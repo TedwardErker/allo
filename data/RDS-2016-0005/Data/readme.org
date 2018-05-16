@@ -1,0 +1,6 @@
+Downloaded from here
+https://www.fs.usda.gov/rds/archive/Product/RDS-2016-0005
+
+From an email with Natalie van Doorn:
+- corrections to the coefficients in the TS6_Growth_coefficients_fromNatalie.csv file.
+- errata to the pdf in the errata file.
