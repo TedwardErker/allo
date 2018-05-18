@@ -185,6 +185,8 @@ cite:zeide_2004
 
 
 
+
+
 ** It would be nice to have repeat measures of trees to get diameter increments.  Individual variation can be large and noisy.
 ** Could the response be multivariate?  For example: height, crown length, leaf area etc are covariate.  Modeling them together could make sense :ATTACH:
 :PROPERTIES:
