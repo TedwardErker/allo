@@ -134,8 +134,6 @@ Mancuccini, 2004)."
 
 * What should the structure of the equations be?
 
-
-
 ** Height
 from cite:Weiskittel_ForestGrowthAndYieldModeling:
 For example, a cumulative growth curve of height over age shows three
@@ -177,6 +175,8 @@ Although these theoretical models offer some biological
 interpretability (e.g. Zeide, 2004), it is easily shown that
 well-formulated empirical sigmoid equations can be just as accurate or
 even more accurate for a wide range of data (e.g. Martin and Ek, 1984)
+
+
 
 cite:garcia_2005
 
