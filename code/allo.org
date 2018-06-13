@@ -200,7 +200,12 @@ acknowledges the fact that response variables are likely related to
 each other.
 
 [[file:/Users/erker/projects/allo/data/4B/81E555-8C81-4BD7-8DA9-0827A9F2FB79/Screenshot 2018-04-26 08.17.38.png]]
+** cite:mcpherson_simpson_99
+see pg 168
 
+they follow frelich 1992
+ look at his equation form.
+also
 
 * Methods
 
