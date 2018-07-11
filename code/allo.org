@@ -847,7 +847,7 @@ ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:figs/ageVdbh_all.png]]
+[[file:../figs/ageVdbh_all.png]]
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
@@ -860,7 +860,7 @@ ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:figs/ageVdbh_byCity_focusCoords.png]]
+[[file:../figs/ageVdbh_byCity_focusCoords.png]]
 
 ** AGE versus DBH by species
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_bySpecies_focusCoords.png :height 1500 :width 800
@@ -872,7 +872,7 @@ ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:figs/ageVdbh_bySpecies_focusCoords.png]]
+[[file:../figs/ageVdbh_bySpecies_focusCoords.png]]
 
 Woah, there are lots of species.  Clearly there is some variability in
 the relationship between age and dbh across species.
@@ -908,7 +908,7 @@ d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
 #+end_src
 
 #+RESULTS:
-[[file:figs/ageVdbh_bySpecies_focusCoords_multiplecities.png]]
+[[file:../figs/ageVdbh_bySpecies_focusCoords_multiplecities.png]]
 *** Adding Loess trend lines
 
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_bySpecies_focusCoords_multiplecities_trendlines.png :height 1100 :width 800
@@ -923,7 +923,7 @@ d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
 #+end_src
 
 #+RESULTS:
-[[file:figs/ageVdbh_bySpecies_focusCoords_multiplecities_trendlines.png]]
+[[file:../figs/ageVdbh_bySpecies_focusCoords_multiplecities_trendlines.png]]
 
 ACPL's cities
 #+begin_src R
@@ -1042,7 +1042,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh__byRegion.png]]
+[[file:../figs/predictions_dbh__byRegion.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies.png :height 1200 :width 1200
 
@@ -1053,7 +1053,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_bySpecies.png]]
+[[file:../figs/predictions_dbh_bySpecies.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
     predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
@@ -1069,7 +1069,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_bySpeciesFull_wData.png]]
+[[file:../figs/predictions_dbh_bySpeciesFull_wData.png]]
 
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData.png :height 1200 :width 1200
@@ -1088,7 +1088,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 
 
 #+RESULTS:
-[[file:figs/predictions_dbh_bySpecies_wData.png]]
+[[file:../figs/predictions_dbh_bySpecies_wData.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL.png
     predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
@@ -1110,7 +1110,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_bySpecies_wData_ACPL.png]]
+[[file:../figs/predictions_dbh_bySpecies_wData_ACPL.png]]
 
 Funny thing about the Apps range is that for functions that eventually
 decrease, they don't properly stop inference.  Look at the pink line
@@ -1138,7 +1138,7 @@ and the response variable.
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_bySpecies_wData_ACPL_facet.png]]
+[[file:../figs/predictions_dbh_bySpecies_wData_ACPL_facet.png]]
 
 We should be able to borrow information from other regions to extend
 the applicable range for regions with smaller ranges.
@@ -1197,7 +1197,7 @@ TIAM TpIntW
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_bySpecies_wData_TIAM.pdf]]
+[[file:../figs/predictions_dbh_bySpecies_wData_TIAM.pdf]]
 
 
 #+begin_src R :exports results :results graphics :file figs/quadratic.png :height 1200 :width 1200
@@ -1207,7 +1207,7 @@ TIAM TpIntW
 #+end_src
 
 #+RESULTS:
-[[file:figs/quadratic.png]]
+[[file:../figs/quadratic.png]]
 
 TIAM TpIntW
 
@@ -1320,7 +1320,7 @@ AGE2scaled -0.895
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_m1.png]]
+[[file:../figs/predictions_dbh_m1.png]]
 
 
 #+begin_src R
@@ -1376,7 +1376,7 @@ newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_m1_RegionsWoSpecies.png]]
+[[file:../figs/predictions_dbh_m1_RegionsWoSpecies.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData.png :width 600 :height 600
   ggplot(pred, aes(x = AGE, y = DBH)) + geom_line() +
@@ -1385,7 +1385,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_m1_RegionsWoSpecies_wData.png]]
+[[file:../figs/predictions_dbh_m1_RegionsWoSpecies_wData.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetSpCode.png :width 1000 :height 300
   ggplot(pred, aes(x = AGE, y = DBH, color = Region)) + geom_line() +
@@ -1394,7 +1394,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetSpCode.png]]
+[[file:../figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetSpCode.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL.png :width 420 :height 400
   ggplot(filter(pred, SpCode == "ACPL", Region %in% unique(filter(ds, SpCode == "ACPL")$Region)), aes(x = AGE, y = DBH, color = Region)) + geom_line() +
@@ -1402,7 +1402,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL.png]]
+[[file:../figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL.png]]
 
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL_wUTDeqn.png :width 1000 :height 400
@@ -1414,7 +1414,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL_wUTDeqn.png]]
+[[file:../figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL_wUTDeqn.png]]
 
 
 #+begin_src R
@@ -1487,7 +1487,7 @@ ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Prec
 #+end_src
 
 #+RESULTS:
-[[file:figs/climatespace.png]]
+[[file:../figs/climatespace.png]]
 
 Rescale precip, HDD, and CDD by dividing by 100
 #+begin_src R
@@ -1560,7 +1560,7 @@ mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2
 #+end_src
 
 #+RESULTS:
-[[file:figs/precip_pred.png]]
+[[file:../figs/precip_pred.png]]
 
 #+begin_src R :exports results :results graphics :file figs/precip_pred_wsomedata.png
   ggplot(pred, aes(x = AGE, y = DBH, color = Precip, group = interaction(Region,Precip))) + geom_line() +
@@ -1569,7 +1569,7 @@ mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2
 #+end_src
 
 #+RESULTS:
-[[file:figs/precip_pred_wsomedata.png]]
+[[file:../figs/precip_pred_wsomedata.png]]
 
 
 #+begin_src R
@@ -1642,7 +1642,7 @@ ggtitle("unconstrained fit")
 #+end_src
 
 #+RESULTS:
-[[file:figs/acpl_tpintw_quadfit_nodash.pdf]]
+[[file:../figs/acpl_tpintw_quadfit_nodash.pdf]]
 
 The predictions decrease at the high end, which cannot be correct.
 Trying to constrain the curve so that it cannot decrease within the
@@ -1736,7 +1736,7 @@ ggtitle("constrained")
 #+end_src
 
 #+RESULTS:
-[[file:figs/constrained_quad.pdf]]
+[[file:../figs/constrained_quad.pdf]]
 
 pcls
 #+begin_src R
@@ -1956,7 +1956,7 @@ ggplot(d, aes( x = DBH, y = AvgCdia)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:figs/dbhVcdia_all.png]]
+[[file:../figs/dbhVcdia_all.png]]
 
 ** DBH versus Cdia by cities
 Constraining scales to 0-200 dbh and 0-40 AvgCdia.  Much of
@@ -1971,7 +1971,7 @@ variability within regions is due to species, colored in the plot below.
 #+end_src
 
 #+RESULTS:
-[[file:figs/dbhVcdia_byCity_focusCoords.png]]
+[[file:../figs/dbhVcdia_byCity_focusCoords.png]]
 
 ** DBH versus Cdia by species
 #+begin_src R :exports results :results graphics :file figs/dbhVcdia_bySpecies_focusCoords.png :height 1500 :width 800
@@ -1984,7 +1984,7 @@ variability within regions is due to species, colored in the plot below.
 #+end_src
 
 #+RESULTS:
-[[file:figs/dbhVcdia_bySpecies_focusCoords.png]]
+[[file:../figs/dbhVcdia_bySpecies_focusCoords.png]]
 
 Woah, there are lots of species.  Clearly there is some variability in
 the relationship between dbh and crown diameter across species.
@@ -2020,7 +2020,7 @@ d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
 #+end_src
 
 #+RESULTS:
-[[file:figs/dbhVcdia_bySpecies_focusCoords_multiplecities.png]]
+[[file:../figs/dbhVcdia_bySpecies_focusCoords_multiplecities.png]]
 *** Adding Loess trend lines
 It looks like some species have the same relationship (e.g. ACPL),
 others may have a different relationship (e.g. LAIN, MOAL), and for
@@ -2041,7 +2041,7 @@ different climates.  There could be a genetic component too.
 #+end_src
 
 #+RESULTS:
-[[file:figs/dbhVcdia_bySpecies_focusCoords_multiplecities_trendlines.png]]
+[[file:../figs/dbhVcdia_bySpecies_focusCoords_multiplecities_trendlines.png]]
 
 ACPL's cities
 #+begin_src R
@@ -2165,7 +2165,7 @@ and with location.  However, for many species there is little
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_byRegion.png]]
+[[file:../figs/predictions_byRegion.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies.png :height 1200 :width 1200
 
@@ -2176,7 +2176,7 @@ and with location.  However, for many species there is little
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_bySpecies.png]]
+[[file:../figs/predictions_bySpecies.png]]
 
 What's up with BUCA and PIPO?  Those equations seem wrong.
 
@@ -2187,7 +2187,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 #+end_src
 
 #+RESULTS:
-[[file:figs/GulfCo_BUCA.png]]
+[[file:../figs/GulfCo_BUCA.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpeciesFull_wData.png :height 1200 :width 1200
     predictions_apprange <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia)
@@ -2203,7 +2203,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_bySpeciesFull_wData.png]]
+[[file:../figs/predictions_bySpeciesFull_wData.png]]
 
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies_wData.png :height 1200 :width 1200
@@ -2222,7 +2222,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 
 
 #+RESULTS:
-[[file:figs/predictions_bySpecies_wData.png]]
+[[file:../figs/predictions_bySpecies_wData.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies_wData_ACPL.png
     predictions_apprange.acpl <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
@@ -2244,7 +2244,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_bySpecies_wData_ACPL.png]]
+[[file:../figs/predictions_bySpecies_wData_ACPL.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies_wData_ACPL_facet.png
     predictions_apprange.acpl <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
@@ -2267,7 +2267,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_bySpecies_wData_ACPL_facet.png]]
+[[file:../figs/predictions_bySpecies_wData_ACPL_facet.png]]
 
 We should be able to borrow information from other regions to extend
 the applicable range for regions with smaller ranges.
@@ -2388,7 +2388,7 @@ Fixed Effects:
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_m1.png]]
+[[file:../figs/predictions_m1.png]]
 
 
 #+begin_src R
@@ -2448,7 +2448,7 @@ Warning messages:
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_m1_RegionsWoSpecies.png]]
+[[file:../figs/predictions_m1_RegionsWoSpecies.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_m1_RegionsWoSpecies_wData.png :width 600 :height 600
   ggplot(pred, aes(x = DBH, y = AvgCdia)) + geom_line() +
@@ -2457,7 +2457,8 @@ geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_m1_RegionsWoSpecies_wData.png]]
+[[file:../figs/predictions_m1_RegionsWoSpecies_wData.png]]
+
 
 #+begin_src R :exports results :results graphics :file figs/predictions_m1_RegionsWoSpecies_wData_facetSpCode.png :width 1000 :height 300
   ggplot(pred, aes(x = DBH, y = AvgCdia, color = Region)) + geom_line() +
@@ -2466,7 +2467,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
-[[file:figs/predictions_m1_RegionsWoSpecies_wData_facetSpCode.png]]
+[[file:../figs/predictions_m1_RegionsWoSpecies_wData_facetSpCode.png]]
 
 Obviously, the lines extrapolate quite a bit.  Differences across
 regions appear to be pretty small.  Looking at the model summary it is
@@ -2523,7 +2524,7 @@ ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Prec
 #+end_src
 
 #+RESULTS:
-[[file:figs/climatespace.png]]
+[[file:../figs/climatespace.png]]
 
 Rescale precip, HDD, and CDD by dividing by 100
 #+begin_src R
@@ -2767,7 +2768,7 @@ dq <- mutate(dq, y = a*(x^2)/100 + b * x)
 #+end_src
 
 #+RESULTS:
-[[file:figs/understand_quad.png]]
+[[file:../figs/understand_quad.png]]
 
 * Issues
 1) Inconsistent naming of regions.  Is sacramento in the sacramento valley or the inland valley?
