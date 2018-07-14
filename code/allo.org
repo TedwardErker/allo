@@ -134,6 +134,22 @@ Mancuccini, 2004)."
 
 * What should the structure of the equations be?
 
+1) Theoretically realistic
+   1) follow what we know about biology
+   2) increase confidence in extrapolation
+   3) assymetrical sigmoidal for growth
+2) Interpretable and parsimonious
+   1) few parameters that correspond as much as possible to an
+      interpretable part of growth
+3) Can fit in Stan
+
+DBH ~ age
+
+assymetrical
+
+
+
+
 ** Height
 from cite:Weiskittel_ForestGrowthAndYieldModeling:
 For example, a cumulative growth curve of height over age shows three
