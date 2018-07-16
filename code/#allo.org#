@@ -210,9 +210,6 @@ cite:garcia_2005
 cite:zeide_2004
 
 
-
-
-
 ** It would be nice to have repeat measures of trees to get diameter increments.  Individual variation can be large and noisy.
 ** Could the response be multivariate?  For example: height, crown length, leaf area etc are covariate.  Modeling them together could make sense :ATTACH:
 :PROPERTIES:
@@ -233,7 +230,20 @@ see pg 168
 they follow frelich 1992
  look at his equation form.
 also
+** look at weibull
 
+
+\[
+\beta_0 + (1 - exp(\beta_1 * DBH^{\beta_2})
+\]
+
+
+
+#+begin_src R
+
+
+
+#+end_src
 * Methods
 ** Data
 repeat measures on the same individuals would help much.
