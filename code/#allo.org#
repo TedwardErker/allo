@@ -559,6 +559,12 @@ Build up Complexity
 
 *** dbh ~ age, pooled
 
+#+begin_src R
+library(brms)
+#+end_src
+
+#+RESULTS:
+: Error in library(brms) : there is no package called ‘brms’
 
 
 * Exploring age and dbh
