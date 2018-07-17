@@ -562,6 +562,11 @@ http://discourse.mc-stan.org/t/what-prior-model-formula-should-i-use-to-account-
 formula = bf(Y ~ X, sigma ~ X)
 example 2: https://arxiv.org/pdf/1705.11123.pdf
 
+advanced brms:
+https://journal.r-project.org/archive/2018/RJ-2018-017/index.html
+
+about brms:
+cite:buerkner_2017
 
 *** dbh ~ age, pooled
 **** generate data
