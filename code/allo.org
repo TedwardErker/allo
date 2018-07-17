@@ -542,17 +542,6 @@ http://discourse.mc-stan.org/t/hierarchical-nonlinear-regression/4382/6
 
 DV = f(IV)
 
-test different functions:
-1) linear; y = a + bx
-2) quadratic; y = a + bx + cx^2
-3) log-log; log(y) = log(a + bx)
-
-Allow none, some, or all of the parameters of these functions to vary
-by species and with climate.  Use AIC to select the best model.
-
-Palms are so different, it doesn't make much sense to pool them with
-the other species.
-
 model form:
 cite:Weiskittel_ForestGrowthAndYieldModeling:
 "This reality should lead to model forms that are complex enough to
@@ -561,16 +550,6 @@ the population, but simple enough to avoid being overly influenced by
 the sample’s peculiarities."
 
 see notes on bayesian approach in cite:Weiskittel_ForestGrowthAndYieldModeling
-
-**** priors
-
-think about looking at champion tree datasets to get maximum sizes.
-
-**** COMMENT monotonic quadratic
-https://stats.stackexchange.com/questions/197509/how-to-smooth-data-and-force-monotonicity
-
-I wonder if I could find a way to do this for a multilevel model.
-biometry project implementing this monotonic constraint in stan?
 
 * Exploring age and dbh
 ** load libraries
