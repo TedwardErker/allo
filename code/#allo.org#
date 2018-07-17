@@ -557,7 +557,21 @@ Generative
 
 Build up Complexity
 
+heteroscedasticity:
+http://discourse.mc-stan.org/t/what-prior-model-formula-should-i-use-to-account-for-heteroscedasticity/4271/2
+formula = bf(Y ~ X, sigma ~ X)
+example 2: https://arxiv.org/pdf/1705.11123.pdf
+
+
 *** dbh ~ age, pooled
+**** generate data
+
+#+begin_src R
+b1 <-
+b2 <- 
+b3 <-
+
+#+end_src
 
 #+begin_src R
 library(brms)
