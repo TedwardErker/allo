@@ -272,7 +272,11 @@ plot(dbh, y)
 
 play with the parameters to understand the flexibility and control.
 
+
+
+
 * Methods
+
 ** Data
 repeat measures on the same individuals would help much.
 
@@ -531,6 +535,10 @@ Equations:
 
 
 *** Modelling
+
+IN STAN:
+vignette("brms_nonlinear")
+http://discourse.mc-stan.org/t/hierarchical-nonlinear-regression/4382/6
 
 DV = f(IV)
 
