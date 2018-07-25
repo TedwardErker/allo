@@ -531,9 +531,6 @@ Equations:
 | dbh                       | th                      |
 
 
-
-
-
 ** Modelling
 
 IN STAN:
@@ -614,7 +611,7 @@ library(tidyr)
 
 ** read in data
 #+begin_src R :exports code
-d <- read_csv("data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
+d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
 #+end_src
 
 #+RESULTS:
@@ -644,8 +641,8 @@ cols(
 )
 See spec(...) for full column specifications.
 Warning: 24255 parsing failures.
-row [90m# A tibble: 5 x 5[39m col     row col   expected   actual file                                            expected   [3m[90m<int>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m      [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m                                           actual [90m1[39m  126[90m2[39m side  an integer C      'data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv' file [90m2[39m  126[90m3[39m side  an integer C      'data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv' row [90m3[39m  126[90m4[39m side  an integer C      'data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv' col [90m4[39m  126[90m5[39m side  an integer C      'data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv' expected [90m5[39m  126[90m6[39m side  an integer C      'data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'
-... ........................... ... ............................................................................... ........ ...................... [... truncated]
+row [90m# A tibble: 5 x 5[39m col     row col   expected   actual file                                            expected   [3m[90m<int>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m      [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m                                           actual [90m1[39m  126[90m2[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… file [90m2[39m  126[90m3[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… row [90m3[39m  126[90m4[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… col [90m4[39m  126[90m5[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… expected [90m5[39m  126[90m6[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.…
+... ........................... ... ............................................................................... ........ ............ [... truncated]
 Warning message:
 In rbind(names(probs), probs_f) :
   number of columns of result is not a multiple of vector length (arg 1)
@@ -921,19 +918,31 @@ sum(d$DBH == -1) / length(d$DBH)
 
 #+begin_src R
   d <- filter(d, DBH != -1, Age != -1) %>%
-    mutate(AGE = Age)
+    rename(AGE = Age)
 #+end_src
 
 #+RESULTS:
 
-
 ** plot age versus dbh for all trees
-#+begin_src R :exports results :results graphics :file figs/ageVdbh_all.png :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/ageVdbh_all.png :bg transparent
 ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/ageVdbh_all.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/ageVdbh_all.png :bg transparent
+fram <- filter(d, SpCode == "FRAM")
+ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ageVdbh_all.png]]
+
+#+begin_src R
+
+m <- nls
+#+end_src
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
