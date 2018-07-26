@@ -232,7 +232,6 @@ they follow frelich 1992
 also
 ** look at weibull
 
-
 \[
 \beta_0 + (1 - exp(\beta_1 * DBH^{\beta_2})
 \]
@@ -271,7 +270,6 @@ plot(dbh, y)
 [[file:../figs/weibull_test.png]]
 
 play with the parameters to understand the flexibility and control.
-
 
 
 
@@ -940,9 +938,15 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 [[file:../figs/ageVdbh_all.png]]
 
 #+begin_src R
+  b <- .0209
+  c <- 1.1973
 
-m <- nls
+m <- nls(DBH ~ a - exp(-1 * (DBH / b) ^ c), fram, list(a = 100, b = .0209, c = 1))
 #+end_src
+
+#+RESULTS:
+: Error in nlsModel(formula, mf, start, wts) :
+:   singular gradient matrix at initial parameter estimates
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
