@@ -262,7 +262,7 @@ dbh <- 1:100
 b <- 1.3
 c <- 1.5
 dbh <- seq(0,3,.1)
-y <- 1 - exp(-1* (dbh/b)^c)
+y <- 2 - exp(-1 * (dbh/b)^c)
 plot(dbh, y)
 #+end_src
 
@@ -938,10 +938,16 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 [[file:../figs/ageVdbh_all.png]]
 
 #+begin_src R
-  b <- .0209
-  c <- 1.1973
+  AGE = 1:100
+  a <- 100
+    b <- 90
+    c <- 90
+  DBH = a - exp(-1 * (AGE / b) ^ c)
+  DBH
 
-m <- nls(DBH ~ a - exp(-1 * (DBH / b) ^ c), fram, list(a = 100, b = .0209, c = 1))
+
+
+  m <- nls(DBH ~ a - exp(-1 * (AGE / b) ^ c), fram, list(a = 10, b = .0209, c = 1.2))
 #+end_src
 
 #+RESULTS:
