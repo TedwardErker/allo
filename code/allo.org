@@ -1011,9 +1011,8 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 #+RESULTS:
 [[file:../figs/weibull_colorC.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/f.png
+#+begin_src R :exports results :results graphics :file ../figs/w2.png
   x <- 1:100
-  a <- seq(60,100,20)
   b <- c(.003,.006,.009)
   c <- seq(1, 1.5, .25)
 
@@ -1024,11 +1023,63 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
   d <- d %>%
       mutate(y = w2(b,c,x))
 
-  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
-
-
-
+  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
 #+end_src
+
+#+RESULTS:
+[[file:../figs/w2.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w3.png
+  x <- 1:100
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w3 <- function(b,c,x) exp(-b * x^c)
+
+  d <- d %>%
+      mutate(y = w3(b,c,x))
+
+  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w3.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w4.png
+  x <- 1:100
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w4 <- function(b,c,x) -b * x^c
+
+  d <- d %>%
+      mutate(y = w4(b,c,x))
+
+  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w4.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w5.png
+  x <- 1:100
+  c <- seq(1, 1.5, .25)
+  d <- expand.grid(x = x,a = a, c = c)
+
+  w5 <- function(c,x) x^c
+
+  d <- d %>%
+      mutate(y = w5(c,x))
+
+  ggplot(d, aes( x = x, y = y, group = c)) + geom_line() + facet_grid(1~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w5.png]]
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
