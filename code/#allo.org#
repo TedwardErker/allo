@@ -943,10 +943,6 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/fram_pred.png
-x <- 1:80
-y <- 
-#+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/fram_test.png
 
@@ -959,6 +955,27 @@ y <-
 
 #+RESULTS:
 [[file:../figs/fram_test.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull.png
+x <- 1:100
+a <- seq(80,110,10)
+b <- seq(.005, .02, .005)
+c <- seq(.95, 1.10, .05)
+
+d <- grid.expand(x,a,b,c)
+
+w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+
+y <- 
+
+plot(x, y)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull.png]]
+
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
