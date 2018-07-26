@@ -957,15 +957,78 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 [[file:../figs/fram_test.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/weibull.png
-x <- 1:80
-a <-
-b <-
-c <-
+  x <- 1:100
+  a <- seq(80,110,10)
+  b <- 10^(-1*1:3)
+  c <- seq(.5, 1.5, .5)
 
-y <- a * (1 - exp(-b * x^c))
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+  d <- d %>%
+      mutate(y = w(a,b,c,x))
+
+  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
 
 #+end_src
 
+#+RESULTS:
+[[file:../figs/weibull.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_colorA.png
+  x <- 1:100
+  a <- seq(60,100,20)
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+  d <- d %>%
+      mutate(y = w(a,b,c,x))
+
+  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_colorA.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_colorB.png
+  ggplot(d, aes( x = x, y = y, color =  b, group = interaction(a,b,c))) + geom_line() + facet_grid(a~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_colorB.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_colorC.png
+  ggplot(d, aes( x = x, y = y, color =  c, group = interaction(a,b,c))) + geom_line() + facet_grid(a~b)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_colorC.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/f.png
+  x <- 1:100
+  a <- seq(60,100,20)
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w2 <- function(b,c,x) (1 - exp(-b * x^c))
+
+  d <- d %>%
+      mutate(y = w2(b,c,x))
+
+  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
+
+
+
+#+end_src
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
