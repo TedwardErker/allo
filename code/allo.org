@@ -7,7 +7,6 @@
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
 * Objective
 To create better allometric equations for urban trees
-
 * Caveat
 I am not an expert on this, but I think I have a contribution to
 make.  I'm using a dataset I did not work to collect and it may have
@@ -44,12 +43,17 @@ Limitations:
    climate varies continuously across space.  Users of the equations
    have to pick which region they are closest to, or consider
    averaging two equations, but the weighting could be difficult to
-   determine.
+   determine.  Climatic differences have been discretized/binned into
+   relatively few groups, when it could be more continuous.
 
 3) Some of the existing equations are based on smaller sample sizes
    than reported.  For example, dbh as a function of age for...  only
    has two observations and so the best fitting equation is a straight
    line, but we know that isn't right.
+
+4) used the best fitting model of several forms based on AIC (i
+   think).  This could potentially lead to overfitting, and depending
+   on the model form selected, makes extrapolation very tenuous.
 
 Solution: Allow for information to be shared across species and across
 regions when fitting models.  Include climate variables as predictors
@@ -126,7 +130,6 @@ generalized (Muukkonen, 2007) static equations ignores significant
 species variability and complex relationships, particularly when the
 goal is to estimate regional and national biomass (Zianis and
 Mancuccini, 2004)."
-
 
 
 * What should the structure of the equations be?
@@ -270,7 +273,6 @@ cdf:
 [[file:../figs/weibull_test.png]]
 
 play with the parameters to understand the flexibility and control.
-
 
 
 * Methods
@@ -579,7 +581,6 @@ library(brms)
 
 #+RESULTS:
 : Error in library(brms) : there is no package called ‘brms’
-
 
 * Exploring age and dbh
 ** load libraries
