@@ -222,75 +222,6 @@ see pg 168
 they follow frelich 1992
  look at his equation form.
 also
-** look at weibull
-
-\[
-\beta_0 + (1 - exp(\beta_1 * DBH^{\beta_2})
-\]
-
-
-from huang 1992
-
-H = 1.3 + a * (1 - exp(-b*DBH^c)
-
-
-from wikipedia:
-cdf:
-\[
-1 - e^{-(x/\lambda)^k}
-\]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/weibull_test.png
-
-    dbh <- 1:100
-
-      a <- 31
-      b <- .0209
-      c <- 1.1973
-      y <- 1.3 + a * (1 - exp(-b*dbh^c))
-
-    a <- 100
-    b <- .13
-    c <- .5
-    age <- seq(0,100,.1)
-  dbh <- 1.3 + a * (1 - exp(-b * age^c))
-    plot(age, dbh)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/weibull_test.png]]
-
-play with the parameters to understand the flexibility and control.
-* Modelling Approach
-- Goal is to model tree dimensions as a function of age (and other factors).
-  - I'm not doing allometric models (relating dimensions to one
-    another) because
-    - they are usually log-log, simpler and less interesting
-    - But doing them would be a natural extension
-- from simple to complex
-  - single species, single location, homoskedasticity
-  - single species, single location, heteroskedasticity
-  - multiple species, single location, heteroskedasticity
-  - multiple species, vary by climate, heteroskedasticity
-- for each of these approaches follow the workflow:
-  - problem
-  - model
-  - fake data
-  - fit
-  - diagnostics
-  - graph fit
-  - PPCs (Posterior Predictive Check)
-  - Compare models
-- criteria for model form
-  - Theoretically realistic
-    - follow what we know about biology
-    - increase confidence in extrapolation
-    - assymetrical sigmoidal for growth
-  - Interpretable and parsimonious
-    - few parameters that correspond as much as possible to an
-      interpretable part of growth
-  - Can fit in Stan
 
 * Methods
 
@@ -547,21 +478,390 @@ Equations:
 | dbh                       | la                      |
 | dbh                       | th                      |
 
+*** tidy data, age and dbh
+**** load libraries
+#+begin_src R :exports none
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(ascii)
+library(tidyr)
+#+end_src
+
+#+RESULTS:
+**** functions
+#+begin_src R
+  options(asciiType = "org")
+  ascii.nowarn.print <- function(x,...) {
+                                          #op <- options(warn = -1)
+                                          #      on.exit(options(op))
+
+      suppressWarnings(print(ascii(x,...)))
+
+  }
+#+end_src
+
+#+RESULTS:
+
+**** read in data
+#+begin_src R :exports code
+d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Parsed with column specification:
+cols(
+  .default = col_integer(),
+  Region = col_character(),
+  City = col_character(),
+  Source = col_character(),
+  Zone = col_character(),
+  `Park/Street` = col_character(),
+  SpCode = col_character(),
+  ScientificName = col_character(),
+  CommonName = col_character(),
+  TreeType = col_character(),
+  street = col_character(),
+  `DBH (cm)` = col_double(),
+  `TreeHt (m)` = col_double(),
+  CrnBase = col_double(),
+  `CrnHt (m)` = col_double(),
+  `CdiaPar (m)` = col_double(),
+  `CDiaPerp (m)` = col_double(),
+  `AvgCdia (m)` = col_double(),
+  `Leaf (m2)` = col_double(),
+  dbh1 = col_double()
+)
+See spec(...) for full column specifications.
+Warning: 24255 parsing failures.
+row [90m# A tibble: 5 x 5[39m col     row col   expected   actual file                                            expected   [3m[90m<int>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m      [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m                                           actual [90m1[39m  126[90m2[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… file [90m2[39m  126[90m3[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… row [90m3[39m  126[90m4[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… col [90m4[39m  126[90m5[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… expected [90m5[39m  126[90m6[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.…
+... ........................... ... ............................................................................... ........ ............ [... truncated]
+Warning message:
+In rbind(names(probs), probs_f) :
+  number of columns of result is not a multiple of vector length (arg 1)
+#+end_example
+
+
+#+begin_src R
+#str(d)
+#+end_src
+
+#+RESULTS:
+**** fix some species things
+***** fix lower case species codes
+#+begin_src R
+d$SpCode <- toupper(d$SpCode)
+#+end_src
+
+#+RESULTS:
+***** fix QUAG1 to be QUAG
+#+begin_src R
+d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
+#+end_src
+
+#+RESULTS:
+***** fix common names
+
+Not all are fixed!
+
+#+begin_src R
+  d$CommonName[d$CommonName == "Kurrajong"] <- "Kurrajong/Bottle tree"
+  d$CommonName[d$CommonName == "Bottle tree"] <- "Kurrajong/Bottle tree"
+
+  d$CommonName[d$CommonName == "Apple"] <- "Apple/Crabapple"
+  d$CommonName[d$CommonName == "Crabapple"] <- "Apple/Crabapple"
+
+
+  d$CommonName[d$CommonName == "silver maple"] <- "Silver maple"
+  d$CommonName[d$CommonName == "camphor tree"] <- "Camphor tree"
+  d$CommonName[d$CommonName == "ginkgo"] <- "Ginkgo"
+  d$CommonName[d$CommonName == "honeylocust"] <- "Honeylocust"
+  d$CommonName[d$CommonName == "ginkgo"] <- "Ginkgo"
+  d$CommonName[d$CommonName == "common crapemyrtle"] <- "Common crapemyrtle"
+  d$CommonName[d$CommonName == "sweetgum"] <- "Sweetgum"
+  d$CommonName[d$CommonName == "southern magnolia"] <- "Southern magnolia"
+
+
+
+#+end_src
+
+#+RESULTS:
+
+**** species are
+#+name: tree_types
+| TreeType | FunctionalType      |
+|----------+---------------------|
+| BDL      | broadleaf deciduous |
+| BDM      | broadleaf deciduous |
+| BDS      | broadleaf deciduous |
+| BEL      | broadleaf evergreen |
+| BEM      | broadleaf evergreen |
+| BES      | broadleaf evergreen |
+| CEL      | conifer evergreen   |
+| CEM      | conifer evergreen   |
+| CES      | conifer evergreen   |
+| PEL      | palm evergreen      |
+| PEM      | palm evergreen      |
+| PES      | palm evergreen      |
+I got rid of the small medium and large distinctions for
+simplification here.
+
+#+begin_src R :var tt=tree_types
+  sp <- d %>% select(SpCode, ScientificName, TreeType) %>%
+    left_join(tt) %>%
+    select(-TreeType) %>%
+    unique() %>%
+    arrange(ScientificName) %>%
+    ascii.nowarn.print()
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Joining, by = "TreeType"
+|     | SpCode | ScientificName                         | FunctionalType      |
+|-----+--------+----------------------------------------+---------------------|
+| 1   | ACFA   | Acacia farnesiana                      | broadleaf deciduous |
+| 2   | ACME   | Acacia melanoxylon                     | broadleaf evergreen |
+| 3   | ACSA3  | Acacia salicina                        | broadleaf evergreen |
+| 4   | ACMA   | Acer macrophyllum                      | broadleaf deciduous |
+| 5   | ACNE   | Acer negundo                           | broadleaf deciduous |
+| 6   | ACPA   | Acer palmatum                          | broadleaf deciduous |
+| 7   | ACPL   | Acer platanoides                       | broadleaf deciduous |
+| 8   | ACRU   | Acer rubrum                            | broadleaf deciduous |
+| 9   | ACSA1  | Acer saccharinum                       | broadleaf deciduous |
+| 10  | ACSA2  | Acer saccharum                         | broadleaf deciduous |
+| 11  | AEHI   | Aesculus hippocastanum                 | broadleaf deciduous |
+| 12  | BABL   | Bauhinia x blakeana                    | broadleaf evergreen |
+| 13  | BENI   | Betula nigra                           | broadleaf deciduous |
+| 14  | BEPE   | Betula pendula                         | broadleaf deciduous |
+| 15  | BRPO   | Brachychiton populneum                 | broadleaf evergreen |
+| 16  | BUCA   | Butia capitata                         | palm evergreen      |
+| 17  | CACI   | Callistemon citrinus                   | broadleaf evergreen |
+| 18  | CADE2  | Calocedrus decurrens                   | conifer evergreen   |
+| 19  | CAIN4  | Calophyllum inophyllum                 | broadleaf evergreen |
+| 20  | CABEF  | Carpinus betulus 'Fastigiata'          | broadleaf deciduous |
+| 21  | CAIL   | Carya illinoinensis                    | broadleaf deciduous |
+| 22  | CANE33 | Cassia x nealiae                       | broadleaf deciduous |
+| 23  | CAEQ   | Casuarina equisetifolia                | broadleaf evergreen |
+| 24  | CASP   | Catalpa speciosa                       | broadleaf deciduous |
+| 25  | CEDE   | Cedrus deodara                         | conifer evergreen   |
+| 26  | CELA   | Celtis laevigata                       | conifer evergreen   |
+| 27  | CEOC   | Celtis occidentalis                    | broadleaf deciduous |
+| 28  | CESI4  | Celtis sinensis                        | broadleaf deciduous |
+| 29  | CESI3  | Ceratonia siliqua                      | broadleaf evergreen |
+| 30  | CECA   | Cercis canadensis                      | broadleaf deciduous |
+| 31  | CHLI   | Chilopsis linearis                     | broadleaf deciduous |
+| 32  | CICA   | Cinnamomum camphora                    | broadleaf evergreen |
+| 33  | CISP2  | Citharexylum spinosum                  | broadleaf evergreen |
+| 34  | CONU   | Cocos nucifera                         | palm evergreen      |
+| 35  | COERA2 | Conocarpus erectus var. argenteus      | broadleaf evergreen |
+| 36  | COSU2  | Cordia subcordata                      | broadleaf evergreen |
+| 37  | COFL   | Cornus florida                         | broadleaf deciduous |
+| 38  | CR     | Crataegus sp.                          | broadleaf deciduous |
+| 39  | CRLA   | Crataegus x lavallei                   | broadleaf deciduous |
+| 40  | CUAN   | Cupaniopsis anacardioides              | broadleaf evergreen |
+| 41  | DERE   | Delonix regia                          | broadleaf deciduous |
+| 42  | ELAN   | Elaeagnus angustifolia                 | broadleaf deciduous |
+| 43  | ELOR2  | Elaeodendron orientale                 | broadleaf evergreen |
+| 44  | ERJA   | Eriobotrya japonica                    | broadleaf evergreen |
+| 45  | EUFI81 | Eucalyptus ficifolia                   | broadleaf evergreen |
+| 46  | EUGL   | Eucalyptus globulus                    | broadleaf evergreen |
+| 47  | EUMI2  | Eucalyptus microtheca                  | broadleaf evergreen |
+| 48  | EUSI   | Eucalyptus sideroxylon                 | broadleaf evergreen |
+| 49  | FASY   | Fagus sylvatica                        | broadleaf deciduous |
+| 50  | FIBE   | Ficus benjamina                        | broadleaf evergreen |
+| 51  | FIMI   | Ficus thonningii                       | broadleaf evergreen |
+| 52  | FIDE6  | Filicium decipiens                     | broadleaf evergreen |
+| 53  | FRAM   | Fraxinus americana                     | broadleaf deciduous |
+| 54  | FRAN2  | Fraxinus angustifolia                  | broadleaf deciduous |
+| 55  | FRAN_R | Fraxinus angustifolia 'Raywood'        | broadleaf deciduous |
+| 56  | FREX_H | Fraxinus excelsior 'Hessei'            | broadleaf deciduous |
+| 57  | FRHO   | Fraxinus holotricha                    | broadleaf deciduous |
+| 58  | FRLA   | Fraxinus latifolia                     | broadleaf deciduous |
+| 59  | FRPE   | Fraxinus pennsylvanica                 | broadleaf deciduous |
+| 60  | FRPE_M | Fraxinus pennsylvanica 'Marshall'      | broadleaf deciduous |
+| 61  | FRUH   | Fraxinus uhdei                         | broadleaf deciduous |
+| 62  | FRVE   | Fraxinus velutina                      | broadleaf deciduous |
+| 63  | FRVE_G | Fraxinus velutina 'Modesto'            | broadleaf deciduous |
+| 64  | GIBI   | Ginkgo biloba                          | broadleaf deciduous |
+| 65  | GLTR   | Gleditsia triacanthos                  | broadleaf deciduous |
+| 66  | GYDI   | Gymnocladus dioicus                    | broadleaf deciduous |
+| 67  | ILOP   | Ilex opaca                             | broadleaf evergreen |
+| 68  | ILPA2  | Ilex paraguariensis                    | broadleaf evergreen |
+| 69  | JAMI   | Jacaranda mimosifolia                  | broadleaf deciduous |
+| 70  | JUNI   | Juglans nigra                          | broadleaf deciduous |
+| 71  | JUVI   | Juniperus virginiana                   | conifer evergreen   |
+| 72  | JUSI   | Juniperus virginiana var. silicicola   | conifer evergreen   |
+| 73  | KOELFO | Koelreuteria elegans                   | broadleaf deciduous |
+| 74  | KOPA   | Koelreuteria paniculata                | broadleaf deciduous |
+| 75  | LAIN   | Lagerstroemia indica                   | broadleaf deciduous |
+| 76  | LA6    | Lagerstroemia sp.                      | broadleaf deciduous |
+| 77  | LASP   | Lagerstroemia speciosa                 | broadleaf deciduous |
+| 78  | LIST   | Liquidambar styraciflua                | broadleaf deciduous |
+| 79  | LITU   | Liriodendron tulipifera                | broadleaf deciduous |
+| 80  | MAGR   | Magnolia grandiflora                   | broadleaf evergreen |
+| 81  | PYAN   | Malus angustifolia                     | broadleaf deciduous |
+| 82  | MA2    | Malus sp.                              | broadleaf deciduous |
+| 83  | MEQU   | Melaleuca quinquenervia                | broadleaf evergreen |
+| 84  | MEEX   | Metrosideros excelsa                   | broadleaf evergreen |
+| 85  | MOAL   | Morus alba                             | broadleaf deciduous |
+| 86  | MO     | Morus sp.                              | broadleaf deciduous |
+| 87  | OLEU   | Olea europaea                          | broadleaf evergreen |
+| 88  | PAAC   | Parkinsonia aculeata                   | broadleaf deciduous |
+| 89  | CEFL   | Parkinsonia florida                    | broadleaf deciduous |
+| 90  | PHCA   | Phoenix canariensis                    | palm evergreen      |
+| 91  | PHDA4  | Phoenix dactylifera                    | palm evergreen      |
+| 92  | PIPU   | Picea pungens                          | conifer evergreen   |
+| 93  | PIBR2  | Pinus brutia                           | conifer evergreen   |
+| 94  | PICA   | Pinus canariensis                      | conifer evergreen   |
+| 95  | PICO   | Pinus contorta                         | conifer evergreen   |
+| 96  | PIEC   | Pinus echinata                         | conifer evergreen   |
+| 97  | PIED   | Pinus edulis                           | conifer evergreen   |
+| 98  | PIEL2  | Pinus eldarica                         | conifer evergreen   |
+| 99  | PIEL   | Pinus elliottii                        | conifer evergreen   |
+| 100 | PIHA   | Pinus halepensis                       | conifer evergreen   |
+| 101 | PINI   | Pinus nigra                            | conifer evergreen   |
+| 102 | PIPO   | Pinus ponderosa                        | conifer evergreen   |
+| 103 | PIRA   | Pinus radiata                          | conifer evergreen   |
+| 104 | PIST   | Pinus strobus                          | conifer evergreen   |
+| 105 | PISY   | Pinus sylvestris                       | conifer evergreen   |
+| 106 | PITA   | Pinus taeda                            | conifer evergreen   |
+| 107 | PITH   | Pinus thunbergiana                     | conifer evergreen   |
+| 108 | PICH   | Pistacia chinensis                     | broadleaf deciduous |
+| 109 | PIUN   | Pittosporum undulatum                  | broadleaf evergreen |
+| 110 | PLOC   | Platanus occidentalis                  | broadleaf deciduous |
+| 111 | PLRA   | Platanus racemosa                      | broadleaf deciduous |
+| 112 | PLAC   | Platanus x acerifolia                  | broadleaf deciduous |
+| 113 | THOR   | Platycladus orientalis                 | conifer evergreen   |
+| 114 | POMA   | Podocarpus macrophyllus                | conifer evergreen   |
+| 115 | POAN   | Populus angustifolia                   | broadleaf deciduous |
+| 116 | POTR2  | Populus balsamifera subsp. trichocarpa | broadleaf deciduous |
+| 117 | PODE   | Populus deltoides                      | broadleaf deciduous |
+| 118 | POFR   | Populus fremontii                      | broadleaf deciduous |
+| 119 | POSA   | Populus sargentii                      | broadleaf deciduous |
+| 120 | PRCH   | Prosopis chilensis                     | broadleaf deciduous |
+| 121 | PRCA   | Prunus caroliniana                     | broadleaf evergreen |
+| 122 | PRCE   | Prunus cerasifera                      | broadleaf deciduous |
+| 123 | PRCE   | Prunus cerasifera cvs.                 | broadleaf deciduous |
+| 124 | PRSE2  | Prunus serrulata                       | broadleaf deciduous |
+| 125 | PR     | Prunus sp.                             | broadleaf deciduous |
+| 126 | PRYE   | Prunus yedoensis                       | broadleaf deciduous |
+| 127 | PSME   | Pseudotsuga menziesii                  | conifer evergreen   |
+| 128 | PYCA   | Pyrus calleryana                       | broadleaf deciduous |
+| 129 | PYCA_B | Pyrus calleryana 'Bradford'            | broadleaf deciduous |
+| 130 | PYCA   | Pyrus calleryana cvs.                  | broadleaf deciduous |
+| 131 | PYKA   | Pyrus kawakamii                        | broadleaf evergreen |
+| 132 | PY     | Pyrus sp.                              | broadleaf deciduous |
+| 133 | QUAG   | Quercus agrifolia                      | broadleaf evergreen |
+| 134 | QUAL   | Quercus alba                           | broadleaf deciduous |
+| 135 | QUIL2  | Quercus ilex                           | broadleaf evergreen |
+| 136 | QULA2  | Quercus laurifolia                     | broadleaf deciduous |
+| 137 | QULO   | Quercus lobata                         | broadleaf deciduous |
+| 138 | QUMA1  | Quercus macrocarpa                     | broadleaf deciduous |
+| 139 | QUNI   | Quercus nigra                          | broadleaf deciduous |
+| 140 | QUPA   | Quercus palustris                      | broadleaf deciduous |
+| 141 | QUPH   | Quercus phellos                        | broadleaf deciduous |
+| 142 | QURU   | Quercus rubra                          | broadleaf deciduous |
+| 143 | QUSH   | Quercus shumardii                      | broadleaf deciduous |
+| 144 | QUVI   | Quercus virginiana                     | broadleaf evergreen |
+| 145 | RHLA   | Rhus lancea                            | broadleaf evergreen |
+| 146 | ROPS   | Robinia pseudoacacia                   | broadleaf deciduous |
+| 147 | SAPA   | Sabal palmetto                         | palm evergreen      |
+| 148 | PISA2  | Samanea saman                          | broadleaf deciduous |
+| 149 | SCMO   | Schinus molle                          | broadleaf evergreen |
+| 150 | SCTE   | Schinus terebinthifolius               | broadleaf evergreen |
+| 151 | SESE   | Sequoia sempervirens                   | conifer evergreen   |
+| 152 | SWMA   | Swietenia mahagoni                     | broadleaf evergreen |
+| 153 | SYRO   | Syagrus romanzoffiana                  | palm evergreen      |
+| 154 | TAAR   | Tabebuia aurea                         | broadleaf evergreen |
+| 155 | TAPA   | Tabebuia heterophylla                  | broadleaf evergreen |
+| 156 | TAOC   | Tabebuia ochracea subsp. neochrysantha | broadleaf evergreen |
+| 157 | TIAM   | Tilia americana                        | broadleaf deciduous |
+| 158 | TICO   | Tilia cordata                          | broadleaf deciduous |
+| 159 | TITO   | Tilia tomentosa                        | broadleaf deciduous |
+| 160 | TRSE6  | Triadica sebifera                      | broadleaf deciduous |
+| 161 | TRCO   | Tristaniopsis conferta                 | broadleaf evergreen |
+| 162 | ULAL   | Ulmus alata                            | broadleaf deciduous |
+| 163 | ULAM   | Ulmus americana                        | broadleaf deciduous |
+| 164 | ULPA   | Ulmus parvifolia                       | broadleaf deciduous |
+| 165 | ULPU   | Ulmus pumila                           | broadleaf deciduous |
+| 166 | VEME   | Veitchia merrillii                     | palm evergreen      |
+| 167 | WAFI   | Washingtonia filifera                  | palm evergreen      |
+| 168 | WARO   | Washingtonia robusta                   | palm evergreen      |
+| 169 | ZESE   | Zelkova serrata                        | broadleaf deciduous |
+#+end_example
+**** tidy a few names and select variables of interest here
+#+begin_src R
+d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+summary(d$Leaf)
+sum(d$Leaf == -1) / length(d$Leaf)
+sum(d$DBH == -1) / length(d$DBH)
+#+end_src
+
+#+RESULTS:
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+:    -1.0    12.9   116.1   302.5   389.2  9516.0
+: [1] 0.1143094
+: [1] 0
+
+#+begin_src R
+  d <- filter(d, DBH != -1, Age != -1) %>%
+    rename(AGE = Age)
+#+end_src
+
+#+RESULTS:
+**** save data
+#+begin_src R
+saveRDS(d, "../data/tidy_age_dbh.rds")
+#+end_src
+
+#+RESULTS:
 
 ** Modelling
 
+- Goal is to model tree dimensions as a function of age (and other factors).
+  - I'm not doing allometric models (relating dimensions to one
+    another) because
+    - they are usually log-log, simpler and less interesting
+    - But doing them would be a natural extension
+- from simple to complex
+  - single species, single location, homoskedasticity
+  - single species, single location, heteroskedasticity
+  - multiple species, single location, heteroskedasticity
+  - multiple species, vary by climate, heteroskedasticity
+  - smarter priors (e.g. max dbh based on champion trees)
+- for each of these approaches follow the workflow:
+  - problem
+  - model
+  - fake data
+  - fit
+  - diagnostics
+  - graph fit
+  - PPCs (Posterior Predictive Check)
+  - Compare models
+- criteria for model form
+  - Theoretically realistic
+    - follow what we know about biology
+    - increase confidence in extrapolation
+    - assymetrical sigmoidal for growth
+  - Interpretable and parsimonious
+    - few parameters that correspond as much as possible to an
+      interpretable part of growth
+  - Can fit in Stan
+
+
+*** notes on how to do modeling in brms
 IN STAN:
 vignette("brms_nonlinear")
 http://discourse.mc-stan.org/t/hierarchical-nonlinear-regression/4382/6
 
-DV = f(IV)
-
-model form:
-cite:Weiskittel_ForestGrowthAndYieldModeling:
-"This reality should lead to model forms that are complex enough to
-accurately and adequately characterize the expected major behaviors of
-the population, but simple enough to avoid being overly influenced by
-the sample’s peculiarities."
 
 see notes on bayesian approach in cite:Weiskittel_ForestGrowthAndYieldModeling
 
@@ -581,6 +881,237 @@ https://journal.r-project.org/archive/2018/RJ-2018-017/index.html
 
 about brms:
 cite:buerkner_2017
+
+*** model form
+model form:
+cite:Weiskittel_ForestGrowthAndYieldModeling:
+"This reality should lead to model forms that are complex enough to
+accurately and adequately characterize the expected major behaviors of
+the population, but simple enough to avoid being overly influenced by
+the sample’s peculiarities."
+**** look at weibull
+
+\[
+\beta_0 + (1 - exp(\beta_1 * DBH^{\beta_2})
+\]
+
+
+from huang 1992
+
+H = 1.3 + a * (1 - exp(-b*DBH^c)
+
+
+from wikipedia:
+cdf:
+\[
+1 - e^{-(x/\lambda)^k}
+\]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_test.png
+
+    dbh <- 1:100
+
+      a <- 31
+      b <- .0209
+      c <- 1.1973
+      y <- 1.3 + a * (1 - exp(-b*dbh^c))
+
+    a <- 100
+    b <- .13
+    c <- .5
+    age <- seq(0,100,.1)
+  dbh <- 1.3 + a * (1 - exp(-b * age^c))
+    plot(age, dbh)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_test.png]]
+
+play with the parameters to understand the flexibility and control.
+
+#+begin_src R
+
+#+end_src
+  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
+
+#+begin_src R :exports results :results graphics :file ../figs/ageVdbh_fram.png :bg transparent
+fram <- filter(d, SpCode == "FRAM")
+ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ageVdbh_all.png]]
+
+#+begin_src R
+  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/fram_test.png
+
+  fram <- fram %>%
+      mutate(pred = predict(m)) %>%
+      gather(DBH, value, -Region, -City, -SpCode, -TreeID, -Leaf, -AGE)
+
+  ggplot(fram, aes( x = AGE, y = value, color = DBH)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fram_test.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull.png
+  x <- 1:100
+  a <- seq(80,110,10)
+  b <- 10^(-1*1:3)
+  c <- seq(.5, 1.5, .5)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+  d <- d %>%
+      mutate(y = w(a,b,c,x))
+
+  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_colorA.png
+  x <- 1:100
+  a <- seq(60,100,20)
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+  d <- d %>%
+      mutate(y = w(a,b,c,x))
+
+  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_colorA.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_colorB.png
+  ggplot(d, aes( x = x, y = y, color =  b, group = interaction(a,b,c))) + geom_line() + facet_grid(a~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_colorB.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_colorC.png
+  ggplot(d, aes( x = x, y = y, color =  c, group = interaction(a,b,c))) + geom_line() + facet_grid(a~b)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_colorC.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w2.png
+  x <- 1:100
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w2 <- function(b,c,x) (1 - exp(-b * x^c))
+
+  d <- d %>%
+      mutate(y = w2(b,c,x))
+
+  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w2.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w3.png
+  x <- 1:100
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w3 <- function(b,c,x) exp(-b * x^c)
+
+  d <- d %>%
+      mutate(y = w3(b,c,x))
+
+  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w3.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w4.png
+  x <- 1:100
+  b <- c(.003,.006,.009)
+  c <- seq(1, 1.5, .25)
+
+  d <- expand.grid(x = x,a = a, b = b, c = c)
+
+  w4 <- function(b,c,x) -b * x^c
+
+  d <- d %>%
+      mutate(y = w4(b,c,x))
+
+  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w4.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/w5.png
+  x <- 1:100
+  c <- seq(1, 1.5, .25)
+  d <- expand.grid(x = x,a = a, c = c)
+
+  w5 <- function(c,x) x^c
+
+  d <- d %>%
+      mutate(y = w5(c,x))
+
+  ggplot(d, aes( x = x, y = y, group = c)) + geom_line() + facet_grid(1~c)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/w5.png]]
+
+
+**** why weibull
+it was good for height:
+
+Why Weibull is a decent option:  pg116 cite:Weiskittel_ForestGrowthAndYieldModeling
+#+BEGIN_QUOTE
+Significant differences between model forms can exist, however, when
+limited data are available. For example, Temesgen and von Gadow (2004)
+found that the percentage difference in root mean square error between
+the best and worst equation for five commonly used model forms varied
+from 5 to 33%. Huang et al. (1992) found in their analysis that the
+Chapman–Richards, Weibull, and a modified logistic-type function were
+consistently among the best performing models because they were
+flexible, able to assume a variety of shapes, and extrapolated well.
+#+END_QUOTE
+
+It should also be good for dbh.  height and dbh are different though:
+
+#+BEGIN_QUOTE
+A diameter growth curve would show much the same trend, except there
+is a tendency toward more sustained growth rate as the tree matures
+(Hann and Hanus, 2002b). While height increment may nearly cease in
+maturity, diameter increment must continue in order to produce the
+xylem and phloem needed for tree survival
+#+END_QUOTE
 
 *** dbh ~ age, pooled
 **** generate data
@@ -947,157 +1478,6 @@ ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 #+RESULTS:
 [[file:../figs/ageVdbh_all.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/ageVdbh_all.png :bg transparent
-fram <- filter(d, SpCode == "FRAM")
-ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ageVdbh_all.png]]
-
-#+begin_src R
-  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
-#+end_src
-
-#+RESULTS:
-
-
-#+begin_src R :exports results :results graphics :file ../figs/fram_test.png
-
-  fram <- fram %>%
-      mutate(pred = predict(m)) %>%
-      gather(DBH, value, -Region, -City, -SpCode, -TreeID, -Leaf, -AGE)
-
-  ggplot(fram, aes( x = AGE, y = value, color = DBH)) + geom_point()
-#+end_src
-
-#+RESULTS:
-[[file:../figs/fram_test.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/weibull.png
-  x <- 1:100
-  a <- seq(80,110,10)
-  b <- 10^(-1*1:3)
-  c <- seq(.5, 1.5, .5)
-
-  d <- expand.grid(x = x,a = a, b = b, c = c)
-
-  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
-
-  d <- d %>%
-      mutate(y = w(a,b,c,x))
-
-  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/weibull.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/weibull_colorA.png
-  x <- 1:100
-  a <- seq(60,100,20)
-  b <- c(.003,.006,.009)
-  c <- seq(1, 1.5, .25)
-
-  d <- expand.grid(x = x,a = a, b = b, c = c)
-
-  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
-
-  d <- d %>%
-      mutate(y = w(a,b,c,x))
-
-  ggplot(d, aes( x = x, y = y, color =  a, group = interaction(a,b,c))) + geom_line() + facet_grid(b~c)
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/weibull_colorA.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/weibull_colorB.png
-  ggplot(d, aes( x = x, y = y, color =  b, group = interaction(a,b,c))) + geom_line() + facet_grid(a~c)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/weibull_colorB.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/weibull_colorC.png
-  ggplot(d, aes( x = x, y = y, color =  c, group = interaction(a,b,c))) + geom_line() + facet_grid(a~b)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/weibull_colorC.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/w2.png
-  x <- 1:100
-  b <- c(.003,.006,.009)
-  c <- seq(1, 1.5, .25)
-
-  d <- expand.grid(x = x,a = a, b = b, c = c)
-
-  w2 <- function(b,c,x) (1 - exp(-b * x^c))
-
-  d <- d %>%
-      mutate(y = w2(b,c,x))
-
-  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/w2.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/w3.png
-  x <- 1:100
-  b <- c(.003,.006,.009)
-  c <- seq(1, 1.5, .25)
-
-  d <- expand.grid(x = x,a = a, b = b, c = c)
-
-  w3 <- function(b,c,x) exp(-b * x^c)
-
-  d <- d %>%
-      mutate(y = w3(b,c,x))
-
-  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/w3.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/w4.png
-  x <- 1:100
-  b <- c(.003,.006,.009)
-  c <- seq(1, 1.5, .25)
-
-  d <- expand.grid(x = x,a = a, b = b, c = c)
-
-  w4 <- function(b,c,x) -b * x^c
-
-  d <- d %>%
-      mutate(y = w4(b,c,x))
-
-  ggplot(d, aes( x = x, y = y, group = interaction(b,c))) + geom_line() + facet_grid(b~c)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/w4.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/w5.png
-  x <- 1:100
-  c <- seq(1, 1.5, .25)
-  d <- expand.grid(x = x,a = a, c = c)
-
-  w5 <- function(c,x) x^c
-
-  d <- d %>%
-      mutate(y = w5(c,x))
-
-  ggplot(d, aes( x = x, y = y, group = c)) + geom_line() + facet_grid(1~c)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/w5.png]]
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
