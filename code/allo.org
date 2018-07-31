@@ -133,16 +133,7 @@ Mancuccini, 2004)."
 
 * What should the structure of the equations be?
 
-1) Theoretically realistic
-   1) follow what we know about biology
-   2) increase confidence in extrapolation
-   3) assymetrical sigmoidal for growth
-2) Interpretable and parsimonious
-   1) few parameters that correspond as much as possible to an
-      interpretable part of growth
-3) Can fit in Stan
-   1) weibull?  may be built in because it is statistical?
-   2)
+
 
 DBH ~ age
 
@@ -210,7 +201,6 @@ even more accurate for a wide range of data (e.g. Martin and Ek, 1984)
 cite:garcia_2005
 
 cite:zeide_2004
-
 
 ** It would be nice to have repeat measures of trees to get diameter increments.  Individual variation can be large and noisy.
 ** Could the response be multivariate?  For example: height, crown length, leaf area etc are covariate.  Modeling them together could make sense :ATTACH:
@@ -293,7 +283,18 @@ play with the parameters to understand the flexibility and control.
   - graph fit
   - PPCs (Posterior Predictive Check)
   - Compare models
-  -
+- criteria for model form
+  - Theoretically realistic
+    - follow what we know about biology
+    - increase confidence in extrapolation
+    - assymetrical sigmoidal for growth
+  - Interpretable and parsimonious
+    - few parameters that correspond as much as possible to an
+      interpretable part of growth
+  - Can fit in Stan
+
+
+
 
 * Methods
 
