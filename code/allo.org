@@ -1156,20 +1156,15 @@ Achieved convergence tolerance: 7.897e-06
 #+RESULTS:
 
 
+**** test model on generated data
 #+begin_src R
 library(brms)
 #+end_src
 
-#+RESULTS:
-: Loading required package: Rcpp
-: Loading 'brms' package (version 2.3.1). Useful instructions
-: can be found by typing help('brms'). A more detailed introduction
-: to the package is available through vignette('brms_overview').
-: Run theme_set(theme_default()) to use the default bayesplot theme.
-: Warning messages:
-: 1: package ‘brms’ was built under R version 3.4.4
-: 2: package ‘Rcpp’ was built under R version 3.4.4
-**** fit model
+#+begin_src R
+
+#+end_src
+**** fit model to real data
 
 **** diagnostics
 **** graph fit
