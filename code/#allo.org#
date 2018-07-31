@@ -882,17 +882,42 @@ https://journal.r-project.org/archive/2018/RJ-2018-017/index.html
 about brms:
 cite:buerkner_2017
 
-*** model form
+*** model form: Weibull
 model form:
 cite:Weiskittel_ForestGrowthAndYieldModeling:
 "This reality should lead to model forms that are complex enough to
 accurately and adequately characterize the expected major behaviors of
 the population, but simple enough to avoid being overly influenced by
 the sample’s peculiarities."
+
+**** why weibull
+it was good for height:
+
+Why Weibull is a decent option:  pg116 cite:Weiskittel_ForestGrowthAndYieldModeling
+#+BEGIN_QUOTE
+Significant differences between model forms can exist, however, when
+limited data are available. For example, Temesgen and von Gadow (2004)
+found that the percentage difference in root mean square error between
+the best and worst equation for five commonly used model forms varied
+from 5 to 33%. Huang et al. (1992) found in their analysis that the
+Chapman–Richards, Weibull, and a modified logistic-type function were
+consistently among the best performing models because they were
+flexible, able to assume a variety of shapes, and extrapolated well.
+#+END_QUOTE
+
+It should also be good for dbh.  height and dbh are different though:
+
+#+BEGIN_QUOTE
+A diameter growth curve would show much the same trend, except there
+is a tendency toward more sustained growth rate as the tree matures
+(Hann and Hanus, 2002b). While height increment may nearly cease in
+maturity, diameter increment must continue in order to produce the
+xylem and phloem needed for tree survival
+#+END_QUOTE
 **** look at weibull
 
 \[
-\beta_0 + (1 - exp(\beta_1 * DBH^{\beta_2})
+\beta_0  (1 - exp(\beta_1 * DBH^{\beta_2})
 \]
 
 
@@ -931,9 +956,10 @@ cdf:
 play with the parameters to understand the flexibility and control.
 
 #+begin_src R
-
+d <- readRDS("../data/tidy_age_dbh.rds")
 #+end_src
-  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
+
+#+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/ageVdbh_fram.png :bg transparent
 fram <- filter(d, SpCode == "FRAM")
@@ -941,7 +967,7 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:../figs/ageVdbh_all.png]]
+[[file:../figs/ageVdbh_fram.png]]
 
 #+begin_src R
   m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
@@ -949,6 +975,28 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 
 #+RESULTS:
 
+#+begin_src R
+summary(m)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Formula: DBH ~ a * (1 - exp(-b * AGE^c))
+
+Parameters:
+   Estimate Std. Error t value Pr(>|t|)
+a 1.176e+02  2.114e+01   5.565 1.51e-07 ***
+b 1.731e-02  2.299e-03   7.527 8.66e-12 ***
+c 9.914e-01  8.754e-02  11.326  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.267 on 126 degrees of freedom
+
+Number of iterations to convergence: 9
+Achieved convergence tolerance: 7.897e-06
+#+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/fram_test.png
 
@@ -1087,39 +1135,13 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 #+RESULTS:
 [[file:../figs/w5.png]]
 
-
-**** why weibull
-it was good for height:
-
-Why Weibull is a decent option:  pg116 cite:Weiskittel_ForestGrowthAndYieldModeling
-#+BEGIN_QUOTE
-Significant differences between model forms can exist, however, when
-limited data are available. For example, Temesgen and von Gadow (2004)
-found that the percentage difference in root mean square error between
-the best and worst equation for five commonly used model forms varied
-from 5 to 33%. Huang et al. (1992) found in their analysis that the
-Chapman–Richards, Weibull, and a modified logistic-type function were
-consistently among the best performing models because they were
-flexible, able to assume a variety of shapes, and extrapolated well.
-#+END_QUOTE
-
-It should also be good for dbh.  height and dbh are different though:
-
-#+BEGIN_QUOTE
-A diameter growth curve would show much the same trend, except there
-is a tendency toward more sustained growth rate as the tree matures
-(Hann and Hanus, 2002b). While height increment may nearly cease in
-maturity, diameter increment must continue in order to produce the
-xylem and phloem needed for tree survival
-#+END_QUOTE
-
-*** dbh ~ age, pooled
+*** singgle species, single location, homoskedasticity
 **** generate data
 
 #+begin_src R
-b1 <-
-b2 <-
-b3 <-
+b1 <- 100
+b2 <- .01
+b3 <- .99
 
 #+end_src
 
@@ -1129,7 +1151,10 @@ library(brms)
 
 #+RESULTS:
 : Error in library(brms) : there is no package called ‘brms’
-
+**** fit model
+**** diagnostics
+**** graph fit
+**** 
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
