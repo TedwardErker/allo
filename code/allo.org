@@ -1141,19 +1141,36 @@ Achieved convergence tolerance: 7.897e-06
 **** generate data
 
 #+begin_src R
-b1 <- 100
-b2 <- .01
-b3 <- .99
+  n <- 100
+  b1 <- 100
+  b2 <- .01
+  b3 <- .99
+  sigma <- 5
 
+  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+  x <- cumsum(rep((150 - 0) / n, n))
+  y <- w(b1,b2,b3, x) + rnorm(n, 0, sigma)
 #+end_src
+
+#+RESULTS:
+
 
 #+begin_src R
 library(brms)
 #+end_src
 
 #+RESULTS:
-: Error in library(brms) : there is no package called ‘brms’
+: Loading required package: Rcpp
+: Loading 'brms' package (version 2.3.1). Useful instructions
+: can be found by typing help('brms'). A more detailed introduction
+: to the package is available through vignette('brms_overview').
+: Run theme_set(theme_default()) to use the default bayesplot theme.
+: Warning messages:
+: 1: package ‘brms’ was built under R version 3.4.4
+: 2: package ‘Rcpp’ was built under R version 3.4.4
 **** fit model
+
 **** diagnostics
 **** graph fit
 ****
