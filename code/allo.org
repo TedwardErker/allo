@@ -280,6 +280,19 @@ play with the parameters to understand the flexibility and control.
     - they are usually log-log, simpler and less interesting
     - But doing them would be a natural extension
 - from simple to complex
+  - single species, single location, homoskedasticity
+  - single species, single location, heteroskedasticity
+  - multiple species, single location, heteroskedasticity
+  - multiple species, vary by climate, heteroskedasticity
+- for each of these approaches follow the workflow:
+  - problem
+  - model
+  - fake data
+  - fit
+  - diagnostics
+  - graph fit
+  - PPCs (Posterior Predictive Check)
+  - Compare models
   -
 
 * Methods
