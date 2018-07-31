@@ -882,6 +882,8 @@ https://journal.r-project.org/archive/2018/RJ-2018-017/index.html
 about brms:
 cite:buerkner_2017
 
+**** great example explaning hamiltonian monte carlo
+http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/
 *** model form: Weibull
 model form:
 cite:Weiskittel_ForestGrowthAndYieldModeling:
