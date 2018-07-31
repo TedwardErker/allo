@@ -276,10 +276,17 @@ play with the parameters to understand the flexibility and control.
 
 - Goal is to model tree dimensions as a function of age (and other factors).
   - I'm not doing allometric models (relating dimensions to one
-    another) because 
+    another) because
     - they are usually log-log, simpler and less interesting
     - But doing them would be a natural extension
-- 
+- from simple to complex
+  - single species, single location, homoskedasticity
+  - single species, single location, heteroskedasticity
+  - multiple species, single location, heteroskedasticity
+  - multiple species, vary by climate, heteroskedasticity
+- for each of these approaches
+  - generate data
+  - 
 
 * Methods
 
