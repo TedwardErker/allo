@@ -1611,6 +1611,8 @@ generated quantities {
 #+END_SRC
 
 *** single species, single location, heteroskedasticity
+no sigma at low ages.  the width of a twig is genetically controlled.
+There will be very little variation at age 1.
 **** generate data
 
 #+begin_src R
@@ -1619,7 +1621,7 @@ generated quantities {
   b1 <- 2
   b2 <- 1
 
-  sigma <- 10 + .08 * x
+  sigma <- .2 * x
 
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
@@ -1647,7 +1649,7 @@ dt <- data.frame(x, y)
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
-                     sigma ~ x,
+                     sigma ~ x - 1,
                      nl = T)
 
   nlprior <- c(prior(gamma(1, 2), nlpar = "b0",lb = 0),
@@ -1724,18 +1726,17 @@ Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ x
+         sigma ~ x - 1
    Data: dt (Number of observations: 100) 
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Population-Level Effects: 
-                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.26      0.15     1.98     2.56       1814 1.00
-b0_Intercept        1.06      0.05     0.97     1.18        701 1.00
-b1_Intercept        1.70      0.58     0.76     2.98        652 1.00
-b2_Intercept        1.14      0.11     0.93     1.37        552 1.00
-sigma_x             0.01      0.00     0.00     0.01       2000 1.00
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.38      0.16     1.13     1.75        583 1.00
+b1_Intercept     1.74      0.14     1.46     2.01        651 1.00
+b2_Intercept     0.99      0.04     0.92     1.07        734 1.00
+sigma_x          0.04      0.00     0.03     0.04       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
@@ -1751,7 +1752,9 @@ plot(m)
 [[file:../figs/test_1_plot.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
-  me <-   marginal_effects(m, points = T)
+cond <- data.frame("1" = 1)
+  me <-   marginal_effects(m, points = T, condistions = cond)
+
 me
 
 #+end_src
@@ -1760,9 +1763,10 @@ me
 [[file:../figs/marginal_1.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts.png
-me <-   marginal_effects(m, points = T)
-ggplot() + geom_line(me$  plot(me, plot = T) +
-    geom_point(data = dt)
+  me <-   marginal_effects(m, points = T)
+  ggplot() + geom_line(data = me$x, aes(x = x, y = estimate__)) +
+    geom_ribbon(data = me$x, alpha = .2, aes(x = x, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_point(data = dt, aes(x = x, y = y))
 
 #+end_src
 
