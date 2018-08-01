@@ -1613,6 +1613,113 @@ generated quantities {
 *** single species, single location, heteroskedasticity
 no sigma at low ages.  the width of a twig is genetically controlled.
 There will be very little variation at age 1.
+**** a simple linear model test
+#+begin_src R
+n <- 1000
+  a <- 1
+  b <- 2
+  x <- seq(1,100,n)
+  sigma <- .3 * x
+  y <- a + b * x + rnorm(n,0,sigma)
+smpl <- data.frame(x,y)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/test.png
+plot(x,y)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test.png]]
+
+#+begin_src R
+  form <- bf(y ~ x,
+             sigma ~ x - 1)
+
+  m_smpl <- brm(form, chains = 2, cores = 2, data = smpl, init_r = 1)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000411 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.11 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000398 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.98 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 5.64912 seconds (Warm-up)
+               4.88615 seconds (Sampling)
+               10.5353 seconds (Total)
+
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 6.5288 seconds (Warm-up)
+               4.50444 seconds (Sampling)
+               11.0332 seconds (Total)
+#+end_example
+
+#+begin_src R
+summary(m_smpl)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: y ~ x
+         sigma ~ x - 1
+   Data: smpl (Number of observations: 100)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects:
+          Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+Intercept     1.15      0.49     0.17     2.06        872 1.00
+x             1.96      0.03     1.89     2.02        431 1.00
+sigma_x       0.05      0.00     0.05     0.06       1294 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
 **** generate data
 
 #+begin_src R
@@ -1726,18 +1833,17 @@ Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ x
+         sigma ~ x - 1
    Data: dt (Number of observations: 100)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Population-Level Effects:
-                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.26      0.15     1.98     2.56       1814 1.00
-b0_Intercept        1.06      0.05     0.97     1.18        701 1.00
-b1_Intercept        1.70      0.58     0.76     2.98        652 1.00
-b2_Intercept        1.14      0.11     0.93     1.37        552 1.00
-sigma_x             0.01      0.00     0.00     0.01       2000 1.00
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.38      0.16     1.13     1.75        583 1.00
+b1_Intercept     1.74      0.14     1.46     2.01        651 1.00
+b2_Intercept     0.99      0.04     0.92     1.07        734 1.00
+sigma_x          0.04      0.00     0.03     0.04       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -1790,7 +1896,8 @@ stancode(m)
 #+RESULTS:
 
 #+BEGIN_SRC stan
- // generated with brms 2.3.1
+
+// generated with brms 2.3.1
 functions {
 }
 data {
@@ -1809,20 +1916,12 @@ data {
   int prior_only;  // should the likelihood be ignored?
 }
 transformed data {
-  int Kc_sigma = K_sigma - 1;
-  matrix[N, K_sigma - 1] Xc_sigma;  // centered version of X_sigma
-  vector[K_sigma - 1] means_X_sigma;  // column means of X_sigma before centering
-  for (i in 2:K_sigma) {
-    means_X_sigma[i - 1] = mean(X_sigma[, i]);
-    Xc_sigma[, i - 1] = X_sigma[, i] - means_X_sigma[i - 1];
-  }
 }
 parameters {
   vector<lower=0>[K_b0] b_b0;  // population-level effects
   vector<lower=0>[K_b1] b_b1;  // population-level effects
   vector<lower=0>[K_b2] b_b2;  // population-level effects
-  vector[Kc_sigma] b_sigma;  // population-level effects
-  real temp_sigma_Intercept;  // temporary intercept
+  vector[K_sigma] b_sigma;  // population-level effects
 }
 transformed parameters {
 }
@@ -1831,7 +1930,7 @@ model {
   vector[N] mu_b1 = X_b1 * b_b1;
   vector[N] mu_b2 = X_b2 * b_b2;
   vector[N] mu;
-  vector[N] sigma = Xc_sigma * b_sigma + temp_sigma_Intercept;
+  vector[N] sigma = X_sigma * b_sigma;
   for (n in 1:N) {
     sigma[n] = exp(sigma[n]);
     // compute non-linear predictor
@@ -1844,17 +1943,13 @@ model {
     - 1 * gamma_lccdf(0 | 1, 2);
   target += gamma_lpdf(b_b2 | 1, 2)
     - 1 * gamma_lccdf(0 | 1, 2);
-  target += student_t_lpdf(temp_sigma_Intercept | 3, 0, 10);
   // likelihood including all constants
   if (!prior_only) {
     target += normal_lpdf(Y | mu, sigma);
   }
 }
 generated quantities {
-  // actual population-level intercept
-  real b_sigma_Intercept = temp_sigma_Intercept - dot_product(means_X_sigma, b_sigma);
 }
-
 #+END_SRC
 
 **** fit model to real data
