@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -490,6 +490,31 @@ library(tidyr)
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:plyr’:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+RStudio Community is a great place to get help:
+https://community.rstudio.com/c/tidyverse.
+
+Attaching package: ‘tidyr’
+
+The following object is masked from ‘package:ascii’:
+
+    expand
+#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -1157,10 +1182,27 @@ d <- data.frame(x, y)
 
 #+RESULTS:
 
+#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
+ggplot(d, aes(x = x, y = y)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_data_1.png]]
+
 **** test model on generated data
 #+begin_src R
 library(brms)
 #+end_src
+
+#+RESULTS:
+: Loading required package: Rcpp
+: Loading 'brms' package (version 2.3.1). Useful instructions
+: can be found by typing help('brms'). A more detailed introduction
+: to the package is available through vignette('brms_overview').
+: Run theme_set(theme_default()) to use the default bayesplot theme.
+: Warning messages:
+: 1: package ‘brms’ was built under R version 3.4.4 
+: 2: package ‘Rcpp’ was built under R version 3.4.4
 
 #+begin_src R
           form <- bf(y ~ b0 * (1 - exp(-b1 * x ^ b2)),
@@ -1237,32 +1279,39 @@ summary(m)
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
-Formula: y ~ b0 * (1 - exp(-b1 * x^b2))
+ Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: y ~ b0 * (1 - exp(-b1 * x^b2)) 
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-   Data: d (Number of observations: 100)
+   Data: d (Number of observations: 100) 
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
-Population-Level Effects:
+Population-Level Effects: 
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept    94.53      8.71    80.53   115.21        572 1.00
-b1_Intercept     0.01      0.00     0.01     0.01        652 1.00
-b2_Intercept     1.04      0.07     0.90     1.20        519 1.00
+b0_Intercept    91.78      7.72    79.76   110.89        566 1.00
+b1_Intercept     0.01      0.00     0.00     0.01        711 1.00
+b2_Intercept     1.11      0.08     0.97     1.28        601 1.00
 
-Family Specific Parameters:
+Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.79      0.41     5.06     6.69        612 1.00
+sigma     5.57      0.42     4.84     6.48        624 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-Looks good! parameter estimates recovered.
+Looks good. parameter estimates recovered.
+
+#+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
+plot(m)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_1_plot.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
   marginal_effects(m, points = T)
@@ -1302,7 +1351,7 @@ the hopes that this speeds things up a bit.
                prior(normal(0, .5), nlpar = "b1"),
                prior(normal(1, 1), nlpar = "b2"))
 
-  model_fram_FtCollins_homo <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior)
+  model_fram_FtCollins_homo <- brm(form, chains = 2, cores = 1, data = d, prior = nlprior)
 #+end_src
 
 **** diagnostics
