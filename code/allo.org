@@ -1137,7 +1137,7 @@ Achieved convergence tolerance: 7.897e-06
 #+RESULTS:
 [[file:../figs/w5.png]]
 
-*** singgle species, single location, homoskedasticity
+*** single species, single location, homoskedasticity
 **** generate data
 
 #+begin_src R
@@ -1156,7 +1156,6 @@ d <- data.frame(x, y)
 #+end_src
 
 #+RESULTS:
-
 
 **** test model on generated data
 #+begin_src R
@@ -1250,24 +1249,56 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept    94.40      8.35    80.51   112.68        650 1.00
-b1_Intercept     0.01      0.00     0.01     0.01        815 1.00
-b2_Intercept     1.04      0.07     0.90     1.20        653 1.00
+b0_Intercept    94.53      8.71    80.53   115.21        572 1.00
+b1_Intercept     0.01      0.00     0.01     0.01        652 1.00
+b2_Intercept     1.04      0.07     0.90     1.20        519 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.77      0.42     5.04     6.70        797 1.00
+sigma     5.79      0.41     5.06     6.69        612 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-Looks good!
+Looks good! parameter estimates recovered.
 
+#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
+  marginal_effects(m, points = T)
+#+end_src
 
+#+RESULTS:
+[[file:../figs/marginal_1.png]]
 
 **** fit model to real data
+#+begin_src R
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram_FtCollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/fram_ftcollins_age_dbh.png
+ggplot(fram_FtCollins, aes(x = AGE, y = DBH)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fram_ftcollins_age_dbh.png]]
+
+#+begin_src R
+          form <- bf(DBH ~ b0 * (1 - exp(-b1 * AGE ^ b2)),
+                     b0 ~ 1,
+                     b1 ~ 1,
+                     b2 ~ 1,
+                     nl = T)
+
+  nlprior <- c(prior(normal(100, 20), nlpar = "b0"),
+               prior(normal(0, 2), nlpar = "b1"),
+               prior(normal(1, 2), nlpar = "b2"))
+
+  model_fram_FtCollins_homo <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior)
+#+end_src
 
 **** diagnostics
 **** graph fit
