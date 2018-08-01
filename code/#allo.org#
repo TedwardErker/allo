@@ -1263,8 +1263,15 @@ is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-Looks good!
+Looks good! parameter estimates recovered.
 
+#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
+  marginal_effects(m) +
+    geom_point(data = d)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_1.png]]
 
 
 **** fit model to real data
