@@ -1201,7 +1201,7 @@ library(brms)
 : to the package is available through vignette('brms_overview').
 : Run theme_set(theme_default()) to use the default bayesplot theme.
 : Warning messages:
-: 1: package ‘brms’ was built under R version 3.4.4 
+: 1: package ‘brms’ was built under R version 3.4.4
 : 2: package ‘Rcpp’ was built under R version 3.4.4
 
 #+begin_src R
@@ -1279,28 +1279,28 @@ summary(m)
 
 #+RESULTS:
 #+begin_example
- Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: y ~ b0 * (1 - exp(-b1 * x^b2)) 
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: y ~ b0 * (1 - exp(-b1 * x^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-   Data: d (Number of observations: 100) 
+   Data: d (Number of observations: 100)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
-Population-Level Effects: 
+Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 b0_Intercept    91.78      7.72    79.76   110.89        566 1.00
 b1_Intercept     0.01      0.00     0.00     0.01        711 1.00
 b2_Intercept     1.11      0.08     0.97     1.28        601 1.00
 
-Family Specific Parameters: 
+Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma     5.57      0.42     4.84     6.48        624 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
-is a crude measure of effective sample size, and Rhat is the potential 
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
@@ -1323,21 +1323,21 @@ plot(m)
 **** fit model to real data
 #+begin_src R
 d <- readRDS("../data/tidy_age_dbh.rds")
-fram_Minne <- filter(d, SpCode == "FRAM", City == "Minneapolis, MN")
+fram <- filter(d, SpCode == "FRAM")
+fram_ftcollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/fram_minne_age_dbh.png
-ggplot(fram_Minne, aes(x = AGE, y = DBH)) + geom_point()
+#+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
+ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/fram_minne_age_dbh.png]]
+[[file:../figs/fram_age_dbh.png]]
 
 I divide b0 by 100 and multiply b1 by 100 to get the parameters on the same scale ish, with
 the hopes that this speeds things up a bit.
-
 
 
 #+begin_src R
@@ -1351,10 +1351,120 @@ the hopes that this speeds things up a bit.
                prior(normal(0, .5), nlpar = "b1"),
                prior(normal(1, 1), nlpar = "b2"))
 
-  model_fram_FtCollins_homo <- brm(form, chains = 2, cores = 1, data = d, prior = nlprior)
+  model_fram_ftcollins_homo <- brm(form, chains = 2, cores = 2, data = fram_ftcollins, prior = nlprior,  control = list(adapt_delta = 0.95))
 #+end_src
 
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+Rejecting initial value:
+  Gradient evaluated at the initial value is not finite.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model4f6553254765_file4f655dea9236' at line 44)
+
+
+Gradient evaluation took 0.000282 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.82 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000302 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.02 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 6.30614 seconds (Warm-up)
+               2.33982 seconds (Sampling)
+               8.64596 seconds (Total)
+
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 6.35439 seconds (Warm-up)
+               4.17114 seconds (Sampling)
+               10.5255 seconds (Total)
+
+Warning messages:
+1: There were 1463 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup 
+2: Examine the pairs() plot to diagnose sampling problems
+#+end_example
+
 **** diagnostics
+#+begin_src R
+summary(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: DBH ~ (b0/100) * (1 - exp(-b1 * AGE^b2)) 
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: fram_ftcollins (Number of observations: 31) 
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects: 
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     0.51      1.11    -1.03     2.80          3 1.18
+b1_Intercept    -0.03      0.50    -0.73     0.97          3 1.23
+b2_Intercept     0.93      0.66     0.07     2.56         92 1.02
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma    50.37      5.83    38.77    62.00          5 1.09
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results! 
+We recommend running more iterations and/or setting stronger priors. 
+2: There were 1463 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
+plot(model_fram_ftcollins_homo)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_marginal_effects.png
+marginal
+#+end_src
 **** graph fit
 ****
 * Exploring age and dbh
