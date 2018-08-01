@@ -1161,6 +1161,14 @@ Achieved convergence tolerance: 7.897e-06
 
 #+RESULTS:
 [[file:../figs/w5.png]]
+*** libraries
+#+begin_src R
+library(dplyr)
+library(brms)
+library(ggplot2)
+#+end_src
+
+#+RESULTS:
 
 *** single species, single location, homoskedasticity
 **** generate data
@@ -1177,33 +1185,19 @@ Achieved convergence tolerance: 7.897e-06
   x <- cumsum(rep((150 - 0) / n, n))
   y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
 
-d <- data.frame(x, y)
+dt <- data.frame(x, y)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
-ggplot(d, aes(x = x, y = y)) + geom_point()
+ggplot(dt, aes(x = x, y = y)) + geom_point()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/test_data_1.png]]
 
 **** test model on generated data
-#+begin_src R
-library(brms)
-#+end_src
-
-#+RESULTS:
-: Loading required package: Rcpp
-: Loading 'brms' package (version 2.3.1). Useful instructions
-: can be found by typing help('brms'). A more detailed introduction
-: to the package is available through vignette('brms_overview').
-: Run theme_set(theme_default()) to use the default bayesplot theme.
-: Warning messages:
-: 1: package ‘brms’ was built under R version 3.4.4
-: 2: package ‘Rcpp’ was built under R version 3.4.4
-
 #+begin_src R
           form <- bf(y ~ b0 * (1 - exp(-b1 * x ^ b2)),
                      b0 ~ 1,
@@ -1215,7 +1209,7 @@ library(brms)
                prior(normal(0, 2), nlpar = "b1"),
                prior(normal(1, 2), nlpar = "b2"))
 
-          m <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior)
+          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 #+end_src
 
 #+RESULTS:
@@ -1351,7 +1345,7 @@ the hopes that this speeds things up a bit.
                prior(normal(0, .5), nlpar = "b1"),
                prior(normal(1, 1), nlpar = "b2"))
 
-  model_fram_ftcollins_homo <- brm(form, chains = 2, cores = 2, data = fram_ftcollins, prior = nlprior,  control = list(adapt_delta = 0.95))
+  model_fram_ftcollins_homo <- brm(form, chains = 4, cores = 2, data = fram_ftcollins, prior = nlprior,  control = list(adapt_delta = 0.95))
 #+end_src
 
 #+RESULTS:
@@ -1422,6 +1416,13 @@ http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 **** diagnostics
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_pairs.png
+pairs(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo_pairs.png]]
+
 #+begin_src R
 summary(model_fram_ftcollins_homo)
 #+end_src
@@ -1466,7 +1467,8 @@ plot(model_fram_ftcollins_homo)
 marginal
 #+end_src
 **** graph fit
-****
+**** stan code for model
+
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
