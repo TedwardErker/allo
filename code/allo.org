@@ -997,7 +997,8 @@ ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 [[file:../figs/ageVdbh_fram.png]]
 
 #+begin_src R
-  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
+#  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
+  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram_ftcollins, list(a = 100, b = .1, c = .5))
 #+end_src
 
 #+RESULTS:
@@ -1013,16 +1014,16 @@ Formula: DBH ~ a * (1 - exp(-b * AGE^c))
 
 Parameters:
    Estimate Std. Error t value Pr(>|t|)
-a 1.176e+02  2.114e+01   5.565 1.51e-07 ***
-b 1.731e-02  2.299e-03   7.527 8.66e-12 ***
-c 9.914e-01  8.754e-02  11.326  < 2e-16 ***
+a 1.298e+02  4.928e+01   2.633 0.013606 *
+b 9.289e-03  2.137e-03   4.346 0.000165 ***
+c 1.112e+00  1.745e-01   6.373 6.75e-07 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 7.267 on 126 degrees of freedom
+Residual standard error: 5.467 on 28 degrees of freedom
 
-Number of iterations to convergence: 9
-Achieved convergence tolerance: 7.897e-06
+Number of iterations to convergence: 18
+Achieved convergence tolerance: 1.869e-06
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/fram_test.png
@@ -1196,14 +1197,14 @@ Warning messages:
 
 #+begin_src R
   n <- 100
-  b0 <- 120
-  b1 <- 0.02
+  b0 <- 1.2
+  b1 <- 2
   b2 <- 1
   sigma <- 5
 
 
-#  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+#  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
 
   x <- cumsum(rep((150 - 0) / n, n))
   y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
@@ -1223,15 +1224,15 @@ dt <- data.frame(x, y)
 
 **** test model on generated data
 #+begin_src R
-#          form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
-          form <- bf(y ~ b0 * (1 - exp(-b1 * x ^ b2)),
+          form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
+#          form <- bf(y ~ b0 * (1 - exp(-b1 * x ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
                      nl = T)
 
-  nlprior <- c(prior(normal(100, 20), nlpar = "b0"),
-               prior(normal(0, 2), nlpar = "b1"),
+  nlprior <- c(prior(normal(1, 1), nlpar = "b0"),
+               prior(normal(1, 2), nlpar = "b1"),
                prior(normal(1, 2), nlpar = "b2"))
 
           m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
@@ -1244,8 +1245,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000562 seconds
-1000 transitions using 10 leapfrog steps per transition would take 5.62 seconds.
+Gradient evaluation took 0.00063 seconds
+1000 transitions using 10 leapfrog steps per transition would take 6.3 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1253,8 +1254,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000525 seconds
-1000 transitions using 10 leapfrog steps per transition would take 5.25 seconds.
+Gradient evaluation took 0.000556 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.56 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1274,27 +1275,22 @@ Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 77.5605 seconds (Warm-up)
-               76.8888 seconds (Sampling)
-               154.449 seconds (Total)
+ Elapsed Time: 20.1102 seconds (Warm-up)
+               16.1524 seconds (Sampling)
+               36.2626 seconds (Total)
 
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 86.2631 seconds (Warm-up)
-               100.025 seconds (Sampling)
-               186.289 seconds (Total)
-
-Warning messages:
-1: There were 7 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
-http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-2: Examine the pairs() plot to diagnose sampling problems
+ Elapsed Time: 20.4824 seconds (Warm-up)
+               19.7054 seconds (Sampling)
+               40.1878 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -1305,7 +1301,7 @@ summary(m)
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: y ~ b0 * (1 - exp(-b1 * x^b2))
+Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
@@ -1315,13 +1311,13 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept   122.53      3.39   116.92   130.34        492 1.00
-b1_Intercept     0.02      0.00     0.01     0.03        538 1.00
-b2_Intercept     1.00      0.05     0.91     1.09        481 1.00
+b0_Intercept     1.21      0.04     1.15     1.30        529 1.01
+b1_Intercept     2.68      0.35     2.05     3.39        565 1.01
+b2_Intercept     0.92      0.04     0.83     1.01        519 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.07      0.37     4.44     5.85        840 1.00
+sigma     5.06      0.37     4.42     5.86        681 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -1376,17 +1372,17 @@ the hopes that this speeds things up a bit.
 
 
 #+begin_src R
-          form <- bf(DBH ~ (b0/100) * (1 - exp(-b1 * AGE ^ b2)),
+          form <- bf(DBH ~ (b0*100) * (1 - exp(-(b1/100) * AGE ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
                      nl = T)
 
-  nlprior <- c(prior(normal(1, 1), nlpar = "b0"),
-               prior(normal(0, .5), nlpar = "b1"),
-               prior(normal(1, 1), nlpar = "b2"))
+  nlprior <- c(prior(normal(1, .3), nlpar = "b0"),
+               prior(normal(1, .3), nlpar = "b1"),
+               prior(normal(1, .1), nlpar = "b2"))
 
-  model_fram_ftcollins_homo <- brm(form, chains = 4, cores = 2, data = fram_ftcollins, prior = nlprior,  control = list(adapt_delta = 0.95))
+  model_fram_ftcollins_homo <- brm(form, chains = 2, cores = 2, data = fram_ftcollins, prior = nlprior,  control = list(adapt_delta = 0.8))
 #+end_src
 
 #+RESULTS:
@@ -1395,25 +1391,29 @@ Compiling the C++ model
 Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-Rejecting initial value:
-  Gradient evaluated at the initial value is not finite.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model4f6553254765_file4f655dea9236' at line 44)
 
-
-Gradient evaluation took 0.000282 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.82 seconds.
+Gradient evaluation took 0.000313 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.13 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is -inf, but must be finite!  (in 'model54b41ccb5d2a_file54b46a74d6f0' at line 44)
 
-Gradient evaluation took 0.000302 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.02 seconds.
+Rejecting initial value:
+  Gradient evaluated at the initial value is not finite.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is -inf, but must be finite!  (in 'model54b41ccb5d2a_file54b46a74d6f0' at line 44)
+
+
+Gradient evaluation took 0.000137 seconds
+1000 transitions using 10 leapfrog steps per transition would take 1.37 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1421,39 +1421,34 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 6.30614 seconds (Warm-up)
-               2.33982 seconds (Sampling)
-               8.64596 seconds (Total)
+ Elapsed Time: 9.54789 seconds (Warm-up)
+               12.2278 seconds (Sampling)
+               21.7757 seconds (Total)
 
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 6.35439 seconds (Warm-up)
-               4.17114 seconds (Sampling)
-               10.5255 seconds (Total)
-
-Warning messages:
-1: There were 1463 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help. See
-http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-2: Examine the pairs() plot to diagnose sampling problems
+ Elapsed Time: 12.9477 seconds (Warm-up)
+               13.1581 seconds (Sampling)
+               26.1058 seconds (Total)
 #+end_example
 
 **** diagnostics
@@ -1472,7 +1467,7 @@ summary(model_fram_ftcollins_homo)
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: DBH ~ (b0/100) * (1 - exp(-b1 * AGE^b2))
+Formula: DBH ~ (b0 * 100) * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
@@ -1482,31 +1477,36 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     0.51      1.11    -1.03     2.80          3 1.18
-b1_Intercept    -0.03      0.50    -0.73     0.97          3 1.23
-b2_Intercept     0.93      0.66     0.07     2.56         92 1.02
+b0_Intercept     0.07      1.51    -2.21     2.46          1 3.86
+b1_Intercept    -0.73      1.75    -3.96     1.26          1 3.21
+b2_Intercept     0.91      0.20     0.67     1.30          1 2.47
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma    50.37      5.83    38.77    62.00          5 1.09
+sigma     5.86      0.83     4.56     7.78         24 1.03
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+Warning message:
+The model has not converged (some Rhats are > 1.1). Do not analyse the results!
 We recommend running more iterations and/or setting stronger priors.
-2: There were 1463 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
 plot(model_fram_ftcollins_homo)
 #+end_src
 
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo.png]]
+
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_marginal_effects.png
-marginal
+marginal_effects(model_fram_ftcollins_homo)
 #+end_src
+
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo_marginal_effects.png]]
+
 **** graph fit
 **** stan code for model
 
