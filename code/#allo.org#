@@ -1619,7 +1619,7 @@ generated quantities {
   b1 <- 2
   b2 <- 1
 
-  sigma <- 5 + .08 * x
+  sigma <- 10 + .08 * x
 
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
@@ -1654,7 +1654,7 @@ dt <- data.frame(x, y)
                prior(gamma(1, 2), nlpar = "b1",lb = 0),
                prior(gamma(1, 2), nlpar = "b2",lb = 0))
 
-          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
 #+end_src
 
 #+RESULTS:
@@ -1664,8 +1664,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000679 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.79 seconds.
+Gradient evaluation took 0.000706 seconds
+1000 transitions using 10 leapfrog steps per transition would take 7.06 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1673,8 +1673,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000697 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.97 seconds.
+Gradient evaluation took 0.000693 seconds
+1000 transitions using 10 leapfrog steps per transition would take 6.93 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1684,32 +1684,32 @@ Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 21.3391 seconds (Warm-up)
-               25.9411 seconds (Sampling)
-               47.2803 seconds (Total)
-
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 17.2654 seconds (Warm-up)
+               16.2416 seconds (Sampling)
+               33.507 seconds (Total)
+
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 28.62 seconds (Warm-up)
-               34.338 seconds (Sampling)
-               62.958 seconds (Total)
+ Elapsed Time: 21.2624 seconds (Warm-up)
+               17.5166 seconds (Sampling)
+               38.779 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -1731,10 +1731,10 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects: 
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     1.93      0.15     1.65     2.23       1554 1.00
-b0_Intercept        1.35      0.28     1.09     2.10        303 1.01
-b1_Intercept        2.64      0.51     1.65     3.64        756 1.00
-b2_Intercept        0.88      0.10     0.67     1.07        458 1.00
+sigma_Intercept     2.26      0.15     1.98     2.56       1814 1.00
+b0_Intercept        1.06      0.05     0.97     1.18        701 1.00
+b1_Intercept        1.70      0.58     0.76     2.98        652 1.00
+b2_Intercept        1.14      0.11     0.93     1.37        552 1.00
 sigma_x             0.01      0.00     0.00     0.01       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
@@ -1773,68 +1773,68 @@ stancode(m)
 
 #+BEGIN_SRC stan
  // generated with brms 2.3.1
-functions { 
-} 
-data { 
-  int<lower=1> N;  // total number of observations 
-  vector[N] Y;  // response variable 
-  int<lower=1> K_b0;  // number of population-level effects 
-  matrix[N, K_b0] X_b0;  // population-level design matrix 
-  int<lower=1> K_b1;  // number of population-level effects 
-  matrix[N, K_b1] X_b1;  // population-level design matrix 
-  int<lower=1> K_b2;  // number of population-level effects 
-  matrix[N, K_b2] X_b2;  // population-level design matrix 
-  // covariate vectors 
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_b0;  // number of population-level effects
+  matrix[N, K_b0] X_b0;  // population-level design matrix
+  int<lower=1> K_b1;  // number of population-level effects
+  matrix[N, K_b1] X_b1;  // population-level design matrix
+  int<lower=1> K_b2;  // number of population-level effects
+  matrix[N, K_b2] X_b2;  // population-level design matrix
+  // covariate vectors
   vector[N] C_1;
-  int<lower=1> K_sigma;  // number of population-level effects 
-  matrix[N, K_sigma] X_sigma;  // population-level design matrix 
-  int prior_only;  // should the likelihood be ignored? 
-} 
-transformed data { 
-  int Kc_sigma = K_sigma - 1; 
-  matrix[N, K_sigma - 1] Xc_sigma;  // centered version of X_sigma 
-  vector[K_sigma - 1] means_X_sigma;  // column means of X_sigma before centering 
-  for (i in 2:K_sigma) { 
-    means_X_sigma[i - 1] = mean(X_sigma[, i]); 
-    Xc_sigma[, i - 1] = X_sigma[, i] - means_X_sigma[i - 1]; 
-  } 
-} 
-parameters { 
-  vector<lower=0>[K_b0] b_b0;  // population-level effects 
-  vector<lower=0>[K_b1] b_b1;  // population-level effects 
-  vector<lower=0>[K_b2] b_b2;  // population-level effects 
-  vector[Kc_sigma] b_sigma;  // population-level effects 
-  real temp_sigma_Intercept;  // temporary intercept 
-} 
-transformed parameters { 
-} 
-model { 
-  vector[N] mu_b0 = X_b0 * b_b0; 
-  vector[N] mu_b1 = X_b1 * b_b1; 
-  vector[N] mu_b2 = X_b2 * b_b2; 
+  int<lower=1> K_sigma;  // number of population-level effects
+  matrix[N, K_sigma] X_sigma;  // population-level design matrix
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+  int Kc_sigma = K_sigma - 1;
+  matrix[N, K_sigma - 1] Xc_sigma;  // centered version of X_sigma
+  vector[K_sigma - 1] means_X_sigma;  // column means of X_sigma before centering
+  for (i in 2:K_sigma) {
+    means_X_sigma[i - 1] = mean(X_sigma[, i]);
+    Xc_sigma[, i - 1] = X_sigma[, i] - means_X_sigma[i - 1];
+  }
+}
+parameters {
+  vector<lower=0>[K_b0] b_b0;  // population-level effects
+  vector<lower=0>[K_b1] b_b1;  // population-level effects
+  vector<lower=0>[K_b2] b_b2;  // population-level effects
+  vector[Kc_sigma] b_sigma;  // population-level effects
+  real temp_sigma_Intercept;  // temporary intercept
+}
+transformed parameters {
+}
+model {
+  vector[N] mu_b0 = X_b0 * b_b0;
+  vector[N] mu_b1 = X_b1 * b_b1;
+  vector[N] mu_b2 = X_b2 * b_b2;
   vector[N] mu;
-  vector[N] sigma = Xc_sigma * b_sigma + temp_sigma_Intercept; 
-  for (n in 1:N) { 
-    sigma[n] = exp(sigma[n]); 
-    // compute non-linear predictor 
+  vector[N] sigma = Xc_sigma * b_sigma + temp_sigma_Intercept;
+  for (n in 1:N) {
+    sigma[n] = exp(sigma[n]);
+    // compute non-linear predictor
     mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
-  } 
-  // priors including all constants 
+  }
+  // priors including all constants
   target += gamma_lpdf(b_b0 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2); 
+    - 1 * gamma_lccdf(0 | 1, 2);
   target += gamma_lpdf(b_b1 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2); 
+    - 1 * gamma_lccdf(0 | 1, 2);
   target += gamma_lpdf(b_b2 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2); 
-  target += student_t_lpdf(temp_sigma_Intercept | 3, 0, 10); 
-  // likelihood including all constants 
-  if (!prior_only) { 
-    target += normal_lpdf(Y | mu, sigma); 
-  } 
-} 
-generated quantities { 
-  // actual population-level intercept 
-  real b_sigma_Intercept = temp_sigma_Intercept - dot_product(means_X_sigma, b_sigma); 
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += student_t_lpdf(temp_sigma_Intercept | 3, 0, 10);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+  // actual population-level intercept
+  real b_sigma_Intercept = temp_sigma_Intercept - dot_product(means_X_sigma, b_sigma);
 }
 
 #+END_SRC
