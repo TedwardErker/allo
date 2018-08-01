@@ -1175,12 +1175,12 @@ library(ggplot2)
 
 #+begin_src R
   n <- 100
-  b0 <- 100
-  b1 <- .01
-  b2 <- .99
+  b0 <- 1.2
+  b1 <- 2
+  b2 <- 1
   sigma <- 5
 
-  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
   x <- cumsum(rep((150 - 0) / n, n))
   y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
@@ -1191,7 +1191,7 @@ dt <- data.frame(x, y)
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
-ggplot(dt, aes(x = x, y = y)) + geom_point()
+  ggplot(dt, aes(x = x, y = y)) + geom_point()
 #+end_src
 
 #+RESULTS:
@@ -1199,15 +1199,15 @@ ggplot(dt, aes(x = x, y = y)) + geom_point()
 
 **** test model on generated data
 #+begin_src R
-          form <- bf(y ~ 100*b0 * (1 - exp(-b1 * x ^ b2)),
+          form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
                      nl = T)
 
-  nlprior <- c(prior(normal(1, 2), nlpar = "b0"),
-               prior(normal(0, 2), nlpar = "b1"),
-               prior(normal(1, 2), nlpar = "b2"))
+  nlprior <- c(prior(normal(0, 5), nlpar = "b0"),
+               prior(normal(0, 5), nlpar = "b1"),
+               prior(normal(0, 5), nlpar = "b2"))
 
           m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 #+end_src
@@ -1219,8 +1219,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000549 seconds
-1000 transitions using 10 leapfrog steps per transition would take 5.49 seconds.
+Gradient evaluation took 0.000562 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.62 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1228,8 +1228,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000469 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.69 seconds.
+Gradient evaluation took 0.000525 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.25 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1249,22 +1249,27 @@ Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 77.5605 seconds (Warm-up)
+               76.8888 seconds (Sampling)
+               154.449 seconds (Total)
+
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 35.5917 seconds (Warm-up)
-               27.7119 seconds (Sampling)
-               63.3037 seconds (Total)
+ Elapsed Time: 86.2631 seconds (Warm-up)
+               100.025 seconds (Sampling)
+               186.289 seconds (Total)
 
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 37.0216 seconds (Warm-up)
-               28.9971 seconds (Sampling)
-               66.0187 seconds (Total)
+Warning messages:
+1: There were 7 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+2: Examine the pairs() plot to diagnose sampling problems
 #+end_example
 
 #+begin_src R
@@ -1275,7 +1280,7 @@ summary(m)
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: y ~ b0 * (1 - exp(-b1 * x^b2))
+Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
@@ -1285,25 +1290,22 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept    45.84     49.68   -14.08   109.78          1 8.65
-b1_Intercept    -0.71      0.85    -2.52     0.01          1 2.06
-b2_Intercept     0.63      0.42     0.15     1.16          1 7.28
+b0_Intercept    -7.08      2.82   -13.70    -2.72        461 1.00
+b1_Intercept    -1.76      0.86    -4.16    -0.74        370 1.00
+b2_Intercept     0.48      0.02     0.44     0.51        530 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.45      0.49     4.59     6.41          2 1.27
+sigma     7.55      0.56     6.59     8.74       1013 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 4 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning message:
+There were 7 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
-Looks good. parameter estimates recovered.
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
 plot(m)
@@ -1320,8 +1322,10 @@ plot(m)
 [[file:../figs/marginal_1.png]]
 
 #+begin_src R
-make_stancode(m)
+#standata(m)
+#stancode(m)
 #+end_src
+
 **** fit model to real data
 #+begin_src R
 d <- readRDS("../data/tidy_age_dbh.rds")
