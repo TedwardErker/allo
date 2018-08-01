@@ -1161,6 +1161,14 @@ Achieved convergence tolerance: 7.897e-06
 
 #+RESULTS:
 [[file:../figs/w5.png]]
+*** libraries
+#+begin_src R
+library(dplyr)
+library(brms)
+library(ggplot2)
+#+end_src
+
+#+RESULTS:
 
 *** single species, single location, homoskedasticity
 **** generate data
@@ -1177,13 +1185,13 @@ Achieved convergence tolerance: 7.897e-06
   x <- cumsum(rep((150 - 0) / n, n))
   y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
 
-d <- data.frame(x, y)
+dt <- data.frame(x, y)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
-ggplot(d, aes(x = x, y = y)) + geom_point()
+ggplot(dt, aes(x = x, y = y)) + geom_point()
 #+end_src
 
 #+RESULTS:
@@ -1191,31 +1199,17 @@ ggplot(d, aes(x = x, y = y)) + geom_point()
 
 **** test model on generated data
 #+begin_src R
-library(brms)
-#+end_src
-
-#+RESULTS:
-: Loading required package: Rcpp
-: Loading 'brms' package (version 2.3.1). Useful instructions
-: can be found by typing help('brms'). A more detailed introduction
-: to the package is available through vignette('brms_overview').
-: Run theme_set(theme_default()) to use the default bayesplot theme.
-: Warning messages:
-: 1: package ‘brms’ was built under R version 3.4.4
-: 2: package ‘Rcpp’ was built under R version 3.4.4
-
-#+begin_src R
-          form <- bf(y ~ b0 * (1 - exp(-b1 * x ^ b2)),
+          form <- bf(y ~ 100*b0 * (1 - exp(-b1 * x ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
                      nl = T)
 
-  nlprior <- c(prior(normal(60, 20), nlpar = "b0"),
+  nlprior <- c(prior(normal(1, 2), nlpar = "b0"),
                prior(normal(0, 2), nlpar = "b1"),
                prior(normal(1, 2), nlpar = "b2"))
 
-          m <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior)
+          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 #+end_src
 
 #+RESULTS:
@@ -1285,23 +1279,28 @@ Formula: y ~ b0 * (1 - exp(-b1 * x^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-   Data: d (Number of observations: 100)
+   Data: dt (Number of observations: 100)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept    91.78      7.72    79.76   110.89        566 1.00
-b1_Intercept     0.01      0.00     0.00     0.01        711 1.00
-b2_Intercept     1.11      0.08     0.97     1.28        601 1.00
+b0_Intercept    45.84     49.68   -14.08   109.78          1 8.65
+b1_Intercept    -0.71      0.85    -2.52     0.01          1 2.06
+b2_Intercept     0.63      0.42     0.15     1.16          1 7.28
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.57      0.42     4.84     6.48        624 1.00
+sigma     5.45      0.49     4.59     6.41          2 1.27
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 4 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 Looks good. parameter estimates recovered.
@@ -1320,6 +1319,9 @@ plot(m)
 #+RESULTS:
 [[file:../figs/marginal_1.png]]
 
+#+begin_src R
+make_stancode(m)
+#+end_src
 **** fit model to real data
 #+begin_src R
 d <- readRDS("../data/tidy_age_dbh.rds")
@@ -1351,12 +1353,130 @@ the hopes that this speeds things up a bit.
                prior(normal(0, .5), nlpar = "b1"),
                prior(normal(1, 1), nlpar = "b2"))
 
-  model_fram_ftcollins_homo <- brm(form, chains = 2, cores = 1, data = fram_ftcollins, prior = nlprior)
+  model_fram_ftcollins_homo <- brm(form, chains = 4, cores = 2, data = fram_ftcollins, prior = nlprior,  control = list(adapt_delta = 0.95))
 #+end_src
 
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+Rejecting initial value:
+  Gradient evaluated at the initial value is not finite.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model4f6553254765_file4f655dea9236' at line 44)
+
+
+Gradient evaluation took 0.000282 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.82 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000302 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.02 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 6.30614 seconds (Warm-up)
+               2.33982 seconds (Sampling)
+               8.64596 seconds (Total)
+
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 6.35439 seconds (Warm-up)
+               4.17114 seconds (Sampling)
+               10.5255 seconds (Total)
+
+Warning messages:
+1: There were 1463 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+2: Examine the pairs() plot to diagnose sampling problems
+#+end_example
+
 **** diagnostics
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_pairs.png
+pairs(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo_pairs.png]]
+
+#+begin_src R
+summary(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ (b0/100) * (1 - exp(-b1 * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: fram_ftcollins (Number of observations: 31)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     0.51      1.11    -1.03     2.80          3 1.18
+b1_Intercept    -0.03      0.50    -0.73     0.97          3 1.23
+b2_Intercept     0.93      0.66     0.07     2.56         92 1.02
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma    50.37      5.83    38.77    62.00          5 1.09
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 1463 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
+plot(model_fram_ftcollins_homo)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_marginal_effects.png
+marginal
+#+end_src
 **** graph fit
-****
+**** stan code for model
+
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
