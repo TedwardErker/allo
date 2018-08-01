@@ -1751,11 +1751,24 @@ plot(m)
 [[file:../figs/test_1_plot.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
-  marginal_effects(m, points = T)
+  me <-   marginal_effects(m, points = T)
+me
+
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_1.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_pts.png
+me <-   marginal_effects(m, points = T)
+ggplot() + geom_line(me$  plot(me, plot = T) +
+    geom_point(data = dt)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_pts.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_1.png
 pairs(m)
