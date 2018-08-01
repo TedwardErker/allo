@@ -1274,26 +1274,28 @@ Looks good! parameter estimates recovered.
 **** fit model to real data
 #+begin_src R
 d <- readRDS("../data/tidy_age_dbh.rds")
-fram_FtCollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
+fram_Minne <- filter(d, SpCode == "FRAM", City == "Minneapolis, MN")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/fram_ftcollins_age_dbh.png
-ggplot(fram_FtCollins, aes(x = AGE, y = DBH)) + geom_point()
+#+begin_src R :exports results :results graphics :file ../figs/fram_minne_age_dbh.png
+ggplot(fram_Minne, aes(x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:../figs/fram_ftcollins_age_dbh.png]]
+[[file:../figs/fram_minne_age_dbh.png]]
 
+I divide b0 by 100 to get the parameters on the same scale ish, with
+the hopes that this speeds things up a bit.
 #+begin_src R
-          form <- bf(DBH ~ b0 * (1 - exp(-b1 * AGE ^ b2)),
+          form <- bf(DBH ~ b0/100 * (1 - exp(-b1 * AGE ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
                      nl = T)
 
-  nlprior <- c(prior(normal(100, 20), nlpar = "b0"),
+  nlprior <- c(prior(normal(1, 2), nlpar = "b0"),
                prior(normal(0, 2), nlpar = "b1"),
                prior(normal(1, 2), nlpar = "b2"))
 
