@@ -1227,7 +1227,6 @@ dt <- data.frame(x, y)
 #+RESULTS:
 [[file:../figs/test_data_1.png]]
 
-
 **** test model on generated data
 #+begin_src R
           form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
@@ -1383,12 +1382,13 @@ the hopes that this speeds things up a bit.
                        b2 ~ 1,
                        nl = T)
 
-    nlprior <- c(prior(gamma(1, 2), nlpar = "b0"),
-                 prior(gamma(1, 2), nlpar = "b1"),
-                 prior(gamma(1, 2), nlpar = "b2"))
+     nlprior <- c(prior(gamma(1, 2), nlpar = "b0", lb = 0),
+                  prior(gamma(1, 2), nlpar = "b1", lb = 0),
+                  prior(gamma(1, 2), nlpar = "b2", lb = 0))
 
-    model_fram_ftcollins_homo <- brm(form, chains = 2, cores = 2, data = fram_ftcollins,
-                                     init_r = 1,
+
+     model_fram_ftcollins_homo <- brm(form, chains = 4, cores = 2, data = fram_ftcollins,
+#                                     init_r = 1,
                                      prior = nlprior,  control = list(adapt_delta = 0.8))
 #+end_src
 
@@ -1398,80 +1398,18 @@ Compiling the C++ model
 Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
 
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-
-Gradient evaluation took 0.000325 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.25 seconds.
+Gradient evaluation took 0.000362 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.62 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
 
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[31] is -inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
-
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
-
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Log probability evaluates to log(0), i.e. negative infinity.
-  Stan can't start sampling from this initial value.
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[31] is -inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
-
-
-Gradient evaluation took 0.000411 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.11 seconds.
+Gradient evaluation took 0.000308 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.08 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1498,23 +1436,65 @@ Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 12.1754 seconds (Warm-up)
-               11.9724 seconds (Sampling)
-               24.1478 seconds (Total)
+ Elapsed Time: 9.83651 seconds (Warm-up)
+               10.6709 seconds (Sampling)
+               20.5074 seconds (Total)
 
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 11.4406 seconds (Warm-up)
-               15.4176 seconds (Sampling)
-               26.8582 seconds (Total)
+ Elapsed Time: 10.1129 seconds (Warm-up)
+               9.95994 seconds (Sampling)
+               20.0729 seconds (Total)
 
-Warning message:
-It appears as if you have specified a lower bounded prior on a parameter that has no natural lower bound.
-If this is really what you want, please specify argument 'lb' of 'set_prior' appropriately.
-Warning occurred for prior
-b_b0 ~ gamma(1, 2)
-b_b1 ~ gamma(1, 2)
-b_b2 ~ gamma(1, 2)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 3).
+
+Gradient evaluation took 0.000924 seconds
+1000 transitions using 10 leapfrog steps per transition would take 9.24 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 4).
+
+Gradient evaluation took 0.000323 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.23 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.9297 seconds (Warm-up)
+               10.449 seconds (Sampling)
+               21.3787 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.341 seconds (Warm-up)
+               10.9421 seconds (Sampling)
+               21.2831 seconds (Total)
 #+end_example
 
 **** diagnostics
@@ -1538,18 +1518,18 @@ Formula: DBH ~ (b0 * 100) * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ 1
          b2 ~ 1
    Data: fram_ftcollins (Number of observations: 31)
-Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 2000
+Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 4000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.41      0.49     0.88     2.76        323 1.01
-b1_Intercept     0.85      0.21     0.46     1.28        738 1.00
-b2_Intercept     1.14      0.14     0.92     1.45        458 1.00
+b0_Intercept     1.38      0.44     0.88     2.56        810 1.00
+b1_Intercept     0.85      0.22     0.47     1.32       1266 1.00
+b2_Intercept     1.14      0.13     0.93     1.44        880 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.63      0.79     4.39     7.40        935 1.00
+sigma     5.62      0.80     4.38     7.42       1570 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -1570,8 +1550,430 @@ marginal_effects(model_fram_ftcollins_homo)
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_homo_marginal_effects.png]]
 
-**** graph fit
 **** stan code for model
+#+begin_src R
+stancode(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC stan
+// generated with brms 2.3.1
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_b0;  // number of population-level effects
+  matrix[N, K_b0] X_b0;  // population-level design matrix
+  int<lower=1> K_b1;  // number of population-level effects
+  matrix[N, K_b1] X_b1;  // population-level design matrix
+  int<lower=1> K_b2;  // number of population-level effects
+  matrix[N, K_b2] X_b2;  // population-level design matrix
+  // covariate vectors
+  vector[N] C_1;
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  vector<lower=0>[K_b0] b_b0;  // population-level effects
+  vector<lower=0>[K_b1] b_b1;  // population-level effects
+  vector<lower=0>[K_b2] b_b2;  // population-level effects
+  real<lower=0> sigma;  // residual SD
+}
+transformed parameters {
+}
+model {
+  vector[N] mu_b0 = X_b0 * b_b0;
+  vector[N] mu_b1 = X_b1 * b_b1;
+  vector[N] mu_b2 = X_b2 * b_b2;
+  vector[N] mu;
+  for (n in 1:N) {
+    // compute non-linear predictor
+    mu[n] = (mu_b0[n] * 100) * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  }
+  // priors including all constants
+  target += gamma_lpdf(b_b0 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b1 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b2 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += student_t_lpdf(sigma | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+}
+#+END_SRC
+
+*** single species, single location, heteroskedasticity
+**** generate data
+
+#+begin_src R
+  n <- 100
+  b0 <- 1.2
+  b1 <- 2
+  b2 <- 1
+
+  sigma <- 5 + .08 * x
+
+
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+
+  x <- cumsum(rep((150 - 0) / n, n))
+
+  y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
+
+dt <- data.frame(x, y)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
+  ggplot(dt, aes(x = x, y = y)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_data_1.png]]
+
+
+**** test model on generated data
+#+begin_src R
+          form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
+                     b0 ~ 1,
+                     b1 ~ 1,
+                     b2 ~ 1,
+                     sigma ~ x,
+                     nl = T)
+
+  nlprior <- c(prior(normal(1, 1), nlpar = "b0"),
+               prior(normal(1, 2), nlpar = "b1"),
+               prior(normal(1, 2), nlpar = "b2"))
+
+          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000535 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.35 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000536 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.36 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 18.1295 seconds (Warm-up)
+               20.4265 seconds (Sampling)
+               38.556 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 17.5867 seconds (Warm-up)
+               22.8102 seconds (Sampling)
+               40.3969 seconds (Total)
+#+end_example
+
+#+begin_src R
+summary(m)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: dt (Number of observations: 100)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.21      0.04     1.15     1.29        371 1.01
+b1_Intercept     2.64      0.36     1.98     3.37        432 1.01
+b2_Intercept     0.93      0.05     0.84     1.02        367 1.01
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     5.09      0.38     4.42     5.92        916 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+
+#+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
+plot(m)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_1_plot.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
+  marginal_effects(m, points = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_1.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png
+pairs(m)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_1.png]]
+
+#+begin_src R
+#standata(m)
+#stancode(m)
+#+end_src
+
+**** fit model to real data
+#+begin_src R
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram <- filter(d, SpCode == "FRAM")
+fram_ftcollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
+ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fram_age_dbh.png]]
+
+I divide b0 by 100 and multiply b1 by 100 to get the parameters on the same scale ish, with
+the hopes that this speeds things up a bit.
+
+
+#+begin_src R
+            form <- bf(DBH ~ (b0*100) * (1 - exp(-(b1/100) * AGE ^ b2)),
+                       b0 ~ 1,
+                       b1 ~ 1,
+                       b2 ~ 1,
+                       nl = T)
+
+     nlprior <- c(prior(gamma(1, 2), nlpar = "b0", lb = 0),
+                  prior(gamma(1, 2), nlpar = "b1", lb = 0),
+                  prior(gamma(1, 2), nlpar = "b2", lb = 0))
+
+
+     model_fram_ftcollins_hetero <- brm(form, chains = 2, cores = 2, data = fram_ftcollins,
+                                     init_r = 1,
+                                     prior = nlprior,  control = list(adapt_delta = 0.8))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000306 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.06 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000309 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.09 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 9.57723 seconds (Warm-up)
+               8.84453 seconds (Sampling)
+               18.4218 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.1318 seconds (Warm-up)
+               10.2082 seconds (Sampling)
+               20.34 seconds (Total)
+#+end_example
+
+**** diagnostics
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_pairs.png
+pairs(model_fram_ftcollins_hetero)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo_pairs.png]]
+
+#+begin_src R
+summary(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ (b0 * 100) * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: fram_ftcollins (Number of observations: 31)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.39      0.44     0.89     2.56        400 1.00
+b1_Intercept     0.85      0.21     0.46     1.30        795 1.00
+b2_Intercept     1.14      0.13     0.92     1.43        466 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     5.70      0.74     4.45     7.35       1010 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
+plot(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_marginal_effects.png
+marginal_effects(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/model_fram_ftcollins_homo_marginal_effects.png]]
+
+**** stan code for model
+#+begin_src R
+stancode(model_fram_ftcollins_homo)
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC stan
+// generated with brms 2.3.1
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_b0;  // number of population-level effects
+  matrix[N, K_b0] X_b0;  // population-level design matrix
+  int<lower=1> K_b1;  // number of population-level effects
+  matrix[N, K_b1] X_b1;  // population-level design matrix
+  int<lower=1> K_b2;  // number of population-level effects
+  matrix[N, K_b2] X_b2;  // population-level design matrix
+  // covariate vectors
+  vector[N] C_1;
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  vector<lower=0>[K_b0] b_b0;  // population-level effects
+  vector<lower=0>[K_b1] b_b1;  // population-level effects
+  vector<lower=0>[K_b2] b_b2;  // population-level effects
+  real<lower=0> sigma;  // residual SD
+}
+transformed parameters {
+}
+model {
+  vector[N] mu_b0 = X_b0 * b_b0;
+  vector[N] mu_b1 = X_b1 * b_b1;
+  vector[N] mu_b2 = X_b2 * b_b2;
+  vector[N] mu;
+  for (n in 1:N) {
+    // compute non-linear predictor
+    mu[n] = (mu_b0[n] * 100) * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  }
+  // priors including all constants
+  target += gamma_lpdf(b_b0 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b1 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b2 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += student_t_lpdf(sigma | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+}
+#+END_SRC
 
 * Exploring age and dbh
 ** load libraries
