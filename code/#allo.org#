@@ -1038,6 +1038,12 @@ Achieved convergence tolerance: 1.869e-06
 #+RESULTS:
 [[file:../figs/fram_test.png]]
 
+
+"a" can't be negative because dbh must be positive
+"b" can't be negative because it causes negative growth and negative
+dbh values, impossible
+"c" can't be negative because it causes negative growth, impossible
+
 #+begin_src R :exports results :results graphics :file ../figs/weibull.png
   x <- 1:100
   a <- seq(80,110,10)
@@ -1377,9 +1383,9 @@ the hopes that this speeds things up a bit.
                        b2 ~ 1,
                        nl = T)
 
-    nlprior <- c(prior(halfnormal(1, .3), nlpar = "b0"),
-                 prior(halfnormal(1, .3), nlpar = "b1"),
-                 prior(halfnormal(1, .3), nlpar = "b2"))
+    nlprior <- c(prior(gamma(1, 2), nlpar = "b0"),
+                 prior(gamma(1, 2), nlpar = "b1"),
+                 prior(gamma(1, 2), nlpar = "b2"))
 
     model_fram_ftcollins_homo <- brm(form, chains = 2, cores = 2, data = fram_ftcollins,
                                      init_r = 1,
@@ -1388,24 +1394,127 @@ the hopes that this speeds things up a bit.
 
 #+RESULTS:
 #+begin_example
-SYNTAX ERROR, MESSAGE(S) FROM PARSER:
+Compiling the C++ model
+Start sampling
 
-No matches for: 
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
 
-  halfnormal_lpdf(vector, int, real)
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
 
-Function halfnormal_lpdf not found.
-  error in 'model54b46f8443b4_file54b47fde9ac9' at line 37, column 43
-  -------------------------------------------------
-    35:   } 
-    36:   // priors including all constants 
-    37:   target += halfnormal_lpdf(b_b0 | 1, 0.3); 
-                                                  ^
-    38:   target += halfnormal_lpdf(b_b1 | 1, 0.3); 
-  -------------------------------------------------
+Gradient evaluation took 0.000325 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.25 seconds.
+Adjust your expectations accordingly!
 
-Error in stanc(model_code = paste(program, collapse = "\n"), model_name = model_cppname,  : 
-  failed to parse Stan model 'file54b47fde9ac9' due to the above error.
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
+
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is -inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
+
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
+
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Log probability evaluates to log(0), i.e. negative infinity.
+  Stan can't start sampling from this initial value.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[31] is -inf, but must be finite!  (in 'model54b459fdb165_file54b45479179e' at line 44)
+
+
+Gradient evaluation took 0.000411 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.11 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 12.1754 seconds (Warm-up)
+               11.9724 seconds (Sampling)
+               24.1478 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 11.4406 seconds (Warm-up)
+               15.4176 seconds (Sampling)
+               26.8582 seconds (Total)
+
+Warning message:
+It appears as if you have specified a lower bounded prior on a parameter that has no natural lower bound.
+If this is really what you want, please specify argument 'lb' of 'set_prior' appropriately.
+Warning occurred for prior
+b_b0 ~ gamma(1, 2)
+b_b1 ~ gamma(1, 2)
+b_b2 ~ gamma(1, 2)
 #+end_example
 
 **** diagnostics
@@ -1434,22 +1543,17 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     0.26      0.97    -1.03     1.54          1 6.11
-b1_Intercept     0.23      0.76    -0.80     1.29          1 5.02
-b2_Intercept     1.18      0.10     1.01     1.42          4 1.13
+b0_Intercept     1.41      0.49     0.88     2.76        323 1.01
+b1_Intercept     0.85      0.21     0.46     1.28        738 1.00
+b2_Intercept     1.14      0.14     0.92     1.45        458 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma    10.04      4.99     4.44    20.11          1 2.48
+sigma     5.63      0.79     4.39     7.40        935 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 3 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
