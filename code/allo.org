@@ -887,6 +887,7 @@ IN STAN:
 vignette("brms_nonlinear")
 http://discourse.mc-stan.org/t/hierarchical-nonlinear-regression/4382/6
 
+https://cran.r-project.org/web/packages/brms/vignettes/brms_nonlinear.html
 
 see notes on bayesian approach in cite:Weiskittel_ForestGrowthAndYieldModeling
 
@@ -4093,35 +4094,36 @@ summary(m_generated_singleSpecies_multipleLocations_homo)
  Family: gaussian
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ City
-         b1 ~ City
-         b2 ~ City
+         b0 ~ (1 | City)
+         b1 ~ (1 | City)
+         b2 ~ (1 | City)
    Data: dt (Number of observations: 100)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
+Group-Level Effects:
+~City (Number of levels: 4)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.53      0.37     0.14     1.62        551 1.00
+sd(b1_Intercept)     0.65      0.62     0.05     2.17        679 1.01
+sd(b2_Intercept)     0.33      0.23     0.10     1.13         42 1.06
+
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.14      0.06     1.04     1.27        784 1.00
-b0_Cityb         0.02      0.01     0.00     0.04       2000 1.00
-b0_Cityc         0.18      0.06     0.06     0.29       1093 1.00
-b0_Cityd         0.03      0.02     0.00     0.08       2000 1.00
-b1_Intercept     2.04      0.51     1.17     3.17        907 1.00
-b1_Cityb         0.06      0.04     0.01     0.17       2000 1.00
-b1_Cityc         0.48      0.31     0.06     1.20       1700 1.00
-b1_Cityd         0.24      0.14     0.04     0.59       2000 1.00
-b2_Intercept     0.96      0.08     0.81     1.11        797 1.00
-b2_Cityb         0.01      0.00     0.00     0.02       2000 1.00
-b2_Cityc         0.08      0.04     0.02     0.17       1465 1.00
-b2_Cityd         0.02      0.02     0.00     0.06       2000 1.00
+b0_Intercept     1.36      0.29     0.83     2.02        489 1.00
+b1_Intercept     2.00      0.41     1.11     2.84        764 1.00
+b2_Intercept     0.93      0.15     0.62     1.26        343 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     9.81      0.78     8.45    11.54       2000 1.00
+sigma     2.94      0.23     2.56     3.43       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 99 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 
@@ -4129,7 +4131,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
   #cond <- data.frame(City = c("a","b","c","d"))
   #marginal_effects(m_generated_singleSpecies_multipleLocations_homo, points = T, conditions = cond)
   me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo,
-                         effects = c("AGE:City"))
+                         effects = c("AGE"))
   plot(me)
 #+end_src
 
@@ -4151,6 +4153,23 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/marginal_pts.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png
+  cond <- data.frame(City = c("a","b","c","d"))
+  #marginal_effects(m_generated_singleSpecies_multipleLocations_homo, points = T)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo,
+                         effects = c("AGE"), conditions = cond)
+  plot(me)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
+pp_check(m_generated_singleSpecies_multipleLocations_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_pred.png]]
 
 #+begin_src R
 stancode(m_generated_singleSpecies_multipleLocations_homo)
@@ -4173,6 +4192,21 @@ data {
   matrix[N, K_b2] X_b2;  // population-level design matrix
   // covariate vectors
   vector[N] C_1;
+  // data for group-level effects of ID 1
+  int<lower=1> J_1[N];
+  int<lower=1> N_1;
+  int<lower=1> M_1;
+  vector[N] Z_1_b0_1;
+  // data for group-level effects of ID 2
+  int<lower=1> J_2[N];
+  int<lower=1> N_2;
+  int<lower=1> M_2;
+  vector[N] Z_2_b1_1;
+  // data for group-level effects of ID 3
+  int<lower=1> J_3[N];
+  int<lower=1> N_3;
+  int<lower=1> M_3;
+  vector[N] Z_3_b2_1;
   int prior_only;  // should the likelihood be ignored?
 }
 transformed data {
@@ -4182,8 +4216,20 @@ parameters {
   vector<lower=0>[K_b1] b_b1;  // population-level effects
   vector<lower=0>[K_b2] b_b2;  // population-level effects
   real<lower=0> sigma;  // residual SD
+  vector<lower=0>[M_1] sd_1;  // group-level standard deviations
+  vector[N_1] z_1[M_1];  // unscaled group-level effects
+  vector<lower=0>[M_2] sd_2;  // group-level standard deviations
+  vector[N_2] z_2[M_2];  // unscaled group-level effects
+  vector<lower=0>[M_3] sd_3;  // group-level standard deviations
+  vector[N_3] z_3[M_3];  // unscaled group-level effects
 }
 transformed parameters {
+  // group-level effects
+  vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
+  // group-level effects
+  vector[N_2] r_2_b1_1 = sd_2[1] * (z_2[1]);
+  // group-level effects
+  vector[N_3] r_3_b2_1 = sd_3[1] * (z_3[1]);
 }
 model {
   vector[N] mu_b0 = X_b0 * b_b0;
@@ -4191,18 +4237,30 @@ model {
   vector[N] mu_b2 = X_b2 * b_b2;
   vector[N] mu;
   for (n in 1:N) {
+    mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n];
+    mu_b1[n] += r_2_b1_1[J_2[n]] * Z_2_b1_1[n];
+    mu_b2[n] += r_3_b2_1[J_3[n]] * Z_3_b2_1[n];
     // compute non-linear predictor
     mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
   }
   // priors including all constants
   target += gamma_lpdf(b_b0 | 2, 1)
-    - 4 * gamma_lccdf(0 | 2, 1);
+    - 1 * gamma_lccdf(0 | 2, 1);
   target += gamma_lpdf(b_b1 | 2, 1)
-    - 4 * gamma_lccdf(0 | 2, 1);
+    - 1 * gamma_lccdf(0 | 2, 1);
   target += gamma_lpdf(b_b2 | 2, 1)
-    - 4 * gamma_lccdf(0 | 2, 1);
+    - 1 * gamma_lccdf(0 | 2, 1);
   target += student_t_lpdf(sigma | 3, 0, 31)
     - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += student_t_lpdf(sd_1 | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += normal_lpdf(z_1[1] | 0, 1);
+  target += student_t_lpdf(sd_2 | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += normal_lpdf(z_2[1] | 0, 1);
+  target += student_t_lpdf(sd_3 | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += normal_lpdf(z_3[1] | 0, 1);
   // likelihood including all constants
   if (!prior_only) {
     target += normal_lpdf(Y | mu, sigma);
