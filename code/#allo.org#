@@ -1905,8 +1905,8 @@ m2 <- stan("simple.stan", data = standata(m_simple))
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000384 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.84 seconds.
+Gradient evaluation took 0.000317 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.17 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1923,15 +1923,39 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 3.75255 seconds (Warm-up)
-               1.21431 seconds (Sampling)
-               4.96686 seconds (Total)
+ Elapsed Time: 1.44226 seconds (Warm-up)
+               1.49804 seconds (Sampling)
+               2.9403 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 2).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.19096, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
 
-Gradient evaluation took 0.000224 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.24 seconds.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.98288, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.816235, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.89688, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.89795, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.62439, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
+
+
+Gradient evaluation took 0.000265 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.65 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1948,15 +1972,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 4.73053 seconds (Warm-up)
-               1.89599 seconds (Sampling)
-               6.62652 seconds (Total)
+ Elapsed Time: 1.44407 seconds (Warm-up)
+               1.80583 seconds (Sampling)
+               3.2499 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 3).
 
-Gradient evaluation took 0.000233 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.33 seconds.
+Gradient evaluation took 0.000244 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.44 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1973,15 +1997,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 5.24105 seconds (Warm-up)
-               1.30115 seconds (Sampling)
-               6.54221 seconds (Total)
+ Elapsed Time: 1.43497 seconds (Warm-up)
+               1.71223 seconds (Sampling)
+               3.1472 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 4).
 
-Gradient evaluation took 0.00021 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.1 seconds.
+Gradient evaluation took 0.000229 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.29 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1998,9 +2022,9 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 3.57251 seconds (Warm-up)
-               1.28397 seconds (Sampling)
-               4.85648 seconds (Total)
+ Elapsed Time: 1.64549 seconds (Warm-up)
+               1.35074 seconds (Sampling)
+               2.99622 seconds (Total)
 #+end_example
 
 **** generate data
