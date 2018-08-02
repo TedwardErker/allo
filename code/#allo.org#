@@ -1860,22 +1860,22 @@ summary(linm)
 #+begin_example
 
 Call:
-lm(formula = stan_sigma_x ~ sqrt(my_sigma_x), data = d[3:12, 
+lm(formula = stan_sigma_x ~ sqrt(my_sigma_x), data = d[3:12,
     ])
 
 Residuals:
-       Min         1Q     Median         3Q        Max 
--0.0064192 -0.0037903  0.0005439  0.0022707  0.0067205 
+       Min         1Q     Median         3Q        Max
+-0.0064192 -0.0037903  0.0005439  0.0022707  0.0067205
 
 Coefficients:
-                 Estimate Std. Error t value Pr(>|t|)    
-(Intercept)      0.003750   0.003014   1.244    0.249    
+                 Estimate Std. Error t value Pr(>|t|)
+(Intercept)      0.003750   0.003014   1.244    0.249
 sqrt(my_sigma_x) 0.086164   0.002680  32.153 9.54e-10 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Residual standard error: 0.004888 on 8 degrees of freedom
-Multiple R-squared:  0.9923,	Adjusted R-squared:  0.9914 
+Multiple R-squared:  0.9923,	Adjusted R-squared:  0.9914
 F-statistic:  1034 on 1 and 8 DF,  p-value: 9.536e-10
 #+end_example
 
@@ -2040,21 +2040,22 @@ I should make the generated data have the exact same structure as the
 real data, and just create one model..
 
 #+begin_src R
-  n <- 30
-  b0 <- 1.2
-  b1 <- 1  #2
-  b2 <- 1
+    n <- 30
+    b0 <- 1.2
+    b1 <- 1  #2
+    b2 <- 1
 
 
-  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+    w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
-  AGE <- cumsum(rep((150 - 0) / n, n))
+    AGE <- rep(seq(0,150,length.out = n/2),each = 2)
+  #cumsum(rep((150 - 0) / n, n))
 
-  sigma <- .05 * AGE
+    sigma <- .05 * AGE
 
-  DBH <- w(b0,b1,b2, AGE) + rnorm(n, 0, sigma)
+    DBH <- w(b0,b1,b2, AGE) + rnorm(n, 0, sigma)
 
-dt <- data.frame(AGE, DBH)
+  dt <- data.frame(AGE, DBH)
 #+end_src
 
 #+RESULTS:
@@ -2088,12 +2089,94 @@ plot(theta, post, type = "l")
                prior(gamma(2, 1), nlpar = "b1",lb = 0),
                prior(gamma(2, 1), nlpar = "b2",lb = 0))
 
-#          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
+          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
 code <- make_stancode(form, dt, prior = nlprior)
-print(code)
+
 #+end_src
 
 #+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000392 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.92 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000333 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.33 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.5629 seconds (Warm-up)
+               12.5943 seconds (Sampling)
+               23.1573 seconds (Total)
+
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 19.1561 seconds (Warm-up)
+               10.4799 seconds (Sampling)
+               29.6359 seconds (Total)
+#+end_example
+
+#+begin_src R
+summary(m)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         sigma ~ AGE - 1
+   Data: dt (Number of observations: 30)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.29      0.26     0.98     1.93        188 1.02
+b1_Intercept     1.00      0.11     0.79     1.22        491 1.01
+b2_Intercept     0.98      0.06     0.87     1.09        331 1.01
+sigma_AGE        0.02      0.00     0.01     0.02       1546 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
 
 Fix the stan code
 #+BEGIN_SRC stan :tangle singleSpeciesLocation_hetero_fixed.stan
@@ -2160,7 +2243,7 @@ m_fixed
 #+RESULTS:
 #+begin_example
 Inference for Stan model: singleSpeciesLocation_hetero_fixed.
-4 chains, each with iter=2000; warmup=1000; thin=1; 
+4 chains, each with iter=2000; warmup=1000; thin=1;
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
              mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
@@ -2172,7 +2255,7 @@ lp__       -78.25    0.05 1.57 -82.28 -79.07 -77.90 -77.07 -76.26  1206    1
 
 Samples were drawn using NUTS(diag_e) at Thu Aug  2 13:08:57 2018.
 For each parameter, n_eff is a crude measure of effective sample size,
-and Rhat is the potential scale reduction factor on split chains (at 
+and Rhat is the potential scale reduction factor on split chains (at
 convergence, Rhat=1).
 #+end_example
 
@@ -2242,9 +2325,10 @@ ggplot(mapping = aes(x = AGE, y = DBH)) + geom_point(data = dt, color = "red") +
 
 #+begin_src R
 
-  initf1 <- function() list(sigma = 1)
-  
-  model_fram_ftcollins_hetero <- stan("singleSpeciesLocation_hetero_fixed.stan", data = make_standata(form, fram_ftcollins, prior = nlprior), init_r = 1, init = initf1)
+  initf1 <- function() list(sigma = 100)
+
+  model_fram_ftcollins_hetero <- stan("singleSpeciesLocation_hetero_fixed.stan", data = make_standata(form, fram_ftcollins, prior = nlprior), init = initf1)
+#  model_fram_ftcollins_hetero <- stan("singleSpeciesLocation_hetero_fixed.stan", data = make_standata(form, dt, prior = nlprior), init = initf1)
 #+end_src
 
 #+RESULTS:
@@ -2265,111 +2349,7 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -9.27426, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -27.8638, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -22.3111, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -5.72291, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -18.0742, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -12.8167, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -9.90004, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -11.4964, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -18.9629, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -23.9291, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -17.859, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -27.4498, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -27.2536, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -11.1513, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -21.4494, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.00671, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -25.8851, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -8.98816, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -25.7272, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -26.4388, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -2.56383, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -33.4667, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2385,59 +2365,11 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -17.3329, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -5.32663, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -20.4249, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -19.1526, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -11.5531, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -5.96631, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -16.2748, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -3.79532, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -11.3328, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -20.6924, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -18.4091, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2453,11 +2385,27 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.94292, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -54.6108, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -14.2495, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -11.0667, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.601129, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -50.2865, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -2.55025, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2473,7 +2421,11 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.41435, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -22.5548, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2481,35 +2433,11 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -27.5598, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -3.59523, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -10.5424, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -26.9112, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -11.9998, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -8.09844, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -10.1586, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2521,23 +2449,11 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -17.3136, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -35.4121, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -25.3834, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -3.35304, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -27.5477, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -20.2728, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2545,7 +2461,7 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -31.3791, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2553,23 +2469,11 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -21.8189, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -47.7728, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -8.95363, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -18.8768, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -5.85305, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -24.7531, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2577,71 +2481,7 @@ Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -5.39838, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -3.65113, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -27.625, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -16.5162, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -5.94215, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -20.5516, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -9.35106, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -6.28229, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -23.6832, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -5.82169, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -12.2596, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
@@ -2651,8 +2491,252 @@ Rejecting initial value:
   Error evaluating the log probability at the initial value.
 Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -18.5381, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
 
-Initialization between (-1, 1) failed after 100 attempts. 
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -24.782, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -30.3844, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -55.3359, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -22.7854, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -52.0443, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -5.69394, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -11.1269, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -35.801, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -5.81806, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -19.719, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -23.8603, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.649481, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -55.0662, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -52.7088, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -47.0225, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -9.84232, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -30.374, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -12.1169, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -33.4545, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -32.0488, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -5.64414, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -39.1402, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -8.95718, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -54.2693, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -3.60448, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -22.1129, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.04548, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -16.0619, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -40.4507, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -21.955, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -34.0463, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[31] is 0, but must be > 0!  (in 'model54b4304d7f68_singleSpeciesLocation_hetero_fixed' at line 49)
+
+
+Initialization between (-2, 2) failed after 100 attempts.
  Try specifying initial values, reducing ranges of constrained values, or reparameterizing the model.
 [1] "Error in sampler$call_sampler(args_list[[i]]) : Initialization failed."
 error occurred during calling the sampler; sampling not done
