@@ -2039,8 +2039,16 @@ dt <- data.frame(AGE, DBH)
 [[file:../figs/test_data_1.png]]
 
 **** test model on generated data
+Priors
+#+begin_src R :exports results :results graphics :file ../figs/ftest.png
+post <- dgamma(theta,2, 1)
+plot(theta, post, type = "l")
+#+end_src
 
-#+begin_src R
+#+RESULTS:
+[[file:../figs/ftest.png]]
+
+#+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
@@ -2048,18 +2056,19 @@ dt <- data.frame(AGE, DBH)
                      sigma ~ AGE - 1,
                      nl = T)
 
-  nlprior <- c(prior(gamma(1, 2), nlpar = "b0",lb = 0),
-               prior(gamma(1, 2), nlpar = "b1",lb = 0),
-               prior(gamma(1, 2), nlpar = "b2",lb = 0))
+  nlprior <- c(prior(gamma(2, 1), nlpar = "b0",lb = 0),
+               prior(gamma(2, 1), nlpar = "b1",lb = 0),
+               prior(gamma(2, 1), nlpar = "b2",lb = 0))
 
 #          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
-make_stancode(form, dt, prior = nlprior)
+code <- make_stancode(form, dt, prior = nlprior)
+print(code)
 #+end_src
 
 #+RESULTS:
 
 Fix the stan code
-#+BEGIN_SRC stan :tangle singleSpeciesLocation_hetero.stan
+#+BEGIN_SRC stan :tangle singleSpeciesLocation_hetero_fixed.stan
 // generated with brms 2.3.1
 functions {
 }
@@ -2100,12 +2109,12 @@ model {
     mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
   }
   // priors including all constants
-  target += gamma_lpdf(b_b0 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2);
-  target += gamma_lpdf(b_b1 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2);
-  target += gamma_lpdf(b_b2 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b0 | 2, 1)
+    - 1 * gamma_lccdf(0 | 2, 1);
+  target += gamma_lpdf(b_b1 | 2, 1)
+    - 1 * gamma_lccdf(0 | 2, 1);
+  target += gamma_lpdf(b_b2 | 2, 1)
+    - 1 * gamma_lccdf(0 | 2, 1);
   // likelihood including all constants
   if (!prior_only) {
     target += normal_lpdf(Y | mu, log(sigma));
@@ -2116,7 +2125,7 @@ generated quantities {
 #+END_SRC
 
 #+begin_src R
-m_fixed <- stan("singleSpeciesLocation_hetero.stan", data = make_standata(form, dt, prior = nlprior))
+m_fixed <- stan("singleSpeciesLocation_hetero_fixed.stan", data = make_standata(form, dt, prior = nlprior))
 m_fixed
 #+end_src
 
