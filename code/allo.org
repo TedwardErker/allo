@@ -1841,8 +1841,60 @@ qplot(sqrt(my_sigma_x), stan_sigma_x, d)
 #+RESULTS:
 [[file:../figs/f.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/f_expMysigmaX.png
+qplot(my_sigma_x, exp(stan_sigma_x), d)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/f_expMysigmaX.png]]
+
+
 hmmmmm......
 
+#+begin_src R
+stancode(m_simple)
+#+end_src
+
+#+RESULTS:
+
+
+#+BEGIN_SRC stan :simple.stan
+// generated with brms 2.3.1
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_sigma;  // number of population-level effects
+  matrix[N, K_sigma] X_sigma;  // population-level design matrix
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  real temp_Intercept;  // temporary intercept
+  vector[K_sigma] b_sigma;  // population-level effects
+}
+transformed parameters {
+}
+model {
+  vector[N] mu = rep_vector(0, N) + temp_Intercept;
+  vector[N] sigma = X_sigma * b_sigma;
+  for (n in 1:N) {
+    sigma[n] = exp(sigma[n]);
+  }
+  // priors including all constants
+  target += student_t_lpdf(temp_Intercept | 3, 0, 10);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+  // actual population-level intercept
+  real b_Intercept = temp_Intercept;
+}
+#+END_SRC
 **** generate data
 
 #+begin_src R
