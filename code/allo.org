@@ -1724,9 +1724,9 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+begin_src R
   n <- 100
   x <- seq(1,100,length.out = n)
-  sigma <- .6 * x
+  sigma <- 1.2 * x
   y <- rnorm(n,0,sigma)
-  smpl <- data.frame(x,y)
+  simple <- data.frame(x,y)
 #+end_src
 
 #+RESULTS:
@@ -1742,7 +1742,7 @@ plot(x,y)
   form <- bf(y ~ 1,
              sigma ~ x - 1)
 
-  m_sup_smpl <- brm(form, chains = 2, cores = 2, data = smpl, init_r = 1)
+  m_simple <- brm(form, chains = 2, cores = 2, data = smpl, init_r = 1)
 #+end_src
 
 #+RESULTS:
@@ -1752,8 +1752,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000313 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.13 seconds.
+Gradient evaluation took 0.001086 seconds
+1000 transitions using 10 leapfrog steps per transition would take 10.86 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1761,8 +1761,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.00033 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.3 seconds.
+Gradient evaluation took 0.001051 seconds
+1000 transitions using 10 leapfrog steps per transition would take 10.51 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1770,38 +1770,38 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 4.85599 seconds (Warm-up)
-               1.41683 seconds (Sampling)
-               6.27281 seconds (Total)
+ Elapsed Time: 15.1599 seconds (Warm-up)
+               8.50206 seconds (Sampling)
+               23.662 seconds (Total)
 
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 5.22799 seconds (Warm-up)
-               1.27924 seconds (Sampling)
-               6.50723 seconds (Total)
+ Elapsed Time: 21.3216 seconds (Warm-up)
+               6.95393 seconds (Sampling)
+               28.2755 seconds (Total)
 #+end_example
 
 #+begin_src R
-summary(m_sup_smpl)
+summary(m_sup_smpl, digits = 3)
 #+end_src
 
 #+RESULTS:
@@ -1810,22 +1810,42 @@ summary(m_sup_smpl)
   Links: mu = identity; sigma = log
 Formula: y ~ 1
          sigma ~ x - 1
-   Data: smpl (Number of observations: 100)
+   Data: smpl (Number of observations: 500)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Population-Level Effects:
           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-Intercept     0.38      0.41    -0.40     1.20        786 1.00
-sigma_x       0.08      0.00     0.07     0.08       1908 1.00
+Intercept    -0.49      0.21    -0.89    -0.10        466 1.00
+sigma_x       0.09      0.00     0.09     0.09       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-.3 get .05
-.6 get .08
+.1 get .02617
+.3 get .0520294
+.6 get .076358
+.9 get .0879
+1.2 get .1132786
+1.5 get .116
+
+#+begin_src R
+my_sigma_x <- c(.1,.3,.6,.9,1.2,1.5)
+stan_sigma_x <- c(.02617, .05202, .076358, .0879, .1132786, .116)
+d <- data.frame(my_sigma_x, stan_sigma_x)
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/f.png
+qplot(my_sigma_x, stan_sigma_x, d)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/f.png]]
 
 hmmmmm......
 
