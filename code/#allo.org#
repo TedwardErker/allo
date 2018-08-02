@@ -1835,7 +1835,7 @@ d <- data.frame(my_sigma_x, stan_sigma_x)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/f.png
-qplot(my_sigma_x, stan_sigma_x, d)
+qplot(sqrt(my_sigma_x), stan_sigma_x, d)
 #+end_src
 
 #+RESULTS:
