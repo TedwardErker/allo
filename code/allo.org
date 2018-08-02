@@ -2052,71 +2052,13 @@ dt <- data.frame(AGE, DBH)
                prior(gamma(1, 2), nlpar = "b1",lb = 0),
                prior(gamma(1, 2), nlpar = "b2",lb = 0))
 
-          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
-#+end_src
-
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.000701 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.01 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.001069 seconds
-1000 transitions using 10 leapfrog steps per transition would take 10.69 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 24.3724 seconds (Warm-up)
-               19.1688 seconds (Sampling)
-               43.5411 seconds (Total)
-
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 24.5135 seconds (Warm-up)
-               20.9414 seconds (Sampling)
-               45.4549 seconds (Total)
-#+end_example
-
-Fit the stan code
-#+begin_src R
-stancode(m)
+#          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
+make_stancode(form, dt, prior = nlprior)
 #+end_src
 
 #+RESULTS:
 
+Fix the stan code
 #+BEGIN_SRC stan :tangle singleSpeciesLocation_hetero.stan
 // generated with brms 2.3.1
 functions {
@@ -2174,24 +2116,214 @@ generated quantities {
 #+END_SRC
 
 #+begin_src R
-m_fixed <- stan("singleSpeciesLocation_hetero.stan", standata(m))
+m_fixed <- stan("singleSpeciesLocation_hetero.stan", data = standata(m))
 summary(m_fixed)
 #+end_src
 
 #+RESULTS:
-: Error in file(fname, "rt") : cannot open the connection
-: In addition: Warning messages:
-: 1: In normalizePath(file) :
-:   path[1]="singleSpeciesLocation_hetero.stan": No such file or directory
-: 2: In file(fname, "rt") :
-:   cannot open file 'singleSpeciesLocation_hetero.stan': No such file or directory
-: Error in get_model_strcode(file, model_code) :
-:   cannot open model file "singleSpeciesLocation_hetero.stan"
-: Error in summary(m_fixed) : object 'm_fixed' not found
+#+begin_example
+
+SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000625 seconds
+1000 transitions using 10 leapfrog steps per transition would take 6.25 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 11.4938 seconds (Warm-up)
+               12.2819 seconds (Sampling)
+               23.7757 seconds (Total)
+
+
+SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000489 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.89 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 11.6945 seconds (Warm-up)
+               12.8227 seconds (Sampling)
+               24.5172 seconds (Total)
+
+
+SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 3).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.98932, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.687726, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+
+Gradient evaluation took 0.000779 seconds
+1000 transitions using 10 leapfrog steps per transition would take 7.79 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 12.7412 seconds (Warm-up)
+               11.396 seconds (Sampling)
+               24.1372 seconds (Total)
+
+
+SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 4).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.0258541, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.14184, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+
+Gradient evaluation took 0.000475 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.75 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 12.4604 seconds (Warm-up)
+               13.0553 seconds (Sampling)
+               25.5157 seconds (Total)
+$summary
+                   mean      se_mean         sd         2.5%          25%
+b_b0[1]       1.0813698 0.0030376682 0.11036362    0.9092764    1.0061342
+b_b1[1]       1.2040620 0.0025139983 0.11985063    0.9799895    1.1249221
+b_b2[1]       1.0681573 0.0010142219 0.04332757    0.9792989    1.0403205
+b_sigma[1]    0.2131066 0.0003310108 0.01550915    0.1863119    0.2020123
+lp__       -395.1958643 0.0409541449 1.51282899 -399.0557577 -395.8859063
+                    50%          75%        97.5%    n_eff      Rhat
+b_b0[1]       1.0698954    1.1383756    1.3340189 1319.992 1.0042699
+b_b1[1]       1.1989378    1.2795850    1.4574706 2272.745 0.9999597
+b_b2[1]       1.0674524    1.0960432    1.1527440 1824.999 1.0032808
+b_sigma[1]    0.2120104    0.2227492    0.2461711 2195.289 1.0000568
+lp__       -394.8270760 -394.0915292 -393.3382082 1364.533 1.0005685
+
+$c_summary
+, , chains = chain:1
+
+            stats
+parameter            mean         sd         2.5%          25%          50%
+  b_b0[1]       1.0805601 0.11354724    0.9001549    1.0051131    1.0666754
+  b_b1[1]       1.2020820 0.12504995    0.9801671    1.1228691    1.1966552
+  b_b2[1]       1.0695265 0.04703001    0.9792989    1.0384928    1.0687429
+  b_sigma[1]    0.2130498 0.01516021    0.1875988    0.2020978    0.2121081
+  lp__       -395.2203336 1.58414831 -399.4402065 -395.9060777 -394.8258195
+            stats
+parameter             75%        97.5%
+  b_b0[1]       1.1380247    1.3350388
+  b_b1[1]       1.2820653    1.4685593
+  b_b2[1]       1.1009054    1.1652374
+  b_sigma[1]    0.2225757    0.2457203
+  lp__       -394.0935889 -393.3208223
+
+, , chains = chain:2
+
+            stats
+parameter            mean         sd         2.5%          25%          50%
+  b_b0[1]       1.0803360 0.10238386    0.9179378    1.0081890    1.0736336
+  b_b1[1]       1.2081979 0.12067604    0.9800104    1.1261353    1.2026442
+  b_b2[1]       1.0669122 0.03975908    0.9832348    1.0416450    1.0657293
+  b_sigma[1]    0.2129071 0.01579740    0.1856015    0.2012691    0.2121568
+  lp__       -395.1145383 1.46285093 -398.8253254 -395.7442303 -394.7341542
+            stats
+parameter            75%        97.5%
+  b_b0[1]       1.137501    1.3237795
+  b_b1[1]       1.281797    1.4584367
+  b_b2[1]       1.092883    1.1452592
+  b_sigma[1]    0.222430    0.2463216
+  lp__       -394.045968 -393.3453246
+
+, , chains = chain:3
+
+            stats
+parameter            mean         sd         2.5%          25%          50%
+  b_b0[1]       1.0785569 0.11303844    0.9092470    1.0056966    1.0684113
+  b_b1[1]       1.2029660 0.11003161    0.9952105    1.1253962    1.2010494
+  b_b2[1]       1.0697894 0.04277586    0.9852246    1.0428688    1.0701078
+  b_sigma[1]    0.2131671 0.01560282    0.1863089    0.2019916    0.2117956
+  lp__       -395.1559090 1.45245370 -398.4927075 -395.8702199 -394.8242136
+            stats
+parameter             75%        97.5%
+  b_b0[1]       1.1320740    1.3164543
+  b_b1[1]       1.2753475    1.4195308
+  b_b2[1]       1.0966096    1.1513403
+  b_sigma[1]    0.2233655    0.2459521
+  lp__       -394.0800112 -393.3203839
+
+, , chains = chain:4
+
+            stats
+parameter            mean         sd         2.5%          25%          50%
+  b_b0[1]       1.0860262 0.11212772    0.9189732    1.0092101    1.0707021
+  b_b1[1]       1.2030018 0.12316374    0.9764417    1.1254845    1.1915763
+  b_b2[1]       1.0664010 0.04339571    0.9772215    1.0388099    1.0664131
+  b_sigma[1]    0.2133021 0.01548983    0.1858808    0.2027383    0.2118895
+  lp__       -395.2926762 1.54408510 -399.1148674 -396.0283009 -394.9300894
+            stats
+parameter             75%        97.5%
+  b_b0[1]       1.1448861    1.3557127
+  b_b1[1]       1.2774452    1.4723228
+  b_b2[1]       1.0958622    1.1487591
+  b_sigma[1]    0.2228091    0.2464493
+  lp__       -394.1661601 -393.3853033
+#+end_example
 
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
-plot(m)
+plot(m_fixed)
 #+end_src
 
 #+RESULTS:
@@ -2199,7 +2331,7 @@ plot(m)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
 cond <- data.frame("1" = 1)
-  me <-   marginal_effects(m, points = T, condistions = cond)
+  me <-   marginal_effects(m_fixed, points = T, condistions = cond)
 
 me
 

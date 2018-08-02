@@ -2052,71 +2052,13 @@ dt <- data.frame(AGE, DBH)
                prior(gamma(1, 2), nlpar = "b1",lb = 0),
                prior(gamma(1, 2), nlpar = "b2",lb = 0))
 
-          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
-#+end_src
-
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.000701 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.01 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.001069 seconds
-1000 transitions using 10 leapfrog steps per transition would take 10.69 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 24.3724 seconds (Warm-up)
-               19.1688 seconds (Sampling)
-               43.5411 seconds (Total)
-
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 24.5135 seconds (Warm-up)
-               20.9414 seconds (Sampling)
-               45.4549 seconds (Total)
-#+end_example
-
-Fit the stan code
-#+begin_src R
-stancode(m)
+#          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
+make_stancode(form, dt, prior = nlprior)
 #+end_src
 
 #+RESULTS:
 
+Fix the stan code
 #+BEGIN_SRC stan :tangle singleSpeciesLocation_hetero.stan
 // generated with brms 2.3.1
 functions {
@@ -2174,7 +2116,7 @@ generated quantities {
 #+END_SRC
 
 #+begin_src R
-m_fixed <- stan("singleSpeciesLocation_hetero.stan", data = standata(m))
+m_fixed <- stan("singleSpeciesLocation_hetero.stan", data = make_standata(form, dt, pri))
 summary(m_fixed)
 #+end_src
 
@@ -2381,7 +2323,7 @@ parameter             75%        97.5%
 
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
-t(m_fixed)
+plot(m_fixed)
 #+end_src
 
 #+RESULTS:
@@ -2389,7 +2331,7 @@ t(m_fixed)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
 cond <- data.frame("1" = 1)
-  me <-   marginal_effects(m, points = T, condistions = cond)
+  me <-   marginal_effects(m_fixed, points = T, condistions = cond)
 
 me
 
