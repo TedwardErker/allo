@@ -1724,7 +1724,8 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+begin_src R
   n <- 100
   x <- seq(1,100,length.out = n)
-  sigma <- .001 * x
+  my_sigma_x <- .0001
+  sigma <- my_sigma_x * x
   y <- rnorm(n,0,sigma)
   simple <- data.frame(x,y)
 #+end_src
@@ -1752,52 +1753,52 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000759 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.59 seconds.
+Gradient evaluation took 0.000347 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.47 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000343 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.43 seconds.
+Gradient evaluation took 0.000325 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.25 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 1.30181 seconds (Warm-up)
+               1.22548 seconds (Sampling)
+               2.5273 seconds (Total)
+
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 4.44289 seconds (Warm-up)
-               2.16154 seconds (Sampling)
-               6.60443 seconds (Total)
-
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 4.71169 seconds (Warm-up)
-               2.18398 seconds (Sampling)
-               6.89567 seconds (Total)
+ Elapsed Time: 1.60939 seconds (Warm-up)
+               1.30008 seconds (Sampling)
+               2.90946 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -1816,8 +1817,8 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects: 
           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-Intercept    -0.02      0.01    -0.04     0.00        517 1.00
-sigma_x      -0.03      0.00    -0.03    -0.03       2000 1.00
+Intercept    -0.00      0.00    -0.00     0.00       1026 1.00
+sigma_x      -0.06      0.00    -0.06    -0.05       1540 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
@@ -1825,8 +1826,8 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 #+begin_src R
-my_sigma_x <- c(.001,.05,.1,.3,.6,.9,1.2,1.5)
-stan_sigma_x <- c( , .017, .02617, .05202, .076358, .0879, .10, .116)
+my_sigma_x <- c(.0001, .001,.05,.1,.3,.6,.9,1.2,1.5, 2.5, 5)
+stan_sigma_x <- c(-0.056, -0.03, .017, .02617, .05202, .076358, .0879, .10, .116, .14, .19)
 d <- data.frame(my_sigma_x, stan_sigma_x)
 #+end_src
 
