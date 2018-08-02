@@ -3395,6 +3395,11 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts.png
+fe <- fixef(m)[c(1,5,9),1]
+b0 <- fe[1]
+
+, AGE)
+w(
   me <-   marginal_effects(m_generated_singleSpecies_multipleLocations_homo, effects = "AGE")
 
   ggplot() + geom_line(data = me$AGE, aes(x = AGE, y = estimate__)) +
