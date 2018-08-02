@@ -1724,7 +1724,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+begin_src R
   n <- 100
   x <- seq(1,100,length.out = n)
-  my_sigma_x <- .5
+  my_sigma_x <- 1.2
   sigma <- my_sigma_x * x
   y <- rnorm(n,0,sigma)
   simple <- data.frame(x,y)
@@ -1753,28 +1753,40 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000316 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.16 seconds.
+Gradient evaluation took 0.000312 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.12 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000314 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.14 seconds.
+Gradient evaluation took 0.000426 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.26 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 5.00798 seconds (Warm-up)
+               1.36136 seconds (Sampling)
+               6.36935 seconds (Total)
+
 Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
@@ -1784,21 +1796,9 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 49.4827 seconds (Warm-up)
-               10.7643 seconds (Sampling)
-               60.247 seconds (Total)
-
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 59.9896 seconds (Warm-up)
-               10.9024 seconds (Sampling)
-               70.892 seconds (Total)
+ Elapsed Time: 28.4501 seconds (Warm-up)
+               18.9572 seconds (Sampling)
+               47.4073 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -1905,8 +1905,8 @@ m2 <- stan("simple.stan", data = standata(m_simple))
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000384 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.84 seconds.
+Gradient evaluation took 0.000311 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.11 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1923,15 +1923,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 3.75255 seconds (Warm-up)
-               1.21431 seconds (Sampling)
-               4.96686 seconds (Total)
+ Elapsed Time: 1.57487 seconds (Warm-up)
+               1.66635 seconds (Sampling)
+               3.24122 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000224 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.24 seconds.
+Gradient evaluation took 0.000251 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.51 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1948,15 +1948,19 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 4.73053 seconds (Warm-up)
-               1.89599 seconds (Sampling)
-               6.62652 seconds (Total)
+ Elapsed Time: 1.39124 seconds (Warm-up)
+               1.29105 seconds (Sampling)
+               2.68229 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 3).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.33081, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
 
-Gradient evaluation took 0.000233 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.33 seconds.
+
+Gradient evaluation took 0.000273 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.73 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1973,15 +1977,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 5.24105 seconds (Warm-up)
-               1.30115 seconds (Sampling)
-               6.54221 seconds (Total)
+ Elapsed Time: 1.43805 seconds (Warm-up)
+               1.2473 seconds (Sampling)
+               2.68535 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 4).
 
-Gradient evaluation took 0.00021 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.1 seconds.
+Gradient evaluation took 0.000245 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.45 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1998,12 +2002,14 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 3.57251 seconds (Warm-up)
-               1.28397 seconds (Sampling)
-               4.85648 seconds (Total)
+ Elapsed Time: 1.45058 seconds (Warm-up)
+               1.45041 seconds (Sampling)
+               2.90099 seconds (Total)
 #+end_example
 
 **** generate data
+I should make the generated data have the exact same structure as the
+real data, and just create one model..
 
 #+begin_src R
   n <- 100
@@ -2011,35 +2017,35 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
   b1 <- 2
   b2 <- 1
 
-  sigma <- .2 * x
-
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
-  x <- cumsum(rep((150 - 0) / n, n))
+  AGE <- cumsum(rep((150 - 0) / n, n))
 
-  y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
+  sigma <- .2 * AGE
 
-dt <- data.frame(x, y)
+  DBH <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
+
+dt <- data.frame(AGE, DBH)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
-  ggplot(dt, aes(x = x, y = y)) + geom_point()
+  ggplot(dt, aes(x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/test_data_1.png]]
 
-
 **** test model on generated data
+
 #+begin_src R
-          form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
+          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                      b0 ~ 1,
                      b1 ~ 1,
                      b2 ~ 1,
-                     sigma ~ x - 1,
+                     sigma ~ AGE - 1,
                      nl = T)
 
   nlprior <- c(prior(gamma(1, 2), nlpar = "b0",lb = 0),
@@ -2056,8 +2062,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000706 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.06 seconds.
+Gradient evaluation took 0.000701 seconds
+1000 transitions using 10 leapfrog steps per transition would take 7.01 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2065,8 +2071,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000693 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.93 seconds.
+Gradient evaluation took 0.001069 seconds
+1000 transitions using 10 leapfrog steps per transition would take 10.69 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2076,62 +2082,112 @@ Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 17.2654 seconds (Warm-up)
-               16.2416 seconds (Sampling)
-               33.507 seconds (Total)
-
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 21.2624 seconds (Warm-up)
-               17.5166 seconds (Sampling)
-               38.779 seconds (Total)
+ Elapsed Time: 24.3724 seconds (Warm-up)
+               19.1688 seconds (Sampling)
+               43.5411 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 24.5135 seconds (Warm-up)
+               20.9414 seconds (Sampling)
+               45.4549 seconds (Total)
 #+end_example
 
+Fit the stan code
 #+begin_src R
-summary(m)
+stancode(m)
 #+end_src
 
 #+RESULTS:
-#+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = log
-Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
-         b0 ~ 1
-         b1 ~ 1
-         b2 ~ 1
-         sigma ~ x - 1
-   Data: dt (Number of observations: 100)
-Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 2000
 
-Population-Level Effects:
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.38      0.16     1.13     1.75        583 1.00
-b1_Intercept     1.74      0.14     1.46     2.01        651 1.00
-b2_Intercept     0.99      0.04     0.92     1.07        734 1.00
-sigma_x          0.04      0.00     0.03     0.04       2000 1.00
+#+BEGIN_SRC stan :tangle singleSpeciesLocation_hetero.stan
+// generated with brms 2.3.1
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_b0;  // number of population-level effects
+  matrix[N, K_b0] X_b0;  // population-level design matrix
+  int<lower=1> K_b1;  // number of population-level effects
+  matrix[N, K_b1] X_b1;  // population-level design matrix
+  int<lower=1> K_b2;  // number of population-level effects
+  matrix[N, K_b2] X_b2;  // population-level design matrix
+  // covariate vectors
+  vector[N] C_1;
+  int<lower=1> K_sigma;  // number of population-level effects
+  matrix[N, K_sigma] X_sigma;  // population-level design matrix
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  vector<lower=0>[K_b0] b_b0;  // population-level effects
+  vector<lower=0>[K_b1] b_b1;  // population-level effects
+  vector<lower=0>[K_b2] b_b2;  // population-level effects
+  vector[K_sigma] b_sigma;  // population-level effects
+}
+transformed parameters {
+}
+model {
+  vector[N] mu_b0 = X_b0 * b_b0;
+  vector[N] mu_b1 = X_b1 * b_b1;
+  vector[N] mu_b2 = X_b2 * b_b2;
+  vector[N] mu;
+  vector[N] sigma = X_sigma * b_sigma;
+  for (n in 1:N) {
+    sigma[n] = exp(sigma[n]);
+    // compute non-linear predictor
+    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  }
+  // priors including all constants
+  target += gamma_lpdf(b_b0 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b1 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  target += gamma_lpdf(b_b2 | 1, 2)
+    - 1 * gamma_lccdf(0 | 1, 2);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, log(sigma));
+  }
+}
+generated quantities {
+}
+#+END_SRC
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).
-#+end_example
+#+begin_src R
+m_fixed <- stan("singleSpeciesLocation_hetero.stan", standata(m))
+summary(m_fixed)
+#+end_src
+
+#+RESULTS:
+: Error in file(fname, "rt") : cannot open the connection
+: In addition: Warning messages:
+: 1: In normalizePath(file) :
+:   path[1]="singleSpeciesLocation_hetero.stan": No such file or directory
+: 2: In file(fname, "rt") :
+:   cannot open file 'singleSpeciesLocation_hetero.stan': No such file or directory
+: Error in get_model_strcode(file, model_code) :
+:   cannot open model file "singleSpeciesLocation_hetero.stan"
+: Error in summary(m_fixed) : object 'm_fixed' not found
 
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
