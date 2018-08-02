@@ -4015,9 +4015,9 @@ generated quantities {
 
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ City,
-                     b1 ~ City,
-                     b2 ~ City,
+                     b0 ~ (1 | City),
+                     b1 ~ (1 | City),
+                     b2 ~ (1 | City),
                      nl = T)
 
   nlprior <- c(prior(gamma(2, 1), nlpar = "b0",lb = 0),
@@ -4036,8 +4036,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000704 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.04 seconds.
+Gradient evaluation took 0.001288 seconds
+1000 transitions using 10 leapfrog steps per transition would take 12.88 seconds.
 Adjust your expectations accordingly!
 
 
@@ -4045,8 +4045,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000667 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.67 seconds.
+Gradient evaluation took 0.001118 seconds
+1000 transitions using 10 leapfrog steps per transition would take 11.18 seconds.
 Adjust your expectations accordingly!
 
 
@@ -4068,20 +4068,20 @@ Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 93.3083 seconds (Warm-up)
-               68.9656 seconds (Sampling)
-               162.274 seconds (Total)
+ Elapsed Time: 49.3772 seconds (Warm-up)
+               32.1115 seconds (Sampling)
+               81.4887 seconds (Total)
 
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 95.6431 seconds (Warm-up)
-               91.6037 seconds (Sampling)
-               187.247 seconds (Total)
+ Elapsed Time: 51.5806 seconds (Warm-up)
+               36.956 seconds (Sampling)
+               88.5365 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -4102,22 +4102,22 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.27      0.19     0.95     1.68        533 1.00
-b0_Cityb         0.35      0.14     0.08     0.60        648 1.00
-b0_Cityc         0.20      0.10     0.04     0.41       1153 1.01
-b0_Cityd         0.04      0.03     0.00     0.10       2000 1.00
-b1_Intercept     2.52      0.38     1.78     3.28        923 1.00
-b1_Cityb         0.28      0.18     0.04     0.72       1745 1.00
-b1_Cityc         0.36      0.24     0.06     0.96       1906 1.00
-b1_Cityd         0.13      0.10     0.02     0.40       2000 1.00
-b2_Intercept     0.77      0.08     0.63     0.93        529 1.00
-b2_Cityb         0.08      0.04     0.01     0.16        654 1.00
-b2_Cityc         0.05      0.03     0.01     0.11       1434 1.00
-b2_Cityd         0.01      0.01     0.00     0.03       2000 1.00
+b0_Intercept     1.14      0.06     1.04     1.27        784 1.00
+b0_Cityb         0.02      0.01     0.00     0.04       2000 1.00
+b0_Cityc         0.18      0.06     0.06     0.29       1093 1.00
+b0_Cityd         0.03      0.02     0.00     0.08       2000 1.00
+b1_Intercept     2.04      0.51     1.17     3.17        907 1.00
+b1_Cityb         0.06      0.04     0.01     0.17       2000 1.00
+b1_Cityc         0.48      0.31     0.06     1.20       1700 1.00
+b1_Cityd         0.24      0.14     0.04     0.59       2000 1.00
+b2_Intercept     0.96      0.08     0.81     1.11        797 1.00
+b2_Cityb         0.01      0.00     0.00     0.02       2000 1.00
+b2_Cityc         0.08      0.04     0.02     0.17       1465 1.00
+b2_Cityd         0.02      0.02     0.00     0.06       2000 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     6.79      0.57     5.79     8.03       1311 1.00
+sigma     9.81      0.78     8.45    11.54       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -4152,13 +4152,65 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/marginal_pts.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png
-pairs(m)
+#+begin_src R
+stancode(m_generated_singleSpecies_multipleLocations_homo)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_1.png]]
 
+#+BEGIN_SRC stan
+// generated with brms 2.3.1
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_b0;  // number of population-level effects
+  matrix[N, K_b0] X_b0;  // population-level design matrix
+  int<lower=1> K_b1;  // number of population-level effects
+  matrix[N, K_b1] X_b1;  // population-level design matrix
+  int<lower=1> K_b2;  // number of population-level effects
+  matrix[N, K_b2] X_b2;  // population-level design matrix
+  // covariate vectors
+  vector[N] C_1;
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  vector<lower=0>[K_b0] b_b0;  // population-level effects
+  vector<lower=0>[K_b1] b_b1;  // population-level effects
+  vector<lower=0>[K_b2] b_b2;  // population-level effects
+  real<lower=0> sigma;  // residual SD
+}
+transformed parameters {
+}
+model {
+  vector[N] mu_b0 = X_b0 * b_b0;
+  vector[N] mu_b1 = X_b1 * b_b1;
+  vector[N] mu_b2 = X_b2 * b_b2;
+  vector[N] mu;
+  for (n in 1:N) {
+    // compute non-linear predictor
+    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  }
+  // priors including all constants
+  target += gamma_lpdf(b_b0 | 2, 1)
+    - 4 * gamma_lccdf(0 | 2, 1);
+  target += gamma_lpdf(b_b1 | 2, 1)
+    - 4 * gamma_lccdf(0 | 2, 1);
+  target += gamma_lpdf(b_b2 | 2, 1)
+    - 4 * gamma_lccdf(0 | 2, 1);
+  target += student_t_lpdf(sigma | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+}
+#+END_SRC
 *** single species, multiple locations, climate predictors for locations, homoskedasticyt..sysgnsy
 *** explaining priors
 can't be negative...
