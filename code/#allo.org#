@@ -1893,37 +1893,37 @@ stancode(m_simple)
 
 #+BEGIN_SRC stan :tangle simple.stan
 // generated with brms 2.3.1
-functions { 
-} 
-data { 
-  int<lower=1> N;  // total number of observations 
-  vector[N] Y;  // response variable 
-  int<lower=1> K_sigma;  // number of population-level effects 
-  matrix[N, K_sigma] X_sigma;  // population-level design matrix 
-  int prior_only;  // should the likelihood be ignored? 
-} 
-transformed data { 
-} 
-parameters { 
-  real temp_Intercept;  // temporary intercept 
-  vector[K_sigma] b_sigma;  // population-level effects 
-} 
-transformed parameters { 
-} 
-model { 
-  vector[N] mu = rep_vector(0, N) + temp_Intercept; 
-  vector[N] sigma = X_sigma * b_sigma; 
-  // priors including all constants 
-  target += student_t_lpdf(temp_Intercept | 3, -3, 43); 
-  // likelihood including all constants 
-  if (!prior_only) { 
-    target += normal_lpdf(Y | mu, sigma); 
-  } 
-} 
-generated quantities { 
-  // actual population-level intercept 
-  real b_Intercept = temp_Intercept; 
-} 
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_sigma;  // number of population-level effects
+  matrix[N, K_sigma] X_sigma;  // population-level design matrix
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  real temp_Intercept;  // temporary intercept
+  vector[K_sigma] b_sigma;  // population-level effects
+}
+transformed parameters {
+}
+model {
+  vector[N] mu = rep_vector(0, N) + temp_Intercept;
+  vector[N] sigma = X_sigma * b_sigma;
+  // priors including all constants
+  target += student_t_lpdf(temp_Intercept | 3, -3, 43);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+  // actual population-level intercept
+  real b_Intercept = temp_Intercept;
+}
 
 #+END_SRC
 
@@ -1946,7 +1946,7 @@ Cannot assign to variable outside of declaration block; left-hand-side variable 
   -------------------------------------------------
 
 PARSER EXPECTED: <expression assignable to left-hand side>
-Error in stanc(file = file, model_code = model_code, model_name = model_name,  : 
+Error in stanc(file = file, model_code = model_code, model_name = model_name,  :
   failed to parse Stan model 'simple' due to the above error.
 #+end_example
 
@@ -4002,7 +4002,7 @@ generated quantities {
 #+end_src
 
 #+RESULTS:
-: [1]  3 68 20  9
+: [1] 24  8 26 42
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
@@ -4036,8 +4036,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000704 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.04 seconds.
+Gradient evaluation took 0.001288 seconds
+1000 transitions using 10 leapfrog steps per transition would take 12.88 seconds.
 Adjust your expectations accordingly!
 
 
@@ -4045,8 +4045,8 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000667 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.67 seconds.
+Gradient evaluation took 0.001118 seconds
+1000 transitions using 10 leapfrog steps per transition would take 11.18 seconds.
 Adjust your expectations accordingly!
 
 
@@ -4068,20 +4068,20 @@ Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 93.3083 seconds (Warm-up)
-               68.9656 seconds (Sampling)
-               162.274 seconds (Total)
+ Elapsed Time: 49.3772 seconds (Warm-up)
+               32.1115 seconds (Sampling)
+               81.4887 seconds (Total)
 
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 95.6431 seconds (Warm-up)
-               91.6037 seconds (Sampling)
-               187.247 seconds (Total)
+ Elapsed Time: 51.5806 seconds (Warm-up)
+               36.956 seconds (Sampling)
+               88.5365 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -4102,22 +4102,22 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects: 
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.27      0.19     0.95     1.68        533 1.00
-b0_Cityb         0.35      0.14     0.08     0.60        648 1.00
-b0_Cityc         0.20      0.10     0.04     0.41       1153 1.01
-b0_Cityd         0.04      0.03     0.00     0.10       2000 1.00
-b1_Intercept     2.52      0.38     1.78     3.28        923 1.00
-b1_Cityb         0.28      0.18     0.04     0.72       1745 1.00
-b1_Cityc         0.36      0.24     0.06     0.96       1906 1.00
-b1_Cityd         0.13      0.10     0.02     0.40       2000 1.00
-b2_Intercept     0.77      0.08     0.63     0.93        529 1.00
-b2_Cityb         0.08      0.04     0.01     0.16        654 1.00
-b2_Cityc         0.05      0.03     0.01     0.11       1434 1.00
-b2_Cityd         0.01      0.01     0.00     0.03       2000 1.00
+b0_Intercept     1.14      0.06     1.04     1.27        784 1.00
+b0_Cityb         0.02      0.01     0.00     0.04       2000 1.00
+b0_Cityc         0.18      0.06     0.06     0.29       1093 1.00
+b0_Cityd         0.03      0.02     0.00     0.08       2000 1.00
+b1_Intercept     2.04      0.51     1.17     3.17        907 1.00
+b1_Cityb         0.06      0.04     0.01     0.17       2000 1.00
+b1_Cityc         0.48      0.31     0.06     1.20       1700 1.00
+b1_Cityd         0.24      0.14     0.04     0.59       2000 1.00
+b2_Intercept     0.96      0.08     0.81     1.11        797 1.00
+b2_Cityb         0.01      0.00     0.00     0.02       2000 1.00
+b2_Cityc         0.08      0.04     0.02     0.17       1465 1.00
+b2_Cityd         0.02      0.02     0.00     0.06       2000 1.00
 
 Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     6.79      0.57     5.79     8.03       1311 1.00
+sigma     9.81      0.78     8.45    11.54       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
@@ -4137,19 +4137,11 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts.png
-   fe <- fixef(m)[c(1,5,9),1]
-   b0 <- fe[1]
-   b1 <- fe[2]
-   b2 <- fe[3]
 
-   DBH <- w(b0,b1,b2, AGE)
-  dpred <- data.frame(AGE, DBH, type = "predicted")
-
-    ggplot() + 
-        geom_line(data = dpred, aes(x = AGE, y = DBH)) +
-        geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
+    ggplot() +
         geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__,  ymax = estimate__ + se__, group = City)) +
-        geom_point(data = dt, 
+        geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
+        geom_point(data = dt, aes(x = AGE, y = DBH, color = City))
 
      #  geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
       #   geom_point(data = dt, aes(x = AGE, y = DBH))
@@ -4160,7 +4152,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/marginal_pts.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_.png
 pairs(m)
 #+end_src
 
