@@ -1722,7 +1722,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 **** a super simple linear model test
 #+begin_src R
-  n <- 100
+  n <- 500
   x <- seq(1,100,length.out = n)
   sigma <- .9 * x
   y <- rnorm(n,0,sigma)
@@ -1752,8 +1752,8 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000345 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.45 seconds.
+Gradient evaluation took 0.00034 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.4 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1761,43 +1761,43 @@ Iteration:    1 / 2000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000363 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.63 seconds.
+Gradient evaluation took 0.000332 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.32 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 3.40178 seconds (Warm-up)
-               1.20375 seconds (Sampling)
-               4.60553 seconds (Total)
-
 Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 4.90074 seconds (Warm-up)
-               1.21794 seconds (Sampling)
-               6.11868 seconds (Total)
+ Elapsed Time: 5.84638 seconds (Warm-up)
+               1.19141 seconds (Sampling)
+               7.0378 seconds (Total)
+
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 21.1158 seconds (Warm-up)
+               1.1907 seconds (Sampling)
+               22.3065 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -1816,17 +1816,37 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects: 
           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-Intercept     0.24      0.41    -0.54     1.04        671 1.00
-sigma_x       0.08      0.00     0.08     0.08       2000 1.00
+Intercept     0.64      0.42    -0.21     1.44        704 1.01
+sigma_x       0.09      0.00     0.08     0.09       1909 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
+.1 get .02617
 .3 get .0520294
 .6 get .076358
-.9 get 
+.9 get .08614892
+1.2 get .1132786
+1.5 get .116
+
+#+begin_src R
+my_sigma_x <- c(.1,.3,.6,.9,1.2,1.5)
+stan_sigma_x <- c(.02617, .05202, .076358, .08614892, .1132786, .116)
+d <- data.frame(my_sigma_x, stan_sigma_x)
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/f.png
+qplot(my_sigma_x, stan_sigma_x, d)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/f.png]]
+
 hmmmmm......
 
 **** generate data
