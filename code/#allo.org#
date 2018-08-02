@@ -2012,7 +2012,7 @@ I should make the generated data have the exact same structure as the
 real data, and just create one model..
 
 #+begin_src R
-  n <- 100
+  n <- 400
   b0 <- 1.2
   b1 <- 2
   b2 <- 1
@@ -2022,9 +2022,9 @@ real data, and just create one model..
 
   AGE <- cumsum(rep((150 - 0) / n, n))
 
-  sigma <- .1 * AGE
+  sigma <- .05 * AGE
 
-  DBH <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
+  DBH <- w(b0,b1,b2, AGE) + rnorm(n, 0, sigma)
 
 dt <- data.frame(AGE, DBH)
 #+end_src
@@ -2124,17 +2124,9 @@ m_fixed
 #+begin_example
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 1).
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.302424, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.43074, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
-
-
-Gradient evaluation took 0.000473 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.73 seconds.
+Gradient evaluation took 0.001731 seconds
+1000 transitions using 10 leapfrog steps per transition would take 17.31 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2151,23 +2143,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 12.9477 seconds (Warm-up)
-               11.7903 seconds (Sampling)
-               24.738 seconds (Total)
+ Elapsed Time: 34.3177 seconds (Warm-up)
+               39.7642 seconds (Sampling)
+               74.0819 seconds (Total)
 
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 2).
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -2.80919, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.40782, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
-
-
-Gradient evaluation took 0.000478 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.78 seconds.
+Gradient evaluation took 0.001707 seconds
+1000 transitions using 10 leapfrog steps per transition would take 17.07 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2184,15 +2168,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 13.0404 seconds (Warm-up)
-               12.2878 seconds (Sampling)
-               25.3282 seconds (Total)
+ Elapsed Time: 35.174 seconds (Warm-up)
+               33.5414 seconds (Sampling)
+               68.7153 seconds (Total)
 
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 3).
 
-Gradient evaluation took 0.00048 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.8 seconds.
+Gradient evaluation took 0.001687 seconds
+1000 transitions using 10 leapfrog steps per transition would take 16.87 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2209,19 +2193,23 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 12.2352 seconds (Warm-up)
-               15.659 seconds (Sampling)
-               27.8943 seconds (Total)
+ Elapsed Time: 31.1607 seconds (Warm-up)
+               31.9678 seconds (Sampling)
+               63.1284 seconds (Total)
 
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 4).
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -2.47611, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -0.374371, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.19516, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
 
-Gradient evaluation took 0.000478 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.78 seconds.
+Gradient evaluation took 0.001689 seconds
+1000 transitions using 10 leapfrog steps per transition would take 16.89 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2238,19 +2226,19 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 13.2074 seconds (Warm-up)
-               12.7563 seconds (Sampling)
-               25.9637 seconds (Total)
+ Elapsed Time: 33.1366 seconds (Warm-up)
+               34.8501 seconds (Sampling)
+               67.9867 seconds (Total)
 Inference for Stan model: singleSpeciesLocation_hetero.
 4 chains, each with iter=2000; warmup=1000; thin=1; 
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
               mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-b_b0[1]       1.18    0.00 0.06    1.08    1.14    1.18    1.22    1.31  1901
-b_b1[1]       1.27    0.00 0.06    1.16    1.23    1.27    1.30    1.38  2266
-b_b2[1]       1.02    0.00 0.02    0.99    1.01    1.02    1.03    1.05  2059
-b_sigma[1]    0.10    0.00 0.01    0.08    0.09    0.09    0.10    0.11  1945
-lp__       -314.66    0.04 1.52 -318.48 -315.36 -314.30 -313.54 -312.78  1412
+b_b0[1]       1.20    0.00 0.01    1.19    1.20    1.20    1.21    1.22  1494
+b_b1[1]       1.99    0.00 0.01    1.96    1.98    1.99    2.00    2.02  1661
+b_b2[1]       1.00    0.00 0.00    0.99    1.00    1.00    1.00    1.01  1939
+b_sigma[1]    0.05    0.00 0.00    0.05    0.05    0.05    0.05    0.05  3705
+lp__       -985.46    0.04 1.44 -989.05 -986.15 -985.14 -984.39 -983.68  1394
            Rhat
 b_b0[1]       1
 b_b1[1]       1
@@ -2258,7 +2246,7 @@ b_b2[1]       1
 b_sigma[1]    1
 lp__          1
 
-Samples were drawn using NUTS(diag_e) at Thu Aug  2 12:10:32 2018.
+Samples were drawn using NUTS(diag_e) at Thu Aug  2 12:21:27 2018.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -2321,78 +2309,9 @@ ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~Ci
 I divide b0 by 100 and multiply b1 by 100 to get the parameters on the same scale ish, with
 the hopes that this speeds things up a bit.
 
-
 #+begin_src R
-            form <- bf(DBH ~ (b0*100) * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ 1,
-                       b1 ~ 1,
-                       b2 ~ 1,
-                       nl = T)
-
-     nlprior <- c(prior(gamma(1, 2), nlpar = "b0", lb = 0),
-                  prior(gamma(1, 2), nlpar = "b1", lb = 0),
-                  prior(gamma(1, 2), nlpar = "b2", lb = 0))
-
-
-     model_fram_ftcollins_hetero <- brm(form, chains = 2, cores = 2, data = fram_ftcollins,
-                                     init_r = 1,
-                                     prior = nlprior,  control = list(adapt_delta = 0.8))
+model_fram_ftcollins_hetero <- stan("singleSpeciesLocation_hetero.stan", data = make_standata(form, select(fram_ftcollins,AGE,DBH), prior = nlprior), init_r = 1)
 #+end_src
-
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.000306 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.06 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.000309 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.09 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 9.57723 seconds (Warm-up)
-               8.84453 seconds (Sampling)
-               18.4218 seconds (Total)
-
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 10.1318 seconds (Warm-up)
-               10.2082 seconds (Sampling)
-               20.34 seconds (Total)
-#+end_example
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_hetero_pairs.png
