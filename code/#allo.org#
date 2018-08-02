@@ -3383,22 +3383,23 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
-cond <- data.frame(City = c("a","b","c","d"))
-#marginal_effects(m_generated_singleSpecies_multipleLocations_homo, points = T, conditions = cond)
-marginal_effects(m_generated_singleSpecies_multipleLocations_homo)
-
-
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png
+  #cond <- data.frame(City = c("a","b","c","d"))
+  #marginal_effects(m_generated_singleSpecies_multipleLocations_homo, points = T, conditions = cond)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo, 
+                         effects = c("AGE:City"))
+  plot(me)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_1.png]]
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts.png
-  me <-   marginal_effects(m, points = T)
-  ggplot() + geom_line(data = me$x, aes(x = x, y = estimate__)) +
-    geom_ribbon(data = me$x, alpha = .2, aes(x = x, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-      geom_point(data = dt, aes(x = x, y = y))
+  me <-   marginal_effects(m_generated_singleSpecies_multipleLocations_homo, effects = "AGE")
+
+  ggplot() + geom_line(data = me$AGE, aes(x = AGE, y = estimate__)) +
+    geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_point(data = dt, aes(x = AGE, y = DBH))
 
 #+end_src
 
