@@ -1701,24 +1701,133 @@ summary(m_smpl)
 
 #+RESULTS:
 #+begin_example
- Family: gaussian 
-  Links: mu = identity; sigma = log 
-Formula: y ~ x 
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: y ~ x
          sigma ~ x - 1
-   Data: smpl (Number of observations: 1000) 
+   Data: smpl (Number of observations: 1000)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
-Population-Level Effects: 
+Population-Level Effects:
           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 Intercept     1.01      0.15     0.72     1.30       1147 1.00
 x             1.99      0.01     1.97     2.01        602 1.00
 sigma_x       0.05      0.00     0.05     0.05        851 1.00
 
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+**** a super simple linear model test
+#+begin_src R
+  n <- 100
+  x <- seq(1,100,length.out = n)
+  sigma <- .9 * x
+  y <- rnorm(n,0,sigma)
+  smpl <- data.frame(x,y)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/test.png
+plot(x,y)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test.png]]
+
+#+begin_src R
+  form <- bf(y ~ 1,
+             sigma ~ x - 1)
+
+  m_sup_smpl <- brm(form, chains = 2, cores = 2, data = smpl, init_r = 1)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000345 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.45 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000363 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.63 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 3.40178 seconds (Warm-up)
+               1.20375 seconds (Sampling)
+               4.60553 seconds (Total)
+
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 4.90074 seconds (Warm-up)
+               1.21794 seconds (Sampling)
+               6.11868 seconds (Total)
+#+end_example
+
+#+begin_src R
+summary(m_sup_smpl, digits = 3)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian 
+  Links: mu = identity; sigma = log 
+Formula: y ~ 1 
+         sigma ~ x - 1
+   Data: smpl (Number of observations: 100) 
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Population-Level Effects: 
+          Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+Intercept     0.24      0.41    -0.54     1.04        671 1.00
+sigma_x       0.08      0.00     0.08     0.08       2000 1.00
+
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
+
+.3 get .0520294
+.6 get .076358
+.9 get 
+hmmmmm......
 
 **** generate data
 
