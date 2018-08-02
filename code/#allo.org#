@@ -1744,6 +1744,7 @@ plot(x,y)
              sigma ~ x - 1)
 
   m_simple <- brm(form, chains = 2, cores = 2, data = simple, family = brmsfamily("gaussian", link_sigma = "identity"))
+  m_simple <- brm(form, chains = 2, cores = 2, data = simple, family = brmsfamily("gaussian", link_sigma = "identity"))
 #+end_src
 
 #+RESULTS:
@@ -1811,21 +1812,21 @@ summary(m_simple)
 
 #+RESULTS:
 #+begin_example
- Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: y ~ 1 
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: y ~ 1
          sigma ~ x - 1
-   Data: simple (Number of observations: 100) 
+   Data: simple (Number of observations: 100)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
-Population-Level Effects: 
+Population-Level Effects:
           Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 Intercept    -0.96      0.71    -2.32     0.41       1491 1.00
 sigma_x       1.08      0.07     0.95     1.24       1444 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
-is a crude measure of effective sample size, and Rhat is the potential 
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
@@ -1846,7 +1847,7 @@ qplot(my_sigma_x, stan_sigma_x, d)
 [[file:../figs/f.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/f_sqrtMysigmaX.png
-qplot(sqrt(my_sigma_x), stan_sigma_x, d)
+qplot(my_sigma_x, log(stan_sigma_x), d)
 #+end_src
 
 #+RESULTS:
@@ -1891,41 +1892,43 @@ stancode(m_simple)
 
 
 #+BEGIN_SRC stan :tangle simple.stan
-// generated with brms 2.3.1
-functions {
-}
-data {
-  int<lower=1> N;  // total number of observations
-  vector[N] Y;  // response variable
-  int<lower=1> K_sigma;  // number of population-level effects
-  matrix[N, K_sigma] X_sigma;  // population-level design matrix
-  int prior_only;  // should the likelihood be ignored?
-}
-transformed data {
-}
-parameters {
-  real temp_Intercept;  // temporary intercept
-  vector[K_sigma] b_sigma;  // population-level effects
-}
-transformed parameters {
-}
-model {
-  vector[N] mu = rep_vector(0, N) + temp_Intercept;
-  vector[N] sigma = X_sigma * b_sigma;
-  for (n in 1:N) {
-    sigma[n] = exp(sigma[n]);
+  // generated with brms 2.3.1
+  functions {
   }
-  // priors including all constants
-  target += student_t_lpdf(temp_Intercept | 3, 0, 10);
-  // likelihood including all constants
-  if (!prior_only) {
-    target += normal_lpdf(Y | mu, log(sigma));
+  data {
+    int<lower=1> N;  // total number of observations
+    vector[N] Y;  // response variable
+    int<lower=1> K_sigma;  // number of population-level effects
+    matrix[N, K_sigma] X_sigma;  // population-level design matrix
+    int prior_only;  // should the likelihood be ignored?
   }
-}
-generated quantities {
-  // actual population-level intercept
-  real b_Intercept = temp_Intercept;
-}
+  transformed data {
+  }
+  parameters {
+    real temp_Intercept;  // temporary intercept
+    vector[K_sigma] b_sigma;  // population-level effects
+    vector[N] sigma;
+  }
+  transformed parameters {
+  }
+  model {
+    vector[N] mu = rep_vector(0, N) + temp_Intercept;
+    sigma = X_sigma * b_sigma;
+    for (n in 1:N) {
+      sigma[n] = exp(sigma[n]);
+    }
+    // priors including all constants
+    target += student_t_lpdf(temp_Intercept | 3, 0, 10);
+    // likelihood including all constants
+    if (!prior_only) {
+      target += normal_lpdf(Y | mu, sigma);
+    }
+  }
+  generated quantities {
+    // actual population-level intercept
+    real b_Intercept = temp_Intercept;
+    vector[N] o_sigma = log(sigma);
+  }
 #+END_SRC
 
 #+begin_src R
@@ -1934,113 +1937,21 @@ m2 <- stan("simple.stan", data = standata(m_simple))
 
 #+RESULTS:
 #+begin_example
+SYNTAX ERROR, MESSAGE(S) FROM PARSER:
 
-SAMPLING FOR MODEL 'simple' NOW (CHAIN 1).
+Cannot assign to variable outside of declaration block; left-hand-side variable origin=parameter
+  error in 'model54b46729212d_simple' at line 22, column 10
+  -------------------------------------------------
+    20: model {
+    21:   vector[N] mu = rep_vector(0, N) + temp_Intercept;
+    22:   sigma = X_sigma * b_sigma;
+                 ^
+    23:   for (n in 1:N) {
+  -------------------------------------------------
 
-Gradient evaluation took 0.000268 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.68 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 1.47304 seconds (Warm-up)
-               1.17021 seconds (Sampling)
-               2.64325 seconds (Total)
-
-
-SAMPLING FOR MODEL 'simple' NOW (CHAIN 2).
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.0694882, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-
-Gradient evaluation took 0.00028 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.8 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 1.4316 seconds (Warm-up)
-               2.06907 seconds (Sampling)
-               3.50067 seconds (Total)
-
-
-SAMPLING FOR MODEL 'simple' NOW (CHAIN 3).
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.962771, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-
-Gradient evaluation took 0.000265 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.65 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 1.50928 seconds (Warm-up)
-               1.80202 seconds (Sampling)
-               3.3113 seconds (Total)
-
-
-SAMPLING FOR MODEL 'simple' NOW (CHAIN 4).
-
-Gradient evaluation took 0.00024 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.4 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 1.39526 seconds (Warm-up)
-               1.35719 seconds (Sampling)
-               2.75245 seconds (Total)
+PARSER EXPECTED: <expression assignable to left-hand side>
+Error in stanc(file = file, model_code = model_code, model_name = model_name,  : 
+  failed to parse Stan model 'simple' due to the above error.
 #+end_example
 
 #+begin_src R
@@ -2536,7 +2447,7 @@ Rejecting initial value:
 Exception: normal_lpdf: Scale parameter[1] is 0, but must be > 0!  (in 'model54b46906265a_file54b454dcc10c' at line 48)
 
 
-Initialization between (-1, 1) failed after 100 attempts. 
+Initialization between (-1, 1) failed after 100 attempts.
  Try specifying initial values, reducing ranges of constrained values, or reparameterizing the model.
 [1] "Error in sampler$call_sampler(args_list[[i]]) : Initialization failed."
 error occurred during calling the sampler; sampling not done
@@ -2943,7 +2854,7 @@ Rejecting initial value:
 Exception: normal_lpdf: Scale parameter[1] is 0, but must be > 0!  (in 'model54b46906265a_file54b454dcc10c' at line 48)
 
 
-Initialization between (-1, 1) failed after 100 attempts. 
+Initialization between (-1, 1) failed after 100 attempts.
  Try specifying initial values, reducing ranges of constrained values, or reparameterizing the model.
 [1] "Error in sampler$call_sampler(args_list[[i]]) : Initialization failed."
 error occurred during calling the sampler; sampling not done
