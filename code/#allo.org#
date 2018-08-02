@@ -1724,7 +1724,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+begin_src R
   n <- 100
   x <- seq(1,100,length.out = n)
-  my_sigma_x <- .5
+  my_sigma_x <- 1.2
   sigma <- my_sigma_x * x
   y <- rnorm(n,0,sigma)
   simple <- data.frame(x,y)
@@ -1753,28 +1753,40 @@ Start sampling
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000316 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.16 seconds.
+Gradient evaluation took 0.000312 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.12 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000314 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.14 seconds.
+Gradient evaluation took 0.000426 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.26 seconds.
 Adjust your expectations accordingly!
 
 
 Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  200 / 2000 [ 10%]  (Warmup)
 Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
 Iteration:  600 / 2000 [ 30%]  (Warmup)
 Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 5.00798 seconds (Warm-up)
+               1.36136 seconds (Sampling)
+               6.36935 seconds (Total)
+
 Iteration:  800 / 2000 [ 40%]  (Warmup)
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
@@ -1784,21 +1796,9 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 49.4827 seconds (Warm-up)
-               10.7643 seconds (Sampling)
-               60.247 seconds (Total)
-
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 59.9896 seconds (Warm-up)
-               10.9024 seconds (Sampling)
-               70.892 seconds (Total)
+ Elapsed Time: 28.4501 seconds (Warm-up)
+               18.9572 seconds (Sampling)
+               47.4073 seconds (Total)
 #+end_example
 
 #+begin_src R
@@ -1905,8 +1905,8 @@ m2 <- stan("simple.stan", data = standata(m_simple))
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000317 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.17 seconds.
+Gradient evaluation took 0.000311 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.11 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1923,39 +1923,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 1.44226 seconds (Warm-up)
-               1.49804 seconds (Sampling)
-               2.9403 seconds (Total)
+ Elapsed Time: 1.57487 seconds (Warm-up)
+               1.66635 seconds (Sampling)
+               3.24122 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 2).
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.19096, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
 
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.98288, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.816235, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.89688, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.89795, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.62439, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
-
-
-Gradient evaluation took 0.000265 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.65 seconds.
+Gradient evaluation took 0.000251 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.51 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1972,15 +1948,19 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 1.44407 seconds (Warm-up)
-               1.80583 seconds (Sampling)
-               3.2499 seconds (Total)
+ Elapsed Time: 1.39124 seconds (Warm-up)
+               1.29105 seconds (Sampling)
+               2.68229 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 3).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.33081, but must be > 0!  (in 'model54b4740ffb71_simple' at line 29)
 
-Gradient evaluation took 0.000244 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.44 seconds.
+
+Gradient evaluation took 0.000273 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.73 seconds.
 Adjust your expectations accordingly!
 
 
@@ -1997,15 +1977,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 1.43497 seconds (Warm-up)
-               1.71223 seconds (Sampling)
-               3.1472 seconds (Total)
+ Elapsed Time: 1.43805 seconds (Warm-up)
+               1.2473 seconds (Sampling)
+               2.68535 seconds (Total)
 
 
 SAMPLING FOR MODEL 'simple' NOW (CHAIN 4).
 
-Gradient evaluation took 0.000229 seconds
-1000 transitions using 10 leapfrog steps per transition would take 2.29 seconds.
+Gradient evaluation took 0.000245 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.45 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2022,9 +2002,9 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 1.64549 seconds (Warm-up)
-               1.35074 seconds (Sampling)
-               2.99622 seconds (Total)
+ Elapsed Time: 1.45058 seconds (Warm-up)
+               1.45041 seconds (Sampling)
+               2.90099 seconds (Total)
 #+end_example
 
 **** generate data
