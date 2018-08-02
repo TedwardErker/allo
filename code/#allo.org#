@@ -2022,7 +2022,7 @@ real data, and just create one model..
 
   AGE <- cumsum(rep((150 - 0) / n, n))
 
-  sigma <- .2 * AGE
+  sigma <- .1 * AGE
 
   DBH <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
 
@@ -2116,17 +2116,25 @@ generated quantities {
 #+END_SRC
 
 #+begin_src R
-m_fixed <- stan("singleSpeciesLocation_hetero.stan", data = make_standata(form, dt, pri))
-summary(m_fixed)
+m_fixed <- stan("singleSpeciesLocation_hetero.stan", data = make_standata(form, dt, prior = nlprior))
+m_fixed
 #+end_src
 
 #+RESULTS:
 #+begin_example
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 1).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -0.302424, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
-Gradient evaluation took 0.000625 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.25 seconds.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.43074, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+
+Gradient evaluation took 0.000473 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.73 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2143,15 +2151,23 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 11.4938 seconds (Warm-up)
-               12.2819 seconds (Sampling)
-               23.7757 seconds (Total)
+ Elapsed Time: 12.9477 seconds (Warm-up)
+               11.7903 seconds (Sampling)
+               24.738 seconds (Total)
 
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 2).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -2.80919, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
-Gradient evaluation took 0.000489 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.89 seconds.
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Scale parameter[1] is -1.40782, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+
+
+Gradient evaluation took 0.000478 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.78 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2168,23 +2184,15 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 11.6945 seconds (Warm-up)
-               12.8227 seconds (Sampling)
-               24.5172 seconds (Total)
+ Elapsed Time: 13.0404 seconds (Warm-up)
+               12.2878 seconds (Sampling)
+               25.3282 seconds (Total)
 
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 3).
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.98932, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.687726, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
-
-
-Gradient evaluation took 0.000779 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.79 seconds.
+Gradient evaluation took 0.00048 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.8 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2201,23 +2209,19 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 12.7412 seconds (Warm-up)
-               11.396 seconds (Sampling)
-               24.1372 seconds (Total)
+ Elapsed Time: 12.2352 seconds (Warm-up)
+               15.659 seconds (Sampling)
+               27.8943 seconds (Total)
 
 
 SAMPLING FOR MODEL 'singleSpeciesLocation_hetero' NOW (CHAIN 4).
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -0.0258541, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Scale parameter[1] is -1.14184, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
+Exception: normal_lpdf: Scale parameter[1] is -2.47611, but must be > 0!  (in 'model54b4f982a67_singleSpeciesLocation_hetero' at line 49)
 
 
-Gradient evaluation took 0.000475 seconds
-1000 transitions using 10 leapfrog steps per transition would take 4.75 seconds.
+Gradient evaluation took 0.000478 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.78 seconds.
 Adjust your expectations accordingly!
 
 
@@ -2234,91 +2238,30 @@ Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Iteration: 2000 / 2000 [100%]  (Sampling)
 
- Elapsed Time: 12.4604 seconds (Warm-up)
-               13.0553 seconds (Sampling)
-               25.5157 seconds (Total)
-$summary
-                   mean      se_mean         sd         2.5%          25%
-b_b0[1]       1.0813698 0.0030376682 0.11036362    0.9092764    1.0061342
-b_b1[1]       1.2040620 0.0025139983 0.11985063    0.9799895    1.1249221
-b_b2[1]       1.0681573 0.0010142219 0.04332757    0.9792989    1.0403205
-b_sigma[1]    0.2131066 0.0003310108 0.01550915    0.1863119    0.2020123
-lp__       -395.1958643 0.0409541449 1.51282899 -399.0557577 -395.8859063
-                    50%          75%        97.5%    n_eff      Rhat
-b_b0[1]       1.0698954    1.1383756    1.3340189 1319.992 1.0042699
-b_b1[1]       1.1989378    1.2795850    1.4574706 2272.745 0.9999597
-b_b2[1]       1.0674524    1.0960432    1.1527440 1824.999 1.0032808
-b_sigma[1]    0.2120104    0.2227492    0.2461711 2195.289 1.0000568
-lp__       -394.8270760 -394.0915292 -393.3382082 1364.533 1.0005685
+ Elapsed Time: 13.2074 seconds (Warm-up)
+               12.7563 seconds (Sampling)
+               25.9637 seconds (Total)
+Inference for Stan model: singleSpeciesLocation_hetero.
+4 chains, each with iter=2000; warmup=1000; thin=1; 
+post-warmup draws per chain=1000, total post-warmup draws=4000.
 
-$c_summary
-, , chains = chain:1
+              mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
+b_b0[1]       1.18    0.00 0.06    1.08    1.14    1.18    1.22    1.31  1901
+b_b1[1]       1.27    0.00 0.06    1.16    1.23    1.27    1.30    1.38  2266
+b_b2[1]       1.02    0.00 0.02    0.99    1.01    1.02    1.03    1.05  2059
+b_sigma[1]    0.10    0.00 0.01    0.08    0.09    0.09    0.10    0.11  1945
+lp__       -314.66    0.04 1.52 -318.48 -315.36 -314.30 -313.54 -312.78  1412
+           Rhat
+b_b0[1]       1
+b_b1[1]       1
+b_b2[1]       1
+b_sigma[1]    1
+lp__          1
 
-            stats
-parameter            mean         sd         2.5%          25%          50%
-  b_b0[1]       1.0805601 0.11354724    0.9001549    1.0051131    1.0666754
-  b_b1[1]       1.2020820 0.12504995    0.9801671    1.1228691    1.1966552
-  b_b2[1]       1.0695265 0.04703001    0.9792989    1.0384928    1.0687429
-  b_sigma[1]    0.2130498 0.01516021    0.1875988    0.2020978    0.2121081
-  lp__       -395.2203336 1.58414831 -399.4402065 -395.9060777 -394.8258195
-            stats
-parameter             75%        97.5%
-  b_b0[1]       1.1380247    1.3350388
-  b_b1[1]       1.2820653    1.4685593
-  b_b2[1]       1.1009054    1.1652374
-  b_sigma[1]    0.2225757    0.2457203
-  lp__       -394.0935889 -393.3208223
-
-, , chains = chain:2
-
-            stats
-parameter            mean         sd         2.5%          25%          50%
-  b_b0[1]       1.0803360 0.10238386    0.9179378    1.0081890    1.0736336
-  b_b1[1]       1.2081979 0.12067604    0.9800104    1.1261353    1.2026442
-  b_b2[1]       1.0669122 0.03975908    0.9832348    1.0416450    1.0657293
-  b_sigma[1]    0.2129071 0.01579740    0.1856015    0.2012691    0.2121568
-  lp__       -395.1145383 1.46285093 -398.8253254 -395.7442303 -394.7341542
-            stats
-parameter            75%        97.5%
-  b_b0[1]       1.137501    1.3237795
-  b_b1[1]       1.281797    1.4584367
-  b_b2[1]       1.092883    1.1452592
-  b_sigma[1]    0.222430    0.2463216
-  lp__       -394.045968 -393.3453246
-
-, , chains = chain:3
-
-            stats
-parameter            mean         sd         2.5%          25%          50%
-  b_b0[1]       1.0785569 0.11303844    0.9092470    1.0056966    1.0684113
-  b_b1[1]       1.2029660 0.11003161    0.9952105    1.1253962    1.2010494
-  b_b2[1]       1.0697894 0.04277586    0.9852246    1.0428688    1.0701078
-  b_sigma[1]    0.2131671 0.01560282    0.1863089    0.2019916    0.2117956
-  lp__       -395.1559090 1.45245370 -398.4927075 -395.8702199 -394.8242136
-            stats
-parameter             75%        97.5%
-  b_b0[1]       1.1320740    1.3164543
-  b_b1[1]       1.2753475    1.4195308
-  b_b2[1]       1.0966096    1.1513403
-  b_sigma[1]    0.2233655    0.2459521
-  lp__       -394.0800112 -393.3203839
-
-, , chains = chain:4
-
-            stats
-parameter            mean         sd         2.5%          25%          50%
-  b_b0[1]       1.0860262 0.11212772    0.9189732    1.0092101    1.0707021
-  b_b1[1]       1.2030018 0.12316374    0.9764417    1.1254845    1.1915763
-  b_b2[1]       1.0664010 0.04339571    0.9772215    1.0388099    1.0664131
-  b_sigma[1]    0.2133021 0.01548983    0.1858808    0.2027383    0.2118895
-  lp__       -395.2926762 1.54408510 -399.1148674 -396.0283009 -394.9300894
-            stats
-parameter             75%        97.5%
-  b_b0[1]       1.1448861    1.3557127
-  b_b1[1]       1.2774452    1.4723228
-  b_b2[1]       1.0958622    1.1487591
-  b_sigma[1]    0.2228091    0.2464493
-  lp__       -394.1661601 -393.3853033
+Samples were drawn using NUTS(diag_e) at Thu Aug  2 12:10:32 2018.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).
 #+end_example
 
 
@@ -2358,70 +2301,6 @@ pairs(m)
 
 #+RESULTS:
 [[file:../figs/pairs_1.png]]
-
-#+begin_src R
-#standata(m)
-stancode(m)
-#+end_src
-
-#+RESULTS:
-
-#+BEGIN_SRC stan
-
-// generated with brms 2.3.1
-functions {
-}
-data {
-  int<lower=1> N;  // total number of observations
-  vector[N] Y;  // response variable
-  int<lower=1> K_b0;  // number of population-level effects
-  matrix[N, K_b0] X_b0;  // population-level design matrix
-  int<lower=1> K_b1;  // number of population-level effects
-  matrix[N, K_b1] X_b1;  // population-level design matrix
-  int<lower=1> K_b2;  // number of population-level effects
-  matrix[N, K_b2] X_b2;  // population-level design matrix
-  // covariate vectors
-  vector[N] C_1;
-  int<lower=1> K_sigma;  // number of population-level effects
-  matrix[N, K_sigma] X_sigma;  // population-level design matrix
-  int prior_only;  // should the likelihood be ignored?
-}
-transformed data {
-}
-parameters {
-  vector<lower=0>[K_b0] b_b0;  // population-level effects
-  vector<lower=0>[K_b1] b_b1;  // population-level effects
-  vector<lower=0>[K_b2] b_b2;  // population-level effects
-  vector[K_sigma] b_sigma;  // population-level effects
-}
-transformed parameters {
-}
-model {
-  vector[N] mu_b0 = X_b0 * b_b0;
-  vector[N] mu_b1 = X_b1 * b_b1;
-  vector[N] mu_b2 = X_b2 * b_b2;
-  vector[N] mu;
-  vector[N] sigma = X_sigma * b_sigma;
-  for (n in 1:N) {
-    sigma[n] = exp(sigma[n]);
-    // compute non-linear predictor
-    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
-  }
-  // priors including all constants
-  target += gamma_lpdf(b_b0 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2);
-  target += gamma_lpdf(b_b1 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2);
-  target += gamma_lpdf(b_b2 | 1, 2)
-    - 1 * gamma_lccdf(0 | 1, 2);
-  // likelihood including all constants
-  if (!prior_only) {
-    target += normal_lpdf(Y | mu, sigma);
-  }
-}
-generated quantities {
-}
-#+END_SRC
 
 **** fit model to real data
 #+begin_src R
