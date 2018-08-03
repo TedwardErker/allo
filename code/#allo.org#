@@ -2741,56 +2741,57 @@ have 4 now which isn't enough for multiple group level predictors.
 
 
 #+begin_src R
-  k <- 5
-  expect_nk <- 30
-  n <- k * expect_nk
-  breaks <- c(0,sort(sample(1:100,(k-1))),n)
-  nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
-  nk
+    k <- 5
+    expect_nk <- 30
+    n <- k * expect_nk
+    breaks <- c(0,sort(sample(1:100,(k-1))),n)
+    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+    nk
 
-precip <- c(600, 400, 400, 250, 800)
+  precip <- c(600, 400, 400, 250, 800) / 1000
+  precip <- precip - mean(precip)
 
-  u_precip_b0 <- .1
-  u_precip_b1 <- .1
-  u_precip_b2 <- .1
+    u_precip_b0 <- 1
+    u_precip_b1 <- 1
+    u_precip_b2 <- 1
 
-  #with centered city level predictors this is the mean
-  u_intercept_b0 <- 1
-  u_intercept_b1 <- 1
-  u_intercept_b2 <- 1
+    #with centered city level predictors this is the mean
+    u_intercept_b0 <- 1
+    u_intercept_b1 <- 1
+    u_intercept_b2 <- 1
 
-    mu_b0 <- u_intercep_b0 + u_precip_b0 * precip
-    sigma_b0 <- .2
-    mu_b1 <- 2
-    sigma_b1 <- .2
-    mu_b2 <- 1
-    sigma_b2 <- .2
+      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
+      sigma_b0 <- .1
+      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
+      sigma_b1 <- .1
+      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
+      sigma_b2 <- .1
 
-    sigma <- 3
+      sigma <- 3
 
-    b0 <- rnorm(k, mu_b0, sigma_b0)
-    b1 <- rnorm(k, mu_b1, sigma_b1)
-    b2 <- rnorm(k, mu_b2, sigma_b2)
+      b0 <- rnorm(k, mu_b0, sigma_b0)
+      b1 <- rnorm(k, mu_b1, sigma_b1)
+      b2 <- rnorm(k, mu_b2, sigma_b2)
 
-    w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
 
-    AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
-        sample  #to randomly shuffle
+      AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+          sample  #to randomly shuffle
 
-    DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
 
-  City <- rep(letters[1:k], times = nk)
-  Precip_col <- rep(c(600, 400, 400, 250, 800), times = nk)
-  Centered_Precip <- Precip - mean(Precip)
+    City <- rep(letters[1:k], times = nk)
+    Precip_col <- rep(precip, times = nk)
 
-  dt <- data.frame(AGE, DBH, City, Precip)
+
+    dt <- data.frame(AGE, DBH, City, Precip)
 #+end_src
 
 #+RESULTS:
 : [1]  9 48 15 28
 
-#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
+#+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_P.png
   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
 #+end_src
 
