@@ -3383,11 +3383,35 @@ plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
 #+begin_src R
   species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
 
-  dm <- d %>% filter(SpCode %in% species.to.select)
+  dm <- d %>% filter(SpCode %in% species.to.select) %>%
+    rename(Species = SpCode)
 
 #+end_src
 
 #+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/d_multipleSpecies_multipleLocations.png :height 700 :width 700
+p <-   ggplot(dm, aes(x = AGE, y = DBH)) + geom_point(size = .5) + facet_grid(City ~ Species)
+p
+#+end_src
+
+#+RESULTS:
+
+This would be a good figure to plot the existing equations on, and
+then plot my equations on.
+[[file:../figs/d_multipleSpecies_multipleLocations.png]]
+
+#+begin_src R
+
+  model_multipleSpecies_multipleCities_homo <- update(m_generated_multipleSpecies_multipleLocations_homo, newdata = dm, cores = 2, control = list(adapt_delta = .9))
+
+#+end_src
+
+#+begin_src R
+  model_multipleSpecies_multipleCities_homo
+#+end_src
+
+
 
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
 *** Full model
@@ -3405,6 +3429,9 @@ DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
 \]
 
 species within genus within ...
+
+I need to test whether just \beta_0 varies by group, or if all three
+\beta's do
 
 *** explaining priors
 can't be negative...  in brms nonlinear advanced, mention the

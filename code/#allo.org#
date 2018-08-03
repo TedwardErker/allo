@@ -3384,7 +3384,8 @@ plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
   species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
 
   dm <- d %>% filter(SpCode %in% species.to.select) %>%
-    rename(Species = SpCode)
+      filter(City %in% c("Modesto, CA", "Fort Collins, CO", "Minneapolis, MN","Boise, ID", "Charleston, SC", "Charlotte, NC",  "Longview, WA")) %>%
+      rename(Species = SpCode)
 
 #+end_src
 
@@ -3396,6 +3397,7 @@ p
 #+end_src
 
 #+RESULTS:
+[[file:../figs/d_multipleSpecies_multipleLocations.png]]
 
 This would be a good figure to plot the existing equations on, and
 then plot my equations on.
@@ -3403,50 +3405,13 @@ then plot my equations on.
 
 #+begin_src R
 
-  model_multipleSpecies_multipleCities_homo <- update(, newdata = dm, cores = 2, control = list(adapt_delta = .9))
+  model_multipleSpecies_multipleCities_homo <- update(m_generated_multipleSpecies_multipleLocations_homo, newdata = dm, cores = 2, control = list(adapt_delta = .9))
 
 #+end_src
 
 #+begin_src R
-model_fram_homo
+  model_multipleSpecies_multipleCities_homo
 #+end_src
-
-#+RESULTS:
-#+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ (1 | City)
-         b1 ~ (1 | City)
-         b2 ~ (1 | City)
-   Data: fram (Number of observations: 129)
-Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 2000
-
-Group-Level Effects:
-~City (Number of levels: 4)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.41      0.52     0.01     1.96        498 1.00
-sd(b1_Intercept)     0.40      0.44     0.01     1.47        484 1.01
-sd(b2_Intercept)     0.13      0.14     0.00     0.51        454 1.00
-
-Population-Level Effects:
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.45      0.37     0.88     2.34        710 1.00
-b1_Intercept     1.14      0.28     0.58     1.72        791 1.00
-b2_Intercept     1.06      0.11     0.86     1.30        528 1.00
-
-Family Specific Parameters:
-      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     6.42      0.41     5.68     7.24       2000 1.00
-
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 32 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#+end_example
 
 
 
@@ -3466,6 +3431,21 @@ DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
 \]
 
 species within genus within ...
+
+I need to test whether just \beta_0 varies by group, or if all three
+\beta's do
+
+It might be worth doing this test on a reasonable subset of the data.
+It might vary by climate but not species, or vice versa.
+
+possibilities
+- \beta_0 + \beta_1 + \beta_2 ~ group1 + group2
+- \beta_0 ~ group1 + group2, \beta_1 + \beta_2 ~ 1
+- \beta_0 ~ group1 + group2, \beta_1 + \beta_2 ~ group1
+- \beta_0 ~ group1 + group2, \beta_1 + \beta_2 ~ group2
+
+
+
 
 *** explaining priors
 can't be negative...  in brms nonlinear advanced, mention the
