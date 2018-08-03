@@ -333,3 +333,22 @@ Update: A friend fit this curve in Julia using the same constraints and got a pr
   [2]: https://i.stack.imgur.com/SBXV0.png
   [3]: https://i.stack.imgur.com/Kq3bK.png
 
+
+* Full model
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-08-03 Fri 15:39
+:ARCHIVE_FILE: ~/git/allo/code/allo.org
+:ARCHIVE_OLPATH: Methods/Modelling
+:ARCHIVE_CATEGORY: allo
+:ARCHIVE_ITAGS: work allo
+:END:
+
+\[
+DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
+
+#\b_0, \b
+
+\]
+
+species within genus within ...
+

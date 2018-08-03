@@ -1200,6 +1200,12 @@ Warning messages:
 1: package ‘brms’ was built under R version 3.4.4
 2: package ‘Rcpp’ was built under R version 3.4.4
 #+end_example
+*** read in data
+#+begin_src R
+d <- readRDS("../data/tidy_age_dbh.rds")
+#+end_src
+
+#+RESULTS:
 
 *** single species, single location, homoskedasticity
 **** generate data
@@ -3278,7 +3284,6 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 : There were 15 warnings (use warnings() to see them)
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_multipleSpecies_multipleLocations_PrecipCityPred.png
-library(gridExtra)
 p <-   ggplot(dt, aes(x = AGE, y = DBH)) + geom_point() + facet_grid(City ~ Species)
 p
 #+end_src
@@ -3307,18 +3312,97 @@ m_generated_multipleSpecies_multipleLocations_homo <- brm(form, chains = 2, core
 summary(m_generated_multipleSpecies_multipleLocations_homo)
 #+end_src
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_multipleSpecies_multipleLocations_homo.png
-pairs(m_generated_multipleSpecies_multipleLocations_homo)
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1 + (1 | City) + (1 | Species)
+         b1 ~ 1 + (1 | City) + (1 | Species)
+         b2 ~ 1 + (1 | City) + (1 | Species)
+   Data: dt (Number of observations: 160)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Group-Level Effects:
+~City (Number of levels: 2)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     1.00      1.06     0.14     4.34        407 1.00
+sd(b1_Intercept)     0.81      1.35     0.01     5.27        368 1.00
+sd(b2_Intercept)     0.37      0.49     0.00     1.68         29 1.09
+
+~Species (Number of levels: 4)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.22      0.25     0.01     0.90        540 1.00
+sd(b1_Intercept)     0.33      0.37     0.02     1.24        631 1.01
+sd(b2_Intercept)     0.22      0.19     0.04     0.67         39 1.04
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.37      0.40     0.62     2.21        463 1.00
+b1_Intercept     1.09      0.37     0.45     1.94        111 1.02
+b2_Intercept     1.15      0.21     0.63     1.59        114 1.01
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     4.79      0.29     4.31     5.39         93 1.02
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 289 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot__multipleSpecies_multipleLocations_homo.png
+plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
 #+end_src
 
+#+RESULTS:
+[[file:../figs/plot__multipleSpecies_multipleLocations_homo.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo.png :width 800
+     cond <- expand.grid(Species = unique(dt$Species), City = unique(dt$City))
+     rownames(cond) <- paste0(cond$Species, cond$City)
+    me <- marginal_effects(m_generated_multipleSpecies_multipleLocations_homo,
+                       re_formula = NULL, method = "predict",
+                          conditions = cond)
+
+  ggplot() +
+    geom_line(data = me$AGE, color = "blue", aes(x = AGE, y = estimate__)) +
+    geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+    geom_point(data = dt, aes(x = AGE, y = DBH)) +
+    facet_grid(City ~ Species)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo.png]]
 
 **** fit real data
 #+begin_src R
   species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
+
+  dm <- d %>% filter(SpCode %in% species.to.select)
+
 #+end_src
+
+#+RESULTS:
+
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
 *** Full model
+
+\[
+DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
+\]
+
+\[
+\beta_0, \beta_1, \beta_2 \sim
+\]
+
+\[
+\sigma \sim
+\]
 
 species within genus within ...
 
