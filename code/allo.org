@@ -2746,12 +2746,6 @@ I'll do other climate predictors when I have more locations, I only
 have 4 now which isn't enough for multiple group level predictors.
 
 **** generate data
-
-| City | Precip | b0 |   |   |
-|------+--------+---+---+---|
-| name | x      |   |   |   |
-
-
 #+begin_src R
     k <- 5
     expect_nk <- 30
@@ -2889,44 +2883,39 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+RESULTS:
 [[file:../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
 
-
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-  #cond <- data.frame(City = c("a","b","c","d"))
-  #marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, points = T, conditions = cond)
-marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = "AGE:Precip")
-#  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
- #                        effects = c("AGE"))
-  #plot(me)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("AGE:Precip"))
+  me
+
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_pts_all.png
 
-    ggplot() +
-        geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__,  ymax = estimate__ + se__, group = City)) +
-        geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
-        geom_point(data = dt, aes(x = AGE, y = DBH, color = City))
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png
 
-     #  geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-      #   geom_point(data = dt, aes(x = AGE, y = DBH))
+me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
+  me
+
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_pts_all.png]]
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_conditionalCity.png
-  cond <- data.frame(City = c("a","b","c","d"))
-  #marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, points = T)
-  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
-                         effects = c("AGE"), conditions = cond)
-  plot(me)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png
+      cond <- data.frame(City = unique(dt$City))
+        me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
+                               conditions = cond,
+                               effects = "AGE",
+                               re_formula = NULL)
+        me
+
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_conditionalCity.png]]
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
 pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
@@ -2938,8 +2927,6 @@ pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+begin_src R
 stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
-
-#+RESULTS:
 
 #+BEGIN_SRC stan
 // generated with brms 2.3.1
@@ -3008,22 +2995,22 @@ model {
     mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
   }
   // priors including all constants
-  target += gamma_lpdf(b_b0 | 2, 1)
-    - 1 * gamma_lccdf(0 | 2, 1);
-  target += gamma_lpdf(b_b1 | 2, 1)
-    - 1 * gamma_lccdf(0 | 2, 1);
-  target += gamma_lpdf(b_b2 | 2, 1)
-    - 1 * gamma_lccdf(0 | 2, 1);
-  target += student_t_lpdf(sigma | 3, 0, 31)
-    - 1 * student_t_lccdf(0 | 3, 0, 31);
-  target += student_t_lpdf(sd_1 | 3, 0, 31)
-    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += gamma_lpdf(b_b0 | 4, 3)
+    - 2 * gamma_lccdf(0 | 4, 3);
+  target += gamma_lpdf(b_b1 | 4, 3)
+    - 2 * gamma_lccdf(0 | 4, 3);
+  target += gamma_lpdf(b_b2 | 4, 3)
+    - 2 * gamma_lccdf(0 | 4, 3);
+  target += student_t_lpdf(sigma | 3, 0, 33)
+    - 1 * student_t_lccdf(0 | 3, 0, 33);
+  target += student_t_lpdf(sd_1 | 3, 0, 33)
+    - 1 * student_t_lccdf(0 | 3, 0, 33);
   target += normal_lpdf(z_1[1] | 0, 1);
-  target += student_t_lpdf(sd_2 | 3, 0, 31)
-    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += student_t_lpdf(sd_2 | 3, 0, 33)
+    - 1 * student_t_lccdf(0 | 3, 0, 33);
   target += normal_lpdf(z_2[1] | 0, 1);
-  target += student_t_lpdf(sd_3 | 3, 0, 31)
-    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += student_t_lpdf(sd_3 | 3, 0, 33)
+    - 1 * student_t_lccdf(0 | 3, 0, 33);
   target += normal_lpdf(z_3[1] | 0, 1);
   // likelihood including all constants
   if (!prior_only) {
@@ -3033,6 +3020,8 @@ model {
 generated quantities {
 }
 #+END_SRC
+
+**** fit to real data
 
 *** explaining priors
 can't be negative...
