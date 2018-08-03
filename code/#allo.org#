@@ -2372,18 +2372,71 @@ stancode(model_fram_ftcollins_homo)
                prior(gamma(4, 3), nlpar = "b1",lb = 0),
                prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 4, cores = 2, data = dt, prior = nlprior,  control = list(adapt_delta = 0.9))
+m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 
 #+end_src
 
 #+RESULTS:
-: Compiling the C++ model
-: Start sampling
-: Error in FUN(X[[i]], ...) :
-:   trying to get slot "mode" from an object (class "try-error") that is not an S4 object
-: In addition: Warning message:
-: In parallel::mclapply(1:chains, FUN = callFun, mc.preschedule = FALSE,  :
-:   4 function calls resulted in an error
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.001119 seconds
+1000 transitions using 10 leapfrog steps per transition would take 11.19 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.00073 seconds
+1000 transitions using 10 leapfrog steps per transition would take 7.3 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 258.285 seconds (Warm-up)
+               273.645 seconds (Sampling)
+               531.929 seconds (Total)
+
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 262.007 seconds (Warm-up)
+               366.854 seconds (Sampling)
+               628.861 seconds (Total)
+
+Warning messages:
+1: There were 53 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+2: There were 253 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
+3: Examine the pairs() plot to diagnose sampling problems
+#+end_example
 
 #+begin_src R
 summary(m_generated_singleSpecies_multipleLocations_homo)
@@ -2398,31 +2451,31 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ (1 | City)
          b2 ~ (1 | City)
    Data: dt (Number of observations: 100)
-Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 4000
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
 
 Group-Level Effects:
 ~City (Number of levels: 4)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.53      0.37     0.18     1.64       1162 1.00
-sd(b1_Intercept)     1.07      0.92     0.18     3.43       1367 1.00
-sd(b2_Intercept)     0.17      0.15     0.02     0.61        935 1.00
+sd(b0_Intercept)     0.55      0.39     0.18     1.65        433 1.00
+sd(b1_Intercept)     1.06      0.84     0.13     3.34        689 1.01
+sd(b2_Intercept)     0.16      0.12     0.02     0.50        544 1.00
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.32      0.28     0.72     1.90       1081 1.00
-b1_Intercept     1.96      0.53     0.83     3.02       1459 1.00
-b2_Intercept     0.95      0.11     0.73     1.19        803 1.00
+b0_Intercept     1.29      0.28     0.67     1.85        486 1.01
+b1_Intercept     1.74      0.46     0.72     2.57        856 1.00
+b2_Intercept     0.95      0.10     0.75     1.20        405 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     2.86      0.21     2.49     3.31       4000 1.00
+sigma     2.86      0.23     2.44     3.37       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 55 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+There were 53 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -2602,19 +2655,7 @@ ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~Ci
 
 #+begin_src R
 
-#  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram, cores = 2)
-
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ (1 | City),
-                     b1 ~ (1 | City),
-                     b2 ~ (1 | City),
-                     nl = T)
-
-  nlprior <- c(prior(gamma(2, 1), nlpar = "b0",lb = 0),
-               prior(gamma(2, 1), nlpar = "b1",lb = 0),
-               prior(gamma(2, 1), nlpar = "b2",lb = 0))
-
-m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 4, cores = 2, data = dt, prior = nlprior,  control = list(adapt_delta = 0.9))
+  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram, cores = 2, control = list(adapt_delta = .9))
 
 #+end_src
 
@@ -2631,33 +2672,31 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ (1 | City)
          b2 ~ (1 | City)
    Data: fram (Number of observations: 129) 
-Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 4000
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
 
 Group-Level Effects: 
 ~City (Number of levels: 4) 
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.33      1.63     0.02     4.04          2 3.97
-sd(b1_Intercept)     1.69      2.12     0.03     5.31          2 7.00
-sd(b2_Intercept)     0.74      0.76     0.01     1.98          2 8.91
+sd(b0_Intercept)     0.41      0.52     0.01     1.96        498 1.00
+sd(b1_Intercept)     0.40      0.44     0.01     1.47        484 1.01
+sd(b2_Intercept)     0.13      0.14     0.00     0.51        454 1.00
 
 Population-Level Effects: 
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-b0_Intercept     2.29      0.93     0.93     3.63          2  2.32
-b1_Intercept     0.69      0.49     0.18     1.66          2  2.37
-b2_Intercept     2.47      1.83     0.88     5.51          2 24.01
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.45      0.37     0.88     2.34        710 1.00
+b1_Intercept     1.14      0.28     0.58     1.72        791 1.00
+b2_Intercept     1.06      0.11     0.86     1.30        528 1.00
 
 Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     4.75      1.71     2.83     7.13          2 6.25
+sigma     6.42      0.41     5.68     7.24       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results! 
-We recommend running more iterations and/or setting stronger priors. 
-2: There were 38 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+Warning message:
+There were 32 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -2667,6 +2706,8 @@ mcmc_trace(as.matrix(model_fram_homo))
 
 #+RESULTS:
 [[file:../figs/trace_model_fram_homo.png]]
+
+<R
 
 *** single species, multiple locations, climate predictors for locations, homoskedasticy
 
