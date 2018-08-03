@@ -2338,7 +2338,7 @@ stancode(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
-: [1] 24  8 26 42
+: [1]  9 48 15 28
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
@@ -2360,65 +2360,18 @@ stancode(model_fram_ftcollins_homo)
                prior(gamma(2, 1), nlpar = "b1",lb = 0),
                prior(gamma(2, 1), nlpar = "b2",lb = 0))
 
-  m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = 1)
+m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 4, cores = 2, data = dt, prior = nlprior,  control = list(adapt_delta = 0.9))
 
-m_generated_singleSpecies_multipleLocations_homo <- m
 #+end_src
 
 #+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.001288 seconds
-1000 transitions using 10 leapfrog steps per transition would take 12.88 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.001118 seconds
-1000 transitions using 10 leapfrog steps per transition would take 11.18 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 49.3772 seconds (Warm-up)
-               32.1115 seconds (Sampling)
-               81.4887 seconds (Total)
-
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 51.5806 seconds (Warm-up)
-               36.956 seconds (Sampling)
-               88.5365 seconds (Total)
-#+end_example
+: Compiling the C++ model
+: Start sampling
+: Error in FUN(X[[i]], ...) :
+:   trying to get slot "mode" from an object (class "try-error") that is not an S4 object
+: In addition: Warning message:
+: In parallel::mclapply(1:chains, FUN = callFun, mc.preschedule = FALSE,  :
+:   4 function calls resulted in an error
 
 #+begin_src R
 summary(m_generated_singleSpecies_multipleLocations_homo)
