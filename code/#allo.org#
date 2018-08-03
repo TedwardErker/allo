@@ -2883,16 +2883,39 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+RESULTS:
 [[file:../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
 
-
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-  citycond <- data.frame(City = unique(dt$City))
-  precipcond <- data.frame(Precip = unique(dt$Precip))
-  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("AGE","Precip"))
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("AGE:Precip"))
+  me
 
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png
+
+me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
+  me
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png
+
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  me
+
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts_all.png
 
