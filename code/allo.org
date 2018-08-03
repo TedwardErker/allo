@@ -3384,7 +3384,8 @@ plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
   species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
 
   dm <- d %>% filter(SpCode %in% species.to.select) %>%
-    rename(Species = SpCode)
+      filter(City %in% c("Fort Collins, CO", "Minneapolis, MN","Boise, ID",  "Longview, WA")) %>%
+      rename(Species = SpCode)
 
 #+end_src
 
@@ -3396,6 +3397,7 @@ p
 #+end_src
 
 #+RESULTS:
+[[file:../figs/d_multipleSpecies_multipleLocations.png]]
 
 This would be a good figure to plot the existing equations on, and
 then plot my equations on.
@@ -3432,6 +3434,18 @@ species within genus within ...
 
 I need to test whether just \beta_0 varies by group, or if all three
 \beta's do
+
+It might be worth doing this test on a reasonable subset of the data.
+It might vary by climate but not species, or vice versa.
+
+possibilities
+- \beta_0 + \beta_1 + \beta_2 ~ group1 + group2
+- \beta_0 ~ group1 + group2, \beta_1 + \beta_2 ~ 1
+- \beta_0 ~ group1 + group2, \beta_1 + \beta_2 ~ group1
+- \beta_0 ~ group1 + group2, \beta_1 + \beta_2 ~ group2
+
+
+
 
 *** explaining priors
 can't be negative...  in brms nonlinear advanced, mention the
