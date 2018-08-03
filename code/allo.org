@@ -2741,61 +2741,245 @@ have 4 now which isn't enough for multiple group level predictors.
 
 
 #+begin_src R
-  k <- 5
-  expect_nk <- 30
-  n <- k * expect_nk
-  breaks <- c(0,sort(sample(1:100,(k-1))),n)
-  nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
-  nk
+    k <- 5
+    expect_nk <- 30
+    n <- k * expect_nk
+    breaks <- c(0,sort(sample(1:100,(k-1))),n)
+    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+    nk
 
-precip <- c(600, 400, 400, 250, 800)
+  precip <- c(600, 400, 400, 250, 800) / 1000
+  precip <- precip - mean(precip)
 
-  u_precip_b0 <- .1
-  u_precip_b1 <- .1
-  u_precip_b2 <- .1
+    u_precip_b0 <- 1
+    u_precip_b1 <- .5
+    u_precip_b2 <- .5
 
-  #with centered city level predictors this is the mean
-  u_intercept_b0 <- 1
-  u_intercept_b1 <- 1
-  u_intercept_b2 <- 1
+    #with centered city level predictors this is the mean
+    u_intercept_b0 <- 1
+    u_intercept_b1 <- 1
+    u_intercept_b2 <- 1
 
-    mu_b0 <- u_intercep_b0 + u_precip_b0 * precip
-    sigma_b0 <- .2
-    mu_b1 <- 2
-    sigma_b1 <- .2
-    mu_b2 <- 1
-    sigma_b2 <- .2
+      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
+      sigma_b0 <- .1
+      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
+      sigma_b1 <- .1
+      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
+      sigma_b2 <- .1
 
-    sigma <- 3
+      sigma <- 3
 
-    b0 <- rnorm(k, mu_b0, sigma_b0)
-    b1 <- rnorm(k, mu_b1, sigma_b1)
-    b2 <- rnorm(k, mu_b2, sigma_b2)
+      b0 <- rnorm(k, mu_b0, sigma_b0)
+      b1 <- rnorm(k, mu_b1, sigma_b1)
+      b2 <- rnorm(k, mu_b2, sigma_b2)
 
-    w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
 
-    AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
-        sample  #to randomly shuffle
+      AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+          sample  #to randomly shuffle
 
-    DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
 
-  City <- rep(letters[1:k], times = nk)
-  Precip_col <- rep(c(600, 400, 400, 250, 800), times = nk)
-  Centered_Precip <- Precip - mean(Precip)
+    City <- rep(letters[1:k], times = nk)
+    Precip <- rep(precip, times = nk)
 
-  dt <- data.frame(AGE, DBH, City, Precip)
+
+    dt <- data.frame(AGE, DBH, City, Precip)
 #+end_src
 
 #+RESULTS:
-: [1]  9 48 15 28
+: [1] 22 16  3 46 63
 
-#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
-  ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+#+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png :height 200
+library(gridExtra)
+pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+grid.arrange(pc,pp, nrow =1)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/test_data_1.png]]
+[[file:../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png]]
+
+**** fit to generated data
+
+#+begin_src R :results output
+          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                     b0 ~ precip + (1 | City),
+                     b1 ~ precip + (1 | City),
+                     b2 ~ precip + (1 | City),
+                     nl = T)
+
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(4, 3), nlpar = "b1",lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+
+m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+
+#+end_src
+
+#+begin_src R
+summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
+pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
+library(bayesplot)
+mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
+  #cond <- data.frame(City = c("a","b","c","d"))
+  #marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, points = T, conditions = cond)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
+                         effects = c("AGE"))
+  plot(me)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_pts_all.png
+
+    ggplot() +
+        geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__,  ymax = estimate__ + se__, group = City)) +
+        geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
+        geom_point(data = dt, aes(x = AGE, y = DBH, color = City))
+
+     #  geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      #   geom_point(data = dt, aes(x = AGE, y = DBH))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_pts_all.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_conditionalCity.png
+  cond <- data.frame(City = c("a","b","c","d"))
+  #marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, points = T)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
+                         effects = c("AGE"), conditions = cond)
+  plot(me)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_conditionalCity.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
+pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_pred.png]]
+
+#+begin_src R
+stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+#+RESULTS:
+
+#+BEGIN_SRC stan
+// generated with brms 2.3.1
+functions {
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  int<lower=1> K_b0;  // number of population-level effects
+  matrix[N, K_b0] X_b0;  // population-level design matrix
+  int<lower=1> K_b1;  // number of population-level effects
+  matrix[N, K_b1] X_b1;  // population-level design matrix
+  int<lower=1> K_b2;  // number of population-level effects
+  matrix[N, K_b2] X_b2;  // population-level design matrix
+  // covariate vectors
+  vector[N] C_1;
+  // data for group-level effects of ID 1
+  int<lower=1> J_1[N];
+  int<lower=1> N_1;
+  int<lower=1> M_1;
+  vector[N] Z_1_b0_1;
+  // data for group-level effects of ID 2
+  int<lower=1> J_2[N];
+  int<lower=1> N_2;
+  int<lower=1> M_2;
+  vector[N] Z_2_b1_1;
+  // data for group-level effects of ID 3
+  int<lower=1> J_3[N];
+  int<lower=1> N_3;
+  int<lower=1> M_3;
+  vector[N] Z_3_b2_1;
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+}
+parameters {
+  vector<lower=0>[K_b0] b_b0;  // population-level effects
+  vector<lower=0>[K_b1] b_b1;  // population-level effects
+  vector<lower=0>[K_b2] b_b2;  // population-level effects
+  real<lower=0> sigma;  // residual SD
+  vector<lower=0>[M_1] sd_1;  // group-level standard deviations
+  vector[N_1] z_1[M_1];  // unscaled group-level effects
+  vector<lower=0>[M_2] sd_2;  // group-level standard deviations
+  vector[N_2] z_2[M_2];  // unscaled group-level effects
+  vector<lower=0>[M_3] sd_3;  // group-level standard deviations
+  vector[N_3] z_3[M_3];  // unscaled group-level effects
+}
+transformed parameters {
+  // group-level effects
+  vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
+  // group-level effects
+  vector[N_2] r_2_b1_1 = sd_2[1] * (z_2[1]);
+  // group-level effects
+  vector[N_3] r_3_b2_1 = sd_3[1] * (z_3[1]);
+}
+model {
+  vector[N] mu_b0 = X_b0 * b_b0;
+  vector[N] mu_b1 = X_b1 * b_b1;
+  vector[N] mu_b2 = X_b2 * b_b2;
+  vector[N] mu;
+  for (n in 1:N) {
+    mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n];
+    mu_b1[n] += r_2_b1_1[J_2[n]] * Z_2_b1_1[n];
+    mu_b2[n] += r_3_b2_1[J_3[n]] * Z_3_b2_1[n];
+    // compute non-linear predictor
+    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  }
+  // priors including all constants
+  target += gamma_lpdf(b_b0 | 2, 1)
+    - 1 * gamma_lccdf(0 | 2, 1);
+  target += gamma_lpdf(b_b1 | 2, 1)
+    - 1 * gamma_lccdf(0 | 2, 1);
+  target += gamma_lpdf(b_b2 | 2, 1)
+    - 1 * gamma_lccdf(0 | 2, 1);
+  target += student_t_lpdf(sigma | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += student_t_lpdf(sd_1 | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += normal_lpdf(z_1[1] | 0, 1);
+  target += student_t_lpdf(sd_2 | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += normal_lpdf(z_2[1] | 0, 1);
+  target += student_t_lpdf(sd_3 | 3, 0, 31)
+    - 1 * student_t_lccdf(0 | 3, 0, 31);
+  target += normal_lpdf(z_3[1] | 0, 1);
+  // likelihood including all constants
+  if (!prior_only) {
+    target += normal_lpdf(Y | mu, sigma);
+  }
+}
+generated quantities {
+}
+#+END_SRC
 
 *** explaining priors
 can't be negative...
