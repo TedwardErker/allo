@@ -3183,6 +3183,19 @@ marginal_effects(model_fram_precip_homo, effects = "AGE:Precip")
 
 Very cool, as precip increases, so does dbh.  But there is high uncertainty.
 
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo_Points.png
+  conditions <- data.frame(Precip = unique(fram_clim$Precip))
+  me <- marginal_effects(model_fram_precip_homo, effects = "AGE", conditions = conditions, re_formula = NA)
+me
+  #ggplot(me$AGE) +
+   #     geom_line(aes(x = AGE, y = estimate__)) +
+    #  geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+     # geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+      #facet_wrap(~City)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_age_fram_ageprecip_homo_Points.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_precip_homo.png
 marginal_effects(model_fram_precip_homo, effects = "Precip")
@@ -3194,52 +3207,57 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 *** multiple species, multiple locations, no group level predictors, homoskedastic
 **** generate data
 #+begin_src R
-    k <- 5  # number locations
-    l <- 7  # number of species
-    expect_nkl <- 20
-    n <- k * expect_nkl
-    breaks <- c(0,sort(sample(1:100,(k-1))),n)
-    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
-    nk
+  k <- 5  # number locations
+  l <- 7  # number of species
+  expect_nkl <- 20
+  n <- k * l * expect_nkl
+  breaks <- c(0,sort(sample(1:n,(l * k-1))),n)
+  nkl <- sapply(1:(k*l), function(i) breaks[i+1] - breaks[i])
+  nkl
 
-  precip <- c(600, 400, 400, 250, 800) / 1000
-  precip <- precip - mean(precip)
+  mu_b0 <- 1.2
+  sigma_b0_k <- .2
+  sigma_b0_l <- .1
 
-    u_precip_b0 <- 1
-    u_precip_b1 <- .5
-    u_precip_b2 <- .5
+  mu_b1 <- 2
+  sigma_b1_k <- .2
+  sigma_b1_l <- .1
 
-    #with centered city level predictors this is the mean
-    u_intercept_b0 <- 1
-    u_intercept_b1 <- 1
-    u_intercept_b2 <- 1
+  mu_b2 <- 1
+  sigma_b2_k <- .2
+  sigma_b2_l <- .1
 
-      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
-      sigma_b0 <- .1
-      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
-      sigma_b1 <- .1
-      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
-      sigma_b2 <- .1
+  sigma <- 3
 
-      sigma <- 3
+  k_b0 <- rnorm(k, 0, sigma_b0_k)
+  l_b0 <- rnorm(l, 0, sigma_b0_l)
+  kl_b0 <- outer(k_b0, l_b0, FUN = "+")
 
-      b0 <- rnorm(k, mu_b0, sigma_b0)
-      b1 <- rnorm(k, mu_b1, sigma_b1)
-      b2 <- rnorm(k, mu_b2, sigma_b2)
+  k_b1 <- rnorm(k, 0, sigma_b1_k)
+  l_b1 <- rnorm(l, 0, sigma_b1_l)
 
-      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+  k_b2 <- rnorm(k, 0, sigma_b2_k)
+  l_b2 <- rnorm(l, 0, sigma_b2_l)
 
 
-      AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
-          sample  #to randomly shuffle
 
-      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+  b0 <- my_b0 + k_b0 + l_b0
+  b1 <- rnorm(k, mu_b1, sigma_b1)
+  b2 <- rnorm(k, mu_b2, sigma_b2)
 
-    City <- rep(letters[1:k], times = nk)
-    Precip <- rep(precip, times = nk)
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
 
-    dt <- data.frame(AGE, DBH, City, Precip)
+  AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+      sample  #to randomly shuffle
+
+  DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+
+  City <- rep(letters[1:k], times = nk)
+  Precip <- rep(precip, times = nk)
+
+
+  dt <- data.frame(AGE, DBH, City, Precip)
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_multipleSpecies_multipleLocations_PrecipCityPred.png :height 200
