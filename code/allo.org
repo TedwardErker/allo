@@ -3172,6 +3172,16 @@ mcmc_trace(as.matrix(model_fram_precip_homo))
 #+RESULTS:
 [[file:../figs/mcmctrace_fram_precip_homo.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_precip_homo.png
+pp_check(model_fram_precip_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_fram_precip_homo.png]]
+Not great.  I think the problem arises because the effect of Precip on
+the parameters may not be linear.  Also, I may need to include
+Temperature related covariates
+
 **** marginal effects
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo.png
 marginal_effects(model_fram_precip_homo, effects = "AGE:Precip")
@@ -3186,12 +3196,12 @@ Very cool, as precip increases, so does dbh.  But there is high uncertainty.
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo_Points.png
   conditions <- data.frame(Precip = unique(fram_clim$Precip))
   me <- marginal_effects(model_fram_precip_homo, effects = "AGE", conditions = conditions, re_formula = NA)
-me
-  #ggplot(me$AGE) +
-   #     geom_line(aes(x = AGE, y = estimate__)) +
-    #  geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-     # geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
-      #facet_wrap(~City)
+#me
+  ggplot(me$AGE) +
+        geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+      facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
@@ -3235,6 +3245,7 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 
   k_b1 <- rnorm(k, 0, sigma_b1_k)
   l_b1 <- rnorm(l, 0, sigma_b1_l)
+
 
   k_b2 <- rnorm(k, 0, sigma_b2_k)
   l_b2 <- rnorm(l, 0, sigma_b2_l)
