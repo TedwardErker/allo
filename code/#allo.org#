@@ -3320,6 +3320,18 @@ pairs(m_generated_multipleSpecies_multipleLocations_homo)
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
 *** Full model
 
+\[
+DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
+\]
+
+\[
+\beta_0, \beta_1, \beta_2 \sim
+\]
+
+\[
+\sigma \sim
+\]
+
 species within genus within ...
 
 *** explaining priors
