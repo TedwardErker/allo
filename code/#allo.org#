@@ -2818,15 +2818,51 @@ m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains =
 
 #+end_src
 
-#+RESULTS:
-: Error: The following variables are missing in 'data':
-: 'precip'
-
 #+begin_src R
 summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
+#+RESULTS:
+#+begin_example
+ Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
+         b0 ~ Precip + (1 | City)
+         b1 ~ Precip + (1 | City)
+         b2 ~ Precip + (1 | City)
+   Data: dt (Number of observations: 150) 
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Group-Level Effects: 
+~City (Number of levels: 5) 
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.15      0.18     0.00     0.69        479 1.00
+sd(b1_Intercept)     0.24      0.26     0.01     0.92        814 1.00
+sd(b2_Intercept)     0.07      0.09     0.00     0.29        536 1.00
+
+Population-Level Effects: 
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     0.98      0.15     0.75     1.35        608 1.00
+b0_Precip        1.06      0.36     0.45     1.80       1521 1.00
+b1_Intercept     0.99      0.18     0.68     1.39        939 1.00
+b1_Precip        0.82      0.39     0.25     1.71       2000 1.00
+b2_Intercept     0.92      0.06     0.80     1.04        908 1.00
+b2_Precip        0.57      0.21     0.25     1.09        929 1.00
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     3.00      0.18     2.67     3.38       2000 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 16 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png :width 1000 :height 1000
 pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
