@@ -3245,19 +3245,13 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 
   k_b1 <- rnorm(k, 0, sigma_b1_k)
   l_b1 <- rnorm(l, 0, sigma_b1_l)
-
+  kl_b1 <- outer(k_b1, l_b1, FUN = "+")
 
   k_b2 <- rnorm(k, 0, sigma_b2_k)
   l_b2 <- rnorm(l, 0, sigma_b2_l)
-
-
-
-  b0 <- my_b0 + k_b0 + l_b0
-  b1 <- rnorm(k, mu_b1, sigma_b1)
-  b2 <- rnorm(k, mu_b2, sigma_b2)
+  kl_b2 <- outer(k_b2, l_b2, FUN = "+")
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-
 
   AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
       sample  #to randomly shuffle
