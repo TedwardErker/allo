@@ -2013,7 +2013,7 @@ real data, and just create one model..
 **** test model on generated data
 Priors
 #+begin_src R :exports results :results graphics :file ../figs/ftest.png
-post <- dgamma(theta,2, 1)
+post <- dgamma(theta,4, 3)
 plot(theta, post, type = "l")
 #+end_src
 
@@ -2368,9 +2368,9 @@ stancode(model_fram_ftcollins_homo)
                      b2 ~ (1 | City),
                      nl = T)
 
-  nlprior <- c(prior(gamma(2, 1), nlpar = "b0",lb = 0),
-               prior(gamma(2, 1), nlpar = "b1",lb = 0),
-               prior(gamma(2, 1), nlpar = "b2",lb = 0))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(4, 3), nlpar = "b1",lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
 m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 4, cores = 2, data = dt, prior = nlprior,  control = list(adapt_delta = 0.9))
 
@@ -2586,9 +2586,36 @@ generated quantities {
 #+END_SRC
 
 **** fit to real data
+#+begin_src R
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram <- filter(d, SpCode == "FRAM")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
+ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fram_age_dbh.png]]
 
 #+begin_src R
-  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram, cores = 2)
+
+#  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram, cores = 2)
+
+          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                     b0 ~ (1 | City),
+                     b1 ~ (1 | City),
+                     b2 ~ (1 | City),
+                     nl = T)
+
+  nlprior <- c(prior(gamma(2, 1), nlpar = "b0",lb = 0),
+               prior(gamma(2, 1), nlpar = "b1",lb = 0),
+               prior(gamma(2, 1), nlpar = "b2",lb = 0))
+
+m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 4, cores = 2, data = dt, prior = nlprior,  control = list(adapt_delta = 0.9))
+
 #+end_src
 
 #+begin_src R
