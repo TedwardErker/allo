@@ -2655,7 +2655,7 @@ ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~Ci
 
 #+begin_src R
 
-  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram, cores = 2)
+  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram, cores = 2, control = list(adapt_delta = .9))
 
 #+end_src
 
@@ -2672,36 +2672,35 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ (1 | City)
          b2 ~ (1 | City)
    Data: fram (Number of observations: 129)
-Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 4000
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
 
 Group-Level Effects:
 ~City (Number of levels: 4)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.33      1.63     0.02     4.04          2 3.97
-sd(b1_Intercept)     1.69      2.12     0.03     5.31          2 7.00
-sd(b2_Intercept)     0.74      0.76     0.01     1.98          2 8.91
+sd(b0_Intercept)     0.41      0.52     0.01     1.96        498 1.00
+sd(b1_Intercept)     0.40      0.44     0.01     1.47        484 1.01
+sd(b2_Intercept)     0.13      0.14     0.00     0.51        454 1.00
 
 Population-Level Effects:
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-b0_Intercept     2.29      0.93     0.93     3.63          2  2.32
-b1_Intercept     0.69      0.49     0.18     1.66          2  2.37
-b2_Intercept     2.47      1.83     0.88     5.51          2 24.01
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.45      0.37     0.88     2.34        710 1.00
+b1_Intercept     1.14      0.28     0.58     1.72        791 1.00
+b2_Intercept     1.06      0.11     0.86     1.30        528 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     4.75      1.71     2.83     7.13          2 6.25
+sigma     6.42      0.41     5.68     7.24       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 38 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+Warning message:
+There were 32 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
+**** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/trace_model_fram_homo.png
 mcmc_trace(as.matrix(model_fram_homo))
 #+end_src
@@ -2709,7 +2708,80 @@ mcmc_trace(as.matrix(model_fram_homo))
 #+RESULTS:
 [[file:../figs/trace_model_fram_homo.png]]
 
-*** single species, multiple locations, climate predictors for locations, homoskedasticy
+**** marginal effects
+#+begin_src R :exports results :results graphics :file ../figs/marginal_fram_homo.png
+marginal_effects(model_fram_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_fram_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_fram_homo_city_wPoints.png
+  cond <- data.frame(City = unique(fram$City))
+  me <- marginal_effects(model_fram_homo, conditions = cond, re_formula = NULL)
+  #me
+  ggplot(me$AGE) + geom_line(aes(x = AGE, y = estimate__)) + facet_wrap(~City) +
+    geom_point(data = fram, aes(x = AGE, y = DBH))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_fram_homo_city_wPoints.png]]
+
+*** single species, multiple locations, precipitation predictors for locations, homoskedasticy
+I'll do other climate predictors when I have more locations, I only
+have 4 now which isn't enough for multiple group level predictors.
+**** generate data
+
+#+begin_src R
+  k <- 4
+  n <- 100
+  breaks <- c(0,sort(sample(1:100,(k-1))),n)
+  nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+  nk
+
+u_precip_b0
+u_precip_b1
+u_precip_b2
+
+u_intercept_b0
+u_intercept_b1
+u_intercept_b2
+
+  mu_b0 <- u_intercep_b0 + u_precip_b0 * precip
+  sigma_b0 <- .2
+  mu_b1 <- 2
+  sigma_b1 <- .2
+  mu_b2 <- 1
+  sigma_b2 <- .2
+
+  sigma <- 3
+
+  b0 <- rnorm(k, mu_b0, sigma_b0)
+  b1 <- rnorm(k, mu_b1, sigma_b1)
+  b2 <- rnorm(k, mu_b2, sigma_b2)
+
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+
+
+  AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+      sample  #to randomly shuffle
+
+  DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+
+  City <- rep(letters[1:k], times = nk)
+
+  dt <- data.frame(AGE, DBH, City)
+#+end_src
+
+#+RESULTS:
+: [1]  9 48 15 28
+
+#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
+  ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_data_1.png]]
 
 *** explaining priors
 can't be negative...
