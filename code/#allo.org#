@@ -2718,12 +2718,24 @@ marginal_effects(model_fram_homo)
 #+RESULTS:
 [[file:../figs/marginal_fram_homo.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/marginal_fram_homo_Cities.png
+  cond <- data.frame(City = unique(fram$City))
+marginal_effects(model_fram_homo, re_formula = NULL, conditions = cond)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_fram_homo_Cities.png]]
+
+
 #+begin_src R :exports results :results graphics :file ../figs/marginal_fram_homo_city_wPoints.png
   cond <- data.frame(City = unique(fram$City))
   me <- marginal_effects(model_fram_homo, conditions = cond, re_formula = NULL)
   #me
-  ggplot(me$AGE) + geom_line(aes(x = AGE, y = estimate__)) + facet_wrap(~City) +
-    geom_point(data = fram, aes(x = AGE, y = DBH))
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+    geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+    geom_point(data = fram, aes(x = AGE, y = DBH)) +
+      facet_wrap(~City)
 #+end_src
 
 #+RESULTS:
@@ -2734,12 +2746,6 @@ I'll do other climate predictors when I have more locations, I only
 have 4 now which isn't enough for multiple group level predictors.
 
 **** generate data
-
-| City | Precip | b0 |   |   |
-|------+--------+---+---+---|
-| name | x      |   |   |   |
-
-
 #+begin_src R
     k <- 5
     expect_nk <- 30
@@ -2824,24 +2830,24 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 
 #+RESULTS:
 #+begin_example
- Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ Precip + (1 | City)
          b1 ~ Precip + (1 | City)
          b2 ~ Precip + (1 | City)
-   Data: dt (Number of observations: 150) 
+   Data: dt (Number of observations: 150)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
-Group-Level Effects: 
-~City (Number of levels: 5) 
+Group-Level Effects:
+~City (Number of levels: 5)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sd(b0_Intercept)     0.15      0.18     0.00     0.69        479 1.00
 sd(b1_Intercept)     0.24      0.26     0.01     0.92        814 1.00
 sd(b2_Intercept)     0.07      0.09     0.00     0.29        536 1.00
 
-Population-Level Effects: 
+Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 b0_Intercept     0.98      0.15     0.75     1.35        608 1.00
 b0_Precip        1.06      0.36     0.45     1.80       1521 1.00
@@ -2850,12 +2856,12 @@ b1_Precip        0.82      0.39     0.25     1.71       2000 1.00
 b2_Intercept     0.92      0.06     0.80     1.04        908 1.00
 b2_Precip        0.57      0.21     0.25     1.09        929 1.00
 
-Family Specific Parameters: 
+Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma     3.00      0.18     2.67     3.38       2000 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
-is a crude measure of effective sample size, and Rhat is the potential 
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
 There were 16 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
@@ -2879,11 +2885,10 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-  #cond <- data.frame(City = c("a","b","c","d"))
-  #marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, points = T, conditions = cond)
-  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
-                         effects = c("AGE"))
-  plot(me)
+  citycond <- data.frame(City = unique(dt$City))
+  precipcond <- data.frame(Precip = unique(dt$Precip))
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("AGE","Precip"))
+
 #+end_src
 
 #+RESULTS:
