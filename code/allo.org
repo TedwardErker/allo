@@ -2003,7 +2003,7 @@ real data, and just create one model..
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
+#+begin_src R :exports results :results graphics :file ../figs/generated_data_singleSpeciesLocation.png
   ggplot(dt, aes(x = AGE, y = DBH)) + geom_point()
 #+end_src
 
@@ -2159,6 +2159,17 @@ pairs(m)
 #+RESULTS:
 [[file:../figs/pairs_1.png]]
 
+***** posterior transform to get back original sigma
+
+Extract the posterior samples via posterior_samples, transform them
+via exp and then summarize via posterior_summary. But keep in mind
+that a linear effect on the log scale becomes multiplicative effect
+after back-transforming on the identity scale.
+
+#+begin_src R
+posterior_samples(
+#+end_src
+
 **** fit model to real data
 #+begin_src R
 d <- readRDS("../data/tidy_age_dbh.rds")
@@ -2294,6 +2305,7 @@ marginal_effects(model_fram_ftcollins_hetero)
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_hetero_marginal_effects.png]]
 
+****
 **** stan code for model
 #+begin_src R
 stancode(model_fram_ftcollins_homo)
@@ -2386,33 +2398,48 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ (1 | City)
          b2 ~ (1 | City)
    Data: dt (Number of observations: 100)
-Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 2000
+Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 4000
 
 Group-Level Effects:
 ~City (Number of levels: 4)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.53      0.37     0.14     1.62        551 1.00
-sd(b1_Intercept)     0.65      0.62     0.05     2.17        679 1.01
-sd(b2_Intercept)     0.33      0.23     0.10     1.13         42 1.06
+sd(b0_Intercept)     0.53      0.37     0.18     1.64       1162 1.00
+sd(b1_Intercept)     1.07      0.92     0.18     3.43       1367 1.00
+sd(b2_Intercept)     0.17      0.15     0.02     0.61        935 1.00
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.36      0.29     0.83     2.02        489 1.00
-b1_Intercept     2.00      0.41     1.11     2.84        764 1.00
-b2_Intercept     0.93      0.15     0.62     1.26        343 1.00
+b0_Intercept     1.32      0.28     0.72     1.90       1081 1.00
+b1_Intercept     1.96      0.53     0.83     3.02       1459 1.00
+b2_Intercept     0.95      0.11     0.73     1.19        803 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     2.94      0.23     2.56     3.43       2000 1.00
+sigma     2.86      0.21     2.49     3.31       4000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 99 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 55 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_homo.png
+pairs(m_generated_singleSpecies_multipleLocations_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_m_generated_singleSpecies_multipleLocations_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_homo.png
+library(bayesplot)
+mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png
@@ -2559,6 +2586,10 @@ generated quantities {
 #+END_SRC
 
 **** fit to real data
+
+#+begin_src R
+  model_fram_homo <- update(m_generated_singleSpecies_multipleLocations_homo, newdata = fram)
+#+end_src
 
 *** single species, multiple locations, climate predictors for locations, homoskedasticy
 
