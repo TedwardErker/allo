@@ -3261,16 +3261,19 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
       })
   })
 
-  DBH <- lapply(1:k, function(i) {
+  dt <- lapply(1:k, function(i) {
       lapply(1:l, function(j) {
-          w(b0[i,j], b1[i,j], b2[i,j], AGE[[i]][[j]]) + rnorm(nkl[i,j], 0, sigma)
+          DBH <- w(b0[i,j], b1[i,j], b2[i,j], AGE[[i]][[j]]) + rnorm(nkl[i,j], 0, sigma)
+          City <- letters[i]
+          Species <- rev(LETTERS)[j]
+          data.frame(AGE = AGE[[i]][[j]], DBH = DBH, City = City, Species = Species)
       })
   })
 
   AGE <- unlist(AGE)
   DBH <- unlist(DBH)
-  City <- rep(letters[1:k], times = l * expect_nkl)
-  Species <- rep(rev(LETTERS)[1:l], times = k * expect_nkl)
+  City <- rep(rep(letters[1:k],l), times = as.vector(nkl))
+  Species <- rep(rep(rev(LETTERS)[1:l],k), times = as.vector(nkl))
 
 
   dt <- data.frame(AGE, DBH, City, Species)
@@ -3278,8 +3281,8 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 
 #+RESULTS:
 :  
-: [1]  35   9  27  29  64   2  17  50  12 100  20   5 123  32  17  11  68   7   2
-: [20]  15  39  15  23  53  64   9  16   4  45  31   9  25  44   8  20
+: [1]  20   5   1 121  20   4  44  23  12  72  41   6  11  24  27  20  24   3  29
+: [20]  16 101  21   4   6  15  22 106  21  26   8  60  20  46  61  10
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_multipleSpecies_multipleLocations_PrecipCityPred.png
 library(gridExtra)
