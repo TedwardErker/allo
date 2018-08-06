@@ -3983,21 +3983,18 @@ DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
 
 species within genus within ...
 
-I need to test whether just \beta_0 varies by group, or if all three
-\beta's do
-
-It might be worth doing this test on a reasonable subset of the data.
-It might vary by climate but not species, or vice versa.
-
-possibilities
 
 Model selection
 1) Do all the betas vary by groups (City, Species, or both), or just beta0?
    1) There would be 4 models to compare:
-      1) \beta_0 + \beta_1 + \beta_2 ~ City + group2
-      2) \beta_0 ~ City + group2, \beta_1 + \beta_2 ~ 1
-      3) \beta_0 ~ City + group2, \beta_1 + \beta_2 ~ City
-      4) \beta_0 ~ City + group2, \beta_1 + \beta_2 ~ group2
+      1) \beta_0 + \beta_1 + \beta_2 ~ City + Species
+      2) \beta_0 ~ City + Species, \beta_1 + \beta_2 ~ 1
+      3) \beta_0 ~ City + Species, \beta_1 + \beta_2 ~ City
+      4) \beta_0 ~ City + Species, \beta_1 + \beta_2 ~ Species
+   2) It might be worth doing this test on a reasonable subset of the
+      data, otherwise this may take a _very_ long time
+2) What is the proper form of the climate variables on the beta's?
+   1) 
 
 
 
