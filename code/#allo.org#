@@ -887,13 +887,25 @@ cs <- cs %>% mutate(InData = join %in% dj)
 [[file:../figs/CitySpeciesData_SpeciesCentric.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SpeciesCentric.png :height 400 :width 1400
-  cs_sp <- cs %>% mutate(SpCode = as.character(SpCode))
-      ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) + 
-          geom_raster() +
-          coord_equal() +
-          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-          scale_fill_manual(values = c("white","black"))
+    cs_sp_cmn <- cs_sp %>% 
+      group_by(SpCode) %>%
+        summarize(n = sum(InData)) %>%
+        arrange(-n) %>%
+        mutate(SpCode = as.factor(SpCode))
+      
+  cs_sp_cmn <- cs_sp %>%
+      mutate(SpCode = as.character(SpCode),
+             SpCode = factor(SpCode, levels(cs_sp_cmn$SpCode)[as.numeric(cs_sp_cmn$SpCode)]))
+
+        ggplot(cs_sp_cmn, aes(x = SpCode, y = City, fill = InData)) + 
+            geom_raster() +
+            coord_equal() +
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+            scale_fill_manual(values = c("white","black"))
 #+end_src
+
+#+RESULTS:
+[[file:../figs/CitySpeciesData_SpeciesCentric.png]]
 
 
 ** Modelling
