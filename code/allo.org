@@ -505,8 +505,6 @@ The following objects are masked from ‘package:stats’:
 The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
-RStudio Community is a great place to get help:
-https://community.rstudio.com/c/tidyverse.
 
 Attaching package: ‘tidyr’
 
@@ -818,7 +816,7 @@ Joining, by = "TreeType"
 #+end_example
 **** tidy a few names and select variables of interest here
 #+begin_src R
-d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age)
+d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age, ScientificName)
 #+end_src
 
 #+RESULTS:
@@ -3820,12 +3818,11 @@ p
 
 #+RESULTS:
 [[file:../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png]]
-**** fit model to generated data
-y ~
+
+**** fit to generated data
 
 b ~ (1 | genus / species)
 
-**** fit to generated data
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                      b0 ~ 1 + (1 | City) + (1 | Genus/Species),
@@ -3921,7 +3918,29 @@ Look at Genus Y, Species X, in City a.  There are only two
 observations, but because the model includes information of genus and
 city, the line has a pretty close fit.
 
+**** fit to real data
+#+begin_src R
+  d <- readRDS("../data/tidy_age_dbh.rds") %>%
+      mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
 
+    species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
+
+    dm <- d %>% filter(SpCode %in% species.to.select) %>%
+        filter(City %in% c("Fort Collins, CO", "Minneapolis, MN","Boise, ID",  "Longview, WA")) %>%
+        rename(Species = SpCode)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+
+  model_multipleSpecies_nestedGenus_multipleCities_homo <- update(m_generated_multipleSpecies_multipleLocations_homo, newdata = dm, cores = 2, chains = 4, control = list(adapt_delta = .9, max_treedepth = 15))
+
+#+end_src
+
+#+begin_src R
+  model_multipleSpecies_nestedGenus_multipleCities_homo
+#+end_src
 
 *** Full model
 

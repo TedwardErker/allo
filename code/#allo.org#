@@ -828,7 +828,7 @@ sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
-:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 :    -1.0    12.9   116.1   302.5   389.2  9516.0
 : [1] 0.1143094
 : [1] 0
@@ -3818,12 +3818,11 @@ p
 
 #+RESULTS:
 [[file:../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png]]
-**** fit model to generated data
-y ~
+
+**** fit to generated data
 
 b ~ (1 | genus / species)
 
-**** fit to generated data
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                      b0 ~ 1 + (1 | City) + (1 | Genus/Species),
@@ -3919,7 +3918,39 @@ Look at Genus Y, Species X, in City a.  There are only two
 observations, but because the model includes information of genus and
 city, the line has a pretty close fit.
 
+**** fit to real data
+#+begin_src R
+  d <- readRDS("../data/tidy_age_dbh.rds") %>%
+      mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
 
+    species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
+
+    dm <- d %>% filter(SpCode %in% species.to.select) %>%
+        filter(City %in% c("Fort Collins, CO", "Minneapolis, MN","Boise, ID",  "Longview, WA")) %>%
+        rename(Species = SpCode)
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/d_multipleSpecies_nestedGenus_multipleLocations.png :height 700 :width 700
+p <-   ggplot(dm, aes(x = AGE, y = DBH, color = Species)) + geom_point() + facet_grid(City ~ Genus)
+p
+#+end_src
+
+#+RESULTS:
+[[file:../figs/d_multipleSpecies_nestedGenus_multipleLocations.png]]
+
+
+#+begin_src R
+
+  model_multipleSpecies_nestedGenus_multipleCities_homo <- update(m_generated_multipleSpecies_multipleLocations_homo, newdata = dm, cores = 2, chains = 4, control = list(adapt_delta = .9, max_treedepth = 15))
+
+#+end_src
+
+#+begin_src R
+  model_multipleSpecies_nestedGenus_multipleCities_homo
+#+end_src
 
 *** Full model
 
