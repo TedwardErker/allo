@@ -224,7 +224,6 @@ they follow frelich 1992
 also
 
 * Methods
-
 ** Data
 repeat measures on the same individuals would help much.
 
@@ -3477,6 +3476,83 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/marginal_dm_multipleSpecies_multipleCities_homo.png]]
 
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
+**** generate data
+#+begin_src R
+  k <- 2  # number locations
+  l <- 3  # number of genera
+  m <- c(1,2,3) # number of species per genera
+  expect_nkl <- 20
+  n <- k * sum(m) * expect_nkl
+  breaks <- c(0,sort(sample(1:n,(sum(m) * k-1))),n)
+  nkl <- sapply(1:(k*sum(m)), function(i) breaks[i+1] - breaks[i])
+  nkl
+
+  mu_b0 <- 1.2
+  sigma_b0_k <- .3
+  sigma_b0_l <- .05
+  sigma_b0_m <- .02
+
+  mu_b1 <- 1
+  sigma_b1_k <- .05
+  sigma_b1_l <- .1
+  sigma_b1_m <- .05
+
+  mu_b2 <- 1
+  sigma_b2_k <- .1
+  sigma_b2_l <- .1
+  sigma_b2_m <- .05
+
+  sigma <- 5
+
+  k_b0 <- rnorm(k, 0, sigma_b0_k)
+  l_b0 <- rnorm(l, 0, sigma_b0_l)
+  b0 <- outer(k_b0, l_b0, FUN = "+") + mu_b0
+
+  k_b1 <- rnorm(k, 0, sigma_b1_k)
+  l_b1 <- rnorm(l, 0, sigma_b1_l)
+  b1 <- outer(k_b1, l_b1, FUN = "+") + mu_b1
+
+  k_b2 <- rnorm(k, 0, sigma_b2_k)
+  l_b2 <- rnorm(l, 0, sigma_b2_l)
+  b2 <- outer(k_b2, l_b2, FUN = "+") + mu_b2
+
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+
+  nkl <- matrix(nkl, nrow = k, ncol = l)
+
+  AGE <- lapply(1:k, function(i) {
+      lapply(1:l, function(j) {
+          runif(nkl[i,j],0,150) %>% round
+      })
+  })
+
+  dt <- lapply(1:k, function(i) {
+      lapply(1:l, function(j) {
+          DBH <- w(b0[i,j], b1[i,j], b2[i,j], AGE[[i]][[j]]) + rnorm(nkl[i,j], 0, sigma)
+          City <- letters[i]
+          Species <- rev(LETTERS)[j]
+          data.frame(AGE = AGE[[i]][[j]], DBH = DBH, City = City, Species = Species)
+      })
+  })
+
+  dt <- bind_rows(unlist(dt,recursive = F))
+#+end_src
+
+#+RESULTS:
+: [1] 23 37  4 14  8 48  9 17
+: There were 15 warnings (use warnings() to see them)
+
+#+begin_src R :exports results :results graphics :file ../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png
+p <-   ggplot(dt, aes(x = AGE, y = DBH)) + geom_point() + facet_grid(City ~ Species)
+p
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_data_multipleSpecies_multipleLocations_PrecipCityPred.png]]
+
+y ~
+
+b ~ (1 | genus / species)
 *** Full model
 
 \[
