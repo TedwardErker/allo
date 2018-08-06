@@ -3349,6 +3349,8 @@ stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 
 **** fit to real data
 #+begin_src R :var clim=city_climate
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram <- filter(d, SpCode == "FRAM")
 
       fram_clim <- left_join(fram,clim) %>%
           mutate(Precip = (Precip - mean(Precip))/ 1000,
@@ -3383,13 +3385,9 @@ model_fram_climate_homo <- brm(form, chains = 2, cores = 2, data = fram_clim, pr
 
 #+end_src
 
-#+RESULTS:
-: Error in terms.formula(reformulate(term[i])) :
-:   invalid model formula in ExtractVars
-
 
 #+begin_src R
-model_fram_precip_homo
+model_fram_climate_homo
 #+end_src
 
 #+RESULTS:
@@ -3397,9 +3395,9 @@ model_fram_precip_homo
  Family: gaussian
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ Precip + (1 | City)
-         b1 ~ Precip + (1 | City)
-         b2 ~ Precip + (1 | City)
+         b0 ~ Precip * HDD + (1 | City)
+         b1 ~ 1
+         b2 ~ 1
    Data: fram_clim (Number of observations: 129)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
@@ -3407,80 +3405,81 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 Group-Level Effects:
 ~City (Number of levels: 4)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.62      0.74     0.01     2.64        478 1.00
-sd(b1_Intercept)     0.40      0.37     0.01     1.34        556 1.00
-sd(b2_Intercept)     0.36      0.28     0.04     1.12        213 1.01
+sd(b0_Intercept)     0.91      0.93     0.02     2.93         19 1.03
 
 Population-Level Effects:
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.44      0.41     0.78     2.46        764 1.01
-b0_Precip        1.20      0.60     0.36     2.68       1262 1.00
-b1_Intercept     1.13      0.28     0.62     1.70        546 1.00
-b1_Precip        1.25      0.59     0.37     2.68       1483 1.00
-b2_Intercept     1.08      0.19     0.67     1.47        298 1.00
-b2_Precip        0.96      0.52     0.25     2.23        288 1.01
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      1.84      0.80     0.74     3.65         12 1.09
+b0_Precip         0.95      0.52     0.28     2.22         43 1.03
+b0_HDD            0.68      0.51     0.12     1.90         16 1.05
+b0_Precip:HDD     1.43      0.69     0.49     3.02         49 1.02
+b1_Intercept      1.05      0.17     0.71     1.39        876 1.00
+b2_Intercept      1.00      0.07     0.88     1.15         79 1.02
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     6.39      0.42     5.66     7.28        904 1.00
+sigma     6.45      0.38     5.73     7.26       1358 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 113 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 160 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 **** diagnostics
-#+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_precip_homo.png
-mcmc_trace(as.matrix(model_fram_precip_homo))
+#+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png
+mcmc_trace(as.matrix(model_fram_climate_homo))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/mcmctrace_fram_precip_homo.png]]
+[[file:../figs/mcmctrace_fram_climate_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_precip_homo.png
-pp_check(model_fram_precip_homo)
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_climate_homo.png
+pp_check(model_fram_climate_homo)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_fram_precip_homo.png]]
+[[file:../figs/pp_check_fram_climate_homo.png]]
 Not great.  I think the problem arises because the effect of Precip on
 the parameters may not be linear.  Also, I may need to include
 Temperature related covariates
 
 **** marginal effects
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo.png
-marginal_effects(model_fram_precip_homo, effects = "AGE:Precip")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_age_homo.png
+marginal_effects(model_fram_climate_homo, effects = "AGE:Precip")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_age_fram_age_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_surface_homo.png
+marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_age_fram_ageprecip_homo.png]]
 
 
-Very cool, as precip increases, so does dbh.  But there is high uncertainty.
+Very cool, there is an interaction between Precip and HDD.
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo_Points.png
-  conditions <- data.frame(Precip = unique(fram_clim$Precip))
-  me <- marginal_effects(model_fram_precip_homo, effects = "AGE", conditions = conditions, re_formula = NA)
-#me
-  ggplot(me$AGE) +
-        geom_line(aes(x = AGE, y = estimate__)) +
-      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-      geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
-      facet_wrap(~Precip)
+THe behavior isn't what I had expected, but I need more than just 4 cities!
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_climate_homo_Points.png
+    conditions <- unique(select(fram_clim, Precip, HDD))
+
+  me <- marginal_effects(model_fram_climate_homo, effects = "AGE", conditions = conditions, re_formula = NA)
+
+    ggplot(me$AGE) +
+          geom_line(aes(x = AGE, y = estimate__)) +
+        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+        geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+        facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_ageprecip_homo_Points.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_precip_homo.png
-marginal_effects(model_fram_precip_homo, effects = "Precip")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_age_fram_precip_homo.png]]
+[[file:../figs/marginal_effects_age_fram_climate_homo_Points.png]]
 
 *** multiple species, multiple locations, no group level predictors, homoskedastic
 **** generate data
