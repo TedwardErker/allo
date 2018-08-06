@@ -976,6 +976,7 @@ The following objects are masked from ‘package:base’:
     - few parameters that correspond as much as possible to an
       interpretable part of growth
   - Can fit in Stan
+- think hard about smart priors to help with convergence.
 
 
 *** notes on how to do modeling in brms
