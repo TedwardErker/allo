@@ -3478,6 +3478,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
 **** generate data
 #+begin_src R
+
   k <- 2  # number locations
   l <- 3  # number of genera
   m <- c(1,2,3) # number of species per genera
@@ -3505,15 +3506,16 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   sigma <- 5
 
   k_b0 <- rnorm(k, 0, sigma_b0_k)
-  l_b0 <- rnorm(l, 0, sigma_b0_l)
+  l_b0 <- sapply(seq_along(m), function(i) l_b0[i]  +rnorm(m[i], 0, sigma_b0_l)) %>% unlist()
+
   b0 <- outer(k_b0, l_b0, FUN = "+") + mu_b0
 
   k_b1 <- rnorm(k, 0, sigma_b1_k)
-  l_b1 <- rnorm(l, 0, sigma_b1_l)
+  l_b1 <- sapply(seq_along(m), function(i) l_b1[i]  +rnorm(m[i], 0, sigma_b1_l)) %>% unlist()
   b1 <- outer(k_b1, l_b1, FUN = "+") + mu_b1
 
   k_b2 <- rnorm(k, 0, sigma_b2_k)
-  l_b2 <- rnorm(l, 0, sigma_b2_l)
+  l_b2 <- sapply(seq_along(m), function(i) l_b2[i]  +rnorm(m[i], 0, sigma_b2_l)) %>% unlist()
   b2 <- outer(k_b2, l_b2, FUN = "+") + mu_b2
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
@@ -3531,6 +3533,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
           DBH <- w(b0[i,j], b1[i,j], b2[i,j], AGE[[i]][[j]]) + rnorm(nkl[i,j], 0, sigma)
           City <- letters[i]
           Species <- rev(LETTERS)[j]
+  #        Genus <- rev(LETTERS)[j]
           data.frame(AGE = AGE[[i]][[j]], DBH = DBH, City = City, Species = Species)
       })
   })
