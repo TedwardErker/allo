@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -842,6 +842,18 @@ sum(d$DBH == -1) / length(d$DBH)
 **** save data
 #+begin_src R
 saveRDS(d, "../data/tidy_age_dbh.rds")
+#+end_src
+
+#+RESULTS:
+*** a couple plots
+**** species by city raster, black if the combination exists
+#+begin_src R
+library(dplyr)
+library(ggplot2)
+
+d <- readRDS("../data/tidy_age_dbh.rds")
+
+
 #+end_src
 
 #+RESULTS:
