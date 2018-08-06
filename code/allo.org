@@ -2077,6 +2077,17 @@ plot(theta, post, type = "l")
 #+RESULTS:
 [[file:../figs/ftest.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/ttest.png
+x <- seq(0,5,.1)
+y <- dt(x,.2)
+y <- dcauchy(x,0,.3)
+plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ttest.png]]
+
+
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                      b0 ~ 1,
@@ -4008,21 +4019,24 @@ p
 
 #+begin_src R
 
-#  model_multipleSpecies_nestedGenus_multipleCities_homo <- update(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, newdata = dm, cores = 2, chains = 2)
-#, control = list(adapt_delta = .9, max_treedepth = 15))
+  #  model_multipleSpecies_nestedGenus_multipleCities_homo <- update(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, newdata = dm, cores = 2, chains = 2)
+  #, control = list(adapt_delta = .9, max_treedepth = 15))
 
 
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ 1 + (1 | City) + (1 | Genus/Species),
-                     b1 ~ 1 + (1 | City) + (1 | Genus/Species),
-                     b2 ~ 1 + (1 | City) + (1 | Genus/Species),
-                     nl = T)
+            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                       b0 ~ 1 + (1 | City) + (1 | Genus/Species),
+                       b1 ~ 1 + (1 | City) + (1 | Genus/Species),
+                       b2 ~ 1 + (1 | City) + (1 | Genus/Species),
+                       nl = T)
 
-  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-               prior(gamma(4, 3), nlpar = "b1",lb = 0),
-               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+    nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                 prior(gamma(4, 3), nlpar = "b1",lb = 0),
+                 prior(gamma(4, 3), nlpar = "b2",lb = 0),
+                 prior(cauchy(0,.3), class = "sd"))
 
-  model_multipleSpecies_nestedGenus_multipleCities_homo <- brm(form, chains = 2, cores = 2, data = dm, prior = nlprior)
+  #get_prior(form, dm)
+
+    model_multipleSpecies_nestedGenus_multipleCities_homo <- brm(form, chains = 2, cores = 2, data = dm, prior = nlprior)
 
 
 #+end_src
