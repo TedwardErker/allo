@@ -848,17 +848,18 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 *** a couple plots
 **** species by city raster, black if the combination exists
 #+begin_src R
-  library(dplyr)
-  library(ggplot2)
+    library(dplyr)
+    library(ggplot2)
 
-  d <- readRDS("../data/tidy_age_dbh.rds")
+    d <- readRDS("../data/tidy_age_dbh.rds")
 
-  cs <- expand.grid(City = unique(d$City), SpCode = unique(d$SpCode)) %>%
-    mutate(join = paste0(City, SpCode))
+    cs <- expand.grid(City = unique(d$City), SpCode = unique(d$SpCode)) %>%
+      mutate(join = paste0(City, SpCode))
 
-dj <- d %>% mutate(join = paste0(City, SpCode)) %>% pull(join)
+  dj <- d %>% mutate(join = paste0(City, SpCode)) %>% pull(join)
 
-cs <- cs %>% mutate(InData = join %in% dj)
+  cs <- cs %>% mutate(InData = join %in% dj)
+
 #+end_src
 
 #+RESULTS:
@@ -875,7 +876,8 @@ cs <- cs %>% mutate(InData = join %in% dj)
 [[file:../figs/CitySpeciesData_CityCentric.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SpeciesCentric.png :height 400 :width 1400
-  cs_sp <- cs %>% mutate(SpCode = as.character(SpCode))
+  cs_sp <- left_join(cs, unique(select(d, SpCode, ScientificName)))
+
       ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) + 
           geom_raster() +
           coord_equal() +
@@ -886,13 +888,16 @@ cs <- cs %>% mutate(InData = join %in% dj)
 #+RESULTS:
 [[file:../figs/CitySpeciesData_SpeciesCentric.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SpeciesCentric.png :height 400 :width 1400
+#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CommonSpeciesCentric.png :height 400 :width 1400
     cs_sp_cmn <- cs_sp %>% 
-      group_by(SpCode) %>%
-        summarize(n = sum(InData)) %>%
+      group_by(SpCode, ScientificName) %>%
+        summarize(n = sum(InData))
+
+  %>%
+        ungroup() %>%
         arrange(-n) %>%
         mutate(SpCode = as.factor(SpCode))
-      
+
   cs_sp_cmn <- cs_sp %>%
       mutate(SpCode = as.character(SpCode),
              SpCode = factor(SpCode, levels(cs_sp_cmn$SpCode)[as.numeric(cs_sp_cmn$SpCode)]))
@@ -905,7 +910,7 @@ cs <- cs %>% mutate(InData = join %in% dj)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/CitySpeciesData_SpeciesCentric.png]]
+[[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
 
 
 ** Modelling
