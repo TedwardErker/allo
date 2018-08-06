@@ -900,9 +900,7 @@ The following objects are masked from ‘package:base’:
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CommonSpeciesCentric.png :height 400 :width 1400
     cs_sp_cmn <- cs_sp %>%
       group_by(SpCode, ScientificName) %>%
-        summarize(n = sum(InData))
-
-  %>%
+        summarize(n = sum(InData)) %>%
         ungroup() %>%
         arrange(-n) %>%
         mutate(SpCode = as.factor(SpCode))
@@ -920,6 +918,29 @@ The following objects are masked from ‘package:base’:
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 400 :width 1400
+    cs_sci_cmn <- cs_sp %>%
+      group_by(ScientificName) %>%
+        summarize(n = sum(InData)) %>%
+        ungroup() %>%
+        arrange(-n) %>%
+        mutate(ScientificName = as.factor(ScientificName))
+
+  cs_sci_cmn <- cs_sp %>%
+      mutate(ScientificName = as.character(ScientificName),
+             ScientificName = factor(ScientificName, levels(cs_sci_cmn$ScientificName)[as.numeric(cs_sci_cmn$ScientificName)]))
+
+
+        ggplot(cs_sci_cmn, aes(x = ScientificName, y = City, fill = InData)) +
+            geom_raster() +
+            coord_equal() +
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+            scale_fill_manual(values = c("white","black"))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/CitySpeciesData_SciNameCentric.png]]
 
 
 ** Modelling
