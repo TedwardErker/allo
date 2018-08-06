@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -860,6 +860,18 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+#+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CityCentric.png :height 400 :width 1400
   ggplot(cs, aes(x = SpCode, y = City, fill = InData)) +
@@ -888,9 +900,7 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CommonSpeciesCentric.png :height 400 :width 1400
     cs_sp_cmn <- cs_sp %>%
       group_by(SpCode, ScientificName) %>%
-        summarize(n = sum(InData))
-
-  %>%
+        summarize(n = sum(InData)) %>%
         ungroup() %>%
         arrange(-n) %>%
         mutate(SpCode = as.factor(SpCode))
@@ -908,6 +918,29 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 400 :width 1400
+    cs_sci_cmn <- cs_sp %>%
+      group_by(ScientificName) %>%
+        summarize(n = sum(InData)) %>%
+        ungroup() %>%
+        arrange(-n) %>%
+        mutate(ScientificName = as.factor(ScientificName))
+
+  cs_sci_cmn <- cs_sp %>%
+      mutate(ScientificName = as.character(ScientificName),
+             ScientificName = factor(ScientificName, levels(cs_sci_cmn$ScientificName)[as.numeric(cs_sci_cmn$ScientificName)]))
+
+
+        ggplot(cs_sci_cmn, aes(x = ScientificName, y = City, fill = InData)) +
+            geom_raster() +
+            coord_equal() +
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+            scale_fill_manual(values = c("white","black"))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/CitySpeciesData_SciNameCentric.png]]
 
 
 ** Modelling
@@ -4029,12 +4062,15 @@ p
                        b2 ~ 1 + (1 | City) + (1 | Genus/Species),
                        nl = T)
 
-    nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                 prior(gamma(4, 3), nlpar = "b1",lb = 0),
-                 prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                 prior(cauchy(0,.3), class = "sd"))
+    nlprior <- c(prior(gamma(4, 3), nlpar = "b0", lb = 0),
+                 prior(gamma(4, 3), nlpar = "b1", lb = 0),
+                 prior(gamma(4, 3), nlpar = "b2", lb = 0),
+                 prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+                 prior(cauchy(0,.3), class = "sd", nlpar = "b1"),
+                 prior(cauchy(0,.3), class = "sd", nlpar = "b2"))
 
-  #get_prior(form, dm)
+
+  get_prior(form, dm)
 
     model_multipleSpecies_nestedGenus_multipleCities_homo <- brm(form, chains = 2, cores = 2, data = dm, prior = nlprior)
 
