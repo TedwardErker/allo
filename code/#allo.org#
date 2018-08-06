@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -489,29 +489,6 @@ library(tidyr)
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:plyr’:
-
-    arrange, count, desc, failwith, id, mutate, rename, summarise,
-    summarize
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Attaching package: ‘tidyr’
-
-The following object is masked from ‘package:ascii’:
-
-    expand
-#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -606,6 +583,14 @@ Not all are fixed!
   d$CommonName[d$CommonName == "southern magnolia"] <- "Southern magnolia"
 
 
+
+#+end_src
+
+#+RESULTS:
+***** fix scientific names
+#+begin_src R
+d$ScientificName[d$ScientificName == "Prunus cerasifera cvs."] <- "Prunus cerasifera"
+d$ScientificName[d$ScientificName == "Pyrus calleryana cvs."] <- "Pyrus calleryana"
 
 #+end_src
 
@@ -766,53 +751,51 @@ Joining, by = "TreeType"
 | 120 | PRCH   | Prosopis chilensis                     | broadleaf deciduous |
 | 121 | PRCA   | Prunus caroliniana                     | broadleaf evergreen |
 | 122 | PRCE   | Prunus cerasifera                      | broadleaf deciduous |
-| 123 | PRCE   | Prunus cerasifera cvs.                 | broadleaf deciduous |
-| 124 | PRSE2  | Prunus serrulata                       | broadleaf deciduous |
-| 125 | PR     | Prunus sp.                             | broadleaf deciduous |
-| 126 | PRYE   | Prunus yedoensis                       | broadleaf deciduous |
-| 127 | PSME   | Pseudotsuga menziesii                  | conifer evergreen   |
-| 128 | PYCA   | Pyrus calleryana                       | broadleaf deciduous |
-| 129 | PYCA_B | Pyrus calleryana 'Bradford'            | broadleaf deciduous |
-| 130 | PYCA   | Pyrus calleryana cvs.                  | broadleaf deciduous |
-| 131 | PYKA   | Pyrus kawakamii                        | broadleaf evergreen |
-| 132 | PY     | Pyrus sp.                              | broadleaf deciduous |
-| 133 | QUAG   | Quercus agrifolia                      | broadleaf evergreen |
-| 134 | QUAL   | Quercus alba                           | broadleaf deciduous |
-| 135 | QUIL2  | Quercus ilex                           | broadleaf evergreen |
-| 136 | QULA2  | Quercus laurifolia                     | broadleaf deciduous |
-| 137 | QULO   | Quercus lobata                         | broadleaf deciduous |
-| 138 | QUMA1  | Quercus macrocarpa                     | broadleaf deciduous |
-| 139 | QUNI   | Quercus nigra                          | broadleaf deciduous |
-| 140 | QUPA   | Quercus palustris                      | broadleaf deciduous |
-| 141 | QUPH   | Quercus phellos                        | broadleaf deciduous |
-| 142 | QURU   | Quercus rubra                          | broadleaf deciduous |
-| 143 | QUSH   | Quercus shumardii                      | broadleaf deciduous |
-| 144 | QUVI   | Quercus virginiana                     | broadleaf evergreen |
-| 145 | RHLA   | Rhus lancea                            | broadleaf evergreen |
-| 146 | ROPS   | Robinia pseudoacacia                   | broadleaf deciduous |
-| 147 | SAPA   | Sabal palmetto                         | palm evergreen      |
-| 148 | PISA2  | Samanea saman                          | broadleaf deciduous |
-| 149 | SCMO   | Schinus molle                          | broadleaf evergreen |
-| 150 | SCTE   | Schinus terebinthifolius               | broadleaf evergreen |
-| 151 | SESE   | Sequoia sempervirens                   | conifer evergreen   |
-| 152 | SWMA   | Swietenia mahagoni                     | broadleaf evergreen |
-| 153 | SYRO   | Syagrus romanzoffiana                  | palm evergreen      |
-| 154 | TAAR   | Tabebuia aurea                         | broadleaf evergreen |
-| 155 | TAPA   | Tabebuia heterophylla                  | broadleaf evergreen |
-| 156 | TAOC   | Tabebuia ochracea subsp. neochrysantha | broadleaf evergreen |
-| 157 | TIAM   | Tilia americana                        | broadleaf deciduous |
-| 158 | TICO   | Tilia cordata                          | broadleaf deciduous |
-| 159 | TITO   | Tilia tomentosa                        | broadleaf deciduous |
-| 160 | TRSE6  | Triadica sebifera                      | broadleaf deciduous |
-| 161 | TRCO   | Tristaniopsis conferta                 | broadleaf evergreen |
-| 162 | ULAL   | Ulmus alata                            | broadleaf deciduous |
-| 163 | ULAM   | Ulmus americana                        | broadleaf deciduous |
-| 164 | ULPA   | Ulmus parvifolia                       | broadleaf deciduous |
-| 165 | ULPU   | Ulmus pumila                           | broadleaf deciduous |
-| 166 | VEME   | Veitchia merrillii                     | palm evergreen      |
-| 167 | WAFI   | Washingtonia filifera                  | palm evergreen      |
-| 168 | WARO   | Washingtonia robusta                   | palm evergreen      |
-| 169 | ZESE   | Zelkova serrata                        | broadleaf deciduous |
+| 123 | PRSE2  | Prunus serrulata                       | broadleaf deciduous |
+| 124 | PR     | Prunus sp.                             | broadleaf deciduous |
+| 125 | PRYE   | Prunus yedoensis                       | broadleaf deciduous |
+| 126 | PSME   | Pseudotsuga menziesii                  | conifer evergreen   |
+| 127 | PYCA   | Pyrus calleryana                       | broadleaf deciduous |
+| 128 | PYCA_B | Pyrus calleryana 'Bradford'            | broadleaf deciduous |
+| 129 | PYKA   | Pyrus kawakamii                        | broadleaf evergreen |
+| 130 | PY     | Pyrus sp.                              | broadleaf deciduous |
+| 131 | QUAG   | Quercus agrifolia                      | broadleaf evergreen |
+| 132 | QUAL   | Quercus alba                           | broadleaf deciduous |
+| 133 | QUIL2  | Quercus ilex                           | broadleaf evergreen |
+| 134 | QULA2  | Quercus laurifolia                     | broadleaf deciduous |
+| 135 | QULO   | Quercus lobata                         | broadleaf deciduous |
+| 136 | QUMA1  | Quercus macrocarpa                     | broadleaf deciduous |
+| 137 | QUNI   | Quercus nigra                          | broadleaf deciduous |
+| 138 | QUPA   | Quercus palustris                      | broadleaf deciduous |
+| 139 | QUPH   | Quercus phellos                        | broadleaf deciduous |
+| 140 | QURU   | Quercus rubra                          | broadleaf deciduous |
+| 141 | QUSH   | Quercus shumardii                      | broadleaf deciduous |
+| 142 | QUVI   | Quercus virginiana                     | broadleaf evergreen |
+| 143 | RHLA   | Rhus lancea                            | broadleaf evergreen |
+| 144 | ROPS   | Robinia pseudoacacia                   | broadleaf deciduous |
+| 145 | SAPA   | Sabal palmetto                         | palm evergreen      |
+| 146 | PISA2  | Samanea saman                          | broadleaf deciduous |
+| 147 | SCMO   | Schinus molle                          | broadleaf evergreen |
+| 148 | SCTE   | Schinus terebinthifolius               | broadleaf evergreen |
+| 149 | SESE   | Sequoia sempervirens                   | conifer evergreen   |
+| 150 | SWMA   | Swietenia mahagoni                     | broadleaf evergreen |
+| 151 | SYRO   | Syagrus romanzoffiana                  | palm evergreen      |
+| 152 | TAAR   | Tabebuia aurea                         | broadleaf evergreen |
+| 153 | TAPA   | Tabebuia heterophylla                  | broadleaf evergreen |
+| 154 | TAOC   | Tabebuia ochracea subsp. neochrysantha | broadleaf evergreen |
+| 155 | TIAM   | Tilia americana                        | broadleaf deciduous |
+| 156 | TICO   | Tilia cordata                          | broadleaf deciduous |
+| 157 | TITO   | Tilia tomentosa                        | broadleaf deciduous |
+| 158 | TRSE6  | Triadica sebifera                      | broadleaf deciduous |
+| 159 | TRCO   | Tristaniopsis conferta                 | broadleaf evergreen |
+| 160 | ULAL   | Ulmus alata                            | broadleaf deciduous |
+| 161 | ULAM   | Ulmus americana                        | broadleaf deciduous |
+| 162 | ULPA   | Ulmus parvifolia                       | broadleaf deciduous |
+| 163 | ULPU   | Ulmus pumila                           | broadleaf deciduous |
+| 164 | VEME   | Veitchia merrillii                     | palm evergreen      |
+| 165 | WAFI   | Washingtonia filifera                  | palm evergreen      |
+| 166 | WARO   | Washingtonia robusta                   | palm evergreen      |
+| 167 | ZESE   | Zelkova serrata                        | broadleaf deciduous |
 #+end_example
 **** tidy a few names and select variables of interest here
 #+begin_src R
@@ -820,6 +803,8 @@ d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City,
 #+end_src
 
 #+RESULTS:
+: Error in rename(., DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) :
+:   unused arguments (DBH = `DBH (cm)`, Leaf = `Leaf (m2)`)
 
 #+begin_src R
 summary(d$Leaf)
@@ -828,10 +813,20 @@ sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
-:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-:    -1.0    12.9   116.1   302.5   389.2  9516.0
-: [1] 0.1143094
-: [1] 0
+#+begin_example
+Length  Class   Mode
+     0   NULL   NULL
+Warning message:
+Unknown or uninitialised column: 'Leaf'.
+[1] NaN
+Warning messages:
+1: Unknown or uninitialised column: 'Leaf'.
+2: Unknown or uninitialised column: 'Leaf'.
+[1] NaN
+Warning messages:
+1: Unknown or uninitialised column: 'DBH'.
+2: Unknown or uninitialised column: 'DBH'.
+#+end_example
 
 #+begin_src R
   d <- filter(d, DBH != -1, Age != -1) %>%
@@ -839,6 +834,8 @@ sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
+: Error in filter_impl(.data, quo) :
+:   Evaluation error: object 'DBH' not found.
 **** save data
 #+begin_src R
 saveRDS(d, "../data/tidy_age_dbh.rds")
@@ -865,7 +862,7 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CityCentric.png :height 400 :width 1400
-  ggplot(cs, aes(x = SpCode, y = City, fill = InData)) + 
+  ggplot(cs, aes(x = SpCode, y = City, fill = InData)) +
       geom_raster() +
       coord_equal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
@@ -878,7 +875,7 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SpeciesCentric.png :height 400 :width 1400
   cs_sp <- left_join(cs, unique(select(d, SpCode, ScientificName)))
 
-      ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) + 
+      ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) +
           geom_raster() +
           coord_equal() +
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
@@ -889,7 +886,7 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 [[file:../figs/CitySpeciesData_SpeciesCentric.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CommonSpeciesCentric.png :height 400 :width 1400
-    cs_sp_cmn <- cs_sp %>% 
+    cs_sp_cmn <- cs_sp %>%
       group_by(SpCode, ScientificName) %>%
         summarize(n = sum(InData))
 
@@ -902,7 +899,7 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
       mutate(SpCode = as.character(SpCode),
              SpCode = factor(SpCode, levels(cs_sp_cmn$SpCode)[as.numeric(cs_sp_cmn$SpCode)]))
 
-        ggplot(cs_sp_cmn, aes(x = SpCode, y = City, fill = InData)) + 
+        ggplot(cs_sp_cmn, aes(x = SpCode, y = City, fill = InData)) +
             geom_raster() +
             coord_equal() +
             theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
@@ -4033,6 +4030,83 @@ p
 #+begin_src R
   model_multipleSpecies_nestedGenus_multipleCities_homo
 #+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1 + (1 | City) + (1 | Genus/Species)
+         b1 ~ 1 + (1 | City) + (1 | Genus/Species)
+         b2 ~ 1 + (1 | City) + (1 | Genus/Species)
+   Data: dm (Number of observations: 1192)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Group-Level Effects:
+~City (Number of levels: 4)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.58      0.63     0.21     2.36          2 1.32
+sd(b1_Intercept)     1.45      0.99     0.20     2.41          1 4.80
+sd(b2_Intercept)     0.43      0.21     0.15     0.88        183 1.03
+
+~Genus (Number of levels: 3)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.50      0.69     0.05     2.49          5 1.09
+sd(b1_Intercept)     1.20      0.89     0.03     2.00          1 2.65
+sd(b2_Intercept)     0.22      0.17     0.01     0.72        305 1.01
+
+~Genus:Species (Number of levels: 8)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.44      0.37     0.17     1.30          1 1.62
+sd(b1_Intercept)     0.67      0.30     0.21     0.95          1 3.05
+sd(b2_Intercept)     0.13      0.05     0.04     0.19          2 1.46
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.63      0.39     0.70     2.24          3 1.20
+b1_Intercept     0.80      0.34     0.56     1.65          1 1.55
+b2_Intercept     0.93      0.19     0.69     1.40          2 1.38
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
+sigma     4.40      3.76     0.64     8.42          1 38.18
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 301 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_model_multipleSpecies_nestedGenus_multipleCities_homo.png :height 2000 :width 2000
+pairs(model_multipleSpecies_nestedGenus_multipleCities_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_model_multipleSpecies_nestedGenus_multipleCities_homo.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_model_multipleSpecies_nestedGenus_multipleCities_homo.png
+     cond <- unique(select(dm, City, Species, Genus))
+    me <- marginal_effects(model_multipleSpecies_nestedGenus_multipleCities_homo,
+                       re_formula = NULL, method = "predict",
+                          conditions = cond)
+
+  ggplot() +
+    geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
+    geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+    geom_point(data = dm, aes(x = AGE, y = DBH)) +
+    facet_grid(City ~ Genus)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_model_multipleSpecies_nestedGenus_multipleCities_homo.png]]
 
 *** Full model
 
