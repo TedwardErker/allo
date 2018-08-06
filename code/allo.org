@@ -1178,27 +1178,15 @@ library(ggplot2)
 #+end_src
 
 #+RESULTS:
-#+begin_example
+: Loading required package: Rcpp
+: Loading 'brms' package (version 2.3.1). Useful instructions
+: can be found by typing help('brms'). A more detailed introduction
+: to the package is available through vignette('brms_overview').
+: Run theme_set(theme_default()) to use the default bayesplot theme.
+: Warning messages:
+: 1: package ‘brms’ was built under R version 3.4.4
+: 2: package ‘Rcpp’ was built under R version 3.4.4
 
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 *** read in data
 #+begin_src R
 d <- readRDS("../data/tidy_age_dbh.rds")
@@ -3477,7 +3465,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
 **** generate data
-#+begin_src R
+#+begin_src R :eval no
 
   k <- 2  # number locations
   l <- 3  # number of genera
@@ -3506,56 +3494,101 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   sigma <- 5
 
   k_b0 <- rnorm(k, 0, sigma_b0_k)
-  l_b0 <- sapply(seq_along(m), function(i) l_b0[i]  +rnorm(m[i], 0, sigma_b0_l)) %>% unlist()
-
+  l_b0 <- rnorm(l, 0, sigma_b0_l)
+  l_b0 <-  sapply(seq_along(m), function(i) l_b0[i]  +rnorm(m[i], 0, sigma_b0_l)) %>% unlist()
   b0 <- outer(k_b0, l_b0, FUN = "+") + mu_b0
 
   k_b1 <- rnorm(k, 0, sigma_b1_k)
-  l_b1 <- sapply(seq_along(m), function(i) l_b1[i]  +rnorm(m[i], 0, sigma_b1_l)) %>% unlist()
+  l_b1 <- rnorm(l, 0, sigma_b1_l)
+  l_b1 <-  sapply(seq_along(m), function(i) l_b1[i]  +rnorm(m[i], 0, sigma_b1_l)) %>% unlist()
   b1 <- outer(k_b1, l_b1, FUN = "+") + mu_b1
 
   k_b2 <- rnorm(k, 0, sigma_b2_k)
-  l_b2 <- sapply(seq_along(m), function(i) l_b2[i]  +rnorm(m[i], 0, sigma_b2_l)) %>% unlist()
+  l_b2 <- rnorm(l, 0, sigma_b2_l)
+  l_b2 <-  sapply(seq_along(m), function(i) l_b2[i]  +rnorm(m[i], 0, sigma_b2_l)) %>% unlist()
   b2 <- outer(k_b2, l_b2, FUN = "+") + mu_b2
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
-  nkl <- matrix(nkl, nrow = k, ncol = l)
+  nkl <- matrix(nkl, nrow = k, ncol = sum(m))
 
   AGE <- lapply(1:k, function(i) {
-      lapply(1:l, function(j) {
+      lapply(1:sum(m), function(j) {
           runif(nkl[i,j],0,150) %>% round
       })
   })
 
   dt <- lapply(1:k, function(i) {
-      lapply(1:l, function(j) {
+      lapply(1:sum(m), function(j) {
           DBH <- w(b0[i,j], b1[i,j], b2[i,j], AGE[[i]][[j]]) + rnorm(nkl[i,j], 0, sigma)
           City <- letters[i]
           Species <- rev(LETTERS)[j]
-  #        Genus <- rev(LETTERS)[j]
-          data.frame(AGE = AGE[[i]][[j]], DBH = DBH, City = City, Species = Species)
+          Genus <- rev(LETTERS)[rep(m,m)[j]]
+          data.frame(AGE = AGE[[i]][[j]], DBH = DBH, City = City, Species = Species, Genus = Genus)
       })
   })
 
-  dt <- bind_rows(unlist(dt,recursive = F))
+  dt <- bind_rows(unlist(dt,recursive = F)) %>%
+    mutate(GenusSpecies = paste0(Genus, Species))
+
+nested <- dt
 #+end_src
 
 #+RESULTS:
-: [1] 23 37  4 14  8 48  9 17
-: There were 15 warnings (use warnings() to see them)
+:
+: [1]  8 33  1  8 22 16 31 18  9  8 56 30
+: There were 34 warnings (use warnings() to see them)
 
-#+begin_src R :exports results :results graphics :file ../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png
-p <-   ggplot(dt, aes(x = AGE, y = DBH)) + geom_point() + facet_grid(City ~ Species)
+#+begin_src R :exports results :results graphics :file ../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png :height 400
+p <-   ggplot(dt, aes(x = AGE, y = DBH, color = GenusSpecies)) + geom_point() + facet_grid(City ~ Genus)
 p
 #+end_src
 
 #+RESULTS:
-[[file:../figs/test_data_multipleSpecies_multipleLocations_PrecipCityPred.png]]
-
+[[file:../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png]]
+**** fit model to generated data
 y ~
 
 b ~ (1 | genus / species)
+
+**** fit to generated data
+#+begin_src R :results output
+          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                     b0 ~ 1 + (1 | City) + (1 | Genus/Species),
+                     b1 ~ 1 + (1 | City) + (1 | Genus/Species),
+                     b2 ~ 1 + (1 | City) + (1 | Genus/Species),
+                     nl = T)
+
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(4, 3), nlpar = "b1",lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+
+m_generated_multipleSpecies_nestedGenus_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+
+#+end_src
+
+#+begin_src R
+summary(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/plot__multipleSpecies_nestedGenus_multipleLocations_homo.png
+plot(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_nestedGenus_multipleLocations_homo.png :width 800
+     cond <- expand.grid(Species = unique(dt$Species), City = unique(dt$City))
+     rownames(cond) <- paste0(cond$Species, cond$City)
+    me <- marginal_effects(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo,
+                       re_formula = NULL, method = "predict",
+                          conditions = cond)
+
+  ggplot() +
+    geom_line(data = me$AGE, color = "blue", aes(x = AGE, y = estimate__)) +
+    geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+    geom_point(data = dt, aes(x = AGE, y = DBH)) +
+    facet_grid(City ~ Genus)
+#+end_src
+
 *** Full model
 
 \[
