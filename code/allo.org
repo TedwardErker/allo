@@ -3530,6 +3530,7 @@ list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
 #+end_src
 
 uncertainty seems low, esp for combinations without observations.
+are betas really drawn from normal??
 should there be correlations?
 I expect \beta_1 and \beta_2 to be negatively correlated.
 how to write?  often I see something like:
