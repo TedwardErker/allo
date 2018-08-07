@@ -3479,7 +3479,6 @@ m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains =
 summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
-
 **** fit to real data
 #+begin_src R :var clim=city_climate
   d <- readRDS("../data/tidy_age_dbh.rds")
@@ -3504,6 +3503,15 @@ grid.arrange(pc,pp, ph, nrow =1)
 
 #+RESULTS:
 [[file:../figs/list_clim.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/list_clim_sepcities.png 
+pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = CDD)) + geom_point() + facet_wrap(~City)
+pc
+#+end_src
+
+#+RESULTS:
+[[file:../figs/list_clim_sepcities.png]]
+
 
 #+begin_src R
 list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
@@ -3638,39 +3646,45 @@ the parameters may not be linear.  Also, I may need to include
 Temperature related covariates
 
 **** marginal effects
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_age_homo.png
-marginal_effects(model_fram_climate_homo, effects = "AGE:Precip")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_age_homo.png
+marginal_effects(model_list_climate, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_age_homo.png]]
+[[file:../figs/marginal_effects_age_list_age_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_surface_homo.png
-marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_age_HDD_homo.png
+marginal_effects(model_list_climate, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_ageprecip_homo.png]]
+[[file:../figs/marginal_effects_age_list_age_HDD_homo.png]]
 
 
-Very cool, there is an interaction between Precip and HDD.
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_surface_homo.png
+marginal_effects(model_list_climate, effects = "Precip:HDD", surface = T)
+#+end_src
 
-THe behavior isn't what I had expected, but I need more than just 4 cities!
+#+RESULTS:
+[[file:../figs/marginal_effects_age_list_surface_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_climate_homo_Points.png
-    conditions <- unique(select(fram_clim, Precip, HDD))
 
-  me <- marginal_effects(model_fram_climate_homo, effects = "AGE", conditions = conditions, re_formula = NA)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_climate_homo_Points.png
+    conditions <- unique(select(list_clim, Precip, HDD))
+
+  me <- marginal_effects(model_list_climate, effects = "AGE", conditions = conditions, re_formula = NA)
 
     ggplot(me$AGE) +
           geom_line(aes(x = AGE, y = estimate__)) +
         geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+        geom_point(data = list_clim, aes(x = AGE, y = DBH)) +
         facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_climate_homo_Points.png]]
+[[file:../figs/marginal_effects_age_list_climate_homo_Points.png]]
+terrible fit.
+
 
 *** species ignorant, multiple locations, multiple climate predictors for locations, homoskedasticy
 **** generate data
