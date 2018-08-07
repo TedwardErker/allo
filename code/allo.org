@@ -977,6 +977,7 @@ The following objects are masked from ‘package:base’:
       interpretable part of growth
   - Can fit in Stan
 - think hard about smart priors to help with convergence.
+  - I need to address the initial value errors.
 
 
 *** notes on how to do modeling in brms
