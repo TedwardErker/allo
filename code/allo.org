@@ -1276,14 +1276,27 @@ library(ggplot2)
 #+end_src
 
 #+RESULTS:
-: Loading required package: Rcpp
-: Loading 'brms' package (version 2.3.1). Useful instructions
-: can be found by typing help('brms'). A more detailed introduction
-: to the package is available through vignette('brms_overview').
-: Run theme_set(theme_default()) to use the default bayesplot theme.
-: Warning messages:
-: 1: package ‘brms’ was built under R version 3.4.4
-: 2: package ‘Rcpp’ was built under R version 3.4.4
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 *** read in data
 #+begin_src R
@@ -2125,9 +2138,9 @@ plot(x, y, type = "l")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/ttest.png
-x <- seq(0,5,.1)
+x <- seq(0,20,.1)
 y <- dt(x,.2)
-y <- dcauchy(x,0,.2)
+y <- dcauchy(x,0,10)
 plot(x, y, type = "l")
 #+end_src
 
@@ -3328,11 +3341,307 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 [[file:../figs/marginal_effects_age_fram_precip_homo.png]]
 
 *** single species, multiple locations, multiple climate predictors for locations, homoskedasticy
-I'll do other climate predictors when I have more locations, I only
-have 4 now which isn't enough for multiple group level predictors.
-
 **** generate data
 #+begin_src R
+    k <- 5
+    expect_nk <- 30
+    n <- k * expect_nk
+    breaks <- c(0,sort(sample(1:100,(k-1))),n)
+    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+    nk
+
+  clim.gen <- filter(clim, Region %in% c("GulfCo", "SWDsrt", "MidWst","NMtnPr", "NoCalC")) %>%
+      mutate(CDD = (CDD - mean(CDD)) / 1000,
+             HDD = (HDD - mean(HDD)) / 1000,
+             Precip = (Precip - mean(Precip)) / 1000)
+
+  precip <- clim.gen$Precip
+  hdd <- clim.gen$HDD
+  cdd <- clim.gen$CDD
+
+  u_precip_b0 <- 1
+    u_precip_b1 <- .5
+    u_precip_b2 <- .5
+
+    #with centered city level predictors this is the mean
+    u_intercept_b0 <- 1
+    u_intercept_b1 <- 1
+    u_intercept_b2 <- 1
+
+      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
+      sigma_b0 <- .1
+      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
+      sigma_b1 <- .1
+      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
+      sigma_b2 <- .1
+
+      sigma <- 3
+
+      b0 <- rnorm(k, mu_b0, sigma_b0)
+      b1 <- rnorm(k, mu_b1, sigma_b1)
+      b2 <- rnorm(k, mu_b2, sigma_b2)
+
+      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+
+
+      AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+          sample  #to randomly shuffle
+
+      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+
+    City <- rep(letters[1:k], times = nk)
+    Precip <- rep(precip, times = nk)
+
+
+    dt <- data.frame(AGE, DBH, City, Precip)
+#+end_src
+
+#+RESULTS:
+: [1] 22 16  3 46 63
+
+#+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png :height 200
+library(gridExtra)
+pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+grid.arrange(pc,pp, nrow =1)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png]]
+
+**** fit to generated data
+
+#+begin_src R :results output
+          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                     b0 ~ t2(Precip, HDD) + (1 | City),
+                     b1 ~ 1,
+                     b2 ~ 1,
+                     nl = T)
+
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(4, 3), nlpar = "b1",lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+
+m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+
+#+end_src
+
+#+begin_src R
+summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+It recovered the true values pretty well, though there is definitely
+more uncertainty.
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png :width 1000 :height 1000
+pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
+library(bayesplot)
+mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("AGE:Precip"))
+  me
+
+#+end_src
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png
+
+me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
+  me
+
+
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png
+      cond <- data.frame(City = unique(dt$City))
+        me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
+                               conditions = cond,
+                               effects = "AGE",
+                               re_formula = NULL)
+        me
+
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
+pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+#+begin_src R
+stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+#+end_src
+
+
+**** fit to real data
+#+begin_src R :var clim=city_climate
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram <- filter(d, SpCode == "FRAM")
+
+      fram_clim <- left_join(fram,clim) %>%
+          mutate(Precip = (Precip - mean(Precip))/ 1000,
+                 HDD = (HDD - mean(HDD))/ 1000,
+                 CDD = (CDD - mean(CDD))/ 1000)
+#+end_src
+
+#+RESULTS:
+: Joining, by = c("Region", "City")
+
+#+begin_src R :exports results :results graphics :file ../figs/fram_clim.png :height 200 :width 700
+pc <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
+pp <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+ph <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
+grid.arrange(pc,pp, ph, nrow =1)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fram_clim.png]]
+
+#+begin_src R
+          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                     b0 ~ Precip * HDD + (1 | City),
+                     b1 ~ 1,
+                     b2 ~ 1,
+                     nl = T)
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(4, 3), nlpar = "b1",lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+
+model_fram_climate_homo <- brm(form, chains = 2, cores = 2, data = fram_clim, prior = nlprior)
+
+#+end_src
+
+
+#+begin_src R
+model_fram_climate_homo
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ Precip * HDD + (1 | City)
+         b1 ~ 1
+         b2 ~ 1
+   Data: fram_clim (Number of observations: 129)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Group-Level Effects:
+~City (Number of levels: 4)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.91      0.93     0.02     2.93         19 1.03
+
+Population-Level Effects:
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      1.84      0.80     0.74     3.65         12 1.09
+b0_Precip         0.95      0.52     0.28     2.22         43 1.03
+b0_HDD            0.68      0.51     0.12     1.90         16 1.05
+b0_Precip:HDD     1.43      0.69     0.49     3.02         49 1.02
+b1_Intercept      1.05      0.17     0.71     1.39        876 1.00
+b2_Intercept      1.00      0.07     0.88     1.15         79 1.02
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     6.45      0.38     5.73     7.26       1358 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 160 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+**** diagnostics
+#+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png
+mcmc_trace(as.matrix(model_fram_climate_homo))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/mcmctrace_fram_climate_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_climate_homo.png
+pp_check(model_fram_climate_homo)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_fram_climate_homo.png]]
+Not great.  I think the problem arises because the effect of Precip on
+the parameters may not be linear.  Also, I may need to include
+Temperature related covariates
+
+**** marginal effects
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_age_homo.png
+marginal_effects(model_fram_climate_homo, effects = "AGE:Precip")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_age_fram_age_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_surface_homo.png
+marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_age_fram_ageprecip_homo.png]]
+
+
+Very cool, there is an interaction between Precip and HDD.
+
+THe behavior isn't what I had expected, but I need more than just 4 cities!
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_climate_homo_Points.png
+    conditions <- unique(select(fram_clim, Precip, HDD))
+
+  me <- marginal_effects(model_fram_climate_homo, effects = "AGE", conditions = conditions, re_formula = NA)
+
+    ggplot(me$AGE) +
+          geom_line(aes(x = AGE, y = estimate__)) +
+        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+        geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+        facet_wrap(~Precip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_age_fram_climate_homo_Points.png]]
+
+*** species ignorant, multiple locations, multiple climate predictors for locations, homoskedasticy
+**** generate data
+#+begin_src R :var clim=city_climate
+clim
+#+end_src
+
+#+RESULTS:
+#+begin_example
+   Region             City  CDD  HDD Precip
+1  CenFla      Orlando, FL 1806  289   1367
+2  GulfCo   Charleston, SC 1124 1221   1555
+3  InlEmp    Claremont, CA  134  872    523
+4  InlVal      Modesto, CA 1052 1439    315
+5  SacVal   Sacramento, CA  773 1718    470
+6  InterW  Albuquerque, NM  677 2416    250
+7  LoMidW Indianapolis, IN  510 3153    392
+8  MidWst  Minneapolis, MN  355 4436    622
+9  NMtnPr Fort Collins, CO  349 3332    452
+10 NoCalC     Berkeley, CA   39 1786    564
+11 NoEast       Queens, NY  560 2819   1041
+12 PacfNW     Longview, WA  157 2468   1059
+13 Piedmt    Charlotte, NC  847 1891   1426
+14 SacVal Santa Monica, CA  266  710    570
+15 SWDsrt     Glendale, AZ 2128  637    174
+16 TpIntW        Boise, ID  387 3325    417
+17 Tropic     Honolulu, HI 2416    0   2206
+#+end_example
+
+
+#+begin_src R
+
     k <- 5
     expect_nk <- 30
     n <- k * expect_nk
@@ -4089,176 +4398,196 @@ b2 : .5 - 1.5
                  prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
-  get_prior(form, dm)
+#  get_prior(form, dm)
 
-    model_multipleSpecies_nestedGenus_multipleCities_homo <- brm(form, chains = 2, cores = 2, data = dm, prior = nlprior)
+    model_multipleSpecies_nestedGenus_multipleCities_homo <- brm(form, chains = 2, cores = 2, data = dm, prior = nlprior, init_r = .4)
 
 
 #+end_src
 
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+Error : 'control' list contains unknown members of names: init_r.
+error in specifying arguments; sampling not done
+Error : 'control' list contains unknown members of names: init_r.
+error in specifying arguments; sampling not done
+here are whatever error messages were returned
+[[1]]
+Stan model 'gaussian brms-model' does not contain samples.
+
+[[2]]
+Stan model 'gaussian brms-model' does not contain samples.
+
+Warning message:
+In .local(object, ...) :
+  some chains had errors; consider specifying chains = 1 to debug
+#+end_example
+
 #+BEGIN_SRC stan
-// generated with brms 2.3.1
-functions {
-}
-data {
-  int<lower=1> N;  // total number of observations
-  vector[N] Y;  // response variable
-  int<lower=1> K_b0;  // number of population-level effects
-  matrix[N, K_b0] X_b0;  // population-level design matrix
-  int<lower=1> K_b1;  // number of population-level effects
-  matrix[N, K_b1] X_b1;  // population-level design matrix
-  int<lower=1> K_b2;  // number of population-level effects
-  matrix[N, K_b2] X_b2;  // population-level design matrix
-  // covariate vectors
-  vector[N] C_1;
-  // data for group-level effects of ID 1
-  int<lower=1> J_1[N];
-  int<lower=1> N_1;
-  int<lower=1> M_1;
-  vector[N] Z_1_b0_1;
-  // data for group-level effects of ID 2
-  int<lower=1> J_2[N];
-  int<lower=1> N_2;
-  int<lower=1> M_2;
-  vector[N] Z_2_b0_1;
-  // data for group-level effects of ID 3
-  int<lower=1> J_3[N];
-  int<lower=1> N_3;
-  int<lower=1> M_3;
-  vector[N] Z_3_b0_1;
-  // data for group-level effects of ID 4
-  int<lower=1> J_4[N];
-  int<lower=1> N_4;
-  int<lower=1> M_4;
-  vector[N] Z_4_b1_1;
-  // data for group-level effects of ID 5
-  int<lower=1> J_5[N];
-  int<lower=1> N_5;
-  int<lower=1> M_5;
-  vector[N] Z_5_b1_1;
-  // data for group-level effects of ID 6
-  int<lower=1> J_6[N];
-  int<lower=1> N_6;
-  int<lower=1> M_6;
-  vector[N] Z_6_b1_1;
-  // data for group-level effects of ID 7
-  int<lower=1> J_7[N];
-  int<lower=1> N_7;
-  int<lower=1> M_7;
-  vector[N] Z_7_b2_1;
-  // data for group-level effects of ID 8
-  int<lower=1> J_8[N];
-  int<lower=1> N_8;
-  int<lower=1> M_8;
-  vector[N] Z_8_b2_1;
-  // data for group-level effects of ID 9
-  int<lower=1> J_9[N];
-  int<lower=1> N_9;
-  int<lower=1> M_9;
-  vector[N] Z_9_b2_1;
-  int prior_only;  // should the likelihood be ignored?
-}
-transformed data {
-}
-parameters {
-  vector<lower=0>[K_b0] b_b0;  // population-level effects
-  vector<lower=0>[K_b1] b_b1;  // population-level effects
-  vector<lower=0>[K_b2] b_b2;  // population-level effects
-  real<lower=0> sigma;  // residual SD
-  vector<lower=0>[M_1] sd_1;  // group-level standard deviations
-  vector[N_1] z_1[M_1];  // unscaled group-level effects
-  vector<lower=0>[M_2] sd_2;  // group-level standard deviations
-  vector[N_2] z_2[M_2];  // unscaled group-level effects
-  vector<lower=0>[M_3] sd_3;  // group-level standard deviations
-  vector[N_3] z_3[M_3];  // unscaled group-level effects
-  vector<lower=0>[M_4] sd_4;  // group-level standard deviations
-  vector[N_4] z_4[M_4];  // unscaled group-level effects
-  vector<lower=0>[M_5] sd_5;  // group-level standard deviations
-  vector[N_5] z_5[M_5];  // unscaled group-level effects
-  vector<lower=0>[M_6] sd_6;  // group-level standard deviations
-  vector[N_6] z_6[M_6];  // unscaled group-level effects
-  vector<lower=0>[M_7] sd_7;  // group-level standard deviations
-  vector[N_7] z_7[M_7];  // unscaled group-level effects
-  vector<lower=0>[M_8] sd_8;  // group-level standard deviations
-  vector[N_8] z_8[M_8];  // unscaled group-level effects
-  vector<lower=0>[M_9] sd_9;  // group-level standard deviations
-  vector[N_9] z_9[M_9];  // unscaled group-level effects
-}
-transformed parameters {
-  // group-level effects
-  vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
-  // group-level effects
-  vector[N_2] r_2_b0_1 = sd_2[1] * (z_2[1]);
-  // group-level effects
-  vector[N_3] r_3_b0_1 = sd_3[1] * (z_3[1]);
-  // group-level effects
-  vector[N_4] r_4_b1_1 = sd_4[1] * (z_4[1]);
-  // group-level effects
-  vector[N_5] r_5_b1_1 = sd_5[1] * (z_5[1]);
-  // group-level effects
-  vector[N_6] r_6_b1_1 = sd_6[1] * (z_6[1]);
-  // group-level effects
-  vector[N_7] r_7_b2_1 = sd_7[1] * (z_7[1]);
-  // group-level effects
-  vector[N_8] r_8_b2_1 = sd_8[1] * (z_8[1]);
-  // group-level effects
-  vector[N_9] r_9_b2_1 = sd_9[1] * (z_9[1]);
-}
-model {
-  vector[N] mu_b0 = X_b0 * b_b0;
-  vector[N] mu_b1 = X_b1 * b_b1;
-  vector[N] mu_b2 = X_b2 * b_b2;
-  vector[N] mu;
-  for (n in 1:N) {
-    mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n] + r_2_b0_1[J_2[n]] * Z_2_b0_1[n] + r_3_b0_1[J_3[n]] * Z_3_b0_1[n];
-    mu_b1[n] += r_4_b1_1[J_4[n]] * Z_4_b1_1[n] + r_5_b1_1[J_5[n]] * Z_5_b1_1[n] + r_6_b1_1[J_6[n]] * Z_6_b1_1[n];
-    mu_b2[n] += r_7_b2_1[J_7[n]] * Z_7_b2_1[n] + r_8_b2_1[J_8[n]] * Z_8_b2_1[n] + r_9_b2_1[J_9[n]] * Z_9_b2_1[n];
-    // compute non-linear predictor
-    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  // generated with brms 2.3.1
+  functions {
   }
-  // priors including all constants
-  target += gamma_lpdf(b_b0 | 4, 3)
-    - 1 * gamma_lccdf(0 | 4, 3);
-  target += gamma_lpdf(b_b1 | 5, 1.2)
-    - 1 * gamma_lccdf(0 | 5, 1.2);
-  target += gamma_lpdf(b_b2 | 4, 3)
-    - 1 * gamma_lccdf(0 | 4, 3);
-  target += student_t_lpdf(sigma | 3, 0, 33)
-    - 1 * student_t_lccdf(0 | 3, 0, 33);
-  target += cauchy_lpdf(sd_1 | 0, 0.3)
-    - 1 * cauchy_lccdf(0 | 0, 0.3);
-  target += normal_lpdf(z_1[1] | 0, 1);
-  target += cauchy_lpdf(sd_2 | 0, 0.3)
-    - 1 * cauchy_lccdf(0 | 0, 0.3);
-  target += normal_lpdf(z_2[1] | 0, 1);
-  target += cauchy_lpdf(sd_3 | 0, 0.3)
-    - 1 * cauchy_lccdf(0 | 0, 0.3);
-  target += normal_lpdf(z_3[1] | 0, 1);
-  target += cauchy_lpdf(sd_4 | 0, 0.2)
-    - 1 * cauchy_lccdf(0 | 0, 0.2);
-  target += normal_lpdf(z_4[1] | 0, 1);
-  target += cauchy_lpdf(sd_5 | 0, 0.2)
-    - 1 * cauchy_lccdf(0 | 0, 0.2);
-  target += normal_lpdf(z_5[1] | 0, 1);
-  target += cauchy_lpdf(sd_6 | 0, 0.2)
-    - 1 * cauchy_lccdf(0 | 0, 0.2);
-  target += normal_lpdf(z_6[1] | 0, 1);
-  target += cauchy_lpdf(sd_7 | 0, 0.2)
-    - 1 * cauchy_lccdf(0 | 0, 0.2);
-  target += normal_lpdf(z_7[1] | 0, 1);
-  target += cauchy_lpdf(sd_8 | 0, 0.2)
-    - 1 * cauchy_lccdf(0 | 0, 0.2);
-  target += normal_lpdf(z_8[1] | 0, 1);
-  target += cauchy_lpdf(sd_9 | 0, 0.2)
-    - 1 * cauchy_lccdf(0 | 0, 0.2);
-  target += normal_lpdf(z_9[1] | 0, 1);
-  // likelihood including all constants
-  if (!prior_only) {
-    target += normal_lpdf(Y | mu, sigma);
+  data {
+    int<lower=1> N;  // total number of observations
+    vector[N] Y;  // response variable
+    int<lower=1> K_b0;  // number of population-level effects
+    matrix[N, K_b0] X_b0;  // population-level design matrix
+    int<lower=1> K_b1;  // number of population-level effects
+    matrix[N, K_b1] X_b1;  // population-level design matrix
+    int<lower=1> K_b2;  // number of population-level effects
+    matrix[N, K_b2] X_b2;  // population-level design matrix
+    // covariate vectors
+    vector[N] C_1;
+    // data for group-level effects of ID 1
+    int<lower=1> J_1[N];
+    int<lower=1> N_1;
+    int<lower=1> M_1;
+    vector[N] Z_1_b0_1;
+    // data for group-level effects of ID 2
+    int<lower=1> J_2[N];
+    int<lower=1> N_2;
+    int<lower=1> M_2;
+    vector[N] Z_2_b0_1;
+    // data for group-level effects of ID 3
+    int<lower=1> J_3[N];
+    int<lower=1> N_3;
+    int<lower=1> M_3;
+    vector[N] Z_3_b0_1;
+    // data for group-level effects of ID 4
+    int<lower=1> J_4[N];
+    int<lower=1> N_4;
+    int<lower=1> M_4;
+    vector[N] Z_4_b1_1;
+    // data for group-level effects of ID 5
+    int<lower=1> J_5[N];
+    int<lower=1> N_5;
+    int<lower=1> M_5;
+    vector[N] Z_5_b1_1;
+    // data for group-level effects of ID 6
+    int<lower=1> J_6[N];
+    int<lower=1> N_6;
+    int<lower=1> M_6;
+    vector[N] Z_6_b1_1;
+    // data for group-level effects of ID 7
+    int<lower=1> J_7[N];
+    int<lower=1> N_7;
+    int<lower=1> M_7;
+    vector[N] Z_7_b2_1;
+    // data for group-level effects of ID 8
+    int<lower=1> J_8[N];
+    int<lower=1> N_8;
+    int<lower=1> M_8;
+    vector[N] Z_8_b2_1;
+    // data for group-level effects of ID 9
+    int<lower=1> J_9[N];
+    int<lower=1> N_9;
+    int<lower=1> M_9;
+    vector[N] Z_9_b2_1;
+    int prior_only;  // should the likelihood be ignored?
   }
-}
-generated quantities {
-}
+  transformed data {
+  }
+  parameters {
+    vector<lower=0>[K_b0] b_b0;  // population-level effects
+    vector<lower=0>[K_b1] b_b1;  // population-level effects
+    vector<lower=0>[K_b2] b_b2;  // population-level effects
+    real<lower=0> sigma;  // residual SD
+    vector<lower=0>[M_1] sd_1;  // group-level standard deviations
+    vector[N_1] z_1[M_1];  // unscaled group-level effects
+    vector<lower=0>[M_2] sd_2;  // group-level standard deviations
+    vector[N_2] z_2[M_2];  // unscaled group-level effects
+    vector<lower=0>[M_3] sd_3;  // group-level standard deviations
+    vector[N_3] z_3[M_3];  // unscaled group-level effects
+    vector<lower=0>[M_4] sd_4;  // group-level standard deviations
+    vector[N_4] z_4[M_4];  // unscaled group-level effects
+    vector<lower=0>[M_5] sd_5;  // group-level standard deviations
+    vector[N_5] z_5[M_5];  // unscaled group-level effects
+    vector<lower=0>[M_6] sd_6;  // group-level standard deviations
+    vector[N_6] z_6[M_6];  // unscaled group-level effects
+    vector<lower=0>[M_7] sd_7;  // group-level standard deviations
+    vector[N_7] z_7[M_7];  // unscaled group-level effects
+    vector<lower=0>[M_8] sd_8;  // group-level standard deviations
+    vector[N_8] z_8[M_8];  // unscaled group-level effects
+    vector<lower=0>[M_9] sd_9;  // group-level standard deviations
+    vector[N_9] z_9[M_9];  // unscaled group-level effects
+  }
+  transformed parameters {
+    // group-level effects
+    vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
+    // group-level effects
+    vector[N_2] r_2_b0_1 = sd_2[1] * (z_2[1]);
+    // group-level effects
+    vector[N_3] r_3_b0_1 = sd_3[1] * (z_3[1]);
+    // group-level effects
+    vector[N_4] r_4_b1_1 = sd_4[1] * (z_4[1]);
+    // group-level effects
+    vector[N_5] r_5_b1_1 = sd_5[1] * (z_5[1]);
+    // group-level effects
+    vector[N_6] r_6_b1_1 = sd_6[1] * (z_6[1]);
+    // group-level effects
+    vector[N_7] r_7_b2_1 = sd_7[1] * (z_7[1]);
+    // group-level effects
+    vector[N_8] r_8_b2_1 = sd_8[1] * (z_8[1]);
+    // group-level effects
+    vector[N_9] r_9_b2_1 = sd_9[1] * (z_9[1]);
+  }
+  model {
+    vector[N] mu_b0 = X_b0 * b_b0;
+    vector[N] mu_b1 = X_b1 * b_b1;
+    vector[N] mu_b2 = X_b2 * b_b2;
+    vector[N] mu;
+    for (n in 1:N) {
+      mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n] + r_2_b0_1[J_2[n]] * Z_2_b0_1[n] + r_3_b0_1[J_3[n]] * Z_3_b0_1[n];
+      mu_b1[n] += r_4_b1_1[J_4[n]] * Z_4_b1_1[n] + r_5_b1_1[J_5[n]] * Z_5_b1_1[n] + r_6_b1_1[J_6[n]] * Z_6_b1_1[n];
+      mu_b2[n] += r_7_b2_1[J_7[n]] * Z_7_b2_1[n] + r_8_b2_1[J_8[n]] * Z_8_b2_1[n] + r_9_b2_1[J_9[n]] * Z_9_b2_1[n];
+      // compute non-linear predictor
+      mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+    }
+    // priors including all constants
+    target += gamma_lpdf(b_b0 | 4, 3)
+      - 1 * gamma_lccdf(0 | 4, 3);
+    target += gamma_lpdf(b_b1 | 5, 1.2)
+      - 1 * gamma_lccdf(0 | 5, 1.2);
+    target += gamma_lpdf(b_b2 | 4, 3)
+      - 1 * gamma_lccdf(0 | 4, 3);
+    target += student_t_lpdf(sigma | 3, 0, 33)
+      - 1 * student_t_lccdf(0 | 3, 0, 33);
+    target += cauchy_lpdf(sd_1 | 0, 0.3)
+      - 1 * cauchy_lccdf(0 | 0, 0.3);
+    target += normal_lpdf(z_1[1] | 0, 1);
+    target += cauchy_lpdf(sd_2 | 0, 0.3)
+      - 1 * cauchy_lccdf(0 | 0, 0.3);
+    target += normal_lpdf(z_2[1] | 0, 1);
+    target += cauchy_lpdf(sd_3 | 0, 0.3)
+      - 1 * cauchy_lccdf(0 | 0, 0.3);
+    target += normal_lpdf(z_3[1] | 0, 1);
+    target += cauchy_lpdf(sd_4 | 0, 0.2)
+      - 1 * cauchy_lccdf(0 | 0, 0.2);
+    target += normal_lpdf(z_4[1] | 0, 1);
+    target += cauchy_lpdf(sd_5 | 0, 0.2)
+      - 1 * cauchy_lccdf(0 | 0, 0.2);
+    target += normal_lpdf(z_5[1] | 0, 1);
+    target += cauchy_lpdf(sd_6 | 0, 0.2)
+      - 1 * cauchy_lccdf(0 | 0, 0.2);
+    target += normal_lpdf(z_6[1] | 0, 1);
+    target += cauchy_lpdf(sd_7 | 0, 0.2)
+      - 1 * cauchy_lccdf(0 | 0, 0.2);
+    target += normal_lpdf(z_7[1] | 0, 1);
+    target += cauchy_lpdf(sd_8 | 0, 0.2)
+      - 1 * cauchy_lccdf(0 | 0, 0.2);
+    target += normal_lpdf(z_8[1] | 0, 1);
+    target += cauchy_lpdf(sd_9 | 0, 0.2)
+      - 1 * cauchy_lccdf(0 | 0, 0.2);
+    target += normal_lpdf(z_9[1] | 0, 1);
+    // likelihood including all constants
+    if (!prior_only) {
+      target += normal_lpdf(Y | mu, sigma);
+    }
+  }
+  generated quantities {
+  }
 #+END_SRC
 
 
