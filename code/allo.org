@@ -2464,7 +2464,7 @@ stancode(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
-: [1]  9 48 15 28
+: [1] 38 11 24 27
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
@@ -2477,9 +2477,9 @@ stancode(model_fram_ftcollins_homo)
 
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ (1 | City),
-                     b1 ~ (1 | City),
-                     b2 ~ (1 | City),
+                     b0 ~ (1 | ID | City),
+                     b1 ~ (1 | ID | City),
+                     b2 ~ (1 | ID | City),
                      nl = T)
 
   nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
@@ -3409,13 +3409,13 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
   cdd <- c(0.325, -0.444, -0.45, -0.76, 1.329)
 
 
-  u_precip_b0 <- 0
-  u_precip_b1 <- 0
-  u_precip_b2 <- 0
+  u_precip_b0 <- .5
+  u_precip_b1 <- .1
+  u_precip_b2 <- -.1
 
-  u_hdd_b0 <- 0
-  u_hdd_b1 <- 0
-  u_hdd_b2 <- 0
+  u_hdd_b0 <- -.2
+  u_hdd_b1 <- -.05
+  u_hdd_b2 <- .05
 
   u_hdd_precip_b0 <- -1
   u_hdd_precip_b1 <- -.2
@@ -3455,10 +3455,9 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 #+end_src
 
 #+RESULTS:
-: [1] 31 37 28  3 51
+: [1] 32 44 19  3 52
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png
-library(gridExtra)
 pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
 pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
 ph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
@@ -3485,7 +3484,7 @@ grid.arrange(pc,pp,ph, pph, nrow =2)
                  prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
                  prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
-m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
