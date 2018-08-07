@@ -3482,7 +3482,8 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 **** fit to real data
 #+begin_src R :var clim=city_climate
   d <- readRDS("../data/tidy_age_dbh.rds")
-  list <- filter(d, SpCode == "LIST")
+  list <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","ACSA1"))
+  list <- filter(d, SpCode %in% c("ACRU","ACSA1","ACSA2","ACPL", "ACNE"))
 
   list_clim <- left_join(list,clim) %>%
             mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
@@ -3505,8 +3506,9 @@ grid.arrange(pc,pp, ph, nrow =1)
 [[file:../figs/list_clim.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/list_clim_sepcities.png 
-pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = CDD)) + geom_point() + facet_wrap(~City)
-pc
+  pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = CDD, shape = SpCode)) + geom_point() + 
+      facet_grid(City~SpCode)
+  pc
 #+end_src
 
 #+RESULTS:
