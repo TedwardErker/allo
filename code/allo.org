@@ -3455,7 +3455,7 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 #+end_src
 
 #+RESULTS:
-: [1] 10 14  6 46 74
+: [1] 31 37 28  3 51
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png
 library(gridExtra)
@@ -3473,14 +3473,17 @@ grid.arrange(pc,pp,ph, pph, nrow =2)
 
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ t2(Precip, HDD) + (1 | City),
-                     b1 ~ 1,
-                     b2 ~ 1,
+                     b0 ~ Precip * HDD + (1 | City),
+                     b1 ~ Precip * HDD + (1 | City),
+                     b2 ~ Precip * HDD + (1 | City),
                      nl = T)
 
-  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-               prior(gamma(4, 3), nlpar = "b1",lb = 0),
-               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+    nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                 prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                 prior(gamma(4, 3), nlpar = "b2",lb = 0),
+                 prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+                 prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+                 prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 
