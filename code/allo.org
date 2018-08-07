@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -3570,7 +3570,7 @@ pg 163 of https://www.casact.org/pubs/forum/08fforum/7Guszcza.pdf
 \]
 
 #+begin_src R
-model_fram_climate_homo
+model_list_climate
 #+end_src
 
 #+RESULTS:
@@ -3579,41 +3579,49 @@ model_fram_climate_homo
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ Precip * HDD + (1 | City)
-         b1 ~ 1
-         b2 ~ 1
-   Data: fram_clim (Number of observations: 129)
+         b1 ~ Precip * HDD + (1 | City)
+         b2 ~ Precip * HDD + (1 | City)
+   Data: list_clim (Number of observations: 428)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Group-Level Effects:
-~City (Number of levels: 4)
+~City (Number of levels: 11)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.91      0.93     0.02     2.93         19 1.03
+sd(b0_Intercept)     0.96      0.70     0.02     2.47         42 1.03
+sd(b1_Intercept)     2.60      0.97     1.20     5.00        255 1.02
+sd(b2_Intercept)     0.13      0.11     0.00     0.43         88 1.02
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      1.84      0.80     0.74     3.65         12 1.09
-b0_Precip         0.95      0.52     0.28     2.22         43 1.03
-b0_HDD            0.68      0.51     0.12     1.90         16 1.05
-b0_Precip:HDD     1.43      0.69     0.49     3.02         49 1.02
-b1_Intercept      1.05      0.17     0.71     1.39        876 1.00
-b2_Intercept      1.00      0.07     0.88     1.15         79 1.02
+b0_Intercept      1.38      0.38     0.67     2.09         77 1.01
+b0_Precip         0.74      0.36     0.23     1.65        614 1.00
+b0_HDD            0.99      0.41     0.31     1.85         93 1.01
+b0_Precip:HDD     1.79      0.73     0.57     3.30         70 1.01
+b1_Intercept      2.16      0.75     0.99     3.96        310 1.00
+b1_Precip         2.51      1.13     0.82     5.17        514 1.00
+b1_HDD            2.27      0.90     0.89     4.46        406 1.00
+b1_Precip:HDD     4.20      1.58     1.71     7.75        652 1.00
+b2_Intercept      1.00      0.07     0.86     1.15        376 1.00
+b2_Precip         0.35      0.14     0.14     0.67        260 1.00
+b2_HDD            0.23      0.07     0.11     0.39        300 1.00
+b2_Precip:HDD     0.46      0.16     0.22     0.84        333 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     6.45      0.38     5.73     7.26       1358 1.00
+sigma     7.91      0.28     7.40     8.46       1290 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 160 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 48 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 **** diagnostics
-#+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png
-mcmc_trace(as.matrix(model_fram_climate_homo))
+#+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png :height 1000 :width 1000
+mcmc_trace(as.matrix(model_list_climate))
 #+end_src
 
 #+RESULTS:
@@ -3909,6 +3917,13 @@ Warning message:
 There were 160 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/asdfas.png
+marginal_effects(model_list_climate, effect = "HDD:Precip", surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/asdfas.png]]
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png
@@ -4745,7 +4760,6 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo)
 #+RESULTS:
 [[file:../figs/marginal2_model_multipleSpecies_nestedGenus_multipleCities_homo.png]]
 
-
 *** Full model
 
 \[
@@ -4774,7 +4788,6 @@ Model selection
       data, otherwise this may take a _very_ long time
 2) What is the proper form of the climate variables on the beta's?
    1)
-
 
 
 
