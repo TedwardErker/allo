@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -1273,30 +1273,16 @@ are correlated.  I wonder if I could include that information in the prior?
 library(dplyr)
 library(brms)
 library(ggplot2)
+library(gridExtra)
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
+:
+: Attaching package: ‘gridExtra’
+:
+: The following object is masked from ‘package:dplyr’:
+:
+:     combine
 
 *** read in data
 #+begin_src R
@@ -3499,10 +3485,10 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
   d <- readRDS("../data/tidy_age_dbh.rds")
   list <- filter(d, SpCode == "LIST")
 
-  list_clim <- left_join(fram,clim) %>%
-            mutate(Precip = (Precip - mean(Precip))/ 1000,
-                   HDD = (HDD - mean(HDD))/ 1000,
-                   CDD = (CDD - mean(CDD))/ 1000)
+  list_clim <- left_join(list,clim) %>%
+            mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+                   HDD = round((HDD - mean(HDD))/ 1000, 4),
+                   CDD = round((CDD - mean(CDD))/ 1000, 4))
 
 #+end_src
 
@@ -3520,8 +3506,10 @@ grid.arrange(pc,pp, ph, nrow =1)
 [[file:../figs/list_clim.png]]
 
 #+begin_src R
-
+list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
 #+end_src
+
+#+RESULTS:
 
 #+begin_src R
             form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
@@ -3541,6 +3529,44 @@ grid.arrange(pc,pp, ph, nrow =1)
 
 #+end_src
 
+uncertainty seems low, esp for combinations without observations.
+should there be correlations?
+I expect \beta_1 and \beta_2 to be negatively correlated.
+how to write?  often I see something like:
+
+
+\[
+\beta \sim N(\mu_{\beta}, \sigma_{\beta})
+\]
+
+pg 163 of https://www.casact.org/pubs/forum/08fforum/7Guszcza.pdf
+
+    \begin{pmatrix}
+           \beta_{1} \\
+           \beta_{2} \\
+    \end{pmatrix} \sim N
+    \begin{pmatrix}
+    \begin{matrix}
+         \mu_{\beta_1} \\
+         \mu_{\beta_2}
+    \end{matrix},
+    \Sigma
+    \end{pmatrix}
+
+
+\Sigma = \begin{pmatrix}
+\sigma^2_\beta_1, \
+\end{pmatrix}
+
+\[
+
+          \begin{bmatrix}
+           ax_{0} + bx_{1} \\
+           \vdots \\
+           ax_{n-1}+bx_{n}
+          \end{bmatrix} -
+
+\]
 
 #+begin_src R
 model_fram_climate_homo
