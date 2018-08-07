@@ -3430,52 +3430,6 @@ m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains =
 summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
-It recovered the true values pretty well, though there is definitely
-more uncertainty.
-
-
-#+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png :width 1000 :height 1000
-pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
-#+end_src
-
-#+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-library(bayesplot)
-mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
-#+end_src
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("AGE:Precip"))
-  me
-
-#+end_src
-
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png
-
-me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
-  me
-
-
-#+end_src
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png
-      cond <- data.frame(City = unique(dt$City))
-        me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
-                               conditions = cond,
-                               effects = "AGE",
-                               re_formula = NULL)
-        me
-
-#+end_src
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
-pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
-#+end_src
-
-#+begin_src R
-stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
-#+end_src
-
 
 **** fit to real data
 #+begin_src R :var clim=city_climate
@@ -3642,7 +3596,7 @@ clim
 
 #+begin_src R
 
-    k <- 5
+    k <- 17
     expect_nk <- 30
     n <- k * expect_nk
     breaks <- c(0,sort(sample(1:100,(k-1))),n)
