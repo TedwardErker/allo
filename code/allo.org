@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -1142,7 +1142,7 @@ Achieved convergence tolerance: 1.869e-06
 "b" can't be negative because it causes negative growth and negative
 dbh values, impossible
 "c" can't be negative because it causes negative growth, impossible
-
+***** what is the range of reasonable parameter values,  can be helpful for priors
 #+begin_src R :exports results :results graphics :file ../figs/weibull.png
   x <- 1:100
   a <- seq(80,110,10)
@@ -4098,39 +4098,37 @@ Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
 Group-Level Effects:
 ~City (Number of levels: 4)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.58      0.63     0.21     2.36          2 1.32
-sd(b1_Intercept)     1.45      0.99     0.20     2.41          1 4.80
-sd(b2_Intercept)     0.43      0.21     0.15     0.88        183 1.03
+sd(b0_Intercept)     0.59      0.34     0.21     1.41        220 1.02
+sd(b1_Intercept)     0.31      0.18     0.02     0.73         20 1.07
+sd(b2_Intercept)     0.24      0.12     0.07     0.57         67 1.02
 
 ~Genus (Number of levels: 3)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.50      0.69     0.05     2.49          5 1.09
-sd(b1_Intercept)     1.20      0.89     0.03     2.00          1 2.65
-sd(b2_Intercept)     0.22      0.17     0.01     0.72        305 1.01
+sd(b0_Intercept)     0.20      0.24     0.00     0.84         80 1.03
+sd(b1_Intercept)     0.22      0.23     0.01     0.85         18 1.08
+sd(b2_Intercept)     0.11      0.09     0.01     0.38         60 1.03
 
 ~Genus:Species (Number of levels: 8)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.44      0.37     0.17     1.30          1 1.62
-sd(b1_Intercept)     0.67      0.30     0.21     0.95          1 3.05
-sd(b2_Intercept)     0.13      0.05     0.04     0.19          2 1.46
+sd(b0_Intercept)     0.51      0.20     0.25     1.02        202 1.00
+sd(b1_Intercept)     0.30      0.13     0.01     0.59         35 1.05
+sd(b2_Intercept)     0.09      0.04     0.03     0.17        228 1.03
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.63      0.39     0.70     2.24          3 1.20
-b1_Intercept     0.80      0.34     0.56     1.65          1 1.55
-b2_Intercept     0.93      0.19     0.69     1.40          2 1.38
+b0_Intercept     1.45      0.38     0.72     2.20        169 1.00
+b1_Intercept     1.04      0.24     0.55     1.47        109 1.01
+b2_Intercept     1.08      0.15     0.80     1.39         73 1.01
 
 Family Specific Parameters:
-      Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sigma     4.40      3.76     0.64     8.42          1 38.18
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     8.20      0.19     7.85     8.60         53 1.04
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 301 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning message:
+There were 20 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -4152,13 +4150,36 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo)
   ggplot() +
     geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
     geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-    geom_point(data = dm, aes(x = AGE, y = DBH)) +
+    geom_point(data = dm, aes(x = AGE, y = DBH, color = Species), size = .5) +
     facet_grid(City ~ Genus)
 
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_model_multipleSpecies_nestedGenus_multipleCities_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal2_model_multipleSpecies_nestedGenus_multipleCities_homo.png
+  City = unique(dm$City)
+  cond <- unique(select(dm, Species, Genus))
+  cond <- cond[rep(1:nrow(cond),times = length(City)),]
+  cond$City <- rep(City, each = 8)
+
+
+    me <- marginal_effects(model_multipleSpecies_nestedGenus_multipleCities_homo,
+                       re_formula = NULL, method = "predict",
+                          conditions = cond)
+
+  ggplot() +
+    geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
+    geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+    geom_point(data = dm, aes(x = AGE, y = DBH, color = Species), size = .5) +
+    facet_grid(City ~ Genus)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal2_model_multipleSpecies_nestedGenus_multipleCities_homo.png]]
+
 
 *** Full model
 
