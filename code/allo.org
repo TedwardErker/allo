@@ -449,7 +449,7 @@ that are important for urban environments?
 | NoEast | Queens, NY       |  560 | 2819 |   1041 |
 | PacfNW | Longview, WA     |  157 | 2468 |   1059 |
 | Piedmt | Charlotte, NC    |  847 | 1891 |   1426 |
-| SacVal | Santa Monica, CA |  266 |  710 |    570 |
+| SoCalC | Santa Monica, CA |  266 |  710 |    570 |
 | SWDsrt | Glendale, AZ     | 2128 |  637 |    174 |
 | TpIntW | Boise, ID        |  387 | 3325 |    417 |
 | Tropic | Honolulu, HI     | 2416 |    0 |   2206 |
@@ -2994,9 +2994,6 @@ stancode(linfit)
 #+end_src
 
 #+RESULTS:
-#+BEGIN_SRC stan
-
-#+END_SRC
 
 #+begin_src R :results output
 
@@ -3218,7 +3215,8 @@ generated quantities {
 
 **** fit to real data
 #+begin_src R :var clim=city_climate
-
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram <- filter(d, SpCode == "FRAM")
     fram_clim <- left_join(fram,clim) %>%
         mutate(Precip = (Precip - mean(Precip))/ 1000)
 #+end_src
@@ -3498,19 +3496,22 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 
 **** fit to real data
 #+begin_src R :var clim=city_climate
-d <- readRDS("../data/tidy_age_dbh.rds")
-fram <- filter(d, SpCode == "FRAM")
+  d <- readRDS("../data/tidy_age_dbh.rds")
+  list <- filter(d, SpCode == "LIST")
 
-      fram_clim <- left_join(fram,clim) %>%
-          mutate(Precip = (Precip - mean(Precip))/ 1000,
-                 HDD = (HDD - mean(HDD))/ 1000,
-                 CDD = (CDD - mean(CDD))/ 1000)
+        list_clim <- left_join(fram,clim)
+
+  %>%
+            mutate(Precip = (Precip - mean(Precip))/ 1000,
+                   HDD = (HDD - mean(HDD))/ 1000,
+                   CDD = (CDD - mean(CDD))/ 1000)
+
 #+end_src
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
 
-#+begin_src R :exports results :results graphics :file ../figs/fram_clim.png :height 200 :width 700
+#+begin_src R :exports results :results graphics :file ../figs/list_clim.png :height 200 :width 700
 pc <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
 pp <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
 ph <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
@@ -3518,7 +3519,7 @@ grid.arrange(pc,pp, ph, nrow =1)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/fram_clim.png]]
+[[file:../figs/list_clim.png]]
 
 #+begin_src R
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
