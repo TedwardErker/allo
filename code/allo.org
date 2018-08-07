@@ -1128,14 +1128,14 @@ Achieved convergence tolerance: 1.869e-06
 "b" can't be negative because it causes negative growth and negative
 dbh values, impossible
 "c" can't be negative because it causes negative growth, impossible
-***** NEXT what is the range of reasonable parameter values,  can be helpful for priors
+***** what is the range of reasonable parameter values,  can be helpful for priors
 #+begin_src R :exports results :results graphics :file ../figs/weibull.png
       data <- readRDS("../data/tidy_age_dbh.rds") %>%
           select(DBH, AGE) %>%
           rename(x = AGE, y = DBH)
 
       x <- 1:200
-      a <- seq(80,200,30)
+      a <- seq(50,250,50)
       b <- 10^(-1*1:3)
       c <- seq(.5, 1.5, .5)
 
@@ -1150,12 +1150,19 @@ dbh values, impossible
   geom_point(data = data, alpha = .01) +
       geom_line(aes(color =  a, group = interaction(a,b,c))) + facet_grid(b~c) +
     xlim(c(0,150))
-
-
 #+end_src
 
 #+RESULTS:
 [[file:../figs/weibull.png]]
+
+range of realistic values:
+b0 : 50 - 250
+b1 : 0.01 - 0.1
+b2 : .5 - 1.5
+
+the higher values of b1 only make sense with lower values of b2.  they
+are correlated.  I wonder if I could include that information in the prior?
+
 
 #+begin_src R :exports results :results graphics :file ../figs/weibull_colorA.png
   x <- 1:100
