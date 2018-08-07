@@ -3409,11 +3409,11 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
   cdd <- c(0.325, -0.444, -0.45, -0.76, 1.329)
 
 
-  u_precip_b0 <- .2
+  u_precip_b0 <- .5
   u_precip_b1 <- .1
   u_precip_b2 <- -.1
 
-  u_hdd_b0 <- 0
+  u_hdd_b0 <- -.2
   u_hdd_b1 <- -.05
   u_hdd_b2 <- .05
 
@@ -3427,11 +3427,11 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
   u_intercept_b2 <- 1
 
   mu_b0 <- u_intercept_b0 + u_precip_b0 * precip + u_hdd_b0 * hdd + u_hdd_precip_b0 * hdd * precip
-  sigma_b0 <- .1
+  sigma_b0 <- .01
   mu_b1 <- u_intercept_b1 + u_precip_b1 * precip + u_hdd_b1 * hdd + u_hdd_precip_b1 * hdd * precip
-  sigma_b1 <- .05
+  sigma_b1 <- .01
   mu_b2 <- u_intercept_b2 + u_precip_b2 * precip + u_hdd_b2 * hdd + u_hdd_precip_b2 * hdd * precip
-  sigma_b2 <- .05
+  sigma_b2 <- .01
 
   sigma <- 3
 
@@ -3455,10 +3455,9 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 #+end_src
 
 #+RESULTS:
-: [1] 21 15 21 42 51
+: [1] 32 44 19  3 52
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png
-library(gridExtra)
 pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
 pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
 ph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
@@ -3485,7 +3484,7 @@ grid.arrange(pc,pp,ph, pph, nrow =2)
                  prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
                  prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
-m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
