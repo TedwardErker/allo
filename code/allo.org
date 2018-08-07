@@ -3392,67 +3392,78 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 *** single species, multiple locations, multiple climate predictors for locations, homoskedasticy
 **** generate data
 #+begin_src R
-    k <- 5
-    expect_nk <- 30
-    n <- k * expect_nk
-    breaks <- c(0,sort(sample(1:100,(k-1))),n)
-    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
-    nk
+  k <- 5
+  expect_nk <- 30
+  n <- k * expect_nk
+  breaks <- c(0,sort(sample(1:100,(k-1))),n)
+  nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+  nk
 
   clim.gen <- filter(clim, Region %in% c("GulfCo", "SWDsrt", "MidWst","NMtnPr", "NoCalC")) %>%
       mutate(CDD = (CDD - mean(CDD)) / 1000,
              HDD = (HDD - mean(HDD)) / 1000,
              Precip = (Precip - mean(Precip)) / 1000)
 
-  precip <- clim.gen$Precip
-  hdd <- clim.gen$HDD
-  cdd <- clim.gen$CDD
-
-  u_precip_b0 <- 1
-    u_precip_b1 <- .5
-    u_precip_b2 <- .5
-
-    #with centered city level predictors this is the mean
-    u_intercept_b0 <- 1
-    u_intercept_b1 <- 1
-    u_intercept_b2 <- 1
-
-      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
-      sigma_b0 <- .1
-      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
-      sigma_b1 <- .1
-      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
-      sigma_b2 <- .1
-
-      sigma <- 3
-
-      b0 <- rnorm(k, mu_b0, sigma_b0)
-      b1 <- rnorm(k, mu_b1, sigma_b1)
-      b2 <- rnorm(k, mu_b2, sigma_b2)
-
-      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+  precip <- c(0.8816, -0.0514, -0.2214, -0.1094, -0.4994)
+  hdd <- c(-1.0614, 2.1536, 1.0496, -0.4964, -1.6454)
+  cdd <- c(0.325, -0.444, -0.45, -0.76, 1.329)
 
 
-      AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
-          sample  #to randomly shuffle
+  u_precip_b0 <- 0
+  u_precip_b1 <- 0
+  u_precip_b2 <- 0
 
-      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+  u_hdd_b0 <- 0
+  u_hdd_b1 <- 0
+  u_hdd_b2 <- 0
 
-    City <- rep(letters[1:k], times = nk)
-    Precip <- rep(precip, times = nk)
+  u_hdd_precip_b0 <- -1
+  u_hdd_precip_b1 <- -.2
+  u_hdd_precip_b2 <- .2
+
+                                          #with centered city level predictors this is the mean
+  u_intercept_b0 <- 1.5
+  u_intercept_b1 <- 1
+  u_intercept_b2 <- 1
+
+  mu_b0 <- u_intercept_b0 + u_precip_b0 * precip + u_hdd_b0 * hdd + u_hdd_precip_b0 * hdd * precip
+  sigma_b0 <- .01
+  mu_b1 <- u_intercept_b1 + u_precip_b1 * precip + u_hdd_b1 * hdd + u_hdd_precip_b1 * hdd * precip
+  sigma_b1 <- .01
+  mu_b2 <- u_intercept_b2 + u_precip_b2 * precip + u_hdd_b2 * hdd + u_hdd_precip_b2 * hdd * precip
+  sigma_b2 <- .01
+
+  sigma <- 3
+
+  b0 <- rnorm(k, mu_b0, sigma_b0)
+  b1 <- rnorm(k, mu_b1, sigma_b1)
+  b2 <- rnorm(k, mu_b2, sigma_b2)
+
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
 
-    dt <- data.frame(AGE, DBH, City, Precip)
+  AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+      sample  #to randomly shuffle
+
+  DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+
+  City <- rep(letters[1:k], times = nk)
+  Precip <- rep(precip, times = nk)
+  HDD <- rep(hdd, times = nk)
+
+  dt <- data.frame(AGE, DBH, City, Precip, HDD)
 #+end_src
 
 #+RESULTS:
-: [1] 22 16  3 46 63
+: [1] 10 14  6 46 74
 
-#+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png :height 200
+#+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png
 library(gridExtra)
 pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
 pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-grid.arrange(pc,pp, nrow =1)
+ph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
+pph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD*Precip)) + geom_point()
+grid.arrange(pc,pp,ph, pph, nrow =2)
 #+end_src
 
 #+RESULTS:
@@ -3479,11 +3490,11 @@ m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains =
 summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
-
 **** fit to real data
 #+begin_src R :var clim=city_climate
   d <- readRDS("../data/tidy_age_dbh.rds")
-  list <- filter(d, SpCode == "LIST")
+  list <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","ACSA1"))
+  list <- filter(d, SpCode %in% c("ACRU","ACSA1","ACSA2","ACPL", "ACNE"))
 
   list_clim <- left_join(list,clim) %>%
             mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
@@ -3504,6 +3515,16 @@ grid.arrange(pc,pp, ph, nrow =1)
 
 #+RESULTS:
 [[file:../figs/list_clim.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/list_clim_sepcities.png
+  pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = CDD, shape = SpCode)) + geom_point() +
+      facet_grid(City~SpCode)
+  pc
+#+end_src
+
+#+RESULTS:
+[[file:../figs/list_clim_sepcities.png]]
+
 
 #+begin_src R
 list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
@@ -3628,7 +3649,7 @@ mcmc_trace(as.matrix(model_list_climate))
 [[file:../figs/mcmctrace_fram_climate_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_climate_homo.png
-pp_check(model_fram_climate_homo)
+pp_check(model_list_climate)
 #+end_src
 
 #+RESULTS:
@@ -3638,39 +3659,45 @@ the parameters may not be linear.  Also, I may need to include
 Temperature related covariates
 
 **** marginal effects
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_age_homo.png
-marginal_effects(model_fram_climate_homo, effects = "AGE:Precip")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_age_homo.png
+marginal_effects(model_list_climate, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_age_homo.png]]
+[[file:../figs/marginal_effects_age_list_age_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_surface_homo.png
-marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_age_HDD_homo.png
+marginal_effects(model_list_climate, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_ageprecip_homo.png]]
+[[file:../figs/marginal_effects_age_list_age_HDD_homo.png]]
 
 
-Very cool, there is an interaction between Precip and HDD.
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_surface_homo.png
+marginal_effects(model_list_climate, effects = "Precip:HDD", surface = T)
+#+end_src
 
-THe behavior isn't what I had expected, but I need more than just 4 cities!
+#+RESULTS:
+[[file:../figs/marginal_effects_age_list_surface_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_climate_homo_Points.png
-    conditions <- unique(select(fram_clim, Precip, HDD))
 
-  me <- marginal_effects(model_fram_climate_homo, effects = "AGE", conditions = conditions, re_formula = NA)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_climate_homo_Points.png
+    conditions <- unique(select(list_clim, Precip, HDD))
+
+  me <- marginal_effects(model_list_climate, effects = "AGE", conditions = conditions, re_formula = NA)
 
     ggplot(me$AGE) +
           geom_line(aes(x = AGE, y = estimate__)) +
         geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+        geom_point(data = list_clim, aes(x = AGE, y = DBH)) +
         facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_fram_climate_homo_Points.png]]
+[[file:../figs/marginal_effects_age_list_climate_homo_Points.png]]
+terrible fit.
+
 
 *** species ignorant, multiple locations, multiple climate predictors for locations, homoskedasticy
 **** generate data
