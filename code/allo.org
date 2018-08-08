@@ -4473,11 +4473,8 @@ m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor <- brm(form, 
 
 #+end_src
 
-#+RESULTS:
-: Error: Can only combine group-level terms of the same grouping factors.
-
 #+begin_src R
-summary(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo)
+summary(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor)
 #+end_src
 
 #+RESULTS:
@@ -4485,47 +4482,79 @@ summary(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo)
  Family: gaussian
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1 + (1 | City) + (1 | Genus/Species)
-         b1 ~ 1 + (1 | City) + (1 | Genus/Species)
-         b2 ~ 1 + (1 | City) + (1 | Genus/Species)
+         b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species)
+         b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species)
+         b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species)
    Data: dt (Number of observations: 240)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Group-Level Effects:
 ~City (Number of levels: 2)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.74      2.18     0.23     8.91        104 1.01
-sd(b1_Intercept)     1.19      2.17     0.01     8.28        119 1.02
-sd(b2_Intercept)     1.05      1.21     0.10     4.73        139 1.03
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.98      0.85     0.19     2.40          4
+sd(b1_Intercept)                   0.23      0.47     0.01     1.36         16
+sd(b2_Intercept)                   0.26      0.16     0.05     0.50          6
+cor(b0_Intercept,b1_Intercept)     0.08      0.53    -0.90     0.75          7
+cor(b0_Intercept,b2_Intercept)    -0.14      0.41    -0.92     0.59         15
+cor(b1_Intercept,b2_Intercept)    -0.02      0.45    -0.79     0.85         27
+                               Rhat
+sd(b0_Intercept)               2.77
+sd(b1_Intercept)               1.07
+sd(b2_Intercept)               1.49
+cor(b0_Intercept,b1_Intercept) 1.36
+cor(b0_Intercept,b2_Intercept) 1.15
+cor(b1_Intercept,b2_Intercept) 1.09
 
 ~Genus (Number of levels: 3)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.31      0.54     0.01     1.74        349 1.00
-sd(b1_Intercept)     0.89      1.24     0.03     4.53        228 1.00
-sd(b2_Intercept)     0.46      0.55     0.04     1.81        103 1.00
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.05      0.07     0.00     0.27         25
+sd(b1_Intercept)                   0.13      0.18     0.01     0.58         21
+sd(b2_Intercept)                   0.07      0.08     0.00     0.30         27
+cor(b0_Intercept,b1_Intercept)    -0.12      0.48    -0.86     0.86         15
+cor(b0_Intercept,b2_Intercept)    -0.21      0.57    -0.90     0.87          8
+cor(b1_Intercept,b2_Intercept)     0.14      0.47    -0.84     0.84         15
+                               Rhat
+sd(b0_Intercept)               1.07
+sd(b1_Intercept)               1.09
+sd(b2_Intercept)               1.10
+cor(b0_Intercept,b1_Intercept) 1.14
+cor(b0_Intercept,b2_Intercept) 1.31
+cor(b1_Intercept,b2_Intercept) 1.15
 
 ~Genus:Species (Number of levels: 6)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.09      0.07     0.02     0.27        194 1.00
-sd(b1_Intercept)     0.34      0.27     0.03     1.03        266 1.00
-sd(b2_Intercept)     0.13      0.14     0.01     0.43        115 1.00
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.05      0.04     0.00     0.15         40
+sd(b1_Intercept)                   0.10      0.09     0.01     0.33         32
+sd(b2_Intercept)                   0.09      0.04     0.04     0.20        541
+cor(b0_Intercept,b1_Intercept)    -0.26      0.54    -0.88     0.77          6
+cor(b0_Intercept,b2_Intercept)    -0.15      0.48    -0.84     0.81         10
+cor(b1_Intercept,b2_Intercept)     0.20      0.56    -0.85     0.88          8
+                               Rhat
+sd(b0_Intercept)               1.04
+sd(b1_Intercept)               1.05
+sd(b2_Intercept)               1.02
+cor(b0_Intercept,b1_Intercept) 1.38
+cor(b0_Intercept,b2_Intercept) 1.17
+cor(b1_Intercept,b2_Intercept) 1.31
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.09      0.45     0.42     2.21        223 1.00
-b1_Intercept     1.17      0.48     0.40     2.27        154 1.01
-b2_Intercept     1.15      0.43     0.49     2.28        203 1.03
+b0_Intercept     1.52      0.44     0.74     2.17          5 1.74
+b1_Intercept     1.07      0.34     0.71     2.35         15 1.08
+b2_Intercept     1.22      0.21     0.84     1.52          5 1.68
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     4.90      0.24     4.48     5.40        383 1.00
+sigma     5.03      0.25     4.64     5.61         13 1.16
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 116 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 571 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -4538,7 +4567,7 @@ plot(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, ask = F)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_nestedGenus_multipleLocations_homo.png :width 800
      cond <- unique(select(dt, City, Species, Genus))
-    me <- marginal_effects(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo,
+    me <- marginal_effects(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor,
                        re_formula = NULL, method = "predict",
                           conditions = cond)
 
@@ -4550,11 +4579,8 @@ plot(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/1marginal_m_generated_multipleSpecies_nestedGenus_multipleLocations_homo.png]]
+[[file:../figs/marginal_m_generated_multipleSpecies_nestedGenus_multipleLocations_homo.png]]
 
-Look at Genus Y, Species X, in City a.  There are only two
-observations, but because the model includes information of genus and
-city, the line has a pretty close fit.
 
 **** fit to real data
 #+begin_src R
@@ -4587,219 +4613,12 @@ b2 : .5 - 1.5
 
 #+begin_src R
 
-  #  model_multipleSpecies_nestedGenus_multipleCities_homo <- update(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, newdata = dm, cores = 2, chains = 2)
-  #, control = list(adapt_delta = .9, max_treedepth = 15))
-
-
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ 1 + (1 | City) + (1 | Genus/Species),
-                       b1 ~ 1 + (1 | City) + (1 | Genus/Species),
-                       b2 ~ 1 + (1 | City) + (1 | Genus/Species),
-                       nl = T)
-
-    nlprior <- c(prior(gamma(4, 3), nlpar = "b0", lb = 0),
-                 prior(gamma(5, 1.2), nlpar = "b1", lb = 0),
-                 prior(gamma(4, 3), nlpar = "b2", lb = 0),
-                 prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                 prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
-
-
-#  get_prior(form, dm)
-
-    model_multipleSpecies_nestedGenus_multipleCities_homo <- brm(form, chains = 2, cores = 2, data = dm, prior = nlprior, init_r = .4)
-
+    model_multipleSpecies_nestedGenus_multipleCities_homo_cor <- update(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor, newdata = dm, cores = 2, chains = 4, init_r = .3, control = list(adapt_delta = .85, max_treedepth = 15))
 
 #+end_src
 
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-Error : 'control' list contains unknown members of names: init_r.
-error in specifying arguments; sampling not done
-Error : 'control' list contains unknown members of names: init_r.
-error in specifying arguments; sampling not done
-here are whatever error messages were returned
-[[1]]
-Stan model 'gaussian brms-model' does not contain samples.
-
-[[2]]
-Stan model 'gaussian brms-model' does not contain samples.
-
-Warning message:
-In .local(object, ...) :
-  some chains had errors; consider specifying chains = 1 to debug
-#+end_example
-
-#+BEGIN_SRC stan
-  // generated with brms 2.3.1
-  functions {
-  }
-  data {
-    int<lower=1> N;  // total number of observations
-    vector[N] Y;  // response variable
-    int<lower=1> K_b0;  // number of population-level effects
-    matrix[N, K_b0] X_b0;  // population-level design matrix
-    int<lower=1> K_b1;  // number of population-level effects
-    matrix[N, K_b1] X_b1;  // population-level design matrix
-    int<lower=1> K_b2;  // number of population-level effects
-    matrix[N, K_b2] X_b2;  // population-level design matrix
-    // covariate vectors
-    vector[N] C_1;
-    // data for group-level effects of ID 1
-    int<lower=1> J_1[N];
-    int<lower=1> N_1;
-    int<lower=1> M_1;
-    vector[N] Z_1_b0_1;
-    // data for group-level effects of ID 2
-    int<lower=1> J_2[N];
-    int<lower=1> N_2;
-    int<lower=1> M_2;
-    vector[N] Z_2_b0_1;
-    // data for group-level effects of ID 3
-    int<lower=1> J_3[N];
-    int<lower=1> N_3;
-    int<lower=1> M_3;
-    vector[N] Z_3_b0_1;
-    // data for group-level effects of ID 4
-    int<lower=1> J_4[N];
-    int<lower=1> N_4;
-    int<lower=1> M_4;
-    vector[N] Z_4_b1_1;
-    // data for group-level effects of ID 5
-    int<lower=1> J_5[N];
-    int<lower=1> N_5;
-    int<lower=1> M_5;
-    vector[N] Z_5_b1_1;
-    // data for group-level effects of ID 6
-    int<lower=1> J_6[N];
-    int<lower=1> N_6;
-    int<lower=1> M_6;
-    vector[N] Z_6_b1_1;
-    // data for group-level effects of ID 7
-    int<lower=1> J_7[N];
-    int<lower=1> N_7;
-    int<lower=1> M_7;
-    vector[N] Z_7_b2_1;
-    // data for group-level effects of ID 8
-    int<lower=1> J_8[N];
-    int<lower=1> N_8;
-    int<lower=1> M_8;
-    vector[N] Z_8_b2_1;
-    // data for group-level effects of ID 9
-    int<lower=1> J_9[N];
-    int<lower=1> N_9;
-    int<lower=1> M_9;
-    vector[N] Z_9_b2_1;
-    int prior_only;  // should the likelihood be ignored?
-  }
-  transformed data {
-  }
-  parameters {
-    vector<lower=0>[K_b0] b_b0;  // population-level effects
-    vector<lower=0>[K_b1] b_b1;  // population-level effects
-    vector<lower=0>[K_b2] b_b2;  // population-level effects
-    real<lower=0> sigma;  // residual SD
-    vector<lower=0>[M_1] sd_1;  // group-level standard deviations
-    vector[N_1] z_1[M_1];  // unscaled group-level effects
-    vector<lower=0>[M_2] sd_2;  // group-level standard deviations
-    vector[N_2] z_2[M_2];  // unscaled group-level effects
-    vector<lower=0>[M_3] sd_3;  // group-level standard deviations
-    vector[N_3] z_3[M_3];  // unscaled group-level effects
-    vector<lower=0>[M_4] sd_4;  // group-level standard deviations
-    vector[N_4] z_4[M_4];  // unscaled group-level effects
-    vector<lower=0>[M_5] sd_5;  // group-level standard deviations
-    vector[N_5] z_5[M_5];  // unscaled group-level effects
-    vector<lower=0>[M_6] sd_6;  // group-level standard deviations
-    vector[N_6] z_6[M_6];  // unscaled group-level effects
-    vector<lower=0>[M_7] sd_7;  // group-level standard deviations
-    vector[N_7] z_7[M_7];  // unscaled group-level effects
-    vector<lower=0>[M_8] sd_8;  // group-level standard deviations
-    vector[N_8] z_8[M_8];  // unscaled group-level effects
-    vector<lower=0>[M_9] sd_9;  // group-level standard deviations
-    vector[N_9] z_9[M_9];  // unscaled group-level effects
-  }
-  transformed parameters {
-    // group-level effects
-    vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
-    // group-level effects
-    vector[N_2] r_2_b0_1 = sd_2[1] * (z_2[1]);
-    // group-level effects
-    vector[N_3] r_3_b0_1 = sd_3[1] * (z_3[1]);
-    // group-level effects
-    vector[N_4] r_4_b1_1 = sd_4[1] * (z_4[1]);
-    // group-level effects
-    vector[N_5] r_5_b1_1 = sd_5[1] * (z_5[1]);
-    // group-level effects
-    vector[N_6] r_6_b1_1 = sd_6[1] * (z_6[1]);
-    // group-level effects
-    vector[N_7] r_7_b2_1 = sd_7[1] * (z_7[1]);
-    // group-level effects
-    vector[N_8] r_8_b2_1 = sd_8[1] * (z_8[1]);
-    // group-level effects
-    vector[N_9] r_9_b2_1 = sd_9[1] * (z_9[1]);
-  }
-  model {
-    vector[N] mu_b0 = X_b0 * b_b0;
-    vector[N] mu_b1 = X_b1 * b_b1;
-    vector[N] mu_b2 = X_b2 * b_b2;
-    vector[N] mu;
-    for (n in 1:N) {
-      mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n] + r_2_b0_1[J_2[n]] * Z_2_b0_1[n] + r_3_b0_1[J_3[n]] * Z_3_b0_1[n];
-      mu_b1[n] += r_4_b1_1[J_4[n]] * Z_4_b1_1[n] + r_5_b1_1[J_5[n]] * Z_5_b1_1[n] + r_6_b1_1[J_6[n]] * Z_6_b1_1[n];
-      mu_b2[n] += r_7_b2_1[J_7[n]] * Z_7_b2_1[n] + r_8_b2_1[J_8[n]] * Z_8_b2_1[n] + r_9_b2_1[J_9[n]] * Z_9_b2_1[n];
-      // compute non-linear predictor
-      mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
-    }
-    // priors including all constants
-    target += gamma_lpdf(b_b0 | 4, 3)
-      - 1 * gamma_lccdf(0 | 4, 3);
-    target += gamma_lpdf(b_b1 | 5, 1.2)
-      - 1 * gamma_lccdf(0 | 5, 1.2);
-    target += gamma_lpdf(b_b2 | 4, 3)
-      - 1 * gamma_lccdf(0 | 4, 3);
-    target += student_t_lpdf(sigma | 3, 0, 33)
-      - 1 * student_t_lccdf(0 | 3, 0, 33);
-    target += cauchy_lpdf(sd_1 | 0, 0.3)
-      - 1 * cauchy_lccdf(0 | 0, 0.3);
-    target += normal_lpdf(z_1[1] | 0, 1);
-    target += cauchy_lpdf(sd_2 | 0, 0.3)
-      - 1 * cauchy_lccdf(0 | 0, 0.3);
-    target += normal_lpdf(z_2[1] | 0, 1);
-    target += cauchy_lpdf(sd_3 | 0, 0.3)
-      - 1 * cauchy_lccdf(0 | 0, 0.3);
-    target += normal_lpdf(z_3[1] | 0, 1);
-    target += cauchy_lpdf(sd_4 | 0, 0.2)
-      - 1 * cauchy_lccdf(0 | 0, 0.2);
-    target += normal_lpdf(z_4[1] | 0, 1);
-    target += cauchy_lpdf(sd_5 | 0, 0.2)
-      - 1 * cauchy_lccdf(0 | 0, 0.2);
-    target += normal_lpdf(z_5[1] | 0, 1);
-    target += cauchy_lpdf(sd_6 | 0, 0.2)
-      - 1 * cauchy_lccdf(0 | 0, 0.2);
-    target += normal_lpdf(z_6[1] | 0, 1);
-    target += cauchy_lpdf(sd_7 | 0, 0.2)
-      - 1 * cauchy_lccdf(0 | 0, 0.2);
-    target += normal_lpdf(z_7[1] | 0, 1);
-    target += cauchy_lpdf(sd_8 | 0, 0.2)
-      - 1 * cauchy_lccdf(0 | 0, 0.2);
-    target += normal_lpdf(z_8[1] | 0, 1);
-    target += cauchy_lpdf(sd_9 | 0, 0.2)
-      - 1 * cauchy_lccdf(0 | 0, 0.2);
-    target += normal_lpdf(z_9[1] | 0, 1);
-    // likelihood including all constants
-    if (!prior_only) {
-      target += normal_lpdf(Y | mu, sigma);
-    }
-  }
-  generated quantities {
-  }
-#+END_SRC
-
-
 #+begin_src R
-  model_multipleSpecies_nestedGenus_multipleCities_homo
+  model_multipleSpecies_nestedGenus_multipleCities_homo_cor
 #+end_src
 
 #+RESULTS:
