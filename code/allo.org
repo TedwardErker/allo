@@ -247,7 +247,12 @@ Urban trees have important ecological effects in cities that can
 affect human wellbeing.  Forecasting ecosystem service provision by
 trees requires a model of tree growth, since most services are
 directly related to tree size (e.g. carbon storage in biomass, air
-filtration by leaf area).
+filtration by leaf area).  Until recently urban tree growth equations
+have been rare because of lacking data.  In 2016 the US Forest Service
+published the "Urban Tree Database and Allometric Equations", a
+valuable dataset of the most common tree species in a dozen cities
+across the US.  In addition to allometric equations, they also provide
+growth equations.
 
 * Methods
 ** Data

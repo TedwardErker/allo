@@ -252,7 +252,12 @@ have been rare because of lacking data.  In 2016 the US Forest Service
 published the "Urban Tree Database and Allometric Equations", a
 valuable dataset of the most common tree species in a dozen cities
 across the US.  In addition to allometric equations, they also provide
-growth equations.  
+growth equations.
+
+While they are great step forward and an incredible resource, their
+growth equations have several limitations.  First, their method of
+model selection simply chose the curve with the lowest AIC.  This
+meant that any amount of extrapolation was highly suspect.  
 
 * Methods
 ** Data
