@@ -6840,11 +6840,16 @@ between the parameters.
 
 quote:
 
-prior is not normal, so how could they be drawn from a normal?
+prior is not normal, so how could they be drawn from a normal?  (they
+must be positive, I'm using gamma
 
 I don't see it in the stan code
 
 the
+
+Questions:
+1) Is this just the case in linear models?
+2) Does the prior on the parameters, or the 
 
 
 
