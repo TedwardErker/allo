@@ -222,6 +222,25 @@ see pg 168
 they follow frelich 1992
  look at his equation form.
 also
+* Introduction
+Big problem   - urban ecosystem services depends on trees. predicting
+depends on growth
+narrower within - urban trees growth differently, there had been a
+lack of data.
+yet narrower
+summary of approach and results
+
+1) theoretically sound model form (through use of weibull)
+2) expansion of predictive envelope/potential (through use of
+   multilevel modeling).
+
+Objective is to show how multilevel models can be used to predict tree
+growth
+1) Information about species functional groups and phylogeny to
+   predict growth for unobserved species
+2) Information about
+3) Information about climate to predict growth in unobserved cities
+4)
 
 * Methods
 ** Data
@@ -4752,6 +4771,16 @@ Model selection
 *** explaining priors
 can't be negative...  in brms nonlinear advanced, mention the
 importance of setting strong priors.  Also non negative.
+
+* Results
+* Discussoins
+
+make better
+- more data, duh, perhaps used results to identify where to sample
+- more cities, this is important for interpolation across climate
+  space.
+- better climate predictors
+-
 
 * Exploring age and dbh
 ** load libraries
