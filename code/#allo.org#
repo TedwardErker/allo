@@ -232,6 +232,11 @@ summary of approach and results
 
 Objective is to show how multilevel models can be used to predict tree
 growth 
+1) Information about species functional groups and phylogeny to
+   predict growth for unobserved species
+2) Information about 
+3) Information about climate to predict growth in unobserved cities
+4) 
 
 * Methods
 ** Data
