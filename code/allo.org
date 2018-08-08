@@ -4277,43 +4277,61 @@ then plot my equations on.
  Family: gaussian
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1 + (1 | City) + (1 | Species)
-         b1 ~ 1 + (1 | City) + (1 | Species)
-         b2 ~ 1 + (1 | City) + (1 | Species)
+         b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Species)
+         b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Species)
+         b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Species)
    Data: dm (Number of observations: 1192)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
 Group-Level Effects:
 ~City (Number of levels: 4)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.07      0.79     0.28     3.35         38 1.11
-sd(b1_Intercept)     0.56      0.43     0.16     1.59         62 1.05
-sd(b2_Intercept)     0.31      0.22     0.08     0.91         12 1.08
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.56      0.28     0.24     1.27       2182
+sd(b1_Intercept)                   0.37      0.19     0.16     0.87       1710
+sd(b2_Intercept)                   0.21      0.08     0.10     0.42       2172
+cor(b0_Intercept,b1_Intercept)     0.14      0.35    -0.56     0.76       2862
+cor(b0_Intercept,b2_Intercept)    -0.54      0.33    -0.95     0.27       2953
+cor(b1_Intercept,b2_Intercept)    -0.35      0.34    -0.87     0.39       3356
+                               Rhat
+sd(b0_Intercept)               1.00
+sd(b1_Intercept)               1.00
+sd(b2_Intercept)               1.00
+cor(b0_Intercept,b1_Intercept) 1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b1_Intercept,b2_Intercept) 1.00
 
 ~Species (Number of levels: 8)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.79      0.84     0.13     4.00         14 1.31
-sd(b1_Intercept)     0.37      0.22     0.11     1.02         20 1.23
-sd(b2_Intercept)     0.11      0.05     0.05     0.23         77 1.04
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.56      0.20     0.29     1.07       1659
+sd(b1_Intercept)                   0.30      0.09     0.17     0.53       2366
+sd(b2_Intercept)                   0.10      0.03     0.05     0.17       2264
+cor(b0_Intercept,b1_Intercept)    -0.47      0.26    -0.86     0.15       2580
+cor(b0_Intercept,b2_Intercept)    -0.35      0.29    -0.81     0.29       2843
+cor(b1_Intercept,b2_Intercept)    -0.48      0.27    -0.89     0.14       2651
+                               Rhat
+sd(b0_Intercept)               1.00
+sd(b1_Intercept)               1.00
+sd(b2_Intercept)               1.00
+cor(b0_Intercept,b1_Intercept) 1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b1_Intercept,b2_Intercept) 1.00
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.46      0.51     0.65     2.55        102 1.01
-b1_Intercept     1.01      0.31     0.54     1.71         87 1.02
-b2_Intercept     1.00      0.26     0.30     1.44          8 1.37
+b0_Intercept     1.50      0.34     0.84     2.20       1689 1.00
+b1_Intercept     1.16      0.25     0.75     1.73       1595 1.00
+b2_Intercept     1.08      0.11     0.86     1.30       2065 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     9.34      6.37     7.86    17.62         25 1.15
+sigma     8.16      0.17     7.84     8.51       4000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 251 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+Warning message:
+There were 43 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -4331,6 +4349,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
     geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
     facet_grid(City ~ Species)
 #+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_dm_multipleSpecies_multipleCities_homo_cor.png]]
 
 
 
