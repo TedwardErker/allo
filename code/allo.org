@@ -242,6 +242,13 @@ growth
 3) Information about climate to predict growth in unobserved cities
 4)
 
+
+Urban trees have important ecological effects in cities that can
+affect human wellbeing.  Forecasting ecosystem service provision by
+trees requires a model of tree growth, since most services are
+directly related to tree size (e.g. carbon storage in biomass, air
+filtration by leaf area).
+
 * Methods
 ** Data
 repeat measures on the same individuals would help much.
