@@ -2513,6 +2513,46 @@ stancode(model_fram_ftcollins_homo)
 
 #+end_src
 
+#+begin_src R
+summary(m_generated_singleSpecies_multipleLocations_homo_nocor)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ (1 | City)
+         b1 ~ (1 | City)
+         b2 ~ (1 | City)
+   Data: dt (Number of observations: 80)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Group-Level Effects:
+~City (Number of levels: 4)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.36      0.17     0.16     0.80        827 1.00
+sd(b1_Intercept)     0.20      0.16     0.01     0.63       1095 1.00
+sd(b2_Intercept)     0.09      0.07     0.01     0.27        650 1.00
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.19      0.20     0.77     1.61        735 1.00
+b1_Intercept     1.73      0.20     1.38     2.17       1359 1.00
+b2_Intercept     0.95      0.07     0.81     1.08        818 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     2.77      0.24     2.36     3.30       2000 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 13 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
 
 #+begin_src R
 summary(m_generated_singleSpecies_multipleLocations_homo_cor)
@@ -2598,6 +2638,39 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 
 #+RESULTS:
 [[file:../figs/marginal2_m_generated_singleSpecies_multipleLocations_homo.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_nocor_m_generated_singleSpecies_multipleLocations_homo.png
+    cond <- data.frame(City = c("a","b","c","d"))
+
+    me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo_nocor,
+                           effects = c("AGE"), conditions = cond, re_formula = NULL)
+
+
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = m_generated_singleSpecies_multipleLocations_homo$data, aes(x = AGE, y = DBH), alpha = .2) +
+      facet_wrap(~City)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_nocor_m_generated_singleSpecies_multipleLocations_homo.png]]
+
+
+#+begin_src R
+LOO(m_generated_singleSpecies_multipleLocations_homo_cor,m_generated_singleSpecies_multipleLocations_homo_nocor)
+#+end_src
+
+#+RESULTS:
+:                                                                                                                LOOIC
+: m_generated_singleSpecies_multipleLocations_homo_cor                                                          398.40
+: m_generated_singleSpecies_multipleLocations_homo_nocor                                                        399.28
+: m_generated_singleSpecies_multipleLocations_homo_cor - m_generated_singleSpecies_multipleLocations_homo_nocor  -0.88
+:                                                                                                                  SE
+: m_generated_singleSpecies_multipleLocations_homo_cor                                                          10.51
+: m_generated_singleSpecies_multipleLocations_homo_nocor                                                        10.73
+: m_generated_singleSpecies_multipleLocations_homo_cor - m_generated_singleSpecies_multipleLocations_homo_nocor  0.54
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts_all.png
     ggplot() +
@@ -2809,24 +2882,21 @@ marginal_effects(model_fram_homo, re_formula = NULL, conditions = cond)
 [[file:../figs/marginal_fram_homo_city_wPoints.png]]
 
 *** single species, multiple locations, precipitation predictors for locations, homoskedasticy
-I'll do other climate predictors when I have more locations, I only
-have 4 now which isn't enough for multiple group level predictors.
-
 **** generate data
 #+begin_src R
-    k <- 5
+    k <- 12
     expect_nk <- 30
     n <- k * expect_nk
-    breaks <- c(0,sort(sample(1:100,(k-1))),n)
+    breaks <- c(0,sort(sample(1:n,(k-1))),n)
     nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
     nk
 
-  precip <- c(600, 400, 400, 250, 800) / 1000
+  precip <- c(200, 100, 1500, 600, 700, 500, 1400, 600, 400, 400, 250, 800) / 1000
   precip <- precip - mean(precip)
 
-    u_precip_b0 <- 1
-    u_precip_b1 <- .5
-    u_precip_b2 <- .5
+    u_precip_b0 <- .5
+    u_precip_b1 <- -.3
+    u_precip_b2 <- .3
 
     #with centered city level predictors this is the mean
     u_intercept_b0 <- 1
@@ -2834,11 +2904,11 @@ have 4 now which isn't enough for multiple group level predictors.
     u_intercept_b2 <- 1
 
       mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
-      sigma_b0 <- .1
+      sigma_b0 <- .3
       mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
-      sigma_b1 <- .1
+      sigma_b1 <- .3
       mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
-      sigma_b2 <- .1
+      sigma_b2 <- .3
 
       sigma <- 3
 
@@ -2862,7 +2932,8 @@ have 4 now which isn't enough for multiple group level predictors.
 #+end_src
 
 #+RESULTS:
-: [1] 27 24 18 20 61
+:
+: [1] 17 20 60 34 17 45 19 95 19  5 19 10
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png :height 200
 library(gridExtra)
@@ -3157,22 +3228,25 @@ generated quantities {
 **** fit to real data
 #+begin_src R :var clim=city_climate
 d <- readRDS("../data/tidy_age_dbh.rds")
-fram <- filter(d, SpCode == "FRAM")
-    fram_clim <- left_join(fram,clim) %>%
+list <- filter(d, SpCode == "LIST")
+    list_clim <- left_join(list,clim) %>%
         mutate(Precip = (Precip - mean(Precip))/ 1000)
 #+end_src
 
-#+begin_src R :exports results :results graphics :file ../figs/fram_clim.png :height 200 :width 700
-pc <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+#+RESULTS:
+: Joining, by = c("Region", "City")
+
+#+begin_src R :exports results :results graphics :file ../figs/list_clim.png :height 200 :width 700
+pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
+pp <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
 grid.arrange(pc,pp, nrow =1)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/fram_clim.png]]
+[[file:../figs/list_clim.png]]
 
 #+begin_src R
-model_fram_precip_homo <- update(m_generated_singleSpecies_multipleLocations_GroupPred_homo, chains = 2, cores = 2, newdata = fram_clim)
+model_list_precip_homo <- update(m_generated_singleSpecies_multipleLocations_GroupPred_homo, chains = 2, cores = 2, newdata = list_clim)
 #+end_src
 
 #+RESULTS:
