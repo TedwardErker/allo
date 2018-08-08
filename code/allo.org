@@ -2431,8 +2431,8 @@ stancode(model_fram_ftcollins_homo)
 **** generate data
 
 #+begin_src R
-  k <- 12
-  n <- 200
+  k <- 4
+  n <- 80
   breaks <- c(0,sort(sample(1:n,(k-1))),n)
   nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
   nk
@@ -2464,8 +2464,7 @@ stancode(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
-:
-: [1] 32 14 20 22  9 11  3  7 10 20 26 26
+: [1] 20 17 20 23
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
@@ -2477,22 +2476,46 @@ stancode(model_fram_ftcollins_homo)
 **** fit to generated data
 
 #+begin_src R :results output
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ (1 | ID | City),
-                     b1 ~ (1 | ID | City),
-                     b2 ~ (1 | ID | City),
-                     nl = T)
+            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                       b0 ~ (1 | ID | City),
+                       b1 ~ (1 | ID | City),
+                       b2 ~ (1 | ID | City),
+                       nl = T)
 
-  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-               prior(gamma(4, 3), nlpar = "b1",lb = 0),
-               prior(gamma(4, 3), nlpar = "b2",lb = 0))
+      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
+                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
-m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+
+  m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
+#+begin_src R :results output
+            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                       b0 ~ (1 | City),
+                       b1 ~ (1 | City),
+                       b2 ~ (1 | City),
+                       nl = T)
+
+      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
+                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+
+
+  m_generated_singleSpecies_multipleLocations_homo_nocor <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
+
+#+end_src
+
+
 #+begin_src R
-summary(m_generated_singleSpecies_multipleLocations_homo)
+summary(m_generated_singleSpecies_multipleLocations_homo_cor)
 #+end_src
 
 #+RESULTS:
@@ -2503,44 +2526,42 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ (1 | ID | City)
          b1 ~ (1 | ID | City)
          b2 ~ (1 | ID | City)
-   Data: dt (Number of observations: 100)
+   Data: dt (Number of observations: 80)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Group-Level Effects:
 ~City (Number of levels: 4)
                                Estimate Est.Error l-95% CI u-95% CI Eff.Sample
-sd(b0_Intercept)                  13.03     17.25     0.28    59.06          1
-sd(b1_Intercept)                   1.46      1.53     0.05     5.81          2
-sd(b2_Intercept)                   0.16      0.13     0.01     0.51        148
-cor(b0_Intercept,b1_Intercept)     0.26      0.49    -0.78     0.94          4
-cor(b0_Intercept,b2_Intercept)     0.16      0.52    -0.85     0.95          4
-cor(b1_Intercept,b2_Intercept)     0.20      0.51    -0.82     0.96          5
+sd(b0_Intercept)                   0.39      0.21     0.16     0.95        565
+sd(b1_Intercept)                   0.21      0.19     0.01     0.71        895
+sd(b2_Intercept)                   0.10      0.07     0.01     0.29        418
+cor(b0_Intercept,b1_Intercept)    -0.22      0.45    -0.89     0.75       1047
+cor(b0_Intercept,b2_Intercept)    -0.01      0.44    -0.79     0.78        672
+cor(b1_Intercept,b2_Intercept)    -0.03      0.48    -0.88     0.84       1141
                                Rhat
-sd(b0_Intercept)               1.54
-sd(b1_Intercept)               1.22
-sd(b2_Intercept)               1.03
-cor(b0_Intercept,b1_Intercept) 1.09
-cor(b0_Intercept,b2_Intercept) 1.12
-cor(b1_Intercept,b2_Intercept) 1.08
+sd(b0_Intercept)               1.00
+sd(b1_Intercept)               1.00
+sd(b2_Intercept)               1.00
+cor(b0_Intercept,b1_Intercept) 1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b1_Intercept,b2_Intercept) 1.00
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.20      0.52     0.41     2.50        823 1.01
-b1_Intercept     1.27      0.63     0.25     2.27          1 1.67
-b2_Intercept     0.79      0.21     0.48     1.12          1 2.28
+b0_Intercept     1.18      0.22     0.75     1.60        325 1.01
+b1_Intercept     1.74      0.21     1.40     2.21       1002 1.00
+b2_Intercept     0.95      0.07     0.79     1.07        530 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     4.54      1.56     2.66     6.83          1 5.07
+sigma     2.76      0.23     2.36     3.24       1609 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 229 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning message:
+There were 52 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -2560,7 +2581,7 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 [[file:../figs/plot_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal2_m_generated_singleSpecies_multipleLocations_homo.png
     cond <- data.frame(City = c("a","b","c","d"))
 
     me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo,
@@ -2576,33 +2597,18 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_homo.png]]
+[[file:../figs/marginal2_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts_all.png
-
     ggplot() +
         geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__,  ymax = estimate__ + se__, group = City)) +
         geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
         geom_point(data = dt, aes(x = AGE, y = DBH, color = City))
 
-     #  geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-      #   geom_point(data = dt, aes(x = AGE, y = DBH))
-
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_pts_all.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_homo_conditionalCity.png
-  cond <- data.frame(City = c("a","b","c","d"))
-  #marginal_effects(m_generated_singleSpecies_multipleLocations_homo, points = T)
-  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo,
-                         effects = c("AGE"), conditions = cond)
-  plot(me)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_homo_conditionalCity.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
 pp_check(m_generated_singleSpecies_multipleLocations_homo)
