@@ -255,9 +255,22 @@ across the US.  In addition to allometric equations, they also provide
 growth equations.
 
 While they are great step forward and an incredible resource, their
-growth equations have several limitations.  First, their method of
-model selection simply chose the curve with the lowest AIC.  This
-meant that any amount of extrapolation was highly suspect.  
+growth equations have limitations.  First, their method of model
+selection simply chose the curve with the lowest AIC.  This meant that
+any amount of extrapolation was highly suspect.  In the extreme case
+where a species only had two observations in a city, the only possible
+fit was a line. Second, they only fit equations for the most common
+species in each of the cities they sampled.  It is not clear how to
+modify an equation to fit a unobserved species or a unobserved city.
+If red maple was not a species sampled in my city, should I use the
+red maple equation from a climaticly dissimilar city?  Or should I use
+the equation from the species most similar to red maple from my city?
+What if I want to make a prediction about an unobserved species in an
+unobserved city?
+
+We relax these limitations 
+
+
 
 * Methods
 ** Data

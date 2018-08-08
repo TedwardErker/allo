@@ -254,6 +254,20 @@ valuable dataset of the most common tree species in a dozen cities
 across the US.  In addition to allometric equations, they also provide
 growth equations.
 
+While they are great step forward and an incredible resource, their
+growth equations have limitations.  First, their method of
+model selection simply chose the curve with the lowest AIC.  This
+meant that any amount of extrapolation was highly suspect.  In the
+extreme case where a species only had two observations in a city, the
+only possible fit was a line.  Second, they only fit equations for the
+most common species in each of the cities they sampled.  It is not
+clear how to modify an equation to fit a unobserved species or a unobserved city.
+Should the equation that is for the same species but in a distant
+city?  Or the equation from a similar but different species in the
+nearest city?  Third
+
+
+
 * Methods
 ** Data
 repeat measures on the same individuals would help much.
