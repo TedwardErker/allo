@@ -4130,9 +4130,9 @@ p
 
 #+begin_src R :results output
           form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ 1 + (1 | ID | City) + (1 | ID | Species),
-                     b1 ~ 1 + (1 | ID | City) + (1 | ID | Species),
-                     b2 ~ 1 + (1 | ID | City) + (1 | ID | Species),
+                     b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
+                     b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
+                     b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
                      nl = T)
 
       nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
@@ -4143,7 +4143,7 @@ p
                    prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
-m_generated_multipleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+m_generated_multipleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
@@ -4156,41 +4156,61 @@ summary(m_generated_multipleSpecies_multipleLocations_homo)
  Family: gaussian
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1 + (1 | City) + (1 | Species)
-         b1 ~ 1 + (1 | City) + (1 | Species)
-         b2 ~ 1 + (1 | City) + (1 | Species)
+         b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Species)
+         b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Species)
+         b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Species)
    Data: dt (Number of observations: 160)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Group-Level Effects:
 ~City (Number of levels: 2)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.00      1.06     0.14     4.34        407 1.00
-sd(b1_Intercept)     0.81      1.35     0.01     5.27        368 1.00
-sd(b2_Intercept)     0.37      0.49     0.00     1.68         29 1.09
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.22      0.24     0.00     0.86       1281
+sd(b1_Intercept)                   0.37      0.42     0.01     1.56        505
+sd(b2_Intercept)                   0.14      0.12     0.01     0.48        872
+cor(b0_Intercept,b1_Intercept)    -0.08      0.51    -0.91     0.85       1196
+cor(b0_Intercept,b2_Intercept)    -0.08      0.51    -0.90     0.85       1379
+cor(b1_Intercept,b2_Intercept)     0.10      0.48    -0.81     0.90       1028
+                               Rhat
+sd(b0_Intercept)               1.00
+sd(b1_Intercept)               1.00
+sd(b2_Intercept)               1.00
+cor(b0_Intercept,b1_Intercept) 1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b1_Intercept,b2_Intercept) 1.00
 
 ~Species (Number of levels: 4)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.22      0.25     0.01     0.90        540 1.00
-sd(b1_Intercept)     0.33      0.37     0.02     1.24        631 1.01
-sd(b2_Intercept)     0.22      0.19     0.04     0.67         39 1.04
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.18      0.20     0.01     0.70        576
+sd(b1_Intercept)                   0.14      0.15     0.00     0.54        753
+sd(b2_Intercept)                   0.18      0.10     0.05     0.43        603
+cor(b0_Intercept,b1_Intercept)     0.01      0.51    -0.86     0.89       1633
+cor(b0_Intercept,b2_Intercept)    -0.12      0.49    -0.91     0.80        774
+cor(b1_Intercept,b2_Intercept)     0.02      0.51    -0.88     0.91        728
+                               Rhat
+sd(b0_Intercept)               1.00
+sd(b1_Intercept)               1.00
+sd(b2_Intercept)               1.00
+cor(b0_Intercept,b1_Intercept) 1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b1_Intercept,b2_Intercept) 1.01
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.37      0.40     0.62     2.21        463 1.00
-b1_Intercept     1.09      0.37     0.45     1.94        111 1.02
-b2_Intercept     1.15      0.21     0.63     1.59        114 1.01
+b0_Intercept     1.40      0.27     0.87     2.00        865 1.01
+b1_Intercept     1.51      0.42     0.99     2.61        427 1.00
+b2_Intercept     0.83      0.14     0.54     1.13        680 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     4.79      0.29     4.31     5.39         93 1.02
+sigma     5.23      0.31     4.64     5.87       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 289 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 59 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -4201,7 +4221,7 @@ plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
 #+RESULTS:
 [[file:../figs/plot__multipleSpecies_multipleLocations_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo_cor.png :width 800
      cond <- expand.grid(Species = unique(dt$Species), City = unique(dt$City))
      rownames(cond) <- paste0(cond$Species, cond$City)
     me <- marginal_effects(m_generated_multipleSpecies_multipleLocations_homo,
@@ -4216,7 +4236,7 @@ plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo.png]]
+[[file:../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo_cor.png]]
 
 **** fit real data
 #+begin_src R
@@ -4244,7 +4264,7 @@ then plot my equations on.
 
 #+begin_src R
 
-  model_multipleSpecies_multipleCities_homo_4chain <- update(m_generated_multipleSpecies_multipleLocations_homo, newdata = dm, cores = 2, chains = 4, control = list(adapt_delta = .9, max_treedepth = 15))
+  model_multipleSpecies_multipleCities_homo <- update(m_generated_multipleSpecies_multipleLocations_homo, newdata = dm, cores = 2, chains = 4, init_r = .4, control = list(adapt_delta = .9, max_treedepth = 15))
 
 #+end_src
 
@@ -4298,7 +4318,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 **** marginal
-#+begin_src R :exports results :results graphics :file ../figs/marginal_dm_multipleSpecies_multipleCities_homo.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_dm_multipleSpecies_multipleCities_homo_cor.png :width 800
      cond <- expand.grid(Species = unique(dm$Species), City = unique(dm$City))
      rownames(cond) <- paste0(cond$Species, cond$City)
     me <- marginal_effects(model_multipleSpecies_multipleCities_homo,
@@ -4312,7 +4332,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
     facet_grid(City ~ Species)
 #+end_src
 
-#+RESULTS:
+
+
+
 [[file:../figs/marginal_dm_multipleSpecies_multipleCities_homo.png]]
 
 *** multiple species, nested within Genus, multiple locations, no group level predictors, homoskedastic
