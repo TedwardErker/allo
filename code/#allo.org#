@@ -3666,7 +3666,10 @@ lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
                  prior(gamma(4, 3), nlpar = "b2",lb = 0),
                  prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
                  prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+                 prior(cauchy(0,.2), class = "sd", nlpar = "b2"),
+                 prior(cauchy(0,.3), class = "sds", nlpar = "b0"),
+                 prior(cauchy(0,.2), class = "sds", nlpar = "b1"),
+                 prior(cauchy(0,.2), class = "sds", nlpar = "b2"))
 
   model_lg_climate <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .1)
 
@@ -3680,810 +3683,810 @@ Start sampling
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 
 SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-Rejecting initial value:
-
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 
 Initialization between (-0.1, 0.1) failed after 100 attempts. 
  Try specifying initial values, reducing ranges of constrained values, or reparameterizing the model.
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 [1] "Error in sampler$call_sampler(args_list[[i]]) : Initialization failed."
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
 error occurred during calling the sampler; sampling not done
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f8568c7574_file143f83436438b' at line 161)
+Exception: normal_lpdf: Location parameter[1] is inf, but must be finite!  (in 'model143f84342c518_file143f8734b091a' at line 161)
 
 
 Initialization between (-0.1, 0.1) failed after 100 attempts. 
