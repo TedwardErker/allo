@@ -223,6 +223,10 @@ they follow frelich 1992
  look at his equation form.
 also
 * Introduction
+
+maybe the framewaork should be broader, just growth equations for all
+trees with urban tree as a case study/example of application.
+
 Big problem   - urban ecosystem services depends on trees. predicting
 depends on growth
 narrower within - urban trees growth differently, there had been a
@@ -3607,7 +3611,7 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+begin_src R :var clim=city_climate
   d <- readRDS("../data/tidy_age_dbh.rds")
   list <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","ACSA1"))
-  list <- filter(d, SpCode %in% c("ACRU","ACSA1","ACSA2","ACPL", "ACNE"))
+#  list <- filter(d, SpCode %in% c("ACRU","ACSA1","ACSA2","ACPL", "ACNE"))
 
   list_clim <- left_join(list,clim) %>%
             mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
@@ -3811,7 +3815,6 @@ marginal_effects(model_list_climate, effects = "Precip:HDD", surface = T)
 [[file:../figs/marginal_effects_age_list_climate_homo_Points.png]]
 terrible fit.
 
-
 *** species ignorant, multiple locations, multiple climate predictors for locations, homoskedasticy
 **** generate data
 #+begin_src R :var clim=city_climate
@@ -3976,7 +3979,6 @@ pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
-
 **** fit to real data
 #+begin_src R :var clim=city_climate
 d <- readRDS("../data/tidy_age_dbh.rds")
@@ -4098,10 +4100,6 @@ marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
 #+RESULTS:
 [[file:../figs/marginal_effects_age_fram_ageprecip_homo.png]]
 
-
-Very cool, there is an interaction between Precip and HDD.
-
-THe behavior isn't what I had expected, but I need more than just 4 cities!
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_climate_homo_Points.png
     conditions <- unique(select(fram_clim, Precip, HDD))
