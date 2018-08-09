@@ -3610,9 +3610,9 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 **** fit to real data
 #+begin_src R :var clim=city_climate
   d <- readRDS("../data/tidy_age_dbh.rds")
-  lg <- filter(d, SpCode %in% c("LIST","GLTR"))
+  lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA"))
 
-  lg_clim <- left_join(list,clim) %>%
+  lg_clim <- left_join(lg,clim) %>%
             mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
                    HDD = round((HDD - mean(HDD))/ 1000, 4),
                    CDD = round((CDD - mean(CDD))/ 1000, 4))
@@ -3622,18 +3622,18 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+RESULTS:
 : Joining, by = c("Region", "City")
 
-#+begin_src R :exports results :results graphics :file ../figs/list_clim.png :height 200 :width 1000
-pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-ph <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
+#+begin_src R :exports results :results graphics :file ../figs/lg_clim.png :height 200 :width 1000
+pc <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
+pp <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+ph <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
 grid.arrange(pc,pp, ph, nrow =1)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/list_clim.png]]
+[[file:../figs/lg_clim.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/list_clim_sepcities.png
-  pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = CDD, shape = SpCode)) + geom_point() +
+  pc <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = CDD, shape = SpCode)) + geom_point() +
       facet_grid(City~SpCode)
   pc
 #+end_src
@@ -3643,7 +3643,7 @@ grid.arrange(pc,pp, ph, nrow =1)
 
 
 #+begin_src R
-list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
+lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
 #+end_src
 
 #+RESULTS:
@@ -3655,6 +3655,12 @@ list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
                        b2 ~ Precip * HDD + (1 | City),
                        nl = T)
 
+            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                       b0 ~ t2(Precip, HDD) + (1 | City),
+                       b1 ~ t2(Precip, HDD) + (1 | City),
+                       b2 ~ t2(Precip, HDD) + (1 | City),
+                       nl = T)
+
     nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
                  prior(gamma(5, 1), nlpar = "b1", lb = 0),
                  prior(gamma(4, 3), nlpar = "b2",lb = 0),
@@ -3662,7 +3668,7 @@ list_clim <- select(list_clim, DBH, AGE, City, Precip, HDD)
                  prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
                  prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
-  model_list_climate <- brm(form, chains = 2, cores = 2, data = list_clim, prior = nlprior, init_r = .2)
+  model_lg_climate <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .2)
 
 #+end_src
 
