@@ -3612,7 +3612,7 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
   d <- readRDS("../data/tidy_age_dbh.rds")
   lg <- filter(d, SpCode %in% c("LIST","GLTR"))
 
-  lg_clim <- left_join(list,clim) %>%
+  lg_clim <- left_join(lg,clim) %>%
             mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
                    HDD = round((HDD - mean(HDD))/ 1000, 4),
                    CDD = round((CDD - mean(CDD))/ 1000, 4))
