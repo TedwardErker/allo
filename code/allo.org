@@ -3675,14 +3675,6 @@ lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
 
 #+end_src
 
-#+RESULTS:
-: Error: The following priors do not correspond to any model parameter:
-: sd_b1 ~ cauchy(0, 0.1)
-: sd_b2 ~ cauchy(0, 0.1)
-: sds_b1 ~ cauchy(0, 0.1)
-: sds_b2 ~ cauchy(0, 0.1)
-: Function 'get_prior' might be helpful to you.
-
 uncertainty seems low, esp for combinations without observations.
 are betas really drawn from normal??
 should there be correlations?
@@ -3724,7 +3716,7 @@ pg 163 of https://www.casact.org/pubs/forum/08fforum/7Guszcza.pdf
 \]
 
 #+begin_src R
-model_list_climate
+model_lg_climate
 #+end_src
 
 #+RESULTS:
@@ -3732,57 +3724,55 @@ model_list_climate
  Family: gaussian
   Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ Precip * HDD + (1 | City)
-         b1 ~ Precip * HDD + (1 | City)
-         b2 ~ Precip * HDD + (1 | City)
-   Data: list_clim (Number of observations: 428)
+         b0 ~ t2(Precip, HDD) + (1 | City)
+         b1 ~ 1
+         b2 ~ 1
+   Data: lg_clim (Number of observations: 1485)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
+Smooth Terms:
+                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(b0_t2PrecipHDD_1)     0.21      0.44     0.00     1.18        754 1.00
+sds(b0_t2PrecipHDD_2)     0.38      1.01     0.00     2.83        261 1.00
+sds(b0_t2PrecipHDD_3)     0.41      0.81     0.00     2.83        615 1.00
+
 Group-Level Effects:
-~City (Number of levels: 11)
+~City (Number of levels: 14)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.96      0.70     0.02     2.47         42 1.03
-sd(b1_Intercept)     2.60      0.97     1.20     5.00        255 1.02
-sd(b2_Intercept)     0.13      0.11     0.00     0.43         88 1.02
+sd(b0_Intercept)     0.39      0.15     0.19     0.75        639 1.00
 
 Population-Level Effects:
-              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      1.38      0.38     0.67     2.09         77 1.01
-b0_Precip         0.74      0.36     0.23     1.65        614 1.00
-b0_HDD            0.99      0.41     0.31     1.85         93 1.01
-b0_Precip:HDD     1.79      0.73     0.57     3.30         70 1.01
-b1_Intercept      2.16      0.75     0.99     3.96        310 1.00
-b1_Precip         2.51      1.13     0.82     5.17        514 1.00
-b1_HDD            2.27      0.90     0.89     4.46        406 1.00
-b1_Precip:HDD     4.20      1.58     1.71     7.75        652 1.00
-b2_Intercept      1.00      0.07     0.86     1.15        376 1.00
-b2_Precip         0.35      0.14     0.14     0.67        260 1.00
-b2_HDD            0.23      0.07     0.11     0.39        300 1.00
-b2_Precip:HDD     0.46      0.16     0.22     0.84        333 1.00
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept         2.25      0.51     1.53     3.55        863 1.00
+b0_t2PrecipHDD_1     0.20      0.11     0.06     0.46       1147 1.00
+b0_t2PrecipHDD_2     0.29      0.12     0.11     0.58        945 1.00
+b0_t2PrecipHDD_3     0.46      0.19     0.17     0.92        836 1.00
+b1_Intercept         1.03      0.15     0.69     1.30       1102 1.00
+b2_Intercept         0.92      0.03     0.86     0.99       1334 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     7.91      0.28     7.40     8.46       1290 1.00
+sigma     9.54      0.17     9.21     9.89       2000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 48 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 1 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png :height 1000 :width 1000
-mcmc_trace(as.matrix(model_list_climate))
+mcmc_trace(as.matrix(model_lg_climate))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/mcmctrace_fram_climate_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_climate_homo.png
-pp_check(model_list_climate)
+pp_check(model_lg_climate)
 #+end_src
 
 #+RESULTS:
@@ -3792,44 +3782,44 @@ the parameters may not be linear.  Also, I may need to include
 Temperature related covariates
 
 **** marginal effects
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_age_homo.png
-marginal_effects(model_list_climate, effects = "AGE:Precip")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_age_homo.png
+marginal_effects(model_lg_climate, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_list_age_homo.png]]
+[[file:../figs/marginal_effects_age_lg_age_homo.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_age_HDD_homo.png
-marginal_effects(model_list_climate, effects = "AGE:HDD")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_age_HDD_homo.png
+marginal_effects(model_lg_climate, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_list_age_HDD_homo.png]]
+[[file:../figs/marginal_effects_age_lg_age_HDD_homo.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_surface_homo.png
-marginal_effects(model_list_climate, effects = "Precip:HDD", surface = T)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_surface_homo.png
+marginal_effects(model_lg_climate, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_list_surface_homo.png]]
+[[file:../figs/marginal_effects_age_lg_surface_homo.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_list_climate_homo_Points.png
-    conditions <- unique(select(list_clim, Precip, HDD))
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_climate_homo_Points.png
+    conditions <- unique(select(lg_clim, Precip, HDD))
 
-  me <- marginal_effects(model_list_climate, effects = "AGE", conditions = conditions, re_formula = NA)
+  me <- marginal_effects(model_lg_climate, effects = "AGE", conditions = conditions, re_formula = NA)
 
     ggplot(me$AGE) +
           geom_line(aes(x = AGE, y = estimate__)) +
         geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = list_clim, aes(x = AGE, y = DBH)) +
+        geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
         facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_age_list_climate_homo_Points.png]]
-terrible fit.
+[[file:../figs/marginal_effects_age_lg_climate_homo_Points.png]]
+
 
 *** species ignorant, multiple locations, multiple climate predictors for locations, homoskedasticy
 **** generate data
