@@ -3649,16 +3649,18 @@ lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
 #+RESULTS:
 
 #+begin_src R
+
+            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                       b0 ~ t2(Precip, HDD) + (1 | City),
+                       b1 ~ (1 | City), #t2(Precip, HDD) + (1 | City),
+                       b2 ~ (1 | City), #t2(Precip, HDD) + (1 | City),
+                       nl = T)
+
+
             form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                        b0 ~ Precip * HDD + (1 | City),
                        b1 ~ Precip * HDD + (1 | City),
                        b2 ~ Precip * HDD + (1 | City),
-                       nl = T)
-
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ t2(Precip, HDD) + (1 | City),
-                       b1 ~ t2(Precip, HDD) + (1 | City),
-                       b2 ~ t2(Precip, HDD) + (1 | City),
                        nl = T)
 
     nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
@@ -3666,29 +3668,14 @@ lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
                  prior(gamma(4, 3), nlpar = "b2",lb = 0),
                  prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                  prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b0"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
+                 prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+#                 prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
+  #               prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
+   #              prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
-  model_lg_climate <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = 0)
+  model_lg_climate <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .1)
 
 #+end_src
-
-#+RESULTS:
-#+begin_example
-Error: unexpected ',' in:
-"          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ t2(Precip, HDD) + (1 | City) + ,"
-Error: unexpected ',' in "                     b1 ~ t2(Precip, HDD) + (1 | City),"
-Error: unexpected ',' in "                     b2 ~ t2(Precip, HDD) + (1 | City),"
-Error: unexpected ')' in "                     nl = T)"
-Error: The following priors do not correspond to any model parameter:
-sds_b0 ~ cauchy(0, 0.1)
-sds_b1 ~ cauchy(0, 0.1)
-sds_b2 ~ cauchy(0, 0.1)
-Function 'get_prior' might be helpful to you.
-#+end_example
 
 uncertainty seems low, esp for combinations without observations.
 are betas really drawn from normal??
