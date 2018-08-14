@@ -3658,8 +3658,8 @@ lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
 
             form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                        b0 ~ t2(Precip, HDD) + (1 | City),
-                       b1 ~ t2(Precip, HDD) + (1 | City),
-                       b2 ~ t2(Precip, HDD) + (1 | City),
+                       b1 ~ Precip * HDD + (1 | City),
+                       b2 ~ Precip * HDD + (1 | City),
                        nl = T)
 
 
@@ -3668,10 +3668,10 @@ lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
                  prior(gamma(4, 3), nlpar = "b2",lb = 0),
                  prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                  prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b0"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
+                 prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+                 prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
+#                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
+ #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
   model_lg_climate <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .1)
 
