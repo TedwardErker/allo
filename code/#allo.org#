@@ -4829,7 +4829,7 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
   d <- readRDS("../data/tidy_age_dbh.rds") %>%
       mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
 
-  lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA"))
+  lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "ACPL", "ULAM", "ULPU"))
 
   lg_clim <- left_join(lg,clim) %>%
             mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
@@ -4841,26 +4841,24 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
 : Joining, by = c("Region", "City")
 
 #+begin_src R
+              form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+                         b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / SpCode),
+                         b1 ~ (1 | City)  + ( 1 | Genus / SpCode),
+                         b2 ~ (1 | City) + ( 1 | Genus / SpCode),
+                         nl = T)
 
 
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ t2(Precip, HDD) + (1 | City),
-                       b1 ~ (1 | City)  + (( 1 | Genus / SpCode),,
-                       b2 ~ (1 | City) + ( 1 | Genus / SpCode),
-                       nl = T)
+      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
+                   prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+                   prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+                   prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+                   prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
+  #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
+   #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
-
-    nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                 prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                 prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
-#                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
- #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
-
-  model_lg_climate_GenSp <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .1)
+    model_lg_climate_GenSp <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
 
 #+end_src
 *** Full model
