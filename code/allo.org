@@ -4861,6 +4861,142 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
     model_lg_climate_GenSp <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
 
 #+end_src
+
+#+begin_src R
+model_lg_climate_GenSp
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ t2(Precip, HDD) + (1 | City) + (1 | Genus/SpCode)
+         b1 ~ (1 | City) + (1 | Genus/SpCode)
+         b2 ~ (1 | City) + (1 | Genus/SpCode)
+   Data: lg_clim (Number of observations: 2953)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Smooth Terms:
+                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(b0_t2PrecipHDD_1)     0.29      0.56     0.00     2.00        601 1.00
+sds(b0_t2PrecipHDD_2)     0.24      0.56     0.00     1.39        601 1.00
+sds(b0_t2PrecipHDD_3)     0.61      1.79     0.01     6.26        156 1.01
+
+Group-Level Effects:
+~City (Number of levels: 14)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.16      0.20     0.00     0.70         69 1.01
+sd(b1_Intercept)     0.18      0.06     0.09     0.33        675 1.00
+sd(b2_Intercept)     0.11      0.03     0.07     0.18        505 1.00
+
+~Genus (Number of levels: 7)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.30      0.35     0.00     1.11        139 1.01
+sd(b1_Intercept)     0.09      0.08     0.00     0.28        560 1.00
+sd(b2_Intercept)     0.07      0.05     0.00     0.19        518 1.00
+
+~Genus:SpCode (Number of levels: 13)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.52      0.21     0.22     1.03        471 1.00
+sd(b1_Intercept)     0.22      0.09     0.08     0.42        272 1.00
+sd(b2_Intercept)     0.10      0.03     0.05     0.18        662 1.00
+
+Population-Level Effects:
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept         2.35      0.33     1.69     3.04        378 1.00
+b0_t2PrecipHDD_1     0.49      0.13     0.29     0.79        287 1.00
+b0_t2PrecipHDD_2     0.40      0.17     0.13     0.79        643 1.00
+b0_t2PrecipHDD_3     0.62      0.23     0.26     1.14        309 1.00
+b1_Intercept         0.97      0.12     0.74     1.23        625 1.00
+b2_Intercept         0.94      0.06     0.82     1.06        472 1.01
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     9.85      0.13     9.59    10.11       2000 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 27 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_lg_climate_GenSp.png
+pp_check(model_lg_climate_GenSp)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_lg_climate_GenSp.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_age_precip_homo.png
+marginal_effects(model_lg_climate_GenSp, effects = "AGE:Precip")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_age_precip_homo.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_age_HDD_homo.png
+marginal_effects(model_lg_climate_GenSp, effects = "AGE:HDD")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_age_HDD_homo.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_surface_homo.png
+marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_surface_homo.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_homo_Points.png
+    conditions <- unique(select(lg_clim, Precip, HDD))
+
+  me <- marginal_effects(model_lg_climate_GenSp, effects = "AGE", conditions = conditions, re_formula = NA)
+
+    ggplot(me$AGE) +
+          geom_line(aes(x = AGE, y = estimate__)) +
+        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+        geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
+        facet_wrap(~Precip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_homo_Points.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_homo_Points_hddprecip.png
+
+    conditions <- unique(select(lg_clim, Genus, SpCode))
+
+  me <- marginal_effects(model_lg_climate_GenSp, effects = "AGE", conditions = conditions, re_formula = NULL)
+
+    ggplot(me$AGE) +
+        geom_line(aes(x = AGE, y = estimate__, color = SpCode)) +
+        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = SpCode, fill = SpCode), alpha = .3) +
+        geom_point(data = lg_clim, aes(x = AGE, y = DBH, color = SpCode)) +
+        facet_wrap(~Genus)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_homo_Points_hddprecip.png]]
+
+
+
+#+begin_src R
+saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
+#+end_src
+
+#+RESULTS:
+
+
+
 *** Full model
 
 \[
