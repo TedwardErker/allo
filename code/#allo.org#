@@ -4959,7 +4959,7 @@ marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_homo_Points.png
     conditions <- unique(select(lg_clim, Precip, HDD))
 
-  me <- marginal_effects(model_lg_climate, effects = "AGE", conditions = conditions, re_formula = NA)
+  me <- marginal_effects(model_lg_climate_GenSp, effects = "AGE", conditions = conditions, re_formula = NA)
 
     ggplot(me$AGE) +
           geom_line(aes(x = AGE, y = estimate__)) +
@@ -4967,6 +4967,26 @@ marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
         geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
         facet_wrap(~Precip)
 #+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_homo_Points.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_homo_Points_hddprecip.png
+
+    conditions <- unique(select(lg_clim, Genus, SpCode))
+
+  me <- marginal_effects(model_lg_climate_GenSp, effects = "AGE", conditions = conditions, re_formula = NULL)
+
+    ggplot(me$AGE) +
+        geom_line(aes(x = AGE, y = estimate__, color = SpCode)) +
+        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = SpCode, fill = SpCode), alpha = .3) +
+        geom_point(data = lg_clim, aes(x = AGE, y = DBH, color = SpCode)) +
+        facet_wrap(~Genus)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_lg_climate_GenSp_homo_Points_hddprecip.png]]
+
 
 
 #+begin_src R
