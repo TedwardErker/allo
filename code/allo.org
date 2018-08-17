@@ -1478,28 +1478,55 @@ then functions subset data, generate formula and prior, and fit model.
 #+end_src
 
 #+RESULTS:
-: [1] "bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)), b0 ~ 1, b1 ~ 1, b2 ~ 1, nl = T)"
-:               prior class coef group resp dpar nlpar     bound
-: 1       gamma(4, 3)     b                         b0 <lower=0>
-: 2       gamma(5, 1)     b                         b1 <lower=0>
-: 3       gamma(4, 3)     b                         b2 <lower=0>
-: 4    cauchy(0, 0.1)    sd                         b0
-: 5    cauchy(0, 0.1)    sd                         b1
-: 6    cauchy(0, 0.1)    sd                         b2
-: 7 normal(0.3, 0.25)   sds                         b0
+#+begin_example
+Loading required package: Rcpp
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+
+Attaching package: ‘gridExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+[1] "bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)), b0 ~ 1, b1 ~ 1, b2 ~ 1, nl = T)"
+              prior class coef group resp dpar nlpar     bound
+1       gamma(4, 3)     b                         b0 <lower=0>
+2       gamma(5, 1)     b                         b1 <lower=0>
+3       gamma(4, 3)     b                         b2 <lower=0>
+4    cauchy(0, 0.1)    sd                         b0
+5    cauchy(0, 0.1)    sd                         b1
+6    cauchy(0, 0.1)    sd                         b2
+7 normal(0.3, 0.25)   sds                         b0
+#+end_example
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
 would that help?  maybe esp when the climate predictors are in the model.
 
 *** read in data
 #+begin_src R
-d <- readRDS("../data/tidy_age_dbh.rds")
+d <- readRDS("../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
 
 
-*** single species, single location, homoskedasticity
+*** genus: none;  species: single; cities: single; climate: none; hetero: no
+**** set values
+#+begin_src R
+genus <- "none"
+species <- "single"
+cities <- "single"
+climate <- "none"
+hetero <- "no"
+#+end_src
+
+#+RESULTS:
+
 **** generate data
 
 #+begin_src R
@@ -1521,82 +1548,22 @@ dt <- data.frame(x, y)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/test_data_1.png
+#+begin_src R :exports results :results graphics :file ../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png
   ggplot(dt, aes(x = x, y = y)) + geom_point()
 #+end_src
 
 #+RESULTS:
-[[file:../figs/test_data_1.png]]
+[[file:../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png]]
 
 **** test model on generated data
 #+begin_src R
-          form <- bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),
-                     b0 ~ 1,
-                     b1 ~ 1,
-                     b2 ~ 1,
-                     nl = T)
+  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
 
-  nlprior <- c(prior(normal(1, 1), nlpar = "b0"),
-               prior(normal(1, 2), nlpar = "b1"),
-               prior(normal(1, 2), nlpar = "b2"))
 
-          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+  nlprior <- generate_prior(genus, species, cities, climate)
+
+  m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, iter = 500)
 #+end_src
-
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.000535 seconds
-1000 transitions using 10 leapfrog steps per transition would take 5.35 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.000536 seconds
-1000 transitions using 10 leapfrog steps per transition would take 5.36 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 18.1295 seconds (Warm-up)
-               20.4265 seconds (Sampling)
-               38.556 seconds (Total)
-
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 17.5867 seconds (Warm-up)
-               22.8102 seconds (Sampling)
-               40.3969 seconds (Total)
-#+end_example
 
 #+begin_src R
 summary(m)
