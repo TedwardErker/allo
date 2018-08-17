@@ -13,18 +13,14 @@ transformed data {
 parameters {
   real temp_Intercept;  // temporary intercept
   vector[K_sigma] b_sigma;  // population-level effects
-  vector[N] sigma;
 }
 transformed parameters {
 }
 model {
   vector[N] mu = rep_vector(0, N) + temp_Intercept;
-  sigma = X_sigma * b_sigma;
-  for (n in 1:N) {
-    sigma[n] = exp(sigma[n]);
-  }
+  vector[N] sigma = X_sigma * b_sigma;
   // priors including all constants
-  target += student_t_lpdf(temp_Intercept | 3, 0, 10);
+  target += student_t_lpdf(temp_Intercept | 3, -3, 43);
   // likelihood including all constants
   if (!prior_only) {
     target += normal_lpdf(Y | mu, sigma);
@@ -33,5 +29,4 @@ model {
 generated quantities {
   // actual population-level intercept
   real b_Intercept = temp_Intercept;
-  vector[N] o_sigma = log(sigma);
 }

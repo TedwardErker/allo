@@ -1398,16 +1398,6 @@ smaller models to build:
 | many  | many    | many   | b0      | yes    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |       |   |   |   |
 
 
-
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0), prior(gamma(5, 1), nlpar = "b1", lb = 0), prior(gamma(4, 3), nlpar = "b2",lb = 0),
-
-                   prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                   prior(normal(.3,.25), class = "sds", nlpar = "b0"))
-
-
-
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
 
@@ -1437,13 +1427,6 @@ then functions subset data, generate formula and prior, and fit model.
 
       model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-        gen <- "none"
-        sp <- "single"
-        cit <- "single"
-        clim <- "none"
-        het <- "no"
-
-
         generate_formula <- function(model_table, gen, sp, cit, clim, het) {
             f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
             if(f$sigma == "") {
@@ -1452,8 +1435,6 @@ then functions subset data, generate formula and prior, and fit model.
                 bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
             }
         }
-
-      generate_formula(model_table, "none", "single", "single", "none", "no")
 
         generate_prior <- function(gen, sp, cit, clim) {
 
@@ -1476,32 +1457,13 @@ then functions subset data, generate formula and prior, and fit model.
             }
             nlprior
         }
-
-        generate_prior("none", "single", "many", "b0")
-
 #+end_src
-
-#+RESULTS:
-#+begin_example
-[[1]]
-y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
-attr(,"nl")
-[1] TRUE
-<environment: 0x7fe74a60a950>
-              prior class coef group resp dpar nlpar     bound
-1       gamma(4, 3)     b                         b0 <lower=0>
-2       gamma(5, 1)     b                         b1 <lower=0>
-3       gamma(4, 3)     b                         b2 <lower=0>
-4    cauchy(0, 0.1)    sd                         b0
-5    cauchy(0, 0.1)    sd                         b1
-6    cauchy(0, 0.1)    sd                         b2
-7 normal(0.3, 0.25)   sds                         b0
-#+end_example
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
 would that help?  maybe esp when the climate predictors are in the model.
 
 *** read in data
+
 #+begin_src R
 d <- readRDS("../data/age_dbh_testing.rds")
 #+end_src
@@ -1509,6 +1471,9 @@ d <- readRDS("../data/age_dbh_testing.rds")
 #+RESULTS:
 
 *** genus: none;  species: single; cities: single; climate: none; hetero: no
+:PROPERTIES:
+:header-args:R: :tangle genus_none_species_single_cities_single_climate_none_hetero_no.R
+:END:
 **** set values
 #+begin_src R
 genus <- "none"
@@ -1521,6 +1486,9 @@ hetero <- "no"
 #+RESULTS:
 
 **** generate data
+:PROPERTIES:
+:header-args:R: :tangle no
+:END:
 
 #+begin_src R
   n <- 100
@@ -1647,23 +1615,8 @@ pairs(m)
 
 **** fit model to real data
 #+begin_src R
-d <- readRDS("../data/tidy_age_dbh.rds")
-fram <- filter(d, SpCode == "FRAM")
-fram_ftcollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
+d <- readRDS("../data/age_dbh_testing.rds")
 #+end_src
-
-#+RESULTS:
-
-#+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
-ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/fram_age_dbh.png]]
-
-I divide b0 by 100 and multiply b1 by 100 to get the parameters on the same scale ish, with
-the hopes that this speeds things up a bit.
-
 
 #+begin_src R
               form <- bf(DBH ~ (b0*100) * (1 - exp(-(b1/100) * AGE ^ b2)),
