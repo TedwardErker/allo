@@ -556,6 +556,29 @@ library(tidyr)
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:plyr’:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Attaching package: ‘tidyr’
+
+The following object is masked from ‘package:ascii’:
+
+    expand
+#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -895,6 +918,28 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 #+end_src
 
 #+RESULTS:
+**** save subset of data for testing
+#+begin_src R :var clim=city_climate
+
+
+  species.to.filter <- c("LIST","GLTR","MAGR","ACRU","ACSA1", "FRAM","FRPE", "FRVE", "TIAM", "TICO")
+
+  d2 <- d %>%
+      mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
+      rename(Species = SpCode) %>%
+      select(-Leaf, -TreeID) %>%
+      left_join(.,clim) %>%
+      mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+             HDD = round((HDD - mean(HDD))/ 1000, 4),
+             CDD = round((CDD - mean(CDD))/ 1000, 4)) %>%
+    filter(Species %in% species.to.filter)
+
+saveRDS(d2, "../data/age_dbh_testing.rds")
+#+end_src
+
+#+RESULTS:
+: Joining, by = c("Region", "City")
+
 *** a couple plots
 **** species by city raster, black if the combination exists
 #+begin_src R
@@ -1444,7 +1489,7 @@ then functions subset data, generate formula and prior, and fit model.
 : 7 normal(0.3, 0.25)   sds                         b0
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
-would that help?
+would that help?  maybe esp when the climate predictors are in the model.
 
 *** read in data
 #+begin_src R

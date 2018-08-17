@@ -901,7 +901,7 @@ sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
-:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 :    -1.0    12.9   116.1   302.5   389.2  9516.0
 : [1] 0.1143094
 : [1] 0
@@ -919,9 +919,26 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 
 #+RESULTS:
 **** save subset of data for testing
-#+begin_src R
+#+begin_src R :var clim=city_climate
 
+
+  species.to.filter <- c("LIST","GLTR","MAGR","ACRU","ACSA1", "FRAM","FRPE", "FRVE", "TIAM", "TICO")
+
+  d2 <- d %>%
+      mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
+      rename(Species = SpCode) %>%
+      select(-Leaf, -TreeID) %>%
+      left_join(.,clim) %>%
+      mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+             HDD = round((HDD - mean(HDD))/ 1000, 4),
+             CDD = round((CDD - mean(CDD))/ 1000, 4)) %>%
+    filter(Species %in% species.to.filter)
+
+saveRDS(d2, "../data/age_dbh_testing.rds")
 #+end_src
+
+#+RESULTS:
+: Joining, by = c("Region", "City")
 
 *** a couple plots
 **** species by city raster, black if the combination exists
