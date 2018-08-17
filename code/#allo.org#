@@ -1793,6 +1793,12 @@ marginal_effects(model_fram_ftcollins_homo)
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_homo_marginal_effects.png]]
 
+**** tangle
+#+begin_src emacs-lisp
+(org-babel-tangle-file "genus_none_species_single_cities_single_climate_none_hetero_no.R")
+#+end_src
+
+#+RESULTS:
 
 *** single species, single location, heteroskedasticity
 no sigma at low ages.  the width of a twig is genetically controlled.
@@ -7265,7 +7271,7 @@ Questions:
 
 * test
 #+begin_src emacs-lisp
-(org-babel-tangle)
+
 #+end_src
 
 #+RESULTS:
