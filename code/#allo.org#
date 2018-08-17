@@ -1363,6 +1363,18 @@ the different betas.  Thinking about it, the full model makes the most sense...
 | many  | many    | many   | on \beta_0         | yes                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1 |         |
 | many  | many    | many   | on \beta_0         | yes                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE -1 |         |
 *** A script to turn model_table into a script to fit
+
+
+There are many models.  Some will be quite big and take a long time.
+I need to run them remotely, say on krusty.
+
+I can generate a single script that fits all models.
+
+I can generate a script for each model.
+
+each script specifies genus, species, cities, climate, and hetero.
+then functions subset data, generate formula and prior, and fit model.
+
 #+begin_src R
   library(dplyr)
   library(brms)

@@ -1,0 +1,12 @@
+Genus,species,cities,climate,hetero,data,b0,b1,b2,sigma
+none,single,single,none,no,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,
+none,single,single,none,yes,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,sigma ~ AGE -1
+none,many,single,none,no,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ (1 \vert Species),b1 ~ (1 \vert Species),b2 ~ (1 \vert Species),
+many,many,single,none,no,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ (1 \vert Genus / Species),b1 ~ (1 \vert Genus / Species),b2 ~ (1 \vert Genus / Species),
+many,many,single,none,yes,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ (1 \vert Genus / Species),b1 ~ (1 \vert Genus / Species),b2 ~ (1 \vert Genus / Species),sigma ~ AGE -1
+none,single,many,none,no,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ (1 \vert Cities),b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),
+none,single,many,b0,no,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities)",b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),
+none,single,many,none,yes,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),b0 ~ (1 \vert Cities),b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),sigma ~ AGE -1
+none,single,many,b0,yes,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities)",b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),sigma ~ AGE -1
+many,many,many,b0,no,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species)",b1 ~ (1 \vert Cities) + (1 \vert Genus / Species),b2 ~ (1 \vert Cities) + (1 \vert Genus / Species),
+many,many,many,b0,yes,y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species)",b1 ~ (1 \vert Cities) + (1 \vert Genus / Species),b2 ~ (1 \vert Cities) + (1 \vert Genus / Species),sigma ~ AGE -1
