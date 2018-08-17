@@ -1484,13 +1484,15 @@ hetero <- "no"
 #+end_src
 
 #+RESULTS:
-
-**** generate data
-:PROPERTIES:
-:header-args:R: :tangle no
-:END:
-
+**** generate formula and priors
 #+begin_src R
+  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
+
+  nlprior <- generate_prior(genus, species, cities, climate)
+#+end_src
+
+**** test model on generated data
+#+begin_src R :tangle no
   n <- 100
   b0 <- 1.2
   b1 <- 2
@@ -1509,237 +1511,59 @@ dt <- data.frame(x, y)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png :tangle no
   ggplot(dt, aes(x = x, y = y)) + geom_point()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png]]
 
-**** test model on generated data
-#+begin_src R
-  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
-
-  nlprior <- generate_prior(genus, species, cities, climate)
-
+#+begin_src R :tangle no
   m <- brm(form, chains = 1, cores = 1, data = dt, prior = nlprior, iter = 500)
 #+end_src
 
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.000751 seconds
-1000 transitions using 10 leapfrog steps per transition would take 7.51 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:   1 / 500 [  0%]  (Warmup)
-Iteration:  50 / 500 [ 10%]  (Warmup)
-Iteration: 100 / 500 [ 20%]  (Warmup)
-Iteration: 150 / 500 [ 30%]  (Warmup)
-Iteration: 200 / 500 [ 40%]  (Warmup)
-Iteration: 250 / 500 [ 50%]  (Warmup)
-Iteration: 251 / 500 [ 50%]  (Sampling)
-Iteration: 300 / 500 [ 60%]  (Sampling)
-Iteration: 350 / 500 [ 70%]  (Sampling)
-Iteration: 400 / 500 [ 80%]  (Sampling)
-Iteration: 450 / 500 [ 90%]  (Sampling)
-Iteration: 500 / 500 [100%]  (Sampling)
-
- Elapsed Time: 7.68354 seconds (Warm-up)
-               7.84655 seconds (Sampling)
-               15.5301 seconds (Total)
-#+end_example
-
-#+begin_src R
+#+begin_src R :tangle no
 summary(m)
 #+end_src
 
-#+RESULTS:
-#+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
-Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
-         b0 ~ 1
-         b1 ~ 1
-         b2 ~ 1
-   Data: dt (Number of observations: 100)
-Samples: 1 chains, each with iter = 500; warmup = 250; thin = 1;
-         total post-warmup samples = 250
 
-Population-Level Effects:
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.23      0.03     1.17     1.30        133 1.00
-b1_Intercept     2.78      0.30     2.25     3.43         89 1.00
-b2_Intercept     0.90      0.04     0.83     0.98         90 1.00
-
-Family Specific Parameters:
-      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     4.59      0.29     4.07     5.14        125 1.01
-
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).
-#+end_example
-
-
-#+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
+#+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png :tangle no
 plot(m)
 #+end_src
 
-#+RESULTS:
-[[file:../figs/test_1_plot.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png :tangle no
   marginal_effects(m, points = T)
 #+end_src
 
-#+RESULTS:
-[[file:../figs/marginal_1.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png :tangle no
 pairs(m)
 #+end_src
 
-#+RESULTS:
-[[file:../figs/pairs_1.png]]
-
-#+begin_src R
+#+begin_src R :tangle no
 #standata(m)
 #stancode(m)
 #+end_src
 
 **** fit model to real data
 #+begin_src R
-d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  mod <- brm(form, chains = 4, cores = 2, data = d, init_r = .3, prior = nlprior)
 #+end_src
 
-#+begin_src R
-              form <- bf(DBH ~ (b0*100) * (1 - exp(-(b1/100) * AGE ^ b2)),
-                         b0 ~ 1,
-                         b1 ~ 1,
-                         b2 ~ 1,
-                         nl = T)
 
-       nlprior <- c(prior(gamma(1, 2), nlpar = "b0", lb = 0),
-                    prior(gamma(1, 2), nlpar = "b1", lb = 0),
-                    prior(gamma(1, 2), nlpar = "b2", lb = 0))
-
-
-       model_fram_ftcollins_homo <- brm(form, chains = 4, cores = 2, data = fram_ftcollins,
-  #                                     init_r = 1,
-                                       prior = nlprior,  control = list(adapt_delta = 0.8))
+**** tangle
+#+begin_src emacs-lisp
+(org-babel-tangle-file "genus_none_species_single_cities_single_climate_none_hetero_no.R")
 #+end_src
 
 #+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
 
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+**** send to krusty
 
-Gradient evaluation took 0.000362 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.62 seconds.
-Adjust your expectations accordingly!
+**** run on krusty
 
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.000308 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.08 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 9.83651 seconds (Warm-up)
-               10.6709 seconds (Sampling)
-               20.5074 seconds (Total)
-
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 10.1129 seconds (Warm-up)
-               9.95994 seconds (Sampling)
-               20.0729 seconds (Total)
-
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 3).
-
-Gradient evaluation took 0.000924 seconds
-1000 transitions using 10 leapfrog steps per transition would take 9.24 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 4).
-
-Gradient evaluation took 0.000323 seconds
-1000 transitions using 10 leapfrog steps per transition would take 3.23 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  400 / 2000 [ 20%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  600 / 2000 [ 30%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration:  800 / 2000 [ 40%]  (Warmup)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 10.9297 seconds (Warm-up)
-               10.449 seconds (Sampling)
-               21.3787 seconds (Total)
-
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 10.341 seconds (Warm-up)
-               10.9421 seconds (Sampling)
-               21.2831 seconds (Total)
-#+end_example
-
+**** pull back from krusty
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_pairs.png
 pairs(model_fram_ftcollins_homo)
@@ -1792,7 +1616,6 @@ marginal_effects(model_fram_ftcollins_homo)
 
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_homo_marginal_effects.png]]
-
 
 *** single species, single location, heteroskedasticity
 no sigma at low ages.  the width of a twig is genetically controlled.
@@ -7265,7 +7088,7 @@ Questions:
 
 * test
 #+begin_src emacs-lisp
-(org-babel-tangle)
+
 #+end_src
 
 #+RESULTS:
