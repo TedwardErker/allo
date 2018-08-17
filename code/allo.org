@@ -1031,24 +1031,31 @@ The following objects are masked from ‘package:base’:
   - Can fit in Stan
 - think hard about smart priors to help with convergence.
   - I need to address the initial value errors.
-
-
+*** all the models
 
 smaller models to build:
-| Genus | species | cities | climate predictors | heteroskedasticity | formula                                                                                            |
-|-------+---------+--------+--------------------+--------------------+----------------------------------------------------------------------------------------------------|
-|       | single  | single | none               | no                 | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T)                  |
-|       | single  | single | none               | yes                | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  sigma ~ AGE - 1, b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T) |
-|       | many    | single | none               | no                 |                                                                                                    |
-| many  | many    | single | none               | no                 |                                                                                                    |
-| many  | many    | single | none               | yes                |                                                                                                    |
-|       | single  | many   | none               | no                 |                                                                                                    |
-|       | single  | many   | on \beta_0         | no                 |                                                                                                    |
-|       | single  | many   | none               | yes                |                                                                                                    |
-|       | single  | many   | on \beta_0         | yes                |                                                                                                    |
-| many  | many    | many   | on \beta_0         | no                 |                                                                                                    |
-| many  | many    | many   | on \beta_0         | yes                |                                                                                                    |
-|       |         |        |                    |                    |                                                                                                    |
+| Genus | species | cities | climate predictors | heteroskedasticity | b0                    | data                                       | b1           | b2           | sigma          | formula                                                                                            |
+|-------+---------+--------+--------------------+--------------------+-----------------------+--------------------------------------------+--------------+--------------+----------------+----------------------------------------------------------------------------------------------------|
+| none  | single  | single | none               | no                 | b0 ~ 1                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b1 ~ 1       | b2 ~ 1       |                | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T)                  |
+| none  | single  | single | none               | yes                | b0 ~ 1                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              | sigma ~ AGE -1 | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  sigma ~ AGE - 1, b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T) |
+| none  | many    | single | none               | no                 | b0 ~ (1 \vert Species) | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b1 ~ Species | b2 ~ Species |                |                                                                                                    |
+| many  | many    | single | none               | no                 | b0 ~                  | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| many  | many    | single | none               | yes                |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| none  | single  | many   | none               | no                 |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| none  | single  | many   | on \beta_0         | no                 |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| none  | single  | many   | none               | yes                |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| none  | single  | many   | on \beta_0         | yes                |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| many  | many    | many   | on \beta_0         | no                 |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+| many  | many    | many   | on \beta_0         | yes                |                       | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) |              |              |                |                                                                                                    |
+|       |         |        |                    |                    |                       |                                            |              |              |                |                                                                                                    |
+|       |         |        |                    |                    |                       |                                            |              |              |                |                                                                                                    |
+
+build up to the full model, then test relaxing some of the effects on
+the different betas
+
+| Genus | species | cities | climate predictors | heteroskedasticity | data                                       | b0 | b1 | b2 | sigma | formula |
+|-------+---------+--------+--------------------+--------------------+--------------------------------------------+----+----+----+-------+---------|
+
 
 
 *** notes on how to do modeling in brms
