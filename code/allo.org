@@ -1482,7 +1482,6 @@ d <- readRDS("../data/age_dbh_testing.rds")
       library(ggplot2)
       library(gridExtra)
 
-      model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
         generate_formula <- function(model_table, gen, sp, cit, clim, het) {
             f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
@@ -1528,6 +1527,10 @@ hetero <- "no"
 #+RESULTS:
 **** generate formula and priors
 #+begin_src R
+
+      model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+
+
   form <- generate_formula(model_table, genus, species, cities, climate, hetero)
 
   nlprior <- generate_prior(genus, species, cities, climate)
@@ -1590,7 +1593,8 @@ pairs(m)
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 2, data = d, init_r = .3, prior = nlprior)
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 200)
+saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
 
