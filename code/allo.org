@@ -2191,9 +2191,9 @@ plot(x, y, type = "l")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/ttest.png
-x <- seq(0,20,.1)
+x <- seq(0,5,.1)
 y <- dt(x,.2)
-y <- dcauchy(x,0,10)
+y <- dcauchy(x,0,.1)
 plot(x, y, type = "l")
 #+end_src
 
@@ -4854,7 +4854,7 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
                    prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                   prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
+                   prior(normal(.2,.3), class = "sds", nlpar = "b0"))
   #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
    #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
@@ -5039,12 +5039,70 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
 model_lg_climate_GenSp_hetero
 #+end_src
 
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         sigma ~ AGE - 1
+         b0 ~ t2(Precip, HDD) + (1 | City) + (1 | Genus/SpCode)
+         b1 ~ (1 | City) + (1 | Genus/SpCode)
+         b2 ~ (1 | City) + (1 | Genus/SpCode)
+   Data: lg_clim (Number of observations: 2953)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Smooth Terms:
+                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(b0_t2PrecipHDD_1)     5.62     12.38     0.01    42.28          5 1.63
+sds(b0_t2PrecipHDD_2)     0.70      2.61     0.00     6.55        162 1.01
+sds(b0_t2PrecipHDD_3)     0.32      0.76     0.00     2.49        401 1.00
+
+Group-Level Effects:
+~City (Number of levels: 14)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     1.81      1.07     0.02     4.18          6 1.33
+sd(b1_Intercept)     0.72      0.22     0.38     1.27         41 1.05
+sd(b2_Intercept)     0.15      0.03     0.11     0.22        240 1.02
+
+~Genus (Number of levels: 7)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.11      0.09     0.00     0.34        145 1.01
+sd(b1_Intercept)     0.14      0.06     0.06     0.29        216 1.01
+sd(b2_Intercept)     0.11      0.04     0.05     0.21        224 1.01
+
+~Genus:SpCode (Number of levels: 13)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.17      0.05     0.10     0.28        131 1.02
+sd(b1_Intercept)     0.03      0.02     0.00     0.09        145 1.03
+sd(b2_Intercept)     0.03      0.02     0.01     0.08         96 1.03
+
+Population-Level Effects:
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept         3.10      0.69     1.82     4.49         63 1.02
+b0_t2PrecipHDD_1     1.52      0.53     0.54     2.62        121 1.02
+b0_t2PrecipHDD_2     0.84      0.39     0.26     1.75         84 1.02
+b0_t2PrecipHDD_3     1.21      0.48     0.44     2.30        249 1.01
+b1_Intercept         0.92      0.22     0.56     1.41        141 1.02
+b2_Intercept         1.00      0.06     0.87     1.11         97 1.01
+sigma_AGE            0.08      0.00     0.07     0.08       1777 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 25 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_lg_climate_GenSp_hetero.png
 pp_check(model_lg_climate_GenSp_hetero)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_lg_climate_GenSp.png]]
+[[file:../figs/pp_check_lg_climate_GenSp_hetero.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_age_precip.png
@@ -5052,7 +5110,7 @@ marginal_effects(model_lg_climate_GenSp_hetero, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_age_precip_homo.png]]
+[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_age_precip.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_age_HDD.png
@@ -5060,7 +5118,7 @@ marginal_effects(model_lg_climate_GenSp_hetero, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_age_HDD_homo.png]]
+[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_age_HDD.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_surface.png
@@ -5068,7 +5126,7 @@ marginal_effects(model_lg_climate_GenSp_hetero, effects = "Precip:HDD", surface 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_surface_homo.png]]
+[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_surface.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_Points.png
@@ -5084,7 +5142,7 @@ marginal_effects(model_lg_climate_GenSp_hetero, effects = "Precip:HDD", surface 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_lg_climate_GenSp_homo_Points.png]]
+[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_Points.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_Points_hddprecip.png
 
@@ -5100,7 +5158,7 @@ marginal_effects(model_lg_climate_GenSp_hetero, effects = "Precip:HDD", surface 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_homo_Points_hddprecip.png]]
+[[file:../figs/marginal_effects_lg_climate_GenSp_hetero_Points_hddprecip.png]]
 
 
 
