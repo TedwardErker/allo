@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -4994,7 +4994,6 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
 #+end_src
 
 #+RESULTS:
-
 
 *** multiple species, nested within Genus, multiple locations, group level predictors for asymtope, heteroskedastic
 #+begin_src R

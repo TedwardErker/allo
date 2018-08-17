@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo:krusty* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -1031,6 +1031,13 @@ The following objects are masked from ‘package:base’:
   - Can fit in Stan
 - think hard about smart priors to help with convergence.
   - I need to address the initial value errors.
+
+
+
+smaller models to build:
+| species | cities | climate predictors | heteroskedasticity |   |
+|---------+--------+--------------------+--------------------+---|
+| single  | single | none               |                    |   |
 
 
 *** notes on how to do modeling in brms
