@@ -1602,8 +1602,16 @@ saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cit
 C-c C-v t
 
 **** send to krusty
-<
+#+BEGIN_SRC sh :session a
+rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no.R erker@krusty:~/allo/code/
+#+END_SRC
 **** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh
+nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no.R &
+#+END_SRC
 
 **** pull back from krusty
 **** diagnostics
