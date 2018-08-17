@@ -1430,67 +1430,70 @@ each script specifies genus, species, cities, climate, and hetero.
 then functions subset data, generate formula and prior, and fit model.
 
 #+begin_src R
-  library(dplyr)
-  library(brms)
-  library(ggplot2)
-  library(gridExtra)
+    library(dplyr)
+    library(brms)
+    library(ggplot2)
+    library(gridExtra)
 
-  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+    model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-    gen <- "none"
-    sp <- "single"
-    cit <- "single"
-    clim <- "none"
-    het <- "no"
+      gen <- "none"
+      sp <- "single"
+      cit <- "single"
+      clim <- "none"
+      het <- "no"
 
 
-    generate_formula <- function(model_table, gen, sp, cit, clim, het, sigma) {
-
-        f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het) %>%
-            mutate(form = ifelse(sigma == "", paste0(data,", ",b0,", ",b1,", ",b2),  paste0(data,",",b0,",",b1,",",b2,",",sigma))) %>%
-            pull(form)
-
-        bf(formula = f, nl = T)
-    }
+      generate_formula <- function(model_table, gen, sp, cit, clim, het) {
+          f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het) 
+          form = ifelse(sigma == "", bf(f$data, f$b0, f$b1, f$b2, nl = T), bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T))
+form
+      }
 
     generate_formula(model_table, "none", "single", "single", "none", "no")
 
-    generate_prior <- function(gen, sp, cit, clim) {
+      generate_prior <- function(gen, sp, cit, clim) {
 
-        nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                     prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                     prior(gamma(4, 3), nlpar = "b2",lb = 0))
+          nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                       prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                       prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-        if("many" %in% c(gen, sp, cit)) {
+          if("many" %in% c(gen, sp, cit)) {
 
-            nlprior <- c(nlprior,
-                         prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                         prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                         prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+              nlprior <- c(nlprior,
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
 
-        }
+          }
 
-        if(clim == "b0") {
-            nlprior <- c(nlprior,
-                         prior(normal(.3,.25), class = "sds", nlpar = "b0"))
-        }
-        nlprior
-    }
+          if(clim == "b0") {
+              nlprior <- c(nlprior,
+                           prior(normal(.3,.25), class = "sds", nlpar = "b0"))
+          }
+          nlprior
+      }
 
-    generate_prior("none", "single", "many", "b0")
+      generate_prior("none", "single", "many", "b0")
 
 #+end_src
 
 #+RESULTS:
-: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
-:               prior class coef group resp dpar nlpar     bound
-: 1       gamma(4, 3)     b                         b0 <lower=0>
-: 2       gamma(5, 1)     b                         b1 <lower=0>
-: 3       gamma(4, 3)     b                         b2 <lower=0>
-: 4    cauchy(0, 0.1)    sd                         b0
-: 5    cauchy(0, 0.1)    sd                         b1
-: 6    cauchy(0, 0.1)    sd                         b2
-: 7 normal(0.3, 0.25)   sds                         b0
+#+begin_example
+[[1]]
+y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
+attr(,"nl")
+[1] TRUE
+<environment: 0x7fe74a60a950>
+              prior class coef group resp dpar nlpar     bound
+1       gamma(4, 3)     b                         b0 <lower=0>
+2       gamma(5, 1)     b                         b1 <lower=0>
+3       gamma(4, 3)     b                         b2 <lower=0>
+4    cauchy(0, 0.1)    sd                         b0          
+5    cauchy(0, 0.1)    sd                         b1          
+6    cauchy(0, 0.1)    sd                         b2          
+7 normal(0.3, 0.25)   sds                         b0
+#+end_example
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
 would that help?  maybe esp when the climate predictors are in the model.
@@ -1553,7 +1556,7 @@ dt <- data.frame(x, y)
 #+end_src
 
 #+RESULTS:
-: Error: No non-linear parameters specified.
+: Error in formula.default(object, env = baseenv()) : invalid formula
 
 #+begin_src R
 summary(m)
