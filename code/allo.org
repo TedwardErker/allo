@@ -1430,65 +1430,73 @@ each script specifies genus, species, cities, climate, and hetero.
 then functions subset data, generate formula and prior, and fit model.
 
 #+begin_src R
-  library(dplyr)
-  library(brms)
-  library(ggplot2)
-  library(gridExtra)
+      library(dplyr)
+      library(brms)
+      library(ggplot2)
+      library(gridExtra)
 
-  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+      model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-    gen <- "none"
-    sp <- "single"
-    cit <- "single"
-    clim <- "none"
-    het <- "no"
+        gen <- "none"
+        sp <- "single"
+        cit <- "single"
+        clim <- "none"
+        het <- "no"
 
 
-    generate_formula <- function(model_table, gen, sp, cit, clim, het, sigma) {
-        filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het) %>%
-            mutate(form = ifelse(sigma == "", paste0(data,", ",b0,", ",b1,", ",b2),  paste0(data,",",b0,",",b1,",",b2,",",sigma))) %>%
-            pull(form) %>%
-            bf(., nl = T)
-    }
-
-    generate_formula(model_table, "none", "single", "single", "none", "no")
-
-    generate_prior <- function(gen, sp, cit, clim) {
-
-        nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                     prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                     prior(gamma(4, 3), nlpar = "b2",lb = 0))
-
-        if("many" %in% c(gen, sp, cit)) {
-
-            nlprior <- c(nlprior,
-                         prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                         prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                         prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
-
+        generate_formula <- function(model_table, gen, sp, cit, clim, het) {
+            f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
+            if(f$sigma == "") {
+                bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
+            } else {
+                bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
+            }
         }
 
-        if(clim == "b0") {
-            nlprior <- c(nlprior,
-                         prior(normal(.3,.25), class = "sds", nlpar = "b0"))
-        }
-        nlprior
-    }
+      generate_formula(model_table, "none", "single", "single", "none", "no")
 
-    generate_prior("none", "single", "many", "b0")
+        generate_prior <- function(gen, sp, cit, clim) {
+
+            nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                         prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                         prior(gamma(4, 3), nlpar = "b2",lb = 0))
+
+            if("many" %in% c(gen, sp, cit)) {
+
+                nlprior <- c(nlprior,
+                             prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+                             prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+                             prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+
+            }
+
+            if(clim == "b0") {
+                nlprior <- c(nlprior,
+                             prior(normal(.3,.25), class = "sds", nlpar = "b0"))
+            }
+            nlprior
+        }
+
+        generate_prior("none", "single", "many", "b0")
 
 #+end_src
 
 #+RESULTS:
-: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
-:               prior class coef group resp dpar nlpar     bound
-: 1       gamma(4, 3)     b                         b0 <lower=0>
-: 2       gamma(5, 1)     b                         b1 <lower=0>
-: 3       gamma(4, 3)     b                         b2 <lower=0>
-: 4    cauchy(0, 0.1)    sd                         b0
-: 5    cauchy(0, 0.1)    sd                         b1
-: 6    cauchy(0, 0.1)    sd                         b2
-: 7 normal(0.3, 0.25)   sds                         b0
+#+begin_example
+[[1]]
+y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
+attr(,"nl")
+[1] TRUE
+<environment: 0x7fe74a60a950>
+              prior class coef group resp dpar nlpar     bound
+1       gamma(4, 3)     b                         b0 <lower=0>
+2       gamma(5, 1)     b                         b1 <lower=0>
+3       gamma(4, 3)     b                         b2 <lower=0>
+4    cauchy(0, 0.1)    sd                         b0
+5    cauchy(0, 0.1)    sd                         b1
+6    cauchy(0, 0.1)    sd                         b2
+7 normal(0.3, 0.25)   sds                         b0
+#+end_example
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
 would that help?  maybe esp when the climate predictors are in the model.
@@ -1551,11 +1559,65 @@ dt <- data.frame(x, y)
 #+end_src
 
 #+RESULTS:
-: Error: No non-linear parameters specified.
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000751 seconds
+1000 transitions using 10 leapfrog steps per transition would take 7.51 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 7.68354 seconds (Warm-up)
+               7.84655 seconds (Sampling)
+               15.5301 seconds (Total)
+#+end_example
 
 #+begin_src R
 summary(m)
 #+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: y ~ 100 * b0 * (1 - exp(-(b1/100) * x^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: dt (Number of observations: 100)
+Samples: 1 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 250
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.23      0.03     1.17     1.30        133 1.00
+b1_Intercept     2.78      0.30     2.25     3.43         89 1.00
+b2_Intercept     0.90      0.04     0.83     0.98         90 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     4.59      0.29     4.07     5.14        125 1.01
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
 
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
