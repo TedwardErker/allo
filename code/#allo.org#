@@ -1037,15 +1037,15 @@ The following objects are masked from ‘package:base’:
 smaller models to build:
 | Genus | species | cities | climate predictors | heteroskedasticity | formula                                                                                            |
 |-------+---------+--------+--------------------+--------------------+----------------------------------------------------------------------------------------------------|
-|       | single  | single | none               | no                 | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T)                  |
-|       | single  | single | none               | yes                | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  sigma ~ AGE - 1, b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T) |
-|       | many    | single | none               | no                 |                                                                                                    |
+| none  | single  | single | none               | no                 | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T)                  |
+| none  | single  | single | none               | yes                | bf(y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)),  sigma ~ AGE - 1, b0 ~ 1,  b1 ~ 1,  b2 ~ 1, nl = T) |
+| none  | many    | single | none               | no                 |                                                                                                    |
 | many  | many    | single | none               | no                 |                                                                                                    |
 | many  | many    | single | none               | yes                |                                                                                                    |
-|       | single  | many   | none               | no                 |                                                                                                    |
-|       | single  | many   | on \beta_0         | no                 |                                                                                                    |
-|       | single  | many   | none               | yes                |                                                                                                    |
-|       | single  | many   | on \beta_0         | yes                |                                                                                                    |
+| none  | single  | many   | none               | no                 |                                                                                                    |
+| none  | single  | many   | on \beta_0         | no                 |                                                                                                    |
+| none  | single  | many   | none               | yes                |                                                                                                    |
+| none  | single  | many   | on \beta_0         | yes                |                                                                                                    |
 | many  | many    | many   | on \beta_0         | no                 |                                                                                                    |
 | many  | many    | many   | on \beta_0         | yes                |                                                                                                    |
 |       |         |        |                    |                    |                                                                                                    |
