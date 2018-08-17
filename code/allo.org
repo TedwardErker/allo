@@ -4854,7 +4854,7 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
                    prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                   prior(normal(.2,.3), class = "sds", nlpar = "b0"))
+                   prior(normal(.3,.25), class = "sds", nlpar = "b0"))
   #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
    #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
@@ -5020,16 +5020,13 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
                          b2 ~ (1 | City) + ( 1 | Genus / SpCode),
                          nl = T)
 
-
       nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
                    prior(gamma(5, 1), nlpar = "b1", lb = 0),
                    prior(gamma(4, 3), nlpar = "b2",lb = 0),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
                    prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                   prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
-  #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
-   #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
+                   prior(normal(.3,.25), class = "sds", nlpar = "b0"))
 
     model_lg_climate_GenSp_hetero <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
 
@@ -5098,7 +5095,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_lg_climate_GenSp_hetero.png
-pp_check(model_lg_climate_GenSp_hetero)
+pp_check(model_lg_climate_GenSp_hetero) + xlim(c(-15,100))
 #+end_src
 
 #+RESULTS:
