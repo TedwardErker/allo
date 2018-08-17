@@ -1508,7 +1508,6 @@ d <- readRDS("../data/age_dbh_testing.rds")
 
 #+RESULTS:
 
-
 *** genus: none;  species: single; cities: single; climate: none; hetero: no
 **** set values
 #+begin_src R
@@ -5295,7 +5294,6 @@ saveRDS(model_lg_climate_GenSp_hetero, "../models/model_lg_climate_GenSp_hetero.
 
 #+RESULTS:
 
-
 *** Full model
 
 \[
@@ -5324,7 +5322,6 @@ Model selection
       data, otherwise this may take a _very_ long time
 2) What is the proper form of the climate variables on the beta's?
    1)
-
 
 
 *** explaining priors
