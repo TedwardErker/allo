@@ -352,3 +352,154 @@ DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
 
 species within genus within ...
 
+
+* fit model to real data
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-08-17 Fri 14:55
+:ARCHIVE_FILE: ~/git/allo/code/allo.org
+:ARCHIVE_OLPATH: Methods/Modelling/genus: none;  species: single; cities: single; climate: none; hetero: no
+:ARCHIVE_CATEGORY: allo
+:ARCHIVE_ITAGS: work allo
+:END:
+
+#+begin_src R
+d <- readRDS("../data/tidy_age_dbh.rds")
+fram <- filter(d, SpCode == "FRAM")
+fram_ftcollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
+ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fram_age_dbh.png]]
+
+I divide b0 by 100 and multiply b1 by 100 to get the parameters on the same scale ish, with
+the hopes that this speeds things up a bit.
+
+
+#+begin_src R
+              form <- bf(DBH ~ (b0*100) * (1 - exp(-(b1/100) * AGE ^ b2)),
+                         b0 ~ 1,
+                         b1 ~ 1,
+                         b2 ~ 1,
+                         nl = T)
+
+       nlprior <- c(prior(gamma(1, 2), nlpar = "b0", lb = 0),
+                    prior(gamma(1, 2), nlpar = "b1", lb = 0),
+                    prior(gamma(1, 2), nlpar = "b2", lb = 0))
+
+
+       model_fram_ftcollins_homo <- brm(form, chains = 4, cores = 2, data = fram_ftcollins,
+  #                                     init_r = 1,
+                                       prior = nlprior,  control = list(adapt_delta = 0.8))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000362 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.62 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000308 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.08 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 9.83651 seconds (Warm-up)
+               10.6709 seconds (Sampling)
+               20.5074 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.1129 seconds (Warm-up)
+               9.95994 seconds (Sampling)
+               20.0729 seconds (Total)
+
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 3).
+
+Gradient evaluation took 0.000924 seconds
+1000 transitions using 10 leapfrog steps per transition would take 9.24 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gaussian brms-model' NOW (CHAIN 4).
+
+Gradient evaluation took 0.000323 seconds
+1000 transitions using 10 leapfrog steps per transition would take 3.23 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.9297 seconds (Warm-up)
+               10.449 seconds (Sampling)
+               21.3787 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 10.341 seconds (Warm-up)
+               10.9421 seconds (Sampling)
+               21.2831 seconds (Total)
+#+end_example
+
