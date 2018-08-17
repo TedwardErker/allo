@@ -1445,10 +1445,12 @@ then functions subset data, generate formula and prior, and fit model.
 
 
     generate_formula <- function(model_table, gen, sp, cit, clim, het, sigma) {
-        filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het) %>%
+
+        f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het) %>%
             mutate(form = ifelse(sigma == "", paste0(data,", ",b0,", ",b1,", ",b2),  paste0(data,",",b0,",",b1,",",b2,",",sigma))) %>%
-            pull(form) %>%
-            bf(., nl = T)
+            pull(form)
+
+        bf(formula = f, nl = T)
     }
 
     generate_formula(model_table, "none", "single", "single", "none", "no")
