@@ -4927,7 +4927,7 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
                    prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
                    prior(normal(.3,.25), class = "sds", nlpar = "b0"))
 
-    model_lg_climate_GenSp_hetero_smooth <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
+    model_lg_climate_GenSp_hetero_smooth <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3, iter = 1000)
 
 #+end_src
 
