@@ -927,7 +927,7 @@ d <- readRDS("../data/tidy_age_dbh.rds")
   d2 <- d %>%
       mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
       rename(Species = SpCode) %>%
-      select(-Leaf) %>%
+      select(-Leaf,-TreeID) %>%
       left_join(.,clim) %>%
       mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
              HDD = round((HDD - mean(HDD))/ 1000, 4),
@@ -939,21 +939,6 @@ saveRDS(d2, "../data/age_dbh_testing.rds")
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
-**** look at duplicates
-#+begin_src R
-d <- readRDS("../data/age_dbh_testing.rds")
-dups <- d %>% filter(duplicated(TreeID))
-#+end_src
-
-
-#+begin_src R :exports results :results graphics :file ../figs/duplicates.png
-  ggplot(dups, aes( x = AGE, y = DBH, color = factor(TreeID))) + geom_point() +
-    fe
-#+end_src
-
-#+RESULTS:
-[[file:../figs/duplicates.png]]
-
 *** a couple plots
 **** species by city raster, black if the combination exists
 #+begin_src R
@@ -4944,7 +4929,7 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
                      prior(normal(1,.3), class = "sds", dpar = "sigma"),
                      prior(normal(0,1), class = "Intercept", dpar = "sigma"))
 
-      model_lg_climate_GenSp_hetero_smooth2 <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
+      model_Genclimate_GenSp_hetero_smooth2 <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior, init_r = .3)
 
 #+end_src
 

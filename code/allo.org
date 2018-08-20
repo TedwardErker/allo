@@ -920,14 +920,14 @@ saveRDS(d, "../data/tidy_age_dbh.rds")
 #+RESULTS:
 **** save subset of data for testing
 #+begin_src R :var clim=city_climate
-
+d <- readRDS("../data/tidy_age_dbh.rds")
 
   species.to.filter <- c("LIST","GLTR","MAGR","ACRU","ACSA1", "FRAM","FRPE", "FRVE", "TIAM", "TICO")
 
   d2 <- d %>%
       mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
       rename(Species = SpCode) %>%
-      select(-Leaf, -TreeID) %>%
+      select(-Leaf) %>%
       left_join(.,clim) %>%
       mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
              HDD = round((HDD - mean(HDD))/ 1000, 4),
@@ -939,6 +939,23 @@ saveRDS(d2, "../data/age_dbh_testing.rds")
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
+**** look at duplicates
+#+begin_src R
+d <- readRDS("../data/age_dbh_testing.rds")
+dupID <- d$TreeID[duplicated(interaction(d$TreeID, d$City))]
+dups <- d %>% filter(TreeID %in% dupID)
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/duplicates.png
+  ggplot(dups, aes( x = AGE, y = DBH, color = factor(TreeID))) + geom_point() +
+    facet_wrap(~City)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/duplicates.png]]
 
 *** a couple plots
 **** species by city raster, black if the combination exists
@@ -4897,19 +4914,19 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
 
 *** multiple species, nested within Genus, multiple locations, group level predictors for asymtope, heteroskedastic
 #+begin_src R
-  d <- readRDS("../data/tidy_age_dbh.rds") %>%
-      mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
+    ## d <- readRDS("../data/tidy_age_dbh.rds") %>%
+    ##     mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
 
-  lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "ACPL", "ULAM", "ULPU"))
+    ## lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "ACPL", "ULAM", "ULPU"))
 
-  lg_clim <- left_join(lg,clim) %>%
-            mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-                   HDD = round((HDD - mean(HDD))/ 1000, 4),
-                   CDD = round((CDD - mean(CDD))/ 1000, 4))
+    ## lg_clim <- left_join(lg,clim) %>%
+    ##           mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+    ##                  HDD = round((HDD - mean(HDD))/ 1000, 4),
+    ##                  CDD = round((CDD - mean(CDD))/ 1000, 4))
+  d <- readRDS("../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
-: Joining, by = c("Region", "City")
 
 #+begin_src R
                 form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
