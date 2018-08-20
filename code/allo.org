@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo2* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -1477,9 +1477,6 @@ d <- readRDS("../data/age_dbh_testing.rds")
 #+begin_src R
       library(dplyr)
       library(brms)
-      library(ggplot2)
-      library(gridExtra)
-
 
         generate_formula <- function(model_table, gen, sp, cit, clim, het) {
             f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
@@ -1512,6 +1509,8 @@ d <- readRDS("../data/age_dbh_testing.rds")
             nlprior
         }
 #+end_src
+
+#+RESULTS:
 
 **** set values
 #+begin_src R
@@ -1602,6 +1601,15 @@ C-c C-v t
 #+BEGIN_SRC sh :session a
 rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no.R erker@krusty:~/allo/code/
 #+END_SRC
+
+#+RESULTS:
+| erker@krusty's                                                   | password: |       |          |         |       |       |           |
+| building                                                         | file      | list  | ...      | done    |       |       |           |
+| genus_none_species_single_cities_single_climate_none_hetero_no.R |           |       |          |         |       |       |           |
+|                                                                  |           |       |          |         |       |       |           |
+| sent                                                             | 455       | bytes | received | 60      | bytes | 206.0 | bytes/sec |
+| total                                                            | size      | is    | 1671     | speedup | is    |  3.24 |           |
+
 **** run on krusty
 
 run from krusty terminal

@@ -1,8 +1,5 @@
 library(dplyr)
 library(brms)
-library(ggplot2)
-library(gridExtra)
-
 
   generate_formula <- function(model_table, gen, sp, cit, clim, het) {
       f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
