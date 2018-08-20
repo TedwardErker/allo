@@ -927,7 +927,7 @@ d <- readRDS("../data/tidy_age_dbh.rds")
   d2 <- d %>%
       mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
       rename(Species = SpCode) %>%
-      select(-Leaf) %>%
+      select(-Leaf,-TreeID) %>%
       left_join(.,clim) %>%
       mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
              HDD = round((HDD - mean(HDD))/ 1000, 4),
@@ -939,24 +939,6 @@ saveRDS(d2, "../data/age_dbh_testing.rds")
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
-**** look at duplicates
-#+begin_src R
-d <- readRDS("../data/age_dbh_testing.rds")
-dupID <- d$TreeID[duplicated(interaction(d$TreeID, d$City))]
-dups <- d %>% filter(TreeID %in% dupID)
-#+end_src
-
-#+RESULTS:
-
-
-#+begin_src R :exports results :results graphics :file ../figs/duplicates.png
-  ggplot(dups, aes( x = AGE, y = DBH, color = factor(TreeID))) + geom_point() +
-    facet_wrap(~City)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/duplicates.png]]
-
 *** a couple plots
 **** species by city raster, black if the combination exists
 #+begin_src R
@@ -4931,9 +4913,9 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
 #+begin_src R
                 form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
                            sigma ~ s(AGE),
-                           b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / SpCode),
-                           b1 ~ (1 | City)  + ( 1 | Genus / SpCode),
-                           b2 ~ (1 | City) + ( 1 | Genus / SpCode),
+                           b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / Species),
+                           b1 ~ (1 | City)  + ( 1 | Genus / Species),
+                           b2 ~ (1 | City) + ( 1 | Genus / Species),
                            nl = T)
 
         nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
@@ -4947,11 +4929,14 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
                      prior(normal(1,.3), class = "sds", dpar = "sigma"),
                      prior(normal(0,1), class = "Intercept", dpar = "sigma"))
 
-      model_lg_climate_GenSp_hetero_smooth2 <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
+      mod <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior, init_r = .3)
 
+#saveRDS(mod, ..
 #+end_src
 
 #+RESULTS:
+: Error: The following variables are missing in 'data':
+: 'SpCode'
 
 #+begin_src R
   make_stancode(form, lg_clim, prior = nlprior)

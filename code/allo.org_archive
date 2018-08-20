@@ -503,3 +503,29 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
                21.2831 seconds (Total)
 #+end_example
 
+
+* look at duplicates
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-08-20 Mon 11:36
+:ARCHIVE_FILE: ~/git/allo/code/allo.org
+:ARCHIVE_OLPATH: Methods/Data/tidy data, age and dbh
+:ARCHIVE_CATEGORY: allo
+:ARCHIVE_ITAGS: work allo
+:END:
+#+begin_src R
+d <- readRDS("../data/age_dbh_testing.rds")
+dupID <- d$TreeID[duplicated(interaction(d$TreeID, d$City))]
+dups <- d %>% filter(TreeID %in% dupID)
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/duplicates.png
+  ggplot(dups, aes( x = AGE, y = DBH, color = factor(TreeID))) + geom_point() +
+    facet_wrap(~City)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/duplicates.png]]
+
