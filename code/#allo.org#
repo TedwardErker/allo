@@ -5040,8 +5040,19 @@ marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "Precip:HDD", s
 
 
 #+begin_src R :exports results :results graphics :file ../figs/sigma_smooth.png
-marginal_effects(model_lg_climate_GenSp_hetero_smooth)
+marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "s(AGE)", ask = F)
 #+end_src
+
+#+RESULTS:
+[[file:../figs/sigma_smooth.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/sigma_smooth_precipHDD.png
+marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "t2(Precip, HDD)", ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/sigma_smooth_precipHDD.png]]
+
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_Points.png
