@@ -43,7 +43,6 @@ hetero <- "no"
 
 model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-
 form <- generate_formula(model_table, genus, species, cities, climate, hetero)
 
 nlprior <- generate_prior(genus, species, cities, climate)

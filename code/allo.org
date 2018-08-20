@@ -1473,7 +1473,6 @@ d <- readRDS("../data/age_dbh_testing.rds")
 :PROPERTIES:
 :header-args:R: :tangle genus_none_species_single_cities_single_climate_none_hetero_no.R
 :END:
-
 **** libraries and functions
 #+begin_src R
       library(dplyr)
@@ -1528,7 +1527,6 @@ hetero <- "no"
 #+begin_src R
 
       model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
-
 
   form <- generate_formula(model_table, genus, species, cities, climate, hetero)
 
