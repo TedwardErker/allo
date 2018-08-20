@@ -1646,61 +1646,68 @@ run from krusty terminal
 
 **** pull back from krusty
 
-#+BEGIN_SRC sh
-rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds
+#+BEGIN_SRC sh :session a :results raw
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
 #+END_SRC
 
-**** diagnostics
-:PROPERTIES:
-:header-args:R: :tangle no
-:END:
-#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_pairs.png
-  pairs(model_fram_ftcollins_homo)
+**** read in model
+#+begin_src R
+mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/model_fram_ftcollins_homo_pairs.png]]
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
 
 #+begin_src R
-  summary(model_fram_ftcollins_homo)
+  summary(mod)
 #+end_src
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
-Formula: DBH ~ (b0 * 100) * (1 - exp(-(b1/100) * AGE^b2))
+ Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-   Data: fram_ftcollins (Number of observations: 31)
-Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 4000
+   Data: d (Number of observations: 2272) 
+Samples: 4 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 2000
 
-Population-Level Effects:
+Population-Level Effects: 
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.38      0.44     0.88     2.56        810 1.00
-b1_Intercept     0.85      0.22     0.47     1.32       1266 1.00
-b2_Intercept     1.14      0.13     0.93     1.44        880 1.00
+b0_Intercept     1.13      0.06     1.03     1.26        692 1.00
+b1_Intercept     1.51      0.11     1.28     1.73        692 1.00
+b2_Intercept     1.05      0.04     0.98     1.12        579 1.00
 
-Family Specific Parameters:
+Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     5.62      0.80     4.38     7.42       1570 1.00
+sigma    13.87      0.21    13.45    14.28       1202 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
-  plot(model_fram_ftcollins_homo)
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png
+  plot(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/model_fram_ftcollins_homo.png]]
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_marginal_effects.png
-  marginal_effects(model_fram_ftcollins_homo)
+#+begin_src R :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no.png
+  marginal_effects(mod)
 #+end_src
 
 #+RESULTS:
