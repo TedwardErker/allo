@@ -1479,16 +1479,24 @@ then functions subset data, generate formula and prior, and fit model.
 
 #+RESULTS:
 
+Send functions to krusty
+#+BEGIN_SRC sh :session a
+rsync -avz allo_functions.R erker@krusty:~/allo/code
+#+END_SRC
+
+#+RESULTS:
+| erker@krusty's   | password: |       |          |         |                 |      |           |
+| building         | file      | list  | ...      | done    |                 |      |           |
+| allo_functions.R |           |       |          |         |                 |      |           |
+|                  |           |       |          |         |                 |      |           |
+| sent             | 129       | bytes | received | 60      | bytes           | 75.6 | bytes/sec |
+| total            | size      | is    | 1650     | speedup | is              | 8.73 |           |
+| You              | have      | new   | mail     | in      | /var/mail/erker |      |           |
+
+
 What is the prior on sigma in hetero models?  Can I adjust that prior?
 would that help?  maybe esp when the climate predictors are in the model.
 
-*** read in data
-
-#+begin_src R
-  d <- readRDS("../data/age_dbh_testing.rds")
-#+end_src
-
-#+RESULTS:
 
 *** genus: none;  species: single; cities: single; climate: none; hetero: no
 :PROPERTIES:
@@ -1626,6 +1634,14 @@ C-c C-v t
   rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no.R erker@krusty:~/allo/code/
 #+END_SRC
 
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no.R
+:
+: sent 186 bytes  received 66 bytes  72.00 bytes/sec
+: total size is 2128  speedup is 8.44
+
 
 **** run on krusty
 
@@ -1644,17 +1660,19 @@ run from krusty terminal
 rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
 #+END_SRC
 
-**** read in model
-#+begin_src R
-mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
-#+end_src
-
-#+RESULTS:
 
 **** diagnostics
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
+
+#+begin_src R
+mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
+#+end_src
+
+#+RESULTS:
+
+
 #+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png
   pairs(mod)
 #+end_src
@@ -1719,7 +1737,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_linear.R
 :END:
-
 **** libraries and functions
 #+begin_src R
   library(dplyr)
@@ -1729,6 +1746,27 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -1771,14 +1809,6 @@ C-c C-v t
 
 #+END_SRC
 
-#+RESULTS:
-: erker@krusty's password:
-: building file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_linear.R
-:
-: sent 710 bytes  received 42 bytes  300.80 bytes/sec
-: total size is 1351  speedup is 1.80
-
 **** run on krusty
 
 run from krusty terminal
@@ -1796,17 +1826,26 @@ run from krusty terminal
 rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
 #+END_SRC
 
-**** read in model
+#+RESULTS:
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_no.rds
+
+sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
+total size is 12029334  speedup is 1.01
+
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
 #+begin_src R
 mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
 #+end_src
 
 #+RESULTS:
 
-**** diagnostics
-:PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
-:END:
+
 #+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png
   pairs(mod)
 #+end_src
@@ -1827,18 +1866,18 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ 1
          b2 ~ 1
    Data: d (Number of observations: 2272)
-Samples: 4 chains, each with iter = 1000; warmup = 500; thin = 1;
-         total post-warmup samples = 2000
+Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 4000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.13      0.06     1.03     1.26        692 1.00
-b1_Intercept     1.51      0.11     1.28     1.73        692 1.00
-b2_Intercept     1.05      0.04     0.98     1.12        579 1.00
+b0_Intercept     1.13      0.06     1.03     1.27       1214 1.00
+b1_Intercept     1.51      0.11     1.30     1.73       1650 1.00
+b2_Intercept     1.05      0.04     0.98     1.12       1046 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma    13.87      0.21    13.45    14.28       1202 1.00
+sigma    13.86      0.20    13.49    14.26       2387 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential

@@ -26,7 +26,3 @@ d <- readRDS("../data/age_dbh_testing.rds")
 mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
 saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 ## fit model to real data:1 ends here
-
-## [[file:~/git/allo/code/allo.org::*read%20in%20model][read in model:1]]
-mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
-## read in model:1 ends here
