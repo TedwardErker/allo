@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+startup: indent
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -102,7 +102,7 @@ Improvements:
 2)
 
 
- For practicioners who wish to use
+For practicioners who wish to use
 
 what was the metric used to select from models?  was it r^2?  they
 used AIC
@@ -118,10 +118,10 @@ range of the data.
 cite:Weiskittel_ForestGrowthAndYieldModeling
 note on pg 130: for biomass equations:
 "Zianis et al. (2005) found that more than two-thirds of the
- equations they examined were functions of just DBH, and more than 75%
- of the studies that reported a sample size had less than 50
- trees. The use of just DBH assumes that the relationship between DBH
- and height is static, which is often not the case, as noted above."
+equations they examined were functions of just DBH, and more than 75%
+of the studies that reported a sample size had less than 50
+trees. The use of just DBH assumes that the relationship between DBH
+and height is static, which is often not the case, as noted above."
 
 "The application to other populations of simple model forms fitted to
 small datasets can produce large prediction errors (e.g. Wang et al.,
@@ -220,7 +220,7 @@ each other.
 see pg 168
 
 they follow frelich 1992
- look at his equation form.
+look at his equation form.
 also
 * Introduction
 
@@ -547,12 +547,12 @@ Equations:
 *** tidy data, age and dbh
 **** load libraries
 #+begin_src R :exports none
-library(plyr)
-library(dplyr)
-library(ggplot2)
-library(readr)
-library(ascii)
-library(tidyr)
+  library(plyr)
+  library(dplyr)
+  library(ggplot2)
+  library(readr)
+  library(ascii)
+  library(tidyr)
 #+end_src
 
 #+RESULTS:
@@ -595,7 +595,7 @@ The following object is masked from ‘package:ascii’:
 
 **** read in data
 #+begin_src R :exports code
-d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
+  d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
 #+end_src
 
 #+RESULTS:
@@ -634,20 +634,20 @@ In rbind(names(probs), probs_f) :
 
 
 #+begin_src R
-#str(d)
+                                          #str(d)
 #+end_src
 
 #+RESULTS:
 **** fix some species things
 ***** fix lower case species codes
 #+begin_src R
-d$SpCode <- toupper(d$SpCode)
+  d$SpCode <- toupper(d$SpCode)
 #+end_src
 
 #+RESULTS:
 ***** fix QUAG1 to be QUAG
 #+begin_src R
-d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
+  d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
 #+end_src
 
 #+RESULTS:
@@ -679,8 +679,8 @@ Not all are fixed!
 #+RESULTS:
 ***** fix scientific names
 #+begin_src R
-d$ScientificName[d$ScientificName == "Prunus cerasifera cvs."] <- "Prunus cerasifera"
-d$ScientificName[d$ScientificName == "Pyrus calleryana cvs."] <- "Pyrus calleryana"
+  d$ScientificName[d$ScientificName == "Prunus cerasifera cvs."] <- "Prunus cerasifera"
+  d$ScientificName[d$ScientificName == "Pyrus calleryana cvs."] <- "Pyrus calleryana"
 
 #+end_src
 
@@ -707,11 +707,11 @@ simplification here.
 
 #+begin_src R :var tt=tree_types
   sp <- d %>% select(SpCode, ScientificName, TreeType) %>%
-    left_join(tt) %>%
-    select(-TreeType) %>%
-    unique() %>%
-    arrange(ScientificName) %>%
-    ascii.nowarn.print()
+      left_join(tt) %>%
+      select(-TreeType) %>%
+      unique() %>%
+      arrange(ScientificName) %>%
+      ascii.nowarn.print()
 #+end_src
 
 #+RESULTS:
@@ -889,15 +889,15 @@ Joining, by = "TreeType"
 #+end_example
 **** tidy a few names and select variables of interest here
 #+begin_src R
-d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age, ScientificName)
+  d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age, ScientificName)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-summary(d$Leaf)
-sum(d$Leaf == -1) / length(d$Leaf)
-sum(d$DBH == -1) / length(d$DBH)
+  summary(d$Leaf)
+  sum(d$Leaf == -1) / length(d$Leaf)
+  sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
@@ -908,19 +908,19 @@ sum(d$DBH == -1) / length(d$DBH)
 
 #+begin_src R
   d <- filter(d, DBH != -1, Age != -1) %>%
-    rename(AGE = Age)
+      rename(AGE = Age)
 #+end_src
 
 #+RESULTS:
 **** save data
 #+begin_src R
-saveRDS(d, "../data/tidy_age_dbh.rds")
+  saveRDS(d, "../data/tidy_age_dbh.rds")
 #+end_src
 
 #+RESULTS:
 **** save subset of data for testing
 #+begin_src R :var clim=city_climate
-d <- readRDS("../data/tidy_age_dbh.rds")
+  d <- readRDS("../data/tidy_age_dbh.rds")
 
   species.to.filter <- c("LIST","GLTR","MAGR","ACRU","ACSA1", "FRAM","FRPE", "FRVE", "TIAM", "TICO")
 
@@ -932,9 +932,9 @@ d <- readRDS("../data/tidy_age_dbh.rds")
       mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
              HDD = round((HDD - mean(HDD))/ 1000, 4),
              CDD = round((CDD - mean(CDD))/ 1000, 4)) %>%
-    filter(Species %in% species.to.filter)
+      filter(Species %in% species.to.filter)
 
-saveRDS(d2, "../data/age_dbh_testing.rds")
+  saveRDS(d2, "../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
@@ -942,12 +942,12 @@ saveRDS(d2, "../data/age_dbh_testing.rds")
 *** a couple plots
 **** species by city raster, black if the combination exists
 #+begin_src R
-    library(dplyr)
-    library(ggplot2)
+  library(dplyr)
+  library(ggplot2)
 
-    d <- readRDS("../data/tidy_age_dbh.rds")
+  d <- readRDS("../data/tidy_age_dbh.rds")
 
-    cs <- expand.grid(City = unique(d$City), SpCode = unique(d$SpCode)) %>%
+  cs <- expand.grid(City = unique(d$City), SpCode = unique(d$SpCode)) %>%
       mutate(join = paste0(City, SpCode))
 
   dj <- d %>% mutate(join = paste0(City, SpCode)) %>% pull(join)
@@ -975,7 +975,7 @@ The following objects are masked from ‘package:base’:
       geom_raster() +
       coord_equal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-    scale_fill_manual(values = c("white","black"))
+      scale_fill_manual(values = c("white","black"))
 #+end_src
 
 #+RESULTS:
@@ -984,56 +984,56 @@ The following objects are masked from ‘package:base’:
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SpeciesCentric.png :height 400 :width 1400
   cs_sp <- left_join(cs, unique(select(d, SpCode, ScientificName)))
 
-      ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) +
-          geom_raster() +
-          coord_equal() +
-          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-          scale_fill_manual(values = c("white","black"))
+  ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) +
+      geom_raster() +
+      coord_equal() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+      scale_fill_manual(values = c("white","black"))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_SpeciesCentric.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CommonSpeciesCentric.png :height 400 :width 1400
-    cs_sp_cmn <- cs_sp %>%
+  cs_sp_cmn <- cs_sp %>%
       group_by(SpCode, ScientificName) %>%
-        summarize(n = sum(InData)) %>%
-        ungroup() %>%
-        arrange(-n) %>%
-        mutate(SpCode = as.factor(SpCode))
+      summarize(n = sum(InData)) %>%
+      ungroup() %>%
+      arrange(-n) %>%
+      mutate(SpCode = as.factor(SpCode))
 
   cs_sp_cmn <- cs_sp %>%
       mutate(SpCode = as.character(SpCode),
              SpCode = factor(SpCode, levels(cs_sp_cmn$SpCode)[as.numeric(cs_sp_cmn$SpCode)]))
 
-        ggplot(cs_sp_cmn, aes(x = SpCode, y = City, fill = InData)) +
-            geom_raster() +
-            coord_equal() +
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-            scale_fill_manual(values = c("white","black"))
+  ggplot(cs_sp_cmn, aes(x = SpCode, y = City, fill = InData)) +
+      geom_raster() +
+      coord_equal() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+      scale_fill_manual(values = c("white","black"))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 400 :width 1400
-    cs_sci_cmn <- cs_sp %>%
+  cs_sci_cmn <- cs_sp %>%
       group_by(ScientificName) %>%
-        summarize(n = sum(InData)) %>%
-        ungroup() %>%
-        arrange(-n) %>%
-        mutate(ScientificName = as.factor(ScientificName))
+      summarize(n = sum(InData)) %>%
+      ungroup() %>%
+      arrange(-n) %>%
+      mutate(ScientificName = as.factor(ScientificName))
 
   cs_sci_cmn <- cs_sp %>%
       mutate(ScientificName = as.character(ScientificName),
              ScientificName = factor(ScientificName, levels(cs_sci_cmn$ScientificName)[as.numeric(cs_sci_cmn$ScientificName)]))
 
 
-        ggplot(cs_sci_cmn, aes(x = ScientificName, y = City, fill = InData)) +
-            geom_raster() +
-            coord_equal() +
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-            scale_fill_manual(values = c("white","black"))
+  ggplot(cs_sci_cmn, aes(x = ScientificName, y = City, fill = InData)) +
+      geom_raster() +
+      coord_equal() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+      scale_fill_manual(values = c("white","black"))
 #+end_src
 
 #+RESULTS:
@@ -1157,19 +1157,19 @@ cdf:
 
 #+begin_src R :exports results :results graphics :file ../figs/weibull_test.png
 
-    dbh <- 1:100
+  dbh <- 1:100
 
-      a <- 31
-      b <- .0209
-      c <- 1.1973
-      y <- 1.3 + a * (1 - exp(-b*dbh^c))
+  a <- 31
+  b <- .0209
+  c <- 1.1973
+  y <- 1.3 + a * (1 - exp(-b*dbh^c))
 
-    a <- 100
-    b <- .13
-    c <- .5
-    age <- seq(0,100,.1)
+  a <- 100
+  b <- .13
+  c <- .5
+  age <- seq(0,100,.1)
   dbh <- 1.3 + a * (1 - exp(-b * age^c))
-    plot(age, dbh)
+  plot(age, dbh)
 #+end_src
 
 #+RESULTS:
@@ -1178,28 +1178,28 @@ cdf:
 play with the parameters to understand the flexibility and control.
 
 #+begin_src R
-d <- readRDS("../data/tidy_age_dbh.rds")
+  d <- readRDS("../data/tidy_age_dbh.rds")
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/ageVdbh_fram.png :bg transparent
-fram <- filter(d, SpCode == "FRAM")
-ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
+  fram <- filter(d, SpCode == "FRAM")
+  ggplot(fram, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/ageVdbh_fram.png]]
 
 #+begin_src R
-#  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
+                                          #  m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram, list(a = 100, b = .1, c = .5))
   m <- nls(DBH ~ a * (1 - exp(-b * AGE^c)), fram_ftcollins, list(a = 100, b = .1, c = .5))
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-summary(m)
+  summary(m)
 #+end_src
 
 #+RESULTS:
@@ -1240,26 +1240,26 @@ dbh values, impossible
 "c" can't be negative because it causes negative growth, impossible
 ***** what is the range of reasonable parameter values,  can be helpful for priors
 #+begin_src R :exports results :results graphics :file ../figs/weibull.png
-      data <- readRDS("../data/tidy_age_dbh.rds") %>%
-          select(DBH, AGE) %>%
-          rename(x = AGE, y = DBH)
+  data <- readRDS("../data/tidy_age_dbh.rds") %>%
+      select(DBH, AGE) %>%
+      rename(x = AGE, y = DBH)
 
-      x <- 1:200
-      a <- seq(50,250,50)
-      b <- 10^(-1*1:3)
-      c <- seq(.5, 1.5, .5)
+  x <- 1:200
+  a <- seq(50,250,50)
+  b <- 10^(-1*1:3)
+  c <- seq(.5, 1.5, .5)
 
-      d <- expand.grid(x = x,a = a, b = b, c = c)
+  d <- expand.grid(x = x,a = a, b = b, c = c)
 
-      w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
 
-      d <- d %>%
-          mutate(y = w(a,b,c,x))
+  d <- d %>%
+      mutate(y = w(a,b,c,x))
 
-      ggplot(d, aes( x = x, y = y)) +
-  geom_point(data = data, alpha = .01) +
+  ggplot(d, aes( x = x, y = y)) +
+      geom_point(data = data, alpha = .01) +
       geom_line(aes(color =  a, group = interaction(a,b,c))) + facet_grid(b~c) +
-    xlim(c(0,150))
+      xlim(c(0,150))
 #+end_src
 
 #+RESULTS:
@@ -1378,34 +1378,34 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
-*** all the models
+*** all the models  model_table
 
 smaller models to build:
 #+name: model_table
-| genus | species | cities | climate | hetero | data                                       | b0                                                                   | b1                                                | b2                                                | sigma          | prior |   |   |   |
-|-------+---------+--------+---------+--------+--------------------------------------------+----------------------------------------------------------------------+---------------------------------------------------+---------------------------------------------------+----------------+-------+---+---+---|
-| none  | single  | single | none    | no     | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            |                |       |   |   |   |
-| none  | single  | single | none    | yes    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE -1 |       |   |   |   |
-| none  | many    | single | none    | no     | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ (1 \vert Species)                                               | b1 ~ (1 \vert Species)                            | b2 ~ (1 \vert Species)                            |                |       |   |   |   |
-| many  | many    | single | none    | no     | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    |                |       |   |   |   |
-| many  | many    | single | none    | yes    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1 |       |   |   |   |
-| none  | single  | many   | none    | no     | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                |       |   |   |   |
-| none  | single  | many   | b0      | no     | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                |       |   |   |   |
-| none  | single  | many   | none    | yes    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |       |   |   |   |
-| none  | single  | many   | b0      | yes    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |       |   |   |   |
-| many  | many    | many   | b0      | no     | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) |                |       |   |   |   |
-| many  | many    | many   | b0      | yes    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |       |   |   |   |
+| genus | species | cities | climate | hetero | data                                           | b0                                                                   | b1                                                | b2                                                | sigma          | prior |   |   |   |
+|-------+---------+--------+---------+--------+------------------------------------------------+----------------------------------------------------------------------+---------------------------------------------------+---------------------------------------------------+----------------+-------+---+---+---|
+| none  | single  | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            |                |       |   |   |   |
+| none  | single  | single | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE -1 |       |   |   |   |
+| none  | many    | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Species)                                               | b1 ~ (1 \vert Species)                            | b2 ~ (1 \vert Species)                            |                |       |   |   |   |
+| many  | many    | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    |                |       |   |   |   |
+| many  | many    | single | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1 |       |   |   |   |
+| none  | single  | many   | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                |       |   |   |   |
+| none  | single  | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                |       |   |   |   |
+| none  | single  | many   | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |       |   |   |   |
+| none  | single  | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |       |   |   |   |
+| many  | many    | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) |                |       |   |   |   |
+| many  | many    | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |       |   |   |   |
 
 
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
 
-| genus | species | cities | climate predictors | heteroskedasticity | data                                       | b0                                                                   | b1                                                | b2                                                | sigma          | formula |
-|-------+---------+--------+--------------------+--------------------+--------------------------------------------+----------------------------------------------------------------------+---------------------------------------------------+---------------------------------------------------+----------------+---------|
-| many  | many    | many   | on \beta_0         | yes                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |         |
-|       |         |        |                    |                    | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |         |
-| many  | many    | many   | on \beta_0         | yes                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1 |         |
-| many  | many    | many   | on \beta_0         | yes                | y ~ 100*b0 * (1 - exp(-(b1/100) * x ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE -1 |         |
+| genus | species | cities | climate predictors | heteroskedasticity | data                                           | b0                                                                   | b1                                                | b2                                                | sigma          | formula |
+|-------+---------+--------+--------------------+--------------------+------------------------------------------------+----------------------------------------------------------------------+---------------------------------------------------+---------------------------------------------------+----------------+---------|
+| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |         |
+|       |         |        |                    |                    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |         |
+| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1 |         |
+| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE -1 |         |
 *** Libraries and functions
 
 There are many models.  Some will be quite big and take a long time.
@@ -1419,43 +1419,43 @@ each script specifies genus, species, cities, climate, and hetero.
 then functions subset data, generate formula and prior, and fit model.
 
 #+begin_src R
-      library(dplyr)
-      library(brms)
-      library(ggplot2)
-      library(gridExtra)
+  library(dplyr)
+  library(brms)
+  library(ggplot2)
+  library(gridExtra)
 
-      model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-        generate_formula <- function(model_table, gen, sp, cit, clim, het) {
-            f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
-            if(f$sigma == "") {
-                bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
-            } else {
-                bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
-            }
-        }
+  generate_formula <- function(model_table, gen, sp, cit, clim, het) {
+      f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
+      if(f$sigma == "") {
+          bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
+      } else {
+          bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
+      }
+  }
 
-        generate_prior <- function(gen, sp, cit, clim) {
+  generate_prior <- function(gen, sp, cit, clim) {
 
-            nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                         prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                         prior(gamma(4, 3), nlpar = "b2",lb = 0))
+      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                   prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-            if("many" %in% c(gen, sp, cit)) {
+      if("many" %in% c(gen, sp, cit)) {
 
-                nlprior <- c(nlprior,
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+          nlprior <- c(nlprior,
+                       prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+                       prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+                       prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
 
-            }
+      }
 
-            if(clim == "b0") {
-                nlprior <- c(nlprior,
-                             prior(normal(.3,.25), class = "sds", nlpar = "b0"))
-            }
-            nlprior
-        }
+      if(clim == "b0") {
+          nlprior <- c(nlprior,
+                       prior(normal(.3,.25), class = "sds", nlpar = "b0"))
+      }
+      nlprior
+  }
 #+end_src
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -1464,73 +1464,76 @@ would that help?  maybe esp when the climate predictors are in the model.
 *** read in data
 
 #+begin_src R
-d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
 
 *** genus: none;  species: single; cities: single; climate: none; hetero: no
 :PROPERTIES:
-:header-args:R: :tangle genus_none_species_single_cities_single_climate_none_hetero_no.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no.R
 :END:
+
 **** libraries and functions
 #+begin_src R
-      library(dplyr)
-      library(brms)
+  library(dplyr)
+  library(brms)
 
-        generate_formula <- function(model_table, gen, sp, cit, clim, het) {
-            f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
-            if(f$sigma == "") {
-                bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
-            } else {
-                bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
-            }
-        }
+  generate_formula <- function(model_table, gen, sp, cit, clim, het) {
+      f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
+      if(f$sigma == "") {
+          bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
+      } else {
+          bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
+      }
+  }
 
-        generate_prior <- function(gen, sp, cit, clim) {
+  generate_prior <- function(gen, sp, cit, clim) {
 
-            nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                         prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                         prior(gamma(4, 3), nlpar = "b2",lb = 0))
+      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
+                   prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-            if("many" %in% c(gen, sp, cit)) {
+      if("many" %in% c(gen, sp, cit)) {
 
-                nlprior <- c(nlprior,
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+          nlprior <- c(nlprior,
+                       prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+                       prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+                       prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
 
-            }
+      }
 
-            if(clim == "b0") {
-                nlprior <- c(nlprior,
-                             prior(normal(.3,.25), class = "sds", nlpar = "b0"))
-            }
-            nlprior
-        }
+      if(clim == "b0") {
+          nlprior <- c(nlprior,
+                       prior(normal(.3,.25), class = "sds", nlpar = "b0"))
+      }
+      nlprior
+  }
 #+end_src
 
 #+RESULTS:
 
 **** set values
 #+begin_src R
-genus <- "none"
-species <- "single"
-cities <- "single"
-climate <- "none"
-hetero <- "no"
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "no"
 #+end_src
 
 #+RESULTS:
 **** generate formula and priors
 #+begin_src R
 
-      model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
   form <- generate_formula(model_table, genus, species, cities, climate, hetero)
 
   nlprior <- generate_prior(genus, species, cities, climate)
 #+end_src
+
+#+RESULTS:
 
 **** test model on generated data
 #+begin_src R :tangle no
@@ -1542,12 +1545,12 @@ hetero <- "no"
 
 
   w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-#  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+                                          #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
 
   x <- cumsum(rep((150 - 0) / n, n))
   y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
 
-dt <- data.frame(x, y)
+  dt <- data.frame(x, y)
 #+end_src
 
 #+RESULTS:
@@ -1564,12 +1567,12 @@ dt <- data.frame(x, y)
 #+end_src
 
 #+begin_src R :tangle no
-summary(m)
+  summary(m)
 #+end_src
 
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png :tangle no
-plot(m)
+  plot(m)
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png :tangle no
@@ -1577,20 +1580,20 @@ plot(m)
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_1.png :tangle no
-pairs(m)
+  pairs(m)
 #+end_src
 
 #+begin_src R :tangle no
-#standata(m)
-#stancode(m)
+                                          #standata(m)
+                                          #stancode(m)
 #+end_src
 
 **** fit model to real data
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 200)
-saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 1000)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
 
@@ -1598,24 +1601,23 @@ saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cit
 C-c C-v t
 
 **** send to krusty
-#+BEGIN_SRC sh :session a
-rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no.R erker@krusty:~/allo/code/
+#+BEGIN_SRC sh :session a :results raw
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
-| erker@krusty's                                                   | password: |       |          |         |       |       |           |
-| building                                                         | file      | list  | ...      | done    |       |       |           |
-| genus_none_species_single_cities_single_climate_none_hetero_no.R |           |       |          |         |       |       |           |
-|                                                                  |           |       |          |         |       |       |           |
-| sent                                                             | 455       | bytes | received | 60      | bytes | 206.0 | bytes/sec |
-| total                                                            | size      | is    | 1671     | speedup | is    |  3.24 |           |
+erker@krusty's password:
+building file list ... done
+
+sent 135 bytes  received 20 bytes  44.29 bytes/sec
+total size is 2127  speedup is 13.72
 
 **** run on krusty
 
 run from krusty terminal
 
 #+BEGIN_SRC sh
-nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no.R &
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no.R &
 #+END_SRC
 
 **** pull back from krusty
@@ -1624,14 +1626,14 @@ nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no
 :header-args:R: :tangle no
 :END:
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_pairs.png
-pairs(model_fram_ftcollins_homo)
+  pairs(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_homo_pairs.png]]
 
 #+begin_src R
-summary(model_fram_ftcollins_homo)
+  summary(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
@@ -1662,14 +1664,14 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo.png
-plot(model_fram_ftcollins_homo)
+  plot(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_homo_marginal_effects.png
-marginal_effects(model_fram_ftcollins_homo)
+  marginal_effects(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
@@ -1680,19 +1682,19 @@ no sigma at low ages.  the width of a twig is genetically controlled.
 There will be very little variation at age 1.
 **** a simple linear model test
 #+begin_src R
-n <- 1000
+  n <- 1000
   a <- 1
   b <- 2
   x <- seq(1,100,length.out = n)
   sigma <- .3 * x
   y <- a + b * x + rnorm(n,0,sigma)
-smpl <- data.frame(x,y)
+  smpl <- data.frame(x,y)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/test.png
-plot(x,y)
+  plot(x,y)
 #+end_src
 
 #+RESULTS:
@@ -1761,7 +1763,7 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
 #+end_example
 
 #+begin_src R
-summary(m_smpl)
+  summary(m_smpl)
 #+end_src
 
 #+RESULTS:
@@ -1798,7 +1800,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/test.png
-plot(x,y)
+  plot(x,y)
 #+end_src
 
 #+RESULTS:
@@ -1872,7 +1874,7 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
 #+end_example
 
 #+begin_src R
-summary(m_simple)
+  summary(m_simple)
 #+end_src
 
 #+RESULTS:
@@ -1896,23 +1898,23 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 #+begin_src R
-my_sigma_x <- c(.0001, .001,.05,.1,.3, .5, .6,.9,1.2,1.5, 2.5, 5)
-stan_sigma_x <- c(-0.056, -0.03, .017, .02617, .05202, 0.0640, .076358, .0879, .10, .116, .14, .19)
-d <- data.frame(my_sigma_x, stan_sigma_x)
+  my_sigma_x <- c(.0001, .001,.05,.1,.3, .5, .6,.9,1.2,1.5, 2.5, 5)
+  stan_sigma_x <- c(-0.056, -0.03, .017, .02617, .05202, 0.0640, .076358, .0879, .10, .116, .14, .19)
+  d <- data.frame(my_sigma_x, stan_sigma_x)
 #+end_src
 
 #+RESULTS:
 
 
 #+begin_src R :exports results :results graphics :file ../figs/f.png
-qplot(my_sigma_x, stan_sigma_x, d)
+  qplot(my_sigma_x, stan_sigma_x, d)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/f.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/f_sqrtMysigmaX.png
-qplot(my_sigma_x, log(stan_sigma_x), d)
+  qplot(my_sigma_x, log(stan_sigma_x), d)
 #+end_src
 
 #+RESULTS:
@@ -1922,8 +1924,8 @@ qplot(my_sigma_x, log(stan_sigma_x), d)
 hmmmmm......
 
 #+begin_src R
-linm <- lm(stan_sigma_x ~ sqrt(my_sigma_x), data = d[3:12,])
-summary(linm)
+  linm <- lm(stan_sigma_x ~ sqrt(my_sigma_x), data = d[3:12,])
+  summary(linm)
 #+end_src
 
 #+RESULTS:
@@ -1950,50 +1952,50 @@ F-statistic:  1034 on 1 and 8 DF,  p-value: 9.536e-10
 #+end_example
 
 #+begin_src R
-stancode(m_simple)
+  stancode(m_simple)
 #+end_src
 
 #+RESULTS:
 
 
 #+BEGIN_SRC stan :tangle simple.stan
-// generated with brms 2.3.1
-functions {
-}
-data {
-  int<lower=1> N;  // total number of observations
-  vector[N] Y;  // response variable
-  int<lower=1> K_sigma;  // number of population-level effects
-  matrix[N, K_sigma] X_sigma;  // population-level design matrix
-  int prior_only;  // should the likelihood be ignored?
-}
-transformed data {
-}
-parameters {
-  real temp_Intercept;  // temporary intercept
-  vector[K_sigma] b_sigma;  // population-level effects
-}
-transformed parameters {
-}
-model {
-  vector[N] mu = rep_vector(0, N) + temp_Intercept;
-  vector[N] sigma = X_sigma * b_sigma;
-  // priors including all constants
-  target += student_t_lpdf(temp_Intercept | 3, -3, 43);
-  // likelihood including all constants
-  if (!prior_only) {
-    target += normal_lpdf(Y | mu, sigma);
+  // generated with brms 2.3.1
+  functions {
   }
-}
-generated quantities {
-  // actual population-level intercept
-  real b_Intercept = temp_Intercept;
-}
+  data {
+    int<lower=1> N;  // total number of observations
+    vector[N] Y;  // response variable
+    int<lower=1> K_sigma;  // number of population-level effects
+    matrix[N, K_sigma] X_sigma;  // population-level design matrix
+    int prior_only;  // should the likelihood be ignored?
+  }
+  transformed data {
+  }
+  parameters {
+    real temp_Intercept;  // temporary intercept
+    vector[K_sigma] b_sigma;  // population-level effects
+  }
+  transformed parameters {
+  }
+  model {
+    vector[N] mu = rep_vector(0, N) + temp_Intercept;
+    vector[N] sigma = X_sigma * b_sigma;
+    // priors including all constants
+    target += student_t_lpdf(temp_Intercept | 3, -3, 43);
+    // likelihood including all constants
+    if (!prior_only) {
+      target += normal_lpdf(Y | mu, sigma);
+    }
+  }
+  generated quantities {
+    // actual population-level intercept
+    real b_Intercept = temp_Intercept;
+  }
 
 #+END_SRC
 
 #+begin_src R
-m2 <- stan("simple.stan", data = standata(m_simple))
+  m2 <- stan("simple.stan", data = standata(m_simple))
 #+end_src
 
 #+RESULTS:
@@ -2016,7 +2018,7 @@ Error in stanc(file = file, model_code = model_code, model_name = model_name,  :
 #+end_example
 
 #+begin_src R
-m2
+  m2
 #+end_src
 
 #+RESULTS:
@@ -2047,20 +2049,20 @@ I should make the generated data have the exact same structure as the
 real data, and just create one model..
 
 #+begin_src R
-    n <- 30
-    b0 <- 1.2
-    b1 <- 1  #2
-    b2 <- 1
-    sigma_x <- 0.05
+  n <- 30
+  b0 <- 1.2
+  b1 <- 1  #2
+  b2 <- 1
+  sigma_x <- 0.05
 
-    w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
-    AGE <- rep(seq(0,150,length.out = n/2),each = 2)
-  #cumsum(rep((150 - 0) / n, n))
+  AGE <- rep(seq(0,150,length.out = n/2),each = 2)
+                                          #cumsum(rep((150 - 0) / n, n))
 
-    sigma <- sigma_x * AGE
+  sigma <- sigma_x * AGE
 
-    DBH <- w(b0,b1,b2, AGE) + rnorm(n, 0, sigma)
+  DBH <- w(b0,b1,b2, AGE) + rnorm(n, 0, sigma)
 
   dt <- data.frame(AGE, DBH)
 #+end_src
@@ -2077,18 +2079,18 @@ real data, and just create one model..
 **** test model on generated data
 Priors
 #+begin_src R :exports results :results graphics :file ../figs/ftest.png
-x <- seq(0,8,.1)
-y <- dgamma(x, 5, 1.2)
-plot(x, y, type = "l")
+  x <- seq(0,8,.1)
+  y <- dgamma(x, 5, 1.2)
+  plot(x, y, type = "l")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/ftest.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/ftest2.png
-x <- seq(0,8,.1)
-y <- dgamma(x, 4, 3)
-plot(x, y, type = "l")
+  x <- seq(0,8,.1)
+  y <- dgamma(x, 4, 3)
+  plot(x, y, type = "l")
 #+end_src
 
 #+RESULTS:
@@ -2096,10 +2098,10 @@ plot(x, y, type = "l")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/ttest.png
-x <- seq(0,5,.1)
-y <- dt(x,.2)
-y <- dcauchy(x,0,.1)
-plot(x, y, type = "l")
+  x <- seq(0,5,.1)
+  y <- dt(x,.2)
+  y <- dcauchy(x,0,.1)
+  plot(x, y, type = "l")
 #+end_src
 
 #+RESULTS:
@@ -2107,18 +2109,18 @@ plot(x, y, type = "l")
 
 
 #+begin_src R :results output
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ 1,
-                     b1 ~ 1,
-                     b2 ~ 1,
-                     sigma ~ AGE - 1,
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ 1,
+             b1 ~ 1,
+             b2 ~ 1,
+             sigma ~ AGE - 1,
+             nl = T)
 
   nlprior <- c(prior(gamma(2, 1), nlpar = "b0",lb = 0),
                prior(gamma(2, 1), nlpar = "b1",lb = 0),
                prior(gamma(2, 1), nlpar = "b2",lb = 0))
 
-          m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+  m <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 
 #+end_src
 
@@ -2182,7 +2184,7 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
 #+end_example
 
 #+begin_src R
-summary(m)
+  summary(m)
 #+end_src
 
 #+RESULTS:
@@ -2211,7 +2213,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png
-plot(m)
+  plot(m)
 #+end_src
 
 #+RESULTS:
@@ -2219,7 +2221,7 @@ plot(m)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_1.png
   me <-   marginal_effects(m)
-me
+  me
 
 #+end_src
 
@@ -2227,9 +2229,9 @@ me
 [[file:../figs/marginal_1.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts.png
-#  me <-   marginal_effects(m)
+                                          #  me <-   marginal_effects(m)
   ggplot() + geom_line(data = me$AGE, aes(x = AGE, y = estimate__)) +
-    geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_ribbon(data = me$AGE, alpha = .2, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
       geom_point(data = dt, aes(x = AGE, y = DBH))
 
 #+end_src
@@ -2239,7 +2241,7 @@ me
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_1.png
-pairs(m)
+  pairs(m)
 #+end_src
 
 #+RESULTS:
@@ -2253,20 +2255,20 @@ that a linear effect on the log scale becomes multiplicative effect
 after back-transforming on the identity scale.
 
 #+begin_src R
-posterior_samples(
+  posterior_samples(
 #+end_src
 
 **** fit model to real data
 #+begin_src R
-d <- readRDS("../data/tidy_age_dbh.rds")
-fram <- filter(d, SpCode == "FRAM")
-fram_ftcollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
+  d <- readRDS("../data/tidy_age_dbh.rds")
+  fram <- filter(d, SpCode == "FRAM")
+  fram_ftcollins <- filter(d, SpCode == "FRAM", City == "Fort Collins, CO")
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
-ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
+  ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
 #+end_src
 
 #+RESULTS:
@@ -2276,7 +2278,7 @@ I divide b0 by 100 and multiply b1 by 100 to get the parameters on the same scal
 the hopes that this speeds things up a bit.
 
 #+begin_src R :exports results :results graphics :file ../figs/fasdfa.png
-ggplot(mapping = aes(x = AGE, y = DBH)) + geom_point(data = dt, color = "red") + geom_point(data = fram_ftcollins, color = "blue")
+  ggplot(mapping = aes(x = AGE, y = DBH)) + geom_point(data = dt, color = "red") + geom_point(data = fram_ftcollins, color = "blue")
 #+end_src
 
 #+RESULTS:
@@ -2342,14 +2344,14 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_hetero_pairs.png
-pairs(model_fram_ftcollins_hetero)
+  pairs(model_fram_ftcollins_hetero)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_hetero_pairs.png]]
 
 #+begin_src R
-summary(model_fram_ftcollins_hetero)
+  summary(model_fram_ftcollins_hetero)
 #+end_src
 
 #+RESULTS:
@@ -2378,14 +2380,14 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_hetero.png
-plot(model_fram_ftcollins_hetero)
+  plot(model_fram_ftcollins_hetero)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/model_fram_ftcollins_hetero.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/model_fram_ftcollins_hetero_marginal_effects.png
-marginal_effects(model_fram_ftcollins_hetero)
+  marginal_effects(model_fram_ftcollins_hetero)
 #+end_src
 
 #+RESULTS:
@@ -2394,7 +2396,7 @@ marginal_effects(model_fram_ftcollins_hetero)
 ****
 **** stan code for model
 #+begin_src R
-stancode(model_fram_ftcollins_homo)
+  stancode(model_fram_ftcollins_homo)
 #+end_src
 
 #+RESULTS:
@@ -2448,18 +2450,18 @@ stancode(model_fram_ftcollins_homo)
 **** fit to generated data
 
 #+begin_src R :results output
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ (1 | ID | City),
-                       b1 ~ (1 | ID | City),
-                       b2 ~ (1 | ID | City),
-                       nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ (1 | ID | City),
+             b1 ~ (1 | ID | City),
+             b2 ~ (1 | ID | City),
+             nl = T)
 
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
   m_generated_singleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
@@ -2467,18 +2469,18 @@ stancode(model_fram_ftcollins_homo)
 #+end_src
 
 #+begin_src R :results output
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ (1 | City),
-                       b1 ~ (1 | City),
-                       b2 ~ (1 | City),
-                       nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ (1 | City),
+             b1 ~ (1 | City),
+             b2 ~ (1 | City),
+             nl = T)
 
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
   m_generated_singleSpecies_multipleLocations_homo_nocor <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
@@ -2486,7 +2488,7 @@ stancode(model_fram_ftcollins_homo)
 #+end_src
 
 #+begin_src R
-summary(m_generated_singleSpecies_multipleLocations_homo_nocor)
+  summary(m_generated_singleSpecies_multipleLocations_homo_nocor)
 #+end_src
 
 #+RESULTS:
@@ -2527,7 +2529,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R
-summary(m_generated_singleSpecies_multipleLocations_homo_cor)
+  summary(m_generated_singleSpecies_multipleLocations_homo_cor)
 #+end_src
 
 #+RESULTS:
@@ -2578,15 +2580,15 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_homo.png
-pairs(m_generated_singleSpecies_multipleLocations_homo)
+  pairs(m_generated_singleSpecies_multipleLocations_homo)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/pairs_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_homo.png
-library(bayesplot)
-mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
+  library(bayesplot)
+  mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 #+end_src
 
 #+RESULTS:
@@ -2594,10 +2596,10 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal2_m_generated_singleSpecies_multipleLocations_homo.png
-    cond <- data.frame(City = c("a","b","c","d"))
+  cond <- data.frame(City = c("a","b","c","d"))
 
-    me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo,
-                           effects = c("AGE"), conditions = cond, re_formula = NULL)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo,
+                         effects = c("AGE"), conditions = cond, re_formula = NULL)
 
 
   ggplot(me$AGE) +
@@ -2612,10 +2614,10 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 [[file:../figs/marginal2_m_generated_singleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_nocor_m_generated_singleSpecies_multipleLocations_homo.png
-    cond <- data.frame(City = c("a","b","c","d"))
+  cond <- data.frame(City = c("a","b","c","d"))
 
-    me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo_nocor,
-                           effects = c("AGE"), conditions = cond, re_formula = NULL)
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_homo_nocor,
+                         effects = c("AGE"), conditions = cond, re_formula = NULL)
 
 
   ggplot(me$AGE) +
@@ -2631,7 +2633,7 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_homo))
 
 
 #+begin_src R
-LOO(m_generated_singleSpecies_multipleLocations_homo_cor,m_generated_singleSpecies_multipleLocations_homo_nocor)
+  LOO(m_generated_singleSpecies_multipleLocations_homo_cor,m_generated_singleSpecies_multipleLocations_homo_nocor)
 #+end_src
 
 #+RESULTS:
@@ -2645,10 +2647,10 @@ LOO(m_generated_singleSpecies_multipleLocations_homo_cor,m_generated_singleSpeci
 : m_generated_singleSpecies_multipleLocations_homo_cor - m_generated_singleSpecies_multipleLocations_homo_nocor  0.54
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_pts_all.png
-    ggplot() +
-        geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__,  ymax = estimate__ + se__, group = City)) +
-        geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
-        geom_point(data = dt, aes(x = AGE, y = DBH, color = City))
+  ggplot() +
+      geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__,  ymax = estimate__ + se__, group = City)) +
+      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = City)) +
+      geom_point(data = dt, aes(x = AGE, y = DBH, color = City))
 
 #+end_src
 
@@ -2656,112 +2658,112 @@ LOO(m_generated_singleSpecies_multipleLocations_homo_cor,m_generated_singleSpeci
 [[file:../figs/marginal_pts_all.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
-pp_check(m_generated_singleSpecies_multipleLocations_homo)
+  pp_check(m_generated_singleSpecies_multipleLocations_homo)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/posterior_pred.png]]
 
 #+begin_src R
-stancode(m_generated_singleSpecies_multipleLocations_homo)
+  stancode(m_generated_singleSpecies_multipleLocations_homo)
 #+end_src
 
 #+RESULTS:
 
 #+BEGIN_SRC stan
-// generated with brms 2.3.1
-functions {
-}
-data {
-  int<lower=1> N;  // total number of observations
-  vector[N] Y;  // response variable
-  int<lower=1> K_b0;  // number of population-level effects
-  matrix[N, K_b0] X_b0;  // population-level design matrix
-  int<lower=1> K_b1;  // number of population-level effects
-  matrix[N, K_b1] X_b1;  // population-level design matrix
-  int<lower=1> K_b2;  // number of population-level effects
-  matrix[N, K_b2] X_b2;  // population-level design matrix
-  // covariate vectors
-  vector[N] C_1;
-  // data for group-level effects of ID 1
-  int<lower=1> J_1[N];
-  int<lower=1> N_1;
-  int<lower=1> M_1;
-  vector[N] Z_1_b0_1;
-  vector[N] Z_1_b1_2;
-  vector[N] Z_1_b2_3;
-  int<lower=1> NC_1;
-  int prior_only;  // should the likelihood be ignored?
-}
-transformed data {
-}
-parameters {
-  vector<lower=0>[K_b0] b_b0;  // population-level effects
-  vector<lower=0>[K_b1] b_b1;  // population-level effects
-  vector<lower=0>[K_b2] b_b2;  // population-level effects
-  real<lower=0> sigma;  // residual SD
-  vector<lower=0>[M_1] sd_1;  // group-level standard deviations
-  matrix[M_1, N_1] z_1;  // unscaled group-level effects
-  // cholesky factor of correlation matrix
-  cholesky_factor_corr[M_1] L_1;
-}
-transformed parameters {
-  // group-level effects
-  matrix[N_1, M_1] r_1 = (diag_pre_multiply(sd_1, L_1) * z_1)';
-  vector[N_1] r_1_b0_1 = r_1[, 1];
-  vector[N_1] r_1_b1_2 = r_1[, 2];
-  vector[N_1] r_1_b2_3 = r_1[, 3];
-}
-model {
-  vector[N] mu_b0 = X_b0 * b_b0;
-  vector[N] mu_b1 = X_b1 * b_b1;
-  vector[N] mu_b2 = X_b2 * b_b2;
-  vector[N] mu;
-  for (n in 1:N) {
-    mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n];
-    mu_b1[n] += r_1_b1_2[J_1[n]] * Z_1_b1_2[n];
-    mu_b2[n] += r_1_b2_3[J_1[n]] * Z_1_b2_3[n];
-    // compute non-linear predictor
-    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  // generated with brms 2.3.1
+  functions {
   }
-  // priors including all constants
-  target += gamma_lpdf(b_b0 | 4, 3)
-    - 1 * gamma_lccdf(0 | 4, 3);
-  target += gamma_lpdf(b_b1 | 4, 3)
-    - 1 * gamma_lccdf(0 | 4, 3);
-  target += gamma_lpdf(b_b2 | 4, 3)
-    - 1 * gamma_lccdf(0 | 4, 3);
-  target += student_t_lpdf(sigma | 3, 0, 49)
-    - 1 * student_t_lccdf(0 | 3, 0, 49);
-  target += student_t_lpdf(sd_1 | 3, 0, 49)
-    - 3 * student_t_lccdf(0 | 3, 0, 49);
-  target += normal_lpdf(to_vector(z_1) | 0, 1);
-  target += lkj_corr_cholesky_lpdf(L_1 | 1);
-  // likelihood including all constants
-  if (!prior_only) {
-    target += normal_lpdf(Y | mu, sigma);
+  data {
+    int<lower=1> N;  // total number of observations
+    vector[N] Y;  // response variable
+    int<lower=1> K_b0;  // number of population-level effects
+    matrix[N, K_b0] X_b0;  // population-level design matrix
+    int<lower=1> K_b1;  // number of population-level effects
+    matrix[N, K_b1] X_b1;  // population-level design matrix
+    int<lower=1> K_b2;  // number of population-level effects
+    matrix[N, K_b2] X_b2;  // population-level design matrix
+    // covariate vectors
+    vector[N] C_1;
+    // data for group-level effects of ID 1
+    int<lower=1> J_1[N];
+    int<lower=1> N_1;
+    int<lower=1> M_1;
+    vector[N] Z_1_b0_1;
+    vector[N] Z_1_b1_2;
+    vector[N] Z_1_b2_3;
+    int<lower=1> NC_1;
+    int prior_only;  // should the likelihood be ignored?
   }
-}
-generated quantities {
-  corr_matrix[M_1] Cor_1 = multiply_lower_tri_self_transpose(L_1);
-  vector<lower=-1,upper=1>[NC_1] cor_1;
-  // take only relevant parts of correlation matrix
-  cor_1[1] = Cor_1[1,2];
-  cor_1[2] = Cor_1[1,3];
-  cor_1[3] = Cor_1[2,3];
-}
+  transformed data {
+  }
+  parameters {
+    vector<lower=0>[K_b0] b_b0;  // population-level effects
+    vector<lower=0>[K_b1] b_b1;  // population-level effects
+    vector<lower=0>[K_b2] b_b2;  // population-level effects
+    real<lower=0> sigma;  // residual SD
+    vector<lower=0>[M_1] sd_1;  // group-level standard deviations
+    matrix[M_1, N_1] z_1;  // unscaled group-level effects
+    // cholesky factor of correlation matrix
+    cholesky_factor_corr[M_1] L_1;
+  }
+  transformed parameters {
+    // group-level effects
+    matrix[N_1, M_1] r_1 = (diag_pre_multiply(sd_1, L_1) * z_1)';
+    vector[N_1] r_1_b0_1 = r_1[, 1];
+    vector[N_1] r_1_b1_2 = r_1[, 2];
+    vector[N_1] r_1_b2_3 = r_1[, 3];
+  }
+  model {
+    vector[N] mu_b0 = X_b0 * b_b0;
+    vector[N] mu_b1 = X_b1 * b_b1;
+    vector[N] mu_b2 = X_b2 * b_b2;
+    vector[N] mu;
+    for (n in 1:N) {
+      mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n];
+      mu_b1[n] += r_1_b1_2[J_1[n]] * Z_1_b1_2[n];
+      mu_b2[n] += r_1_b2_3[J_1[n]] * Z_1_b2_3[n];
+      // compute non-linear predictor
+      mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+    }
+    // priors including all constants
+    target += gamma_lpdf(b_b0 | 4, 3)
+      - 1 * gamma_lccdf(0 | 4, 3);
+    target += gamma_lpdf(b_b1 | 4, 3)
+      - 1 * gamma_lccdf(0 | 4, 3);
+    target += gamma_lpdf(b_b2 | 4, 3)
+      - 1 * gamma_lccdf(0 | 4, 3);
+    target += student_t_lpdf(sigma | 3, 0, 49)
+      - 1 * student_t_lccdf(0 | 3, 0, 49);
+    target += student_t_lpdf(sd_1 | 3, 0, 49)
+      - 3 * student_t_lccdf(0 | 3, 0, 49);
+    target += normal_lpdf(to_vector(z_1) | 0, 1);
+    target += lkj_corr_cholesky_lpdf(L_1 | 1);
+    // likelihood including all constants
+    if (!prior_only) {
+      target += normal_lpdf(Y | mu, sigma);
+    }
+  }
+  generated quantities {
+    corr_matrix[M_1] Cor_1 = multiply_lower_tri_self_transpose(L_1);
+    vector<lower=-1,upper=1>[NC_1] cor_1;
+    // take only relevant parts of correlation matrix
+    cor_1[1] = Cor_1[1,2];
+    cor_1[2] = Cor_1[1,3];
+    cor_1[3] = Cor_1[2,3];
+  }
 #+END_SRC
 
 **** fit to real data
 #+begin_src R
-d <- readRDS("../data/tidy_age_dbh.rds")
-fram <- filter(d, SpCode == "FRAM")
+  d <- readRDS("../data/tidy_age_dbh.rds")
+  fram <- filter(d, SpCode == "FRAM")
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/fram_age_dbh.png
-ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
+  ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~City)
 #+end_src
 
 #+RESULTS:
@@ -2769,18 +2771,18 @@ ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~Ci
 
 #+begin_src R
 
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ (1 | ID | City),
-                       b1 ~ (1 | ID | City),
-                       b2 ~ (1 | ID | City),
-                       nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ (1 | ID | City),
+             b1 ~ (1 | ID | City),
+             b2 ~ (1 | ID | City),
+             nl = T)
 
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
   model_fram <- brm(form, chains = 2, cores = 2, data = fram, prior = nlprior, init_r = .3)
@@ -2789,7 +2791,7 @@ ggplot(fram, aes(x = AGE, y = DBH,color = City)) + geom_point() + facet_wrap(~Ci
 #+end_src
 
 #+begin_src R
-model_fram
+  model_fram
 #+end_src
 
 #+RESULTS:
@@ -2841,7 +2843,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/trace_model_fram_homo.png
-mcmc_trace(as.matrix(model_fram))
+  mcmc_trace(as.matrix(model_fram))
 #+end_src
 
 #+RESULTS:
@@ -2851,7 +2853,7 @@ mcmc_trace(as.matrix(model_fram))
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_fram_homo_Cities.png
   cond <- data.frame(City = unique(fram$City))
-marginal_effects(model_fram, re_formula = NULL, conditions = cond)
+  marginal_effects(model_fram, re_formula = NULL, conditions = cond)
 #+end_src
 
 #+RESULTS:
@@ -2864,8 +2866,8 @@ marginal_effects(model_fram, re_formula = NULL, conditions = cond)
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
-    geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-    geom_point(data = fram, aes(x = AGE, y = DBH)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = fram, aes(x = AGE, y = DBH)) +
       facet_wrap(~City)
 #+end_src
 
@@ -2875,51 +2877,51 @@ marginal_effects(model_fram, re_formula = NULL, conditions = cond)
 *** single species, multiple locations, precipitation predictors for locations, homoskedasticy
 **** generate data
 #+begin_src R
-    k <- 12
-    expect_nk <- 30
-    n <- k * expect_nk
-    breaks <- c(0,sort(sample(1:n,(k-1))),n)
-    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
-    nk
+  k <- 12
+  expect_nk <- 30
+  n <- k * expect_nk
+  breaks <- c(0,sort(sample(1:n,(k-1))),n)
+  nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+  nk
 
   precip <- c(200, 100, 1500, 600, 700, 500, 1400, 600, 400, 400, 250, 800) / 1000
   precip <- precip - mean(precip)
 
-    u_precip_b0 <- .4
-    u_precip_b1 <- -.2
-    u_precip_b2 <- .2
+  u_precip_b0 <- .4
+  u_precip_b1 <- -.2
+  u_precip_b2 <- .2
 
-    #with centered city level predictors this is the mean
-    u_intercept_b0 <- 1.5
-    u_intercept_b1 <- 2
-    u_intercept_b2 <- 1
+                                          #with centered city level predictors this is the mean
+  u_intercept_b0 <- 1.5
+  u_intercept_b1 <- 2
+  u_intercept_b2 <- 1
 
-      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
-      sigma_b0 <- .2
-      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
-      sigma_b1 <- .2
-      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
-      sigma_b2 <- .2
+  mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
+  sigma_b0 <- .2
+  mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
+  sigma_b1 <- .2
+  mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
+  sigma_b2 <- .2
 
-      sigma <- 3
+  sigma <- 3
 
-      b0 <- rnorm(k, mu_b0, sigma_b0)
-      b1 <- rnorm(k, mu_b1, sigma_b1)
-      b2 <- rnorm(k, mu_b2, sigma_b2)
+  b0 <- rnorm(k, mu_b0, sigma_b0)
+  b1 <- rnorm(k, mu_b1, sigma_b1)
+  b2 <- rnorm(k, mu_b2, sigma_b2)
 
-      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-
-
-      AGE <- rep(seq(0,100,length.out = n/2),each = 2) %>%
-          sample  #to randomly shuffle
-
-      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
-
-    City <- rep(letters[1:k], times = nk)
-    Precip <- rep(precip, times = nk)
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
 
-    dt <- data.frame(AGE, DBH, City, Precip)
+  AGE <- rep(seq(0,100,length.out = n/2),each = 2) %>%
+      sample  #to randomly shuffle
+
+  DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+
+  City <- rep(letters[1:k], times = nk)
+  Precip <- rep(precip, times = nk)
+
+
+  dt <- data.frame(AGE, DBH, City, Precip)
 #+end_src
 
 #+RESULTS:
@@ -2927,10 +2929,10 @@ marginal_effects(model_fram, re_formula = NULL, conditions = cond)
 : [1]  19   8  35   6  16  19  21  47 112  32  29  16
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png :height 200
-library(gridExtra)
-pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-grid.arrange(pc,pp, nrow =1)
+  library(gridExtra)
+  pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+  pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+  grid.arrange(pc,pp, nrow =1)
 #+end_src
 
 #+RESULTS:
@@ -2939,14 +2941,14 @@ grid.arrange(pc,pp, nrow =1)
 **** fit to generated data
 linear fit for test
 #+begin_src R
-            form <- bf(DBH ~ AGE * Precip + (AGE + 1 | City))
+  form <- bf(DBH ~ AGE * Precip + (AGE + 1 | City))
 
-linfit <- brm(form, chains = 2, cores = 2, data = dt)
+  linfit <- brm(form, chains = 2, cores = 2, data = dt)
 
 #+end_src
 
 #+begin_src R
-linfit
+  linfit
 #+end_src
 
 #+RESULTS:
@@ -2986,14 +2988,14 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/linfit.png
-marginal_effects(linfit, "AGE:Precip")
+  marginal_effects(linfit, "AGE:Precip")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/linfit.png]]
 
 #+begin_src R
-stancode(linfit)
+  stancode(linfit)
 #+end_src
 
 #+RESULTS:
@@ -3001,22 +3003,22 @@ stancode(linfit)
 #+begin_src R :results output
 
 
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ Precip + (1 | City),
-                     b1 ~ Precip + (1 | City),
-                     b2 ~ Precip + (1 | City),
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ Precip + (1 | City),
+             b1 ~ Precip + (1 | City),
+             b2 ~ Precip + (1 | City),
+             nl = T)
 
   nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
                prior(gamma(4, 3), nlpar = "b1",lb = 0),
                prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+  m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 
 #+end_src
 
 #+begin_src R
-summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 #+RESULTS:
@@ -3064,15 +3066,15 @@ more uncertainty.
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png :width 1000 :height 1000
-pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-library(bayesplot)
-mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
+  library(bayesplot)
+  mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
 #+end_src
 
 #+RESULTS:
@@ -3090,7 +3092,7 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png
 
-me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
   me
 
 
@@ -3100,12 +3102,12 @@ me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_hom
 [[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png
-      cond <- data.frame(City = unique(dt$City))
-        me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
-                               conditions = cond,
-                               effects = "AGE",
-                               re_formula = NULL)
-        me
+  cond <- data.frame(City = unique(dt$City))
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
+                         conditions = cond,
+                         effects = "AGE",
+                         re_formula = NULL)
+  me
 
 #+end_src
 
@@ -3113,131 +3115,131 @@ me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_hom
 [[file:../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
-pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/posterior_pred.png]]
 
 #+begin_src R
-stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 #+BEGIN_SRC stan
-// generated with brms 2.3.1
-functions {
-}
-data {
-  int<lower=1> N;  // total number of observations
-  vector[N] Y;  // response variable
-  int<lower=1> K_b0;  // number of population-level effects
-  matrix[N, K_b0] X_b0;  // population-level design matrix
-  int<lower=1> K_b1;  // number of population-level effects
-  matrix[N, K_b1] X_b1;  // population-level design matrix
-  int<lower=1> K_b2;  // number of population-level effects
-  matrix[N, K_b2] X_b2;  // population-level design matrix
-  // covariate vectors
-  vector[N] C_1;
-  // data for group-level effects of ID 1
-  int<lower=1> J_1[N];
-  int<lower=1> N_1;
-  int<lower=1> M_1;
-  vector[N] Z_1_b0_1;
-  // data for group-level effects of ID 2
-  int<lower=1> J_2[N];
-  int<lower=1> N_2;
-  int<lower=1> M_2;
-  vector[N] Z_2_b1_1;
-  // data for group-level effects of ID 3
-  int<lower=1> J_3[N];
-  int<lower=1> N_3;
-  int<lower=1> M_3;
-  vector[N] Z_3_b2_1;
-  int prior_only;  // should the likelihood be ignored?
-}
-transformed data {
-}
-parameters {
-  vector<lower=0>[K_b0] b_b0;  // population-level effects
-  vector<lower=0>[K_b1] b_b1;  // population-level effects
-  vector<lower=0>[K_b2] b_b2;  // population-level effects
-  real<lower=0> sigma;  // residual SD
-  vector<lower=0>[M_1] sd_1;  // group-level standard deviations
-  vector[N_1] z_1[M_1];  // unscaled group-level effects
-  vector<lower=0>[M_2] sd_2;  // group-level standard deviations
-  vector[N_2] z_2[M_2];  // unscaled group-level effects
-  vector<lower=0>[M_3] sd_3;  // group-level standard deviations
-  vector[N_3] z_3[M_3];  // unscaled group-level effects
-}
-transformed parameters {
-  // group-level effects
-  vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
-  // group-level effects
-  vector[N_2] r_2_b1_1 = sd_2[1] * (z_2[1]);
-  // group-level effects
-  vector[N_3] r_3_b2_1 = sd_3[1] * (z_3[1]);
-}
-model {
-  vector[N] mu_b0 = X_b0 * b_b0;
-  vector[N] mu_b1 = X_b1 * b_b1;
-  vector[N] mu_b2 = X_b2 * b_b2;
-  vector[N] mu;
-  for (n in 1:N) {
-    mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n];
-    mu_b1[n] += r_2_b1_1[J_2[n]] * Z_2_b1_1[n];
-    mu_b2[n] += r_3_b2_1[J_3[n]] * Z_3_b2_1[n];
-    // compute non-linear predictor
-    mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+  // generated with brms 2.3.1
+  functions {
   }
-  // priors including all constants
-  target += gamma_lpdf(b_b0 | 4, 3)
-    - 2 * gamma_lccdf(0 | 4, 3);
-  target += gamma_lpdf(b_b1 | 4, 3)
-    - 2 * gamma_lccdf(0 | 4, 3);
-  target += gamma_lpdf(b_b2 | 4, 3)
-    - 2 * gamma_lccdf(0 | 4, 3);
-  target += student_t_lpdf(sigma | 3, 0, 33)
-    - 1 * student_t_lccdf(0 | 3, 0, 33);
-  target += student_t_lpdf(sd_1 | 3, 0, 33)
-    - 1 * student_t_lccdf(0 | 3, 0, 33);
-  target += normal_lpdf(z_1[1] | 0, 1);
-  target += student_t_lpdf(sd_2 | 3, 0, 33)
-    - 1 * student_t_lccdf(0 | 3, 0, 33);
-  target += normal_lpdf(z_2[1] | 0, 1);
-  target += student_t_lpdf(sd_3 | 3, 0, 33)
-    - 1 * student_t_lccdf(0 | 3, 0, 33);
-  target += normal_lpdf(z_3[1] | 0, 1);
-  // likelihood including all constants
-  if (!prior_only) {
-    target += normal_lpdf(Y | mu, sigma);
+  data {
+    int<lower=1> N;  // total number of observations
+    vector[N] Y;  // response variable
+    int<lower=1> K_b0;  // number of population-level effects
+    matrix[N, K_b0] X_b0;  // population-level design matrix
+    int<lower=1> K_b1;  // number of population-level effects
+    matrix[N, K_b1] X_b1;  // population-level design matrix
+    int<lower=1> K_b2;  // number of population-level effects
+    matrix[N, K_b2] X_b2;  // population-level design matrix
+    // covariate vectors
+    vector[N] C_1;
+    // data for group-level effects of ID 1
+    int<lower=1> J_1[N];
+    int<lower=1> N_1;
+    int<lower=1> M_1;
+    vector[N] Z_1_b0_1;
+    // data for group-level effects of ID 2
+    int<lower=1> J_2[N];
+    int<lower=1> N_2;
+    int<lower=1> M_2;
+    vector[N] Z_2_b1_1;
+    // data for group-level effects of ID 3
+    int<lower=1> J_3[N];
+    int<lower=1> N_3;
+    int<lower=1> M_3;
+    vector[N] Z_3_b2_1;
+    int prior_only;  // should the likelihood be ignored?
   }
-}
-generated quantities {
-}
+  transformed data {
+  }
+  parameters {
+    vector<lower=0>[K_b0] b_b0;  // population-level effects
+    vector<lower=0>[K_b1] b_b1;  // population-level effects
+    vector<lower=0>[K_b2] b_b2;  // population-level effects
+    real<lower=0> sigma;  // residual SD
+    vector<lower=0>[M_1] sd_1;  // group-level standard deviations
+    vector[N_1] z_1[M_1];  // unscaled group-level effects
+    vector<lower=0>[M_2] sd_2;  // group-level standard deviations
+    vector[N_2] z_2[M_2];  // unscaled group-level effects
+    vector<lower=0>[M_3] sd_3;  // group-level standard deviations
+    vector[N_3] z_3[M_3];  // unscaled group-level effects
+  }
+  transformed parameters {
+    // group-level effects
+    vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
+    // group-level effects
+    vector[N_2] r_2_b1_1 = sd_2[1] * (z_2[1]);
+    // group-level effects
+    vector[N_3] r_3_b2_1 = sd_3[1] * (z_3[1]);
+  }
+  model {
+    vector[N] mu_b0 = X_b0 * b_b0;
+    vector[N] mu_b1 = X_b1 * b_b1;
+    vector[N] mu_b2 = X_b2 * b_b2;
+    vector[N] mu;
+    for (n in 1:N) {
+      mu_b0[n] += r_1_b0_1[J_1[n]] * Z_1_b0_1[n];
+      mu_b1[n] += r_2_b1_1[J_2[n]] * Z_2_b1_1[n];
+      mu_b2[n] += r_3_b2_1[J_3[n]] * Z_3_b2_1[n];
+      // compute non-linear predictor
+      mu[n] = 100 * mu_b0[n] * (1 - exp( - (mu_b1[n] / 100) * C_1[n] ^ mu_b2[n]));
+    }
+    // priors including all constants
+    target += gamma_lpdf(b_b0 | 4, 3)
+      - 2 * gamma_lccdf(0 | 4, 3);
+    target += gamma_lpdf(b_b1 | 4, 3)
+      - 2 * gamma_lccdf(0 | 4, 3);
+    target += gamma_lpdf(b_b2 | 4, 3)
+      - 2 * gamma_lccdf(0 | 4, 3);
+    target += student_t_lpdf(sigma | 3, 0, 33)
+      - 1 * student_t_lccdf(0 | 3, 0, 33);
+    target += student_t_lpdf(sd_1 | 3, 0, 33)
+      - 1 * student_t_lccdf(0 | 3, 0, 33);
+    target += normal_lpdf(z_1[1] | 0, 1);
+    target += student_t_lpdf(sd_2 | 3, 0, 33)
+      - 1 * student_t_lccdf(0 | 3, 0, 33);
+    target += normal_lpdf(z_2[1] | 0, 1);
+    target += student_t_lpdf(sd_3 | 3, 0, 33)
+      - 1 * student_t_lccdf(0 | 3, 0, 33);
+    target += normal_lpdf(z_3[1] | 0, 1);
+    // likelihood including all constants
+    if (!prior_only) {
+      target += normal_lpdf(Y | mu, sigma);
+    }
+  }
+  generated quantities {
+  }
 #+END_SRC
 
 **** fit to real data
 #+begin_src R :var clim=city_climate
-d <- readRDS("../data/tidy_age_dbh.rds")
-list <- filter(d, SpCode == "LIST")
-    list_clim <- left_join(list,clim) %>%
-        mutate(Precip = (Precip - mean(Precip))/ 1000)
+  d <- readRDS("../data/tidy_age_dbh.rds")
+  list <- filter(d, SpCode == "LIST")
+  list_clim <- left_join(list,clim) %>%
+      mutate(Precip = (Precip - mean(Precip))/ 1000)
 #+end_src
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
 
 #+begin_src R :exports results :results graphics :file ../figs/list_clim.png :height 200 :width 700
-pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-grid.arrange(pc,pp, nrow =1)
+  pc <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
+  pp <-   ggplot(list_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+  grid.arrange(pc,pp, nrow =1)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/list_clim.png]]
 
 #+begin_src R
-model_list_precip_homo <- update(m_generated_singleSpecies_multipleLocations_GroupPred_homo, chains = 2, cores = 2, newdata = list_clim)
+  model_list_precip_homo <- update(m_generated_singleSpecies_multipleLocations_GroupPred_homo, chains = 2, cores = 2, newdata = list_clim)
 #+end_src
 
 #+RESULTS:
@@ -3316,7 +3318,7 @@ http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R
-model_fram_precip_homo
+  model_fram_precip_homo
 #+end_src
 
 #+RESULTS:
@@ -3361,14 +3363,14 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_precip_homo.png
-mcmc_trace(as.matrix(model_fram_precip_homo))
+  mcmc_trace(as.matrix(model_fram_precip_homo))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/mcmctrace_fram_precip_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_precip_homo.png
-pp_check(model_fram_precip_homo)
+  pp_check(model_fram_precip_homo)
 #+end_src
 
 #+RESULTS:
@@ -3379,7 +3381,7 @@ Temperature related covariates
 
 **** marginal effects
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo.png
-marginal_effects(model_fram_precip_homo, effects = "AGE:Precip")
+  marginal_effects(model_fram_precip_homo, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
@@ -3391,9 +3393,9 @@ Very cool, as precip increases, so does dbh.  But there is high uncertainty.
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_ageprecip_homo_Points.png
   conditions <- data.frame(Precip = unique(fram_clim$Precip))
   me <- marginal_effects(model_fram_precip_homo, effects = "AGE", conditions = conditions, re_formula = NA)
-#me
+                                          #me
   ggplot(me$AGE) +
-        geom_line(aes(x = AGE, y = estimate__)) +
+      geom_line(aes(x = AGE, y = estimate__)) +
       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
       geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
       facet_wrap(~Precip)
@@ -3403,7 +3405,7 @@ Very cool, as precip increases, so does dbh.  But there is high uncertainty.
 [[file:../figs/marginal_effects_age_fram_ageprecip_homo_Points.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_precip_homo.png
-marginal_effects(model_fram_precip_homo, effects = "Precip")
+  marginal_effects(model_fram_precip_homo, effects = "Precip")
 #+end_src
 
 #+RESULTS:
@@ -3478,11 +3480,11 @@ marginal_effects(model_fram_precip_homo, effects = "Precip")
 : [1] 32 44 19  3 52
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png
-pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-ph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
-pph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD*Precip)) + geom_point()
-grid.arrange(pc,pp,ph, pph, nrow =2)
+  pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+  pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+  ph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
+  pph <-   ggplot(dt, aes(x = AGE, y = DBH, color = HDD*Precip)) + geom_point()
+  grid.arrange(pc,pp,ph, pph, nrow =2)
 #+end_src
 
 #+RESULTS:
@@ -3491,25 +3493,25 @@ grid.arrange(pc,pp,ph, pph, nrow =2)
 **** fit to generated data
 
 #+begin_src R :results output
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ Precip * HDD + (1 | City),
-                     b1 ~ Precip * HDD + (1 | City),
-                     b2 ~ Precip * HDD + (1 | City),
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ Precip * HDD + (1 | City),
+             b1 ~ Precip * HDD + (1 | City),
+             b2 ~ Precip * HDD + (1 | City),
+             nl = T)
 
-    nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                 prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                 prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                 prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                 prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
-m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
+  m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
 #+begin_src R
-summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 **** fit to real data
@@ -3518,9 +3520,9 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
   lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA"))
 
   lg_clim <- left_join(lg,clim) %>%
-            mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-                   HDD = round((HDD - mean(HDD))/ 1000, 4),
-                   CDD = round((CDD - mean(CDD))/ 1000, 4))
+      mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+             HDD = round((HDD - mean(HDD))/ 1000, 4),
+             CDD = round((CDD - mean(CDD))/ 1000, 4))
 
 #+end_src
 
@@ -3528,10 +3530,10 @@ summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 : Joining, by = c("Region", "City")
 
 #+begin_src R :exports results :results graphics :file ../figs/lg_clim.png :height 200 :width 1000
-pc <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-ph <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
-grid.arrange(pc,pp, ph, nrow =1)
+  pc <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
+  pp <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+  ph <-   ggplot(lg_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
+  grid.arrange(pc,pp, ph, nrow =1)
 #+end_src
 
 #+RESULTS:
@@ -3548,35 +3550,35 @@ grid.arrange(pc,pp, ph, nrow =1)
 
 
 #+begin_src R
-lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
+  lg_clim <- select(lg_clim, DBH, AGE, City, Precip, HDD)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ Precip * HDD + (1 | City),
-                       b1 ~ Precip * HDD + (1 | City),
-                       b2 ~ Precip * HDD + (1 | City),
-                       nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ Precip * HDD + (1 | City),
+             b1 ~ Precip * HDD + (1 | City),
+             b2 ~ Precip * HDD + (1 | City),
+             nl = T)
 
 
-            form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                       b0 ~ t2(Precip, HDD) + (1 | City),
-                       b1 ~ (1 | City),
-                       b2 ~ (1 | City) + ( 1 | SpCode),
-                       nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ t2(Precip, HDD) + (1 | City),
+             b1 ~ (1 | City),
+             b2 ~ (1 | City) + ( 1 | SpCode),
+             nl = T)
 
 
-    nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                 prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                 prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                 prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                 prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
-#                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
- #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+               prior(cauchy(0,.1), class = "sds", nlpar = "b0"))
+                                          #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
+                                          #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
   model_lg_climate <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .1)
 
@@ -3595,17 +3597,17 @@ how to write?  often I see something like:
 
 pg 163 of https://www.casact.org/pubs/forum/08fforum/7Guszcza.pdf
 
-    \begin{pmatrix}
-           \beta_{1} \\
-           \beta_{2} \\
-    \end{pmatrix} \sim N
-    \begin{pmatrix}
-    \begin{matrix}
-         \mu_{\beta_1} \\
-         \mu_{\beta_2}
-    \end{matrix},
-    \Sigma
-    \end{pmatrix}
+\begin{pmatrix}
+       \beta_{1} \\
+       \beta_{2} \\
+\end{pmatrix} \sim N
+\begin{pmatrix}
+\begin{matrix}
+     \mu_{\beta_1} \\
+     \mu_{\beta_2}
+\end{matrix},
+\Sigma
+\end{pmatrix}
 
 
 \Sigma = \begin{pmatrix}
@@ -3614,16 +3616,16 @@ pg 163 of https://www.casact.org/pubs/forum/08fforum/7Guszcza.pdf
 
 \[
 
-          \begin{bmatrix}
-           ax_{0} + bx_{1} \\
-           \vdots \\
-           ax_{n-1}+bx_{n}
-          \end{bmatrix} -
+\begin{bmatrix}
+ax_{0} + bx_{1} \\
+\vdots \\
+ax_{n-1}+bx_{n}
+\end{bmatrix} -
 
 \]
 
 #+begin_src R
-model_lg_climate
+  model_lg_climate
 #+end_src
 
 #+RESULTS:
@@ -3682,14 +3684,14 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png :height 1000 :width 1000
-mcmc_trace(as.matrix(model_lg_climate))
+  mcmc_trace(as.matrix(model_lg_climate))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/mcmctrace_fram_climate_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_climate_homo.png
-pp_check(model_lg_climate)
+  pp_check(model_lg_climate)
 #+end_src
 
 #+RESULTS:
@@ -3698,14 +3700,14 @@ Not great.
 
 **** marginal effects
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_age_homo.png
-marginal_effects(model_lg_climate, effects = "AGE:Precip")
+  marginal_effects(model_lg_climate, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_age_lg_age_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_age_HDD_homo.png
-marginal_effects(model_lg_climate, effects = "AGE:HDD")
+  marginal_effects(model_lg_climate, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
@@ -3713,7 +3715,7 @@ marginal_effects(model_lg_climate, effects = "AGE:HDD")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_surface_homo.png
-marginal_effects(model_lg_climate, effects = "Precip:HDD", surface = T)
+  marginal_effects(model_lg_climate, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
@@ -3721,15 +3723,15 @@ marginal_effects(model_lg_climate, effects = "Precip:HDD", surface = T)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_lg_climate_homo_Points.png
-    conditions <- unique(select(lg_clim, Precip, HDD))
+  conditions <- unique(select(lg_clim, Precip, HDD))
 
   me <- marginal_effects(model_lg_climate, effects = "AGE", conditions = conditions, re_formula = NA)
 
-    ggplot(me$AGE) +
-          geom_line(aes(x = AGE, y = estimate__)) +
-        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
-        facet_wrap(~Precip)
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
+      facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
@@ -3738,7 +3740,7 @@ marginal_effects(model_lg_climate, effects = "Precip:HDD", surface = T)
 *** species ignorant, multiple locations, multiple climate predictors for locations, homoskedasticy
 **** generate data
 #+begin_src R :var clim=city_climate
-clim
+  clim
 #+end_src
 
 #+RESULTS:
@@ -3766,12 +3768,12 @@ clim
 
 #+begin_src R
 
-    k <- 17
-    expect_nk <- 30
-    n <- k * expect_nk
-    breaks <- c(0,sort(sample(1:100,(k-1))),n)
-    nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
-    nk
+  k <- 17
+  expect_nk <- 30
+  n <- k * expect_nk
+  breaks <- c(0,sort(sample(1:100,(k-1))),n)
+  nk <- sapply(1:k, function(i) breaks[i+1] - breaks[i])
+  nk
 
   clim.gen <- filter(clim, Region %in% c("GulfCo", "SWDsrt", "MidWst","NMtnPr", "NoCalC")) %>%
       mutate(CDD = (CDD - mean(CDD)) / 1000,
@@ -3783,50 +3785,50 @@ clim
   cdd <- clim.gen$CDD
 
   u_precip_b0 <- 1
-    u_precip_b1 <- .5
-    u_precip_b2 <- .5
+  u_precip_b1 <- .5
+  u_precip_b2 <- .5
 
-    #with centered city level predictors this is the mean
-    u_intercept_b0 <- 1
-    u_intercept_b1 <- 1
-    u_intercept_b2 <- 1
+                                          #with centered city level predictors this is the mean
+  u_intercept_b0 <- 1
+  u_intercept_b1 <- 1
+  u_intercept_b2 <- 1
 
-      mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
-      sigma_b0 <- .1
-      mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
-      sigma_b1 <- .1
-      mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
-      sigma_b2 <- .1
+  mu_b0 <- u_intercept_b0 + u_precip_b0 * precip
+  sigma_b0 <- .1
+  mu_b1 <-  u_intercept_b1 + u_precip_b1 * precip
+  sigma_b1 <- .1
+  mu_b2 <-  u_intercept_b2 + u_precip_b2 * precip
+  sigma_b2 <- .1
 
-      sigma <- 3
+  sigma <- 3
 
-      b0 <- rnorm(k, mu_b0, sigma_b0)
-      b1 <- rnorm(k, mu_b1, sigma_b1)
-      b2 <- rnorm(k, mu_b2, sigma_b2)
+  b0 <- rnorm(k, mu_b0, sigma_b0)
+  b1 <- rnorm(k, mu_b1, sigma_b1)
+  b2 <- rnorm(k, mu_b2, sigma_b2)
 
-      w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-
-
-      AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
-          sample  #to randomly shuffle
-
-      DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
-
-    City <- rep(letters[1:k], times = nk)
-    Precip <- rep(precip, times = nk)
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
 
 
-    dt <- data.frame(AGE, DBH, City, Precip)
+  AGE <- rep(seq(0,150,length.out = n/2),each = 2) %>%
+      sample  #to randomly shuffle
+
+  DBH <- sapply(1:k, function(i) w(b0[i], b1[i], b2[i], AGE[seq(breaks[i]+1,breaks[i+1])]) + rnorm(nk[i], 0, sigma)) %>% unlist
+
+  City <- rep(letters[1:k], times = nk)
+  Precip <- rep(precip, times = nk)
+
+
+  dt <- data.frame(AGE, DBH, City, Precip)
 #+end_src
 
 #+RESULTS:
 : [1] 22 16  3 46 63
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_singleSpecies_multipleLocations_PrecipCityPred.png :height 200
-library(gridExtra)
-pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-grid.arrange(pc,pp, nrow =1)
+  library(gridExtra)
+  pc <-   ggplot(dt, aes(x = AGE, y = DBH, color = City)) + geom_point()
+  pp <-   ggplot(dt, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+  grid.arrange(pc,pp, nrow =1)
 #+end_src
 
 #+RESULTS:
@@ -3835,22 +3837,22 @@ grid.arrange(pc,pp, nrow =1)
 **** fit to generated data
 
 #+begin_src R :results output
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ t2(Precip, HDD) + (1 | City),
-                     b1 ~ 1,
-                     b2 ~ 1,
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ t2(Precip, HDD) + (1 | City),
+             b1 ~ 1,
+             b2 ~ 1,
+             nl = T)
 
   nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
                prior(gamma(4, 3), nlpar = "b1",lb = 0),
                prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
+  m_generated_singleSpecies_multipleLocations_GroupPred_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior)
 
 #+end_src
 
 #+begin_src R
-summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  summary(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 It recovered the true values pretty well, though there is definitely
@@ -3858,12 +3860,12 @@ more uncertainty.
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png :width 1000 :height 1000
-pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  pairs(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/plot_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
-library(bayesplot)
-mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
+  library(bayesplot)
+  mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo))
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo.png
@@ -3875,71 +3877,71 @@ mcmc_trace(as.matrix(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_Precip.png
 
-me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo, effects = c("Precip"))
   me
 
 
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_singleSpecies_multipleLocations_GroupPred_homo_City.png
-      cond <- data.frame(City = unique(dt$City))
-        me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
-                               conditions = cond,
-                               effects = "AGE",
-                               re_formula = NULL)
-        me
+  cond <- data.frame(City = unique(dt$City))
+  me <- marginal_effects(m_generated_singleSpecies_multipleLocations_GroupPred_homo,
+                         conditions = cond,
+                         effects = "AGE",
+                         re_formula = NULL)
+  me
 
 #+end_src
 
 #+begin_src R :exports results :results graphics :file ../figs/posterior_pred.png
-pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  pp_check(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 #+begin_src R
-stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
+  stancode(m_generated_singleSpecies_multipleLocations_GroupPred_homo)
 #+end_src
 
 **** fit to real data
 #+begin_src R :var clim=city_climate
-d <- readRDS("../data/tidy_age_dbh.rds")
-fram <- filter(d, SpCode == "FRAM")
+  d <- readRDS("../data/tidy_age_dbh.rds")
+  fram <- filter(d, SpCode == "FRAM")
 
-      fram_clim <- left_join(fram,clim) %>%
-          mutate(Precip = (Precip - mean(Precip))/ 1000,
-                 HDD = (HDD - mean(HDD))/ 1000,
-                 CDD = (CDD - mean(CDD))/ 1000)
+  fram_clim <- left_join(fram,clim) %>%
+      mutate(Precip = (Precip - mean(Precip))/ 1000,
+             HDD = (HDD - mean(HDD))/ 1000,
+             CDD = (CDD - mean(CDD))/ 1000)
 #+end_src
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
 
 #+begin_src R :exports results :results graphics :file ../figs/fram_clim.png :height 200 :width 700
-pc <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
-pp <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
-ph <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
-grid.arrange(pc,pp, ph, nrow =1)
+  pc <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = City)) + geom_point()
+  pp <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = Precip)) + geom_point()
+  ph <-   ggplot(fram_clim, aes(x = AGE, y = DBH, color = HDD)) + geom_point()
+  grid.arrange(pc,pp, ph, nrow =1)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/fram_clim.png]]
 
 #+begin_src R
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ Precip * HDD + (1 | City),
-                     b1 ~ 1,
-                     b2 ~ 1,
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ Precip * HDD + (1 | City),
+             b1 ~ 1,
+             b2 ~ 1,
+             nl = T)
   nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
                prior(gamma(4, 3), nlpar = "b1",lb = 0),
                prior(gamma(4, 3), nlpar = "b2",lb = 0))
 
-model_fram_climate_homo <- brm(form, chains = 2, cores = 2, data = fram_clim, prior = nlprior)
+  model_fram_climate_homo <- brm(form, chains = 2, cores = 2, data = fram_clim, prior = nlprior)
 
 #+end_src
 
 
 #+begin_src R
-model_fram_climate_homo
+  model_fram_climate_homo
 #+end_src
 
 #+RESULTS:
@@ -3981,7 +3983,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/asdfas.png
-marginal_effects(model_list_climate, effect = "HDD:Precip", surface = T)
+  marginal_effects(model_list_climate, effect = "HDD:Precip", surface = T)
 #+end_src
 
 #+RESULTS:
@@ -3989,14 +3991,14 @@ marginal_effects(model_list_climate, effect = "HDD:Precip", surface = T)
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/mcmctrace_fram_climate_homo.png
-mcmc_trace(as.matrix(model_fram_climate_homo))
+  mcmc_trace(as.matrix(model_fram_climate_homo))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/mcmctrace_fram_climate_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_fram_climate_homo.png
-pp_check(model_fram_climate_homo)
+  pp_check(model_fram_climate_homo)
 #+end_src
 
 #+RESULTS:
@@ -4007,14 +4009,14 @@ Temperature related covariates
 
 **** marginal effects
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_age_homo.png
-marginal_effects(model_fram_climate_homo, effects = "AGE:Precip")
+  marginal_effects(model_fram_climate_homo, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_age_fram_age_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_surface_homo.png
-marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
+  marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
@@ -4022,15 +4024,15 @@ marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_age_fram_climate_homo_Points.png
-    conditions <- unique(select(fram_clim, Precip, HDD))
+  conditions <- unique(select(fram_clim, Precip, HDD))
 
   me <- marginal_effects(model_fram_climate_homo, effects = "AGE", conditions = conditions, re_formula = NA)
 
-    ggplot(me$AGE) +
-          geom_line(aes(x = AGE, y = estimate__)) +
-        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
-        facet_wrap(~Precip)
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = fram_clim, aes(x = AGE, y = DBH)) +
+      facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
@@ -4100,8 +4102,8 @@ marginal_effects(model_fram_climate_homo, effects = "Precip:HDD", surface = T)
 : There were 15 warnings (use warnings() to see them)
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_multipleSpecies_multipleLocations_PrecipCityPred.png
-p <-   ggplot(dt, aes(x = AGE, y = DBH)) + geom_point() + facet_grid(City ~ Species)
-p
+  p <-   ggplot(dt, aes(x = AGE, y = DBH)) + geom_point() + facet_grid(City ~ Species)
+  p
 #+end_src
 
 #+RESULTS:
@@ -4110,26 +4112,26 @@ p
 **** fit to generated data
 
 #+begin_src R :results output
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
-                     b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
-                     b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
+             b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
+             b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Species),
+             nl = T)
 
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
-m_generated_multipleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
+  m_generated_multipleSpecies_multipleLocations_homo <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
 #+begin_src R
-summary(m_generated_multipleSpecies_multipleLocations_homo)
+  summary(m_generated_multipleSpecies_multipleLocations_homo)
 #+end_src
 
 #+RESULTS:
@@ -4196,24 +4198,24 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/plot__multipleSpecies_multipleLocations_homo.png
-plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
+  plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/plot__multipleSpecies_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_multipleLocations_homo_cor.png :width 800
-     cond <- expand.grid(Species = unique(dt$Species), City = unique(dt$City))
-     rownames(cond) <- paste0(cond$Species, cond$City)
-    me <- marginal_effects(m_generated_multipleSpecies_multipleLocations_homo,
-                       re_formula = NULL, method = "predict",
-                          conditions = cond)
+  cond <- expand.grid(Species = unique(dt$Species), City = unique(dt$City))
+  rownames(cond) <- paste0(cond$Species, cond$City)
+  me <- marginal_effects(m_generated_multipleSpecies_multipleLocations_homo,
+                         re_formula = NULL, method = "predict",
+                         conditions = cond)
 
   ggplot() +
-    geom_line(data = me$AGE, color = "blue", aes(x = AGE, y = estimate__)) +
-    geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-    geom_point(data = dt, aes(x = AGE, y = DBH)) +
-    facet_grid(City ~ Species)
+      geom_line(data = me$AGE, color = "blue", aes(x = AGE, y = estimate__)) +
+      geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_point(data = dt, aes(x = AGE, y = DBH)) +
+      facet_grid(City ~ Species)
 #+end_src
 
 #+RESULTS:
@@ -4232,8 +4234,8 @@ plot(m_generated_multipleSpecies_multipleLocations_homo, ask = F)
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/d_multipleSpecies_multipleLocations.png :height 700 :width 700
-p <-   ggplot(dm, aes(x = AGE, y = DBH)) + geom_point(size = .5) + facet_grid(City ~ Species)
-p
+  p <-   ggplot(dm, aes(x = AGE, y = DBH)) + geom_point(size = .5) + facet_grid(City ~ Species)
+  p
 #+end_src
 
 #+RESULTS:
@@ -4318,7 +4320,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 **** diagnostics
 #+begin_src R :exports results :results graphics :file ../figs/model_multipleSpecies_multipleCities_homo_ppcheck.png
-pp_check(model_multipleSpecies_multipleCities_homo)
+  pp_check(model_multipleSpecies_multipleCities_homo)
 #+end_src
 
 #+RESULTS:
@@ -4326,17 +4328,17 @@ pp_check(model_multipleSpecies_multipleCities_homo)
 
 **** marginal
 #+begin_src R :exports results :results graphics :file ../figs/marginal_dm_multipleSpecies_multipleCities_homo_cor.png :width 800
-     cond <- expand.grid(Species = unique(dm$Species), City = unique(dm$City))
-     rownames(cond) <- paste0(cond$Species, cond$City)
-    me <- marginal_effects(model_multipleSpecies_multipleCities_homo,
-                       re_formula = NULL, method = "predict",
-                          conditions = cond)
+  cond <- expand.grid(Species = unique(dm$Species), City = unique(dm$City))
+  rownames(cond) <- paste0(cond$Species, cond$City)
+  me <- marginal_effects(model_multipleSpecies_multipleCities_homo,
+                         re_formula = NULL, method = "predict",
+                         conditions = cond)
 
   ggplot() +
-    geom_point(data = dm, aes(x = AGE, y = DBH), size = .8) +
-    geom_line(data = me$AGE, color = "blue", aes(x = AGE, y = estimate__)) +
-    geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-    facet_grid(City ~ Species)
+      geom_point(data = dm, aes(x = AGE, y = DBH), size = .8) +
+      geom_line(data = me$AGE, color = "blue", aes(x = AGE, y = estimate__)) +
+      geom_ribbon(data = me$AGE, alpha = .3, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      facet_grid(City ~ Species)
 #+end_src
 
 #+RESULTS:
@@ -4413,9 +4415,9 @@ pp_check(model_multipleSpecies_multipleCities_homo)
   })
 
   dt <- bind_rows(unlist(dt,recursive = F)) %>%
-    mutate(GenusSpecies = paste0(Genus, Species))
+      mutate(GenusSpecies = paste0(Genus, Species))
 
-nested <- dt
+  nested <- dt
 #+end_src
 
 #+RESULTS:
@@ -4424,8 +4426,8 @@ nested <- dt
 : There were 34 warnings (use warnings() to see them)
 
 #+begin_src R :exports results :results graphics :file ../figs/test_data_multipleGenusSpecies_multipleLocations_PrecipCityPred.png :height 400
-p <-   ggplot(dt, aes(x = AGE, y = DBH, color = GenusSpecies)) + geom_point() + facet_grid(City ~ Genus)
-p
+  p <-   ggplot(dt, aes(x = AGE, y = DBH, color = GenusSpecies)) + geom_point() + facet_grid(City ~ Genus)
+  p
 #+end_src
 
 #+RESULTS:
@@ -4436,26 +4438,26 @@ p
 b ~ (1 | genus / species)
 
 #+begin_src R :results output
-          form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                     b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species),
-                     b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species),
-                     b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species),
-                     nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species),
+             b1 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species),
+             b2 ~ 1 + (1 | ID | City) + (1 | ID2 | Genus) + (1 | ID3 | Genus:Species),
+             nl = T)
 
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                   prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.2), class = "sd", nlpar = "b2"))
 
 
-m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
+  m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor <- brm(form, chains = 2, cores = 2, data = dt, prior = nlprior, init_r = .3)
 
 #+end_src
 
 #+begin_src R
-summary(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor)
+  summary(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor)
 #+end_src
 
 #+RESULTS:
@@ -4540,23 +4542,23 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/plot__multipleSpecies_nestedGenus_multipleLocations_homo.png
-plot(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, ask = F)
+  plot(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, ask = F)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/plot__multipleSpecies_nestedGenus_multipleLocations_homo.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_m_generated_multipleSpecies_nestedGenus_multipleLocations_homo.png :width 800
-     cond <- unique(select(dt, City, Species, Genus))
-    me <- marginal_effects(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor,
-                       re_formula = NULL, method = "predict",
-                          conditions = cond)
+  cond <- unique(select(dt, City, Species, Genus))
+  me <- marginal_effects(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor,
+                         re_formula = NULL, method = "predict",
+                         conditions = cond)
 
   ggplot() +
-    geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
-    geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-    geom_point(data = dt, aes(x = AGE, y = DBH)) +
-    facet_grid(City ~ Genus)
+      geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
+      geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_point(data = dt, aes(x = AGE, y = DBH)) +
+      facet_grid(City ~ Genus)
 #+end_src
 
 #+RESULTS:
@@ -4568,19 +4570,19 @@ plot(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo, ask = F)
   d <- readRDS("../data/tidy_age_dbh.rds") %>%
       mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
 
-    species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
+  species.to.select <- c("ACPL", "ACRU", "ACSA1", "ACSA2", "BEPA", "FRAM","FRPE", "TIAM", "TICO")
 
-    dm <- d %>% filter(SpCode %in% species.to.select) %>%
-        filter(City %in% c("Fort Collins, CO", "Minneapolis, MN","Boise, ID",  "Longview, WA")) %>%
-        rename(Species = SpCode)
+  dm <- d %>% filter(SpCode %in% species.to.select) %>%
+      filter(City %in% c("Fort Collins, CO", "Minneapolis, MN","Boise, ID",  "Longview, WA")) %>%
+      rename(Species = SpCode)
 #+end_src
 
 #+RESULTS:
 
 
 #+begin_src R :exports results :results graphics :file ../figs/d_multipleSpecies_nestedGenus_multipleLocations.png :height 700 :width 700
-p <-   ggplot(dm, aes(x = AGE, y = DBH, color = Species)) + geom_point() + facet_grid(City ~ Genus)
-p
+  p <-   ggplot(dm, aes(x = AGE, y = DBH, color = Species)) + geom_point() + facet_grid(City ~ Genus)
+  p
 #+end_src
 
 #+RESULTS:
@@ -4594,7 +4596,7 @@ b2 : .5 - 1.5
 
 #+begin_src R
 
-    model_multipleSpecies_nestedGenus_multipleCities_homo_cor <- update(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor, newdata = dm, cores = 2, chains = 4, init_r = .3, control = list(adapt_delta = .85, max_treedepth = 15))
+  model_multipleSpecies_nestedGenus_multipleCities_homo_cor <- update(m_generated_multipleSpecies_nestedGenus_multipleLocations_homo_cor, newdata = dm, cores = 2, chains = 4, init_r = .3, control = list(adapt_delta = .85, max_treedepth = 15))
 
 #+end_src
 
@@ -4683,7 +4685,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_model_multipleSpecies_nestedGenus_multipleCities_homo.png :height 2000 :width 2000
-pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
+  pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
 #+end_src
 
 #+RESULTS:
@@ -4691,16 +4693,16 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_model_multipleSpecies_nestedGenus_multipleCities_homo_cor.png
-     cond <- unique(select(dm, City, Species, Genus))
-    me <- marginal_effects(model_multipleSpecies_nestedGenus_multipleCities_homo_cor,
-                       re_formula = NULL, method = "predict",
-                          conditions = cond)
+  cond <- unique(select(dm, City, Species, Genus))
+  me <- marginal_effects(model_multipleSpecies_nestedGenus_multipleCities_homo_cor,
+                         re_formula = NULL, method = "predict",
+                         conditions = cond)
 
   ggplot() +
-    geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
-    geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-    geom_point(data = dm, aes(x = AGE, y = DBH, color = Species), size = .5) +
-    facet_grid(City ~ Genus)
+      geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
+      geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_point(data = dm, aes(x = AGE, y = DBH, color = Species), size = .5) +
+      facet_grid(City ~ Genus)
 
 #+end_src
 
@@ -4714,15 +4716,15 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
   cond$City <- rep(City, each = 8)
 
 
-    me <- marginal_effects(model_multipleSpecies_nestedGenus_multipleCities_homo_cor,
-                       re_formula = NULL, method = "predict",
-                          conditions = cond)
+  me <- marginal_effects(model_multipleSpecies_nestedGenus_multipleCities_homo_cor,
+                         re_formula = NULL, method = "predict",
+                         conditions = cond)
 
   ggplot() +
-    geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
-    geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
-    geom_point(data = dm, aes(x = AGE, y = DBH, color = Species), size = .5) +
-    facet_grid(City ~ Genus)
+      geom_line(data = me$AGE, aes(color = Species, x = AGE, y = estimate__)) +
+      geom_ribbon(data = me$AGE, alpha = .3, aes(group = Species, x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__)) +
+      geom_point(data = dm, aes(x = AGE, y = DBH, color = Species), size = .5) +
+      facet_grid(City ~ Genus)
 
 #+end_src
 
@@ -4737,38 +4739,38 @@ pairs(model_multipleSpecies_nestedGenus_multipleCities_homo_cor)
   lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "ACPL", "ULAM", "ULPU"))
 
   lg_clim <- left_join(lg,clim) %>%
-            mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-                   HDD = round((HDD - mean(HDD))/ 1000, 4),
-                   CDD = round((CDD - mean(CDD))/ 1000, 4))
+      mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+             HDD = round((HDD - mean(HDD))/ 1000, 4),
+             CDD = round((CDD - mean(CDD))/ 1000, 4))
 #+end_src
 
 #+RESULTS:
 : Joining, by = c("Region", "City")
 
 #+begin_src R
-              form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                         b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / SpCode),
-                         b1 ~ (1 | City)  + ( 1 | Genus / SpCode),
-                         b2 ~ (1 | City) + ( 1 | Genus / SpCode),
-                         nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / SpCode),
+             b1 ~ (1 | City)  + ( 1 | Genus / SpCode),
+             b2 ~ (1 | City) + ( 1 | Genus / SpCode),
+             nl = T)
 
 
-      nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                   prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                   prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                   prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                   prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                   prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                   prior(normal(.3,.25), class = "sds", nlpar = "b0"))
-  #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
-   #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+               prior(normal(.3,.25), class = "sds", nlpar = "b0"))
+                                          #                 prior(cauchy(0,.1), class = "sds", nlpar = "b1"),
+                                          #                prior(cauchy(0,.1), class = "sds", nlpar = "b2"))
 
-    model_lg_climate_GenSp <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
+  model_lg_climate_GenSp <- brm(form, chains = 2, cores = 2, data = lg_clim, prior = nlprior, init_r = .3)
 
 #+end_src
 
 #+begin_src R
-model_lg_climate_GenSp
+  model_lg_climate_GenSp
 #+end_src
 
 #+RESULTS:
@@ -4830,7 +4832,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_lg_climate_GenSp.png
-pp_check(model_lg_climate_GenSp)
+  pp_check(model_lg_climate_GenSp)
 #+end_src
 
 #+RESULTS:
@@ -4838,7 +4840,7 @@ pp_check(model_lg_climate_GenSp)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_age_precip_homo.png
-marginal_effects(model_lg_climate_GenSp, effects = "AGE:Precip")
+  marginal_effects(model_lg_climate_GenSp, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
@@ -4846,7 +4848,7 @@ marginal_effects(model_lg_climate_GenSp, effects = "AGE:Precip")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_age_HDD_homo.png
-marginal_effects(model_lg_climate_GenSp, effects = "AGE:HDD")
+  marginal_effects(model_lg_climate_GenSp, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
@@ -4854,7 +4856,7 @@ marginal_effects(model_lg_climate_GenSp, effects = "AGE:HDD")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_surface_homo.png
-marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
+  marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
@@ -4862,15 +4864,15 @@ marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_homo_Points.png
-    conditions <- unique(select(lg_clim, Precip, HDD))
+  conditions <- unique(select(lg_clim, Precip, HDD))
 
   me <- marginal_effects(model_lg_climate_GenSp, effects = "AGE", conditions = conditions, re_formula = NA)
 
-    ggplot(me$AGE) +
-          geom_line(aes(x = AGE, y = estimate__)) +
-        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
-        facet_wrap(~Precip)
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
+      facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
@@ -4878,15 +4880,15 @@ marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_homo_Points_hddprecip.png
 
-    conditions <- unique(select(lg_clim, Genus, SpCode))
+  conditions <- unique(select(lg_clim, Genus, SpCode))
 
   me <- marginal_effects(model_lg_climate_GenSp, effects = "AGE", conditions = conditions, re_formula = NULL)
 
-    ggplot(me$AGE) +
-        geom_line(aes(x = AGE, y = estimate__, color = SpCode)) +
-        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = SpCode, fill = SpCode), alpha = .3) +
-        geom_point(data = lg_clim, aes(x = AGE, y = DBH, color = SpCode)) +
-        facet_wrap(~Genus)
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__, color = SpCode)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = SpCode, fill = SpCode), alpha = .3) +
+      geom_point(data = lg_clim, aes(x = AGE, y = DBH, color = SpCode)) +
+      facet_wrap(~Genus)
 #+end_src
 
 #+RESULTS:
@@ -4895,49 +4897,49 @@ marginal_effects(model_lg_climate_GenSp, effects = "Precip:HDD", surface = T)
 
 
 #+begin_src R
-saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
+  saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
 #+end_src
 
 #+RESULTS:
 
 *** multiple species, nested within Genus, multiple locations, group level predictors for asymtope, heteroskedastic
 #+begin_src R
-    ## d <- readRDS("../data/tidy_age_dbh.rds") %>%
-    ##     mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
+  ## d <- readRDS("../data/tidy_age_dbh.rds") %>%
+  ##     mutate(Genus = stringr::str_extract(ScientificName, '\\w*'))
 
-    ## lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "ACPL", "ULAM", "ULPU"))
+  ## lg <- filter(d, SpCode %in% c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "ACPL", "ULAM", "ULPU"))
 
-    ## lg_clim <- left_join(lg,clim) %>%
-    ##           mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-    ##                  HDD = round((HDD - mean(HDD))/ 1000, 4),
-    ##                  CDD = round((CDD - mean(CDD))/ 1000, 4))
+  ## lg_clim <- left_join(lg,clim) %>%
+  ##           mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+  ##                  HDD = round((HDD - mean(HDD))/ 1000, 4),
+  ##                  CDD = round((CDD - mean(CDD))/ 1000, 4))
   d <- readRDS("../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-                form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
-                           sigma ~ s(AGE),
-                           b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / Species),
-                           b1 ~ (1 | City)  + ( 1 | Genus / Species),
-                           b2 ~ (1 | City) + ( 1 | Genus / Species),
-                           nl = T)
+  form <- bf(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),
+             sigma ~ s(AGE),
+             b0 ~ t2(Precip, HDD) + (1 | City) + ( 1 | Genus / Species),
+             b1 ~ (1 | City)  + ( 1 | Genus / Species),
+             b2 ~ (1 | City) + ( 1 | Genus / Species),
+             nl = T)
 
-        nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
-                     prior(gamma(5, 1), nlpar = "b1", lb = 0),
-                     prior(gamma(4, 3), nlpar = "b2",lb = 0),
-                     prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                     prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                     prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
-                     prior(normal(.3,.1), class = "sds", nlpar = "b0"),
-                     prior(normal(1,.3), class = "b", dpar = "sigma"),
-                     prior(normal(1,.3), class = "sds", dpar = "sigma"),
-                     prior(normal(0,1), class = "Intercept", dpar = "sigma"))
+  nlprior <- c(prior(gamma(4, 3), nlpar = "b0",lb = 0),
+               prior(gamma(5, 1), nlpar = "b1", lb = 0),
+               prior(gamma(4, 3), nlpar = "b2",lb = 0),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+               prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+               prior(normal(.3,.1), class = "sds", nlpar = "b0"),
+               prior(normal(1,.3), class = "b", dpar = "sigma"),
+               prior(normal(1,.3), class = "sds", dpar = "sigma"),
+               prior(normal(0,1), class = "Intercept", dpar = "sigma"))
 
-      mod <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior, init_r = .3)
+  mod <- brm(form, chains = 2, cores = 2, data = d, prior = nlprior, init_r = .3)
 
-#saveRDS(mod, ..
+                                          #saveRDS(mod, ..
 #+end_src
 
 #+RESULTS:
@@ -4951,7 +4953,7 @@ saveRDS(model_lg_climate_GenSp, "../models/model_lg_climate_GenSp.rds")
 #+RESULTS:
 
 #+begin_src R
-model_lg_climate_GenSp_hetero_smooth
+  model_lg_climate_GenSp_hetero_smooth
 #+end_src
 
 #+RESULTS:
@@ -5015,7 +5017,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_lg_climate_GenSp_hetero.png
-pp_check(model_lg_climate_GenSp_hetero_smooth) + xlim(c(-15,100))
+  pp_check(model_lg_climate_GenSp_hetero_smooth) + xlim(c(-15,100))
 #+end_src
 
 #+RESULTS:
@@ -5023,7 +5025,7 @@ pp_check(model_lg_climate_GenSp_hetero_smooth) + xlim(c(-15,100))
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_age_precip.png
-marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE:Precip")
+  marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
@@ -5031,7 +5033,7 @@ marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE:Precip")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_age_HDD.png
-marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE:HDD")
+  marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
@@ -5039,7 +5041,7 @@ marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE:HDD")
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_surface.png
-marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "Precip:HDD", surface = T)
+  marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
@@ -5047,14 +5049,14 @@ marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "Precip:HDD", s
 
 
 #+begin_src R :exports results :results graphics :file ../figs/sigma_smooth.png
-marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "s(AGE)", ask = F)
+  marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "s(AGE)", ask = F)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/sigma_smooth.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/sigma_smooth_precipHDD.png
-marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "t2(Precip, HDD)", ask = F)
+  marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "t2(Precip, HDD)", ask = F)
 #+end_src
 
 #+RESULTS:
@@ -5063,15 +5065,15 @@ marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "t2(Precip, HDD
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_Points.png
-    conditions <- unique(select(lg_clim, Precip, HDD))
+  conditions <- unique(select(lg_clim, Precip, HDD))
 
   me <- marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE", conditions = conditions, re_formula = NA)
 
-    ggplot(me$AGE) +
-          geom_line(aes(x = AGE, y = estimate__)) +
-        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-        geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
-        facet_wrap(~Precip)
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = lg_clim, aes(x = AGE, y = DBH)) +
+      facet_wrap(~Precip)
 #+end_src
 
 #+RESULTS:
@@ -5079,15 +5081,15 @@ marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "t2(Precip, HDD
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_lg_climate_GenSp_hetero_Points_hddprecip.png
 
-    conditions <- unique(select(lg_clim, Genus, SpCode))
+  conditions <- unique(select(lg_clim, Genus, SpCode))
 
   me <- marginal_effects(model_lg_climate_GenSp_hetero_smooth, effects = "AGE", conditions = conditions, re_formula = NULL)
 
-    ggplot(me$AGE) +
-        geom_point(data = lg_clim, aes(x = AGE, y = DBH, color = SpCode),alpha = .3) +
-        geom_line(aes(x = AGE, y = estimate__, color = SpCode)) +
-        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = SpCode, fill = SpCode), alpha = .3) +
-        facet_wrap(~Genus)
+  ggplot(me$AGE) +
+      geom_point(data = lg_clim, aes(x = AGE, y = DBH, color = SpCode),alpha = .3) +
+      geom_line(aes(x = AGE, y = estimate__, color = SpCode)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = SpCode, fill = SpCode), alpha = .3) +
+      facet_wrap(~Genus)
 #+end_src
 
 #+RESULTS:
@@ -5096,7 +5098,7 @@ marginal_smooths(model_lg_climate_GenSp_hetero_smooth, smooths = "t2(Precip, HDD
 
 
 #+begin_src R
-saveRDS(model_lg_climate_GenSp_hetero, "../models/model_lg_climate_GenSp_hetero.rds")
+  saveRDS(model_lg_climate_GenSp_hetero, "../models/model_lg_climate_GenSp_hetero.rds")
 #+end_src
 
 #+RESULTS:
@@ -5148,12 +5150,12 @@ make better
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
-library(plyr)
-library(dplyr)
-library(ggplot2)
-library(readr)
-library(ascii)
-library(tidyr)
+  library(plyr)
+  library(dplyr)
+  library(ggplot2)
+  library(readr)
+  library(ascii)
+  library(tidyr)
 #+end_src
 
 #+RESULTS:
@@ -5173,7 +5175,7 @@ library(tidyr)
 
 ** read in data
 #+begin_src R :exports code
-d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
+  d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
 #+end_src
 
 #+RESULTS:
@@ -5212,20 +5214,20 @@ In rbind(names(probs), probs_f) :
 
 
 #+begin_src R
-#str(d)
+                                          #str(d)
 #+end_src
 
 #+RESULTS:
 ** fix some species things
 *** fix lower case species codes
 #+begin_src R
-d$SpCode <- toupper(d$SpCode)
+  d$SpCode <- toupper(d$SpCode)
 #+end_src
 
 #+RESULTS:
 *** fix QUAG1 to be QUAG
 #+begin_src R
-d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
+  d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
 #+end_src
 
 #+RESULTS:
@@ -5277,11 +5279,11 @@ simplification here.
 
 #+begin_src R :var tt=tree_types
   sp <- d %>% select(SpCode, ScientificName, TreeType) %>%
-    left_join(tt) %>%
-    select(-TreeType) %>%
-    unique() %>%
-    arrange(ScientificName) %>%
-    ascii.nowarn.print()
+      left_join(tt) %>%
+      select(-TreeType) %>%
+      unique() %>%
+      arrange(ScientificName) %>%
+      ascii.nowarn.print()
 #+end_src
 
 #+RESULTS:
@@ -5461,15 +5463,15 @@ Joining, by = "TreeType"
 #+end_example
 ** tidy a few names and select variables of interest here
 #+begin_src R
-d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age)
+  d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-summary(d$Leaf)
-sum(d$Leaf == -1) / length(d$Leaf)
-sum(d$DBH == -1) / length(d$DBH)
+  summary(d$Leaf)
+  sum(d$Leaf == -1) / length(d$Leaf)
+  sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
@@ -5480,14 +5482,14 @@ sum(d$DBH == -1) / length(d$DBH)
 
 #+begin_src R
   d <- filter(d, DBH != -1, Age != -1) %>%
-    rename(AGE = Age)
+      rename(AGE = Age)
 #+end_src
 
 #+RESULTS:
 
 ** plot age versus dbh for all trees
 #+begin_src R :exports results :results graphics :file ../figs/ageVdbh_all.png :bg transparent
-ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
+  ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 #+end_src
 
 #+RESULTS:
@@ -5496,12 +5498,12 @@ ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 
 ** AGE versus dbh by cities
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_byCity_focusCoords.png :height 1000 :width 1000
-      ggplot(d, aes( x = AGE, y = DBH, color = SpCode)) + geom_point(alpha = .7, size = .5) +
-          facet_wrap(~City) +
-          coord_cartesian(xlim = c(0, 70), ylim = c(0,100)) +
-          theme_minimal() +
-          theme(text = element_text(size = 20),
-                legend.position = "none")
+  ggplot(d, aes( x = AGE, y = DBH, color = SpCode)) + geom_point(alpha = .7, size = .5) +
+      facet_wrap(~City) +
+      coord_cartesian(xlim = c(0, 70), ylim = c(0,100)) +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none")
 #+end_src
 
 #+RESULTS:
@@ -5509,11 +5511,11 @@ ggplot(d, aes( x = AGE, y = DBH)) + geom_point()
 
 ** AGE versus DBH by species
 #+begin_src R :exports results :results graphics :file figs/ageVdbh_bySpecies_focusCoords.png :height 1500 :width 800
-      ggplot(d, aes( x = AGE, y = DBH, color = City)) + geom_point(alpha = .2, size = .5) +
-          facet_wrap(~SpCode, ncol = 8) +
-          theme_minimal() +
-          theme(text = element_text(size = 20),
-                legend.position = "none")
+  ggplot(d, aes( x = AGE, y = DBH, color = City)) + geom_point(alpha = .2, size = .5) +
+      facet_wrap(~SpCode, ncol = 8) +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none")
 #+end_src
 
 #+RESULTS:
@@ -5531,11 +5533,11 @@ combination?  Or can we use one equation for each species, regardless
 of city?
 #+begin_src R
   sp.w.multiple.cities <- d %>% group_by(City, SpCode) %>% summarize(n = n()) %>% ungroup() %>% group_by(SpCode) %>%
-    summarize(n_cities_per_species = n()) %>%
-    filter(n_cities_per_species > 1) %>%
-    pull(SpCode)
+      summarize(n_cities_per_species = n()) %>%
+      filter(n_cities_per_species > 1) %>%
+      pull(SpCode)
 
-d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
+  d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
 
 #+end_src
 
@@ -5560,11 +5562,11 @@ d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
   ggplot(d.sp.w.multiple.cities, aes( x = AGE, y = DBH, color = City)) +
       geom_point(alpha = .7, size = .8) +
       facet_wrap(~SpCode, scales = "free", ncol = 8) +
-    #  coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
+                                          #  coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
       theme_minimal() +
       theme(text = element_text(size = 20),
             legend.position = "none") +
-    stat_smooth()
+      stat_smooth()
 #+end_src
 
 #+RESULTS:
@@ -5572,7 +5574,7 @@ d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
 
 ACPL's cities
 #+begin_src R
-filter(d.sp.w.multiple.cities, SpCode == "ACPL") %>% pull(City) %>% unique
+  filter(d.sp.w.multiple.cities, SpCode == "ACPL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
@@ -5581,7 +5583,7 @@ filter(d.sp.w.multiple.cities, SpCode == "ACPL") %>% pull(City) %>% unique
 
 MOAL's cities
 #+begin_src R
-filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
+  filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
@@ -5589,36 +5591,36 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 ** Plot Urban Tree Allometric equations on top of data
 
 #+begin_src R
-          predict.allo <- function(x, EqName, a, b, c, d, e) {
-              if(EqName == "loglogw1") {
-                  y = exp(a + b*log(log(x + 1) + c/2))
-                  }
-              else if(EqName == "loglogw2") {
-                y = exp(a + b*log(log(x + 1))+(sqrt(x) * (c/2)))
-              }
-              else if (EqName == "loglogw3") {
-                y = exp(a + b*log(log(x + 1)) + x * c/2)
-              }
-              else if (EqName == "loglogw4") {
-                y = exp(a + b*log(log(x + 1)) + x^2 * c/2)
-              }
-              else if (EqName == "expow1") {
-                  y = exp(a+ b * (x) + (c/2))
-              }
-              else if (EqName == "lin") {
-                      y = a + b * x
-                  }
-              else if (EqName == "quad") {
-                      y = a + b * x + c* x^2
-                  }
-              else if (EqName == "cub") {
-                      y = a+b * x+c *x^2 + d * x^3
-                  }
-              else if (EqName == "quart") {
-                      y = a+b * x+c *x^2 + d * x^3 + e * x^4
-                  }
-              return(y)
-          }
+  predict.allo <- function(x, EqName, a, b, c, d, e) {
+      if(EqName == "loglogw1") {
+          y = exp(a + b*log(log(x + 1) + c/2))
+      }
+      else if(EqName == "loglogw2") {
+          y = exp(a + b*log(log(x + 1))+(sqrt(x) * (c/2)))
+      }
+      else if (EqName == "loglogw3") {
+          y = exp(a + b*log(log(x + 1)) + x * c/2)
+      }
+      else if (EqName == "loglogw4") {
+          y = exp(a + b*log(log(x + 1)) + x^2 * c/2)
+      }
+      else if (EqName == "expow1") {
+          y = exp(a+ b * (x) + (c/2))
+      }
+      else if (EqName == "lin") {
+          y = a + b * x
+      }
+      else if (EqName == "quad") {
+          y = a + b * x + c* x^2
+      }
+      else if (EqName == "cub") {
+          y = a+b * x+c *x^2 + d * x^3
+      }
+      else if (EqName == "quart") {
+          y = a+b * x+c *x^2 + d * x^3 + e * x^4
+      }
+      return(y)
+  }
 
 #+end_src
 
@@ -5626,43 +5628,43 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 
 
 #+begin_src R
-        eqn <- read.csv("data/RDS-2016-0005/Data/TS6_Growth_coefficients_fromNatalie.csv", stringsAsFactors = F) %>%
-              mutate(a = as.numeric(a))
+  eqn <- read.csv("data/RDS-2016-0005/Data/TS6_Growth_coefficients_fromNatalie.csv", stringsAsFactors = F) %>%
+      mutate(a = as.numeric(a))
 
-          eqn <- eqn %>%
-              filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
+  eqn <- eqn %>%
+      filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
 
-    age_min_max = d %>%
+  age_min_max = d %>%
       group_by(Region, SpCode) %>%
       summarize(minAGE = min(AGE, na.rm = T),
                 maxAGE = max(AGE, na.rm = T))
 
-    eqn <- left_join(eqn, age_min_max)
+  eqn <- left_join(eqn, age_min_max)
 
-    DBH_min_max = d %>%
+  DBH_min_max = d %>%
       group_by(Region, SpCode) %>%
       summarize(minDBH = min(DBH, na.rm = T),
                 maxDBH = max(DBH, na.rm = T))
 
-    eqn <- left_join(eqn, DBH_min_max)
+  eqn <- left_join(eqn, DBH_min_max)
 
 
-                                            # fill in the NAs due to equations existing for species in regions where they weren't sampled.
-    eqn$minAGE[is.na(eqn$minAGE)] <- 0
-    eqn$maxAGE[is.na(eqn$maxAGE)] <- 100
+                                          # fill in the NAs due to equations existing for species in regions where they weren't sampled.
+  eqn$minAGE[is.na(eqn$minAGE)] <- 0
+  eqn$maxAGE[is.na(eqn$maxAGE)] <- 100
 
-        newdata <- lapply(1:nrow(eqn), function(i) {
-            x <- seq(eqn$minAGE[i], eqn$maxAGE[i],  (eqn$maxAGE[i] - eqn$minAGE[i]) / 20)
-            cbind(x, eqn[i,])
-            })
+  newdata <- lapply(1:nrow(eqn), function(i) {
+      x <- seq(eqn$minAGE[i], eqn$maxAGE[i],  (eqn$maxAGE[i] - eqn$minAGE[i]) / 20)
+      cbind(x, eqn[i,])
+  })
 
-      newdata <- bind_rows(newdata)
+  newdata <- bind_rows(newdata)
 
-        predictions <- newdata %>% rowwise %>% mutate(predicted_dbh = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
+  predictions <- newdata %>% rowwise %>% mutate(predicted_dbh = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
 
 
 
-  #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
+                                          #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
   predictions_apprange <- predictions %>%
       filter(predicted_dbh > Apps.min & predicted_dbh < Apps.max)
 
@@ -5682,7 +5684,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = SpCode)) +
       geom_line() +
-    facet_wrap(~Region, scales = "free")
+      facet_wrap(~Region, scales = "free")
 
 #+end_src
 
@@ -5693,7 +5695,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Region)) +
       geom_line() +
-    facet_wrap(~SpCode, scales = "free")
+      facet_wrap(~SpCode, scales = "free")
 
 #+end_src
 
@@ -5701,7 +5703,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 [[file:../figs/predictions_dbh_bySpecies.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
-    predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
+  predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
 
   ggplot(d, aes( x = AGE, y = DBH, color = Region)) +
       geom_point(alpha = .7, size = .5) +
@@ -5718,7 +5720,7 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData.png :height 1200 :width 1200
-    predictions_apprange.sp.w.multiple.cities <- predictions_apprange %>%       filter(SpCode %in% d.sp.w.multiple.cities$SpCode)
+  predictions_apprange.sp.w.multiple.cities <- predictions_apprange %>%       filter(SpCode %in% d.sp.w.multiple.cities$SpCode)
 
 
   ggplot(d.sp.w.multiple.cities, aes( x = AGE, y = DBH, color = Region)) +
@@ -5736,10 +5738,10 @@ filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 [[file:../figs/predictions_dbh_bySpecies_wData.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL.png
-    predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
       filter(SpCode == "ACPL")
 
-    predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
       filter(SpCode == "ACPL")
 
   ggplot(filter(d, SpCode == "ACPL"), aes( x = AGE, y = DBH, color = Region)) +
@@ -5763,10 +5765,10 @@ above.  The application range should be given for both the predictor
 and the response variable.
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL_facet.png
-    predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
       filter(SpCode == "ACPL")
 
-    predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
       filter(SpCode == "ACPL")
 
   ggplot(filter(d, SpCode == "ACPL"), aes( x = AGE, y = DBH)) +
@@ -5777,7 +5779,7 @@ and the response variable.
             legend.position = "none") +
       geom_line(data = predictions_datarange.acpl, aes(group = Region, color = Region), size = 1, linetype = "1111") +
       geom_line(data = predictions_apprange.acpl, aes(group = Region, color = Region), size = 1) +
-    facet_wrap(~Region)
+      facet_wrap(~Region)
 
 
 #+end_src
@@ -5791,31 +5793,31 @@ the applicable range for regions with smaller ranges.
 There is an equation for the lower midwest, but no data?
 
 #+begin_src R :results org
-ascii.nowarn.print(filter(eqn, SpCode == "ACPL"))
+  ascii.nowarn.print(filter(eqn, SpCode == "ACPL"))
 #+end_src
 
 #+RESULTS:
 #+BEGIN_SRC org
-|   | Region | Scientific.Name  | SpCode | Independent.variable | Predicts.component | Units.of.predicted.components | Model.weight | EqName |     a |    b |     c |     d | e | Apps.min | Apps.max | Sigma |     n | adj.R2 | Data.min..from.raw.data. | Data.max..from.raw.data. |    DF | minAGE | maxAGE | minDBH | maxDBH |
-|---+--------+------------------+--------+----------------------+--------------------+-------------------------------+--------------+--------+-------+------+-------+-------+---+----------+----------+-------+-------+--------+--------------------------+--------------------------+-------+--------+--------+--------+--------|
-| 1 | LoMidW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  0.98 | 0.25 |  0.04 | -0.00 |   |     0.98 |   103.07 |  0.48 | 13.00 |   0.98 |                     4.80 |                    98.60 |  9.00 |   0.00 | 100.00 |        |        |
-| 2 | MidWst | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | cub    | -7.95 | 3.81 | -0.09 |  0.00 |   |     2.66 |    93.26 |  8.92 | 48.00 |   0.97 |                     4.60 |                    77.50 | 44.00 |   2.00 |  44.00 |   4.60 |  77.50 |
-| 3 | NMtnPr | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age^2      | quad   |  2.84 | 1.32 | -0.00 |       |   |     2.84 |    92.73 |  0.08 | 60.00 |   0.94 |                     2.90 |                   103.10 | 57.00 |   0.00 |  88.00 |   2.90 | 103.10 |
-| 4 | NoEast | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | lin    |  5.62 | 0.92 |       |       |   |     5.62 |   114.66 | 36.41 | 48.00 |   0.91 |                     2.70 |                   120.70 | 46.00 |   0.00 |  75.00 |   3.80 |  87.10 |
-| 5 | PacfNW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    | -0.85 | 2.44 | -0.03 |  0.00 |   |     1.56 |   146.78 |  1.40 | 74.00 |   0.98 |                     1.10 |                   129.40 | 70.00 |   1.00 |  81.00 |   1.10 | 129.40 |
-| 6 | TpIntW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  4.42 | 1.08 |  0.01 | -0.00 |   |     4.42 |    79.42 |  0.81 | 62.00 |   0.96 |                     5.30 |                    95.00 | 58.00 |   1.00 | 105.00 |   5.30 |  95.00 |
+  |   | Region | Scientific.Name  | SpCode | Independent.variable | Predicts.component | Units.of.predicted.components | Model.weight | EqName |     a |    b |     c |     d | e | Apps.min | Apps.max | Sigma |     n | adj.R2 | Data.min..from.raw.data. | Data.max..from.raw.data. |    DF | minAGE | maxAGE | minDBH | maxDBH |
+  |---+--------+------------------+--------+----------------------+--------------------+-------------------------------+--------------+--------+-------+------+-------+-------+---+----------+----------+-------+-------+--------+--------------------------+--------------------------+-------+--------+--------+--------+--------|
+  | 1 | LoMidW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  0.98 | 0.25 |  0.04 | -0.00 |   |     0.98 |   103.07 |  0.48 | 13.00 |   0.98 |                     4.80 |                    98.60 |  9.00 |   0.00 | 100.00 |        |        |
+  | 2 | MidWst | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | cub    | -7.95 | 3.81 | -0.09 |  0.00 |   |     2.66 |    93.26 |  8.92 | 48.00 |   0.97 |                     4.60 |                    77.50 | 44.00 |   2.00 |  44.00 |   4.60 |  77.50 |
+  | 3 | NMtnPr | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age^2      | quad   |  2.84 | 1.32 | -0.00 |       |   |     2.84 |    92.73 |  0.08 | 60.00 |   0.94 |                     2.90 |                   103.10 | 57.00 |   0.00 |  88.00 |   2.90 | 103.10 |
+  | 4 | NoEast | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | lin    |  5.62 | 0.92 |       |       |   |     5.62 |   114.66 | 36.41 | 48.00 |   0.91 |                     2.70 |                   120.70 | 46.00 |   0.00 |  75.00 |   3.80 |  87.10 |
+  | 5 | PacfNW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    | -0.85 | 2.44 | -0.03 |  0.00 |   |     1.56 |   146.78 |  1.40 | 74.00 |   0.98 |                     1.10 |                   129.40 | 70.00 |   1.00 |  81.00 |   1.10 | 129.40 |
+  | 6 | TpIntW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  4.42 | 1.08 |  0.01 | -0.00 |   |     4.42 |    79.42 |  0.81 | 62.00 |   0.96 |                     5.30 |                    95.00 | 58.00 |   1.00 | 105.00 |   5.30 |  95.00 |
 #+END_SRC
 
 #+begin_src R :results org
-ascii.nowarn.print(filter(d, SpCode == "ACPL", Region == "NoEast"))
+  ascii.nowarn.print(filter(d, SpCode == "ACPL", Region == "NoEast"))
 #+end_src
 
 #+RESULTS:
 #+BEGIN_SRC org
-|   | Region | City       |    TreeID | SpCode |   DBH |   Leaf |   Age |   AGE |
-|---+--------+------------+-----------+--------+-------+--------+-------+-------|
-| 1 | NoEast | Queens, NY | 900243.00 | ACPL   |  3.80 |   3.10 |  0.00 |  0.00 |
-| 2 | NoEast | Queens, NY |  46681.00 | ACPL   | 87.10 | 445.50 | 75.00 | 75.00 |
+  |   | Region | City       |    TreeID | SpCode |   DBH |   Leaf |   Age |   AGE |
+  |---+--------+------------+-----------+--------+-------+--------+-------+-------|
+  | 1 | NoEast | Queens, NY | 900243.00 | ACPL   |  3.80 |   3.10 |  0.00 |  0.00 |
+  | 2 | NoEast | Queens, NY |  46681.00 | ACPL   | 87.10 | 445.50 | 75.00 | 75.00 |
 #+END_SRC
 
 The reason that the equation for ACPL in the North East is linear is
@@ -5825,16 +5827,16 @@ because there are only two observations.  Yikes.
 TIAM TpIntW
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_TIAM.pdf :height 3 :width 5
 
-    theme_set(theme_classic(base_size = 12))
+  theme_set(theme_classic(base_size = 12))
   predictions_apprange.tiam <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
       filter(SpCode == "TIAM", Region == "TpIntW")
 
-    predictions_datarange.tiam <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+  predictions_datarange.tiam <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
       filter(SpCode == "TIAM", Region == "TpIntW")
 
   ggplot(filter(d, SpCode == "TIAM", Region == "TpIntW"), aes( x = AGE, y = DBH)) +
       geom_point(alpha = .7, size = 1) +
-        theme(text = element_text(size = 20)) +
+      theme(text = element_text(size = 20)) +
       geom_line(data = predictions_datarange.tiam, aes(group = Region), size = 1, linetype = "1111") +
       geom_line(data = predictions_apprange.tiam, aes(group = Region), size = 1)
 
@@ -5847,8 +5849,8 @@ TIAM TpIntW
 
 #+begin_src R :exports results :results graphics :file figs/quadratic.png :height 1200 :width 1200
   ggplot(predictions_apprange %>% filter(EqName == "quad"), aes(x = AGE, y = DBH)) +
-    geom_line() +
-    facet_wrap(~interaction(SpCode, Region))
+      geom_line() +
+      facet_wrap(~interaction(SpCode, Region))
 #+end_src
 
 #+RESULTS:
@@ -5862,37 +5864,37 @@ Just do the climate effects now
 
 Subset down to 5 species
 #+begin_src R
-sp.sub <- c("ACPL", "QURU", "PIST", "CEOC", "FRPE")
-ds <- filter(d, SpCode %in% sp.sub)
+  sp.sub <- c("ACPL", "QURU", "PIST", "CEOC", "FRPE")
+  ds <- filter(d, SpCode %in% sp.sub)
 #+end_src
 
 #+RESULTS:
 
 *** lme4
 #+begin_src R
-library(lme4)
+  library(lme4)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-ds <- mutate(ds, logDBH = log(DBH), logAGE = log(AGE + 1), AGE2 = AGE^2, AGE2scaled = AGE2/100)
-#mod <- lmer(DBH ~ AGE + (1 + AGE | SpCode) + ( 1 + AGE | Region), data = ds)
-#mod <- lmer(DBH ~ poly(AGE,2) + (1 + poly(AGE,2) | SpCode) + ( 1 + poly(AGE,2) | Region), data = ds)
-#mod <- lmer(DBH ~ poly(AGE,2) + (1 + poly(AGE,2) | SpCode) + ( 1 + AGE | Region), data = ds)
-#mod <- lmer(DBH ~ sqrt(AGE) + (1 + sqrt(AGE) | SpCode) + ( 1 + sqrt(AGE) | Region), data = ds)
-#mod <- lmer(DBH ~ AGE + (1 + AGE | SpCode) + ( 1 + AGE | Region), data = ds)
+  ds <- mutate(ds, logDBH = log(DBH), logAGE = log(AGE + 1), AGE2 = AGE^2, AGE2scaled = AGE2/100)
+                                          #mod <- lmer(DBH ~ AGE + (1 + AGE | SpCode) + ( 1 + AGE | Region), data = ds)
+                                          #mod <- lmer(DBH ~ poly(AGE,2) + (1 + poly(AGE,2) | SpCode) + ( 1 + poly(AGE,2) | Region), data = ds)
+                                          #mod <- lmer(DBH ~ poly(AGE,2) + (1 + poly(AGE,2) | SpCode) + ( 1 + AGE | Region), data = ds)
+                                          #mod <- lmer(DBH ~ sqrt(AGE) + (1 + sqrt(AGE) | SpCode) + ( 1 + sqrt(AGE) | Region), data = ds)
+                                          #mod <- lmer(DBH ~ AGE + (1 + AGE | SpCode) + ( 1 + AGE | Region), data = ds)
 
 
-#no intercept.  This is a good looking model.
-mod <- lmer(DBH ~ AGE + AGE2scaled - 1 + (AGE + AGE2scaled - 1 | SpCode) + (AGE - 1 | Region), data = ds)
+                                          #no intercept.  This is a good looking model.
+  mod <- lmer(DBH ~ AGE + AGE2scaled - 1 + (AGE + AGE2scaled - 1 | SpCode) + (AGE - 1 | Region), data = ds)
 
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-summary(mod)
+  summary(mod)
 #+end_src
 
 #+RESULTS:
@@ -5929,11 +5931,11 @@ AGE2scaled -0.895
 
 #+begin_src R
 
-    dsAGE_min_max = ds %>%
+  dsAGE_min_max = ds %>%
       group_by(Region, SpCode) %>%
       summarize(minAGE = min(AGE, na.rm = T),
                 maxAGE = max(AGE, na.rm = T)) %>%
-        data.frame()
+      data.frame()
 
   newdata <- lapply(1:nrow(dsAGE_min_max), function(i) {
       x <- seq(dsAGE_min_max$minAGE[i], dsAGE_min_max$maxAGE[i],  (dsAGE_min_max$maxAGE[i] - dsAGE_min_max$minAGE[i]) / 9)
@@ -5953,7 +5955,7 @@ AGE2scaled -0.895
   pred <- predict(mod, newdata)
 
   pred <- cbind(newdata, pred) %>%
-    mutate(DBH = pred)
+      mutate(DBH = pred)
 
 #+end_src
 
@@ -5961,7 +5963,7 @@ AGE2scaled -0.895
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1.png
   ggplot(pred, aes(x = AGE, y = DBH)) + geom_line() +
-    facet_grid(Region~SpCode)
+      facet_grid(Region~SpCode)
 #+end_src
 
 #+RESULTS:
@@ -5970,25 +5972,25 @@ AGE2scaled -0.895
 
 #+begin_src R
 
-      dsAGE_min_max = ds %>%
-        group_by(SpCode) %>%
-        summarize(minAGE = min(AGE, na.rm = T),
-                  maxAGE = max(AGE, na.rm = T)) %>%
-          data.frame()
+  dsAGE_min_max = ds %>%
+      group_by(SpCode) %>%
+      summarize(minAGE = min(AGE, na.rm = T),
+                maxAGE = max(AGE, na.rm = T)) %>%
+      data.frame()
 
-    newdata <- lapply(1:nrow(dsAGE_min_max), function(i) {
-        x <- seq(dsAGE_min_max$minAGE[i], dsAGE_min_max$maxAGE[i],  (dsAGE_min_max$maxAGE[i] - dsAGE_min_max$minAGE[i]) / 9)
-        cbind(dsAGE_min_max[i,], AGE = x)
-    })
+  newdata <- lapply(1:nrow(dsAGE_min_max), function(i) {
+      x <- seq(dsAGE_min_max$minAGE[i], dsAGE_min_max$maxAGE[i],  (dsAGE_min_max$maxAGE[i] - dsAGE_min_max$minAGE[i]) / 9)
+      cbind(dsAGE_min_max[i,], AGE = x)
+  })
 
-    newdata <- bind_rows(newdata)
+  newdata <- bind_rows(newdata)
 
   newdata <- mutate(newdata, logAGE = log(AGE + 1), AGE2scaled = AGE^2/100)
 
 
   regions <- rep(unique(ds$Region), each = nrow(newdata))
 
-newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify = FALSE))
+  newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify = FALSE))
 
   newdata$Region <- regions
 
@@ -6009,7 +6011,7 @@ newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify
   pred <- predict(mod, newdata)
 
   pred <- cbind(newdata, pred) %>%
-    mutate(DBH = pred)
+      mutate(DBH = pred)
 
 #+end_src
 
@@ -6017,7 +6019,7 @@ newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies.png
   ggplot(pred, aes(x = AGE, y = DBH)) + geom_line() +
-    facet_grid(Region~SpCode)
+      facet_grid(Region~SpCode)
 #+end_src
 
 #+RESULTS:
@@ -6025,8 +6027,8 @@ newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData.png :width 600 :height 600
   ggplot(pred, aes(x = AGE, y = DBH)) + geom_line() +
-    facet_grid(Region~SpCode) +
-geom_point(data = ds, size = .5, alpha = .5)
+      facet_grid(Region~SpCode) +
+      geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
@@ -6034,8 +6036,8 @@ geom_point(data = ds, size = .5, alpha = .5)
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetSpCode.png :width 1000 :height 300
   ggplot(pred, aes(x = AGE, y = DBH, color = Region)) + geom_line() +
-  facet_wrap(~SpCode, ncol = 5) +
-  geom_point(data = ds, size = .5, alpha = .5)
+      facet_wrap(~SpCode, ncol = 5) +
+      geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
@@ -6043,7 +6045,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL.png :width 420 :height 400
   ggplot(filter(pred, SpCode == "ACPL", Region %in% unique(filter(ds, SpCode == "ACPL")$Region)), aes(x = AGE, y = DBH, color = Region)) + geom_line() +
-  geom_point(data = filter(ds, SpCode == "ACPL"), size = .5, alpha = .5)
+      geom_point(data = filter(ds, SpCode == "ACPL"), size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
@@ -6051,11 +6053,11 @@ geom_point(data = ds, size = .5, alpha = .5)
 
 
 #+begin_src R :exports results :results graphics :file figs/predictions_dbh_m1_RegionsWoSpecies_wData_facetRegion_ACPL_wUTDeqn.png :width 1000 :height 400
-    ggplot(filter(pred, SpCode == "ACPL", Region %in% unique(filter(ds, SpCode == "ACPL")$Region)), aes(x = AGE, y = DBH)) +
-        geom_line(aes(color = Region)) +
-    facet_wrap(~Region, ncol = 3) +
-    geom_point(data = filter(ds, SpCode == "ACPL"), size = .5, alpha = .5) +
-        geom_line(data = predictions_apprange.acpl, aes(group = Region), color = "black", size = .5)
+  ggplot(filter(pred, SpCode == "ACPL", Region %in% unique(filter(ds, SpCode == "ACPL")$Region)), aes(x = AGE, y = DBH)) +
+      geom_line(aes(color = Region)) +
+      facet_wrap(~Region, ncol = 3) +
+      geom_point(data = filter(ds, SpCode == "ACPL"), size = .5, alpha = .5) +
+      geom_line(data = predictions_apprange.acpl, aes(group = Region), color = "black", size = .5)
 #+end_src
 
 #+RESULTS:
@@ -6063,7 +6065,7 @@ geom_point(data = ds, size = .5, alpha = .5)
 
 
 #+begin_src R
-filter(d, SpCode == "ACPL") %>% group_by(Region) %>% summarize(n = n())
+  filter(d, SpCode == "ACPL") %>% group_by(Region) %>% summarize(n = n())
 #+end_src
 
 #+RESULTS:
@@ -6077,7 +6079,7 @@ filter(d, SpCode == "ACPL") %>% group_by(Region) %>% summarize(n = n())
 : 5 TpIntW    62
 
 #+begin_src R :results org :eval no
-ascii.nowarn.print(filter(eqn, SpCode == "ACPL"))
+  ascii.nowarn.print(filter(eqn, SpCode == "ACPL"))
 #+end_src
 
 
@@ -6100,14 +6102,14 @@ does this equation come from?  The n for the north east is reportedly
 
 **** What about adding climate?
 #+begin_src R
-sp.sub <- c("ACPL", "QURU", "PIST", "CEOC", "FRPE")
-ds <- filter(d, SpCode %in% sp.sub)
+  sp.sub <- c("ACPL", "QURU", "PIST", "CEOC", "FRPE")
+  ds <- filter(d, SpCode %in% sp.sub)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-ds <- mutate(ds, logDBH = log(DBH), logAGE = log(AGE + 1), AGE2 = AGE^2, AGE2scaled = AGE2/100)
+  ds <- mutate(ds, logDBH = log(DBH), logAGE = log(AGE + 1), AGE2 = AGE^2, AGE2scaled = AGE2/100)
 #+end_src
 
 #+RESULTS:
@@ -6115,7 +6117,7 @@ ds <- mutate(ds, logDBH = log(DBH), logAGE = log(AGE + 1), AGE2 = AGE^2, AGE2sca
 from table 1 see above
 
 #+begin_src R :var climate=city_climate
-str(climate)
+  str(climate)
 #+end_src
 
 #+RESULTS:
@@ -6128,7 +6130,7 @@ str(climate)
 
 
 #+begin_src R :exports results :results graphics :file figs/climatespace.png
-ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Precip)) + geom_text(hjust = .5, nudge_y = 80)
+  ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Precip)) + geom_text(hjust = .5, nudge_y = 80)
 #+end_src
 
 #+RESULTS:
@@ -6136,8 +6138,8 @@ ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Prec
 
 Rescale precip, HDD, and CDD by dividing by 100
 #+begin_src R
-climate <- climate %>% mutate(HDD = HDD/100, CDD = CDD/100, Precip = Precip/100)
-ds <- left_join(ds, climate)
+  climate <- climate %>% mutate(HDD = HDD/100, CDD = CDD/100, Precip = Precip/100)
+  ds <- left_join(ds, climate)
 #+end_src
 
 #+RESULTS:
@@ -6146,26 +6148,26 @@ ds <- left_join(ds, climate)
 
 Just precip for now
 #+begin_src R
-mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2scaled - 1 | SpCode) + (AGE - 1 | Region), data = ds)
+  mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2scaled - 1 | SpCode) + (AGE - 1 | Region), data = ds)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-      dsAGE_min_max = ds %>%
-        group_by(SpCode) %>%
-        summarize(minAGE = min(AGE, na.rm = T),
-                  maxAGE = max(AGE, na.rm = T)) %>%
-          data.frame()
+  dsAGE_min_max = ds %>%
+      group_by(SpCode) %>%
+      summarize(minAGE = min(AGE, na.rm = T),
+                maxAGE = max(AGE, na.rm = T)) %>%
+      data.frame()
 
   newdata <- lapply(1:nrow(dsAGE_min_max), function(i) {
-          x <- seq(dsAGE_min_max$minAGE[i], dsAGE_min_max$maxAGE[i],  (dsAGE_min_max$maxAGE[i] - dsAGE_min_max$minAGE[i]) / 9)
-          cbind(dsAGE_min_max[i,], AGE = x)
-      })
+      x <- seq(dsAGE_min_max$minAGE[i], dsAGE_min_max$maxAGE[i],  (dsAGE_min_max$maxAGE[i] - dsAGE_min_max$minAGE[i]) / 9)
+      cbind(dsAGE_min_max[i,], AGE = x)
+  })
 
-      newdata <- bind_rows(newdata)
+  newdata <- bind_rows(newdata)
 
-    newdata <- mutate(newdata, logAGE = log(AGE + 1), AGE2scaled = AGE^2/100)
+  newdata <- mutate(newdata, logAGE = log(AGE + 1), AGE2scaled = AGE^2/100)
 
   regions <- rep(c("wet","dry"), each = nrow(newdata))
   newprecip <- rep(c(2.5,14), each = nrow(newdata))
@@ -6193,7 +6195,7 @@ mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2
   pred <- predict(mod_precip, newdata, allow.new.levels = T)
 
   pred <- cbind(newdata, pred) %>%
-    mutate(DBH = pred)
+      mutate(DBH = pred)
 
 #+end_src
 
@@ -6201,7 +6203,7 @@ mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2
 
 #+begin_src R :exports results :results graphics :file figs/precip_pred.png
   ggplot(pred, aes(x = AGE, y = DBH, color = Precip, group = interaction(Region,Precip))) + geom_line() +
-    facet_wrap(~SpCode)
+      facet_wrap(~SpCode)
 #+end_src
 
 #+RESULTS:
@@ -6209,8 +6211,8 @@ mod_precip <- lmer(DBH ~ AGE + AGE2scaled - 1 + Precip + Precip:AGE +(AGE + AGE2
 
 #+begin_src R :exports results :results graphics :file figs/precip_pred_wsomedata.png
   ggplot(pred, aes(x = AGE, y = DBH, color = Precip, group = interaction(Region,Precip))) + geom_line() +
-    facet_wrap(~SpCode) +
-    geom_point(data = ds)
+      facet_wrap(~SpCode) +
+      geom_point(data = ds)
 #+end_src
 
 #+RESULTS:
@@ -6231,16 +6233,16 @@ two regions)
 
 ** load libraries
 #+begin_src R :exports none
-library(plyr)
-library(dplyr)
-library(ggplot2)
-library(readr)
+  library(plyr)
+  library(dplyr)
+  library(ggplot2)
+  library(readr)
 #+end_src
 
 #+RESULTS:
 ** read in data
 #+begin_src R :exports code
-d <- read_csv("data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
+  d <- read_csv("data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
 #+end_src
 
 #+RESULTS:
@@ -6279,23 +6281,23 @@ In rbind(names(probs), probs_f) :
 
 
 #+begin_src R
-#str(d)
+                                          #str(d)
 #+end_src
 
 #+RESULTS:
 
 ** tidy a few names and select variables of interest here
 #+begin_src R
-d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, AvgCdia = `AvgCdia (m)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, AvgCdia, Age)
+  d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, AvgCdia = `AvgCdia (m)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, AvgCdia, Age)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-summary(d$Leaf)
-sum(d$Leaf == -1) / length(d$Leaf)
-sum(d$AvgCdia == -1) / length(d$AvgCdia)
-sum(d$DBH == -1) / length(d$DBH)
+  summary(d$Leaf)
+  sum(d$Leaf == -1) / length(d$Leaf)
+  sum(d$AvgCdia == -1) / length(d$AvgCdia)
+  sum(d$DBH == -1) / length(d$DBH)
 #+end_src
 
 #+RESULTS:
@@ -6306,14 +6308,14 @@ sum(d$DBH == -1) / length(d$DBH)
 : [1] 0
 
 #+begin_src R
-d <- filter(d, AvgCdia != -1)
+  d <- filter(d, AvgCdia != -1)
 #+end_src
 
 #+RESULTS:
 
 ** plot dbh versus average crown diamter for all trees
 #+begin_src R :exports results :results graphics :file figs/dbhVcdia_all.png :bg transparent
-ggplot(d, aes( x = DBH, y = AvgCdia)) + geom_point()
+  ggplot(d, aes( x = DBH, y = AvgCdia)) + geom_point()
 #+end_src
 
 #+RESULTS:
@@ -6323,12 +6325,12 @@ ggplot(d, aes( x = DBH, y = AvgCdia)) + geom_point()
 Constraining scales to 0-200 dbh and 0-40 AvgCdia.  Much of
 variability within regions is due to species, colored in the plot below.
 #+begin_src R :exports results :results graphics :file figs/dbhVcdia_byCity_focusCoords.png :height 1000 :width 1000
-      ggplot(d, aes( x = DBH, y = AvgCdia, color = SpCode)) + geom_point(alpha = .7, size = .5) +
-          facet_wrap(~City) +
-          coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
-          theme_minimal() +
-          theme(text = element_text(size = 20),
-                legend.position = "none")
+  ggplot(d, aes( x = DBH, y = AvgCdia, color = SpCode)) + geom_point(alpha = .7, size = .5) +
+      facet_wrap(~City) +
+      coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none")
 #+end_src
 
 #+RESULTS:
@@ -6336,12 +6338,12 @@ variability within regions is due to species, colored in the plot below.
 
 ** DBH versus Cdia by species
 #+begin_src R :exports results :results graphics :file figs/dbhVcdia_bySpecies_focusCoords.png :height 1500 :width 800
-      ggplot(d, aes( x = DBH, y = AvgCdia, color = City)) + geom_point(alpha = .2, size = .5) +
-          facet_wrap(~SpCode, ncol = 8) +
-          coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
-          theme_minimal() +
-          theme(text = element_text(size = 20),
-                legend.position = "none")
+  ggplot(d, aes( x = DBH, y = AvgCdia, color = City)) + geom_point(alpha = .2, size = .5) +
+      facet_wrap(~SpCode, ncol = 8) +
+      coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none")
 #+end_src
 
 #+RESULTS:
@@ -6359,11 +6361,11 @@ combination?  Or can we use one equation for each species, regardless
 of city?
 #+begin_src R
   sp.w.multiple.cities <- d %>% group_by(City, SpCode) %>% summarize(n = n()) %>% ungroup() %>% group_by(SpCode) %>%
-    summarize(n_cities_per_species = n()) %>%
-    filter(n_cities_per_species > 1) %>%
-    pull(SpCode)
+      summarize(n_cities_per_species = n()) %>%
+      filter(n_cities_per_species > 1) %>%
+      pull(SpCode)
 
-d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
+  d.sp.w.multiple.cities <- filter(d, SpCode %in% sp.w.multiple.cities)
 
 #+end_src
 
@@ -6394,11 +6396,11 @@ different climates.  There could be a genetic component too.
   ggplot(d.sp.w.multiple.cities, aes( x = DBH, y = AvgCdia, color = City)) +
       geom_point(alpha = .7, size = .8) +
       facet_wrap(~SpCode, scales = "free", ncol = 8) +
-    #  coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
+                                          #  coord_cartesian(xlim = c(0, 200), ylim = c(0,40)) +
       theme_minimal() +
       theme(text = element_text(size = 20),
             legend.position = "none") +
-    stat_smooth()
+      stat_smooth()
 #+end_src
 
 #+RESULTS:
@@ -6406,7 +6408,7 @@ different climates.  There could be a genetic component too.
 
 ACPL's cities
 #+begin_src R
-filter(d.sp.w.multiple.cities, SpCode == "ACPL") %>% pull(City) %>% unique
+  filter(d.sp.w.multiple.cities, SpCode == "ACPL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
@@ -6415,7 +6417,7 @@ filter(d.sp.w.multiple.cities, SpCode == "ACPL") %>% pull(City) %>% unique
 
 MOAL's cities
 #+begin_src R
-filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
+  filter(d.sp.w.multiple.cities, SpCode == "MOAL") %>% pull(City) %>% unique
 #+end_src
 
 #+RESULTS:
@@ -6427,36 +6429,36 @@ and with location.  However, for many species there is little
 ** Plot Urban Tree Allometric equations on top of data
 
 #+begin_src R
-                predict.allo <- function(x, EqName, a, b, c, d, e) {
-              if(EqName == "loglogw1") {
-                  y = exp(a + b*log(log(x + 1) + c/2))
-                  }
-              else if(EqName == "loglogw2") {
-                y = exp(a + b*log(log(x + 1))+(sqrt(x) * (c/2)))
-              }
-              else if (EqName == "loglogw3") {
-                y = exp(a + b*log(log(x + 1)) + x * c/2)
-              }
-              else if (EqName == "loglogw4") {
-                y = exp(a + b*log(log(x + 1)) + x^2 * c/2)
-              }
-              else if (EqName == "expow1") {
-                  y = exp(a+ b * (x) + (c/2))
-              }
-              else if (EqName == "lin") {
-                      y = a + b * x
-                  }
-              else if (EqName == "quad") {
-                      y = a + b * x + c* x^2
-                  }
-              else if (EqName == "cub") {
-                      y = a+b * x+c *x^2 + d * x^3
-                  }
-              else if (EqName == "quart") {
-                      y = a+b * x+c *x^2 + d * x^3 + e * x^4
-                  }
-              return(y)
-          }
+  predict.allo <- function(x, EqName, a, b, c, d, e) {
+      if(EqName == "loglogw1") {
+          y = exp(a + b*log(log(x + 1) + c/2))
+      }
+      else if(EqName == "loglogw2") {
+          y = exp(a + b*log(log(x + 1))+(sqrt(x) * (c/2)))
+      }
+      else if (EqName == "loglogw3") {
+          y = exp(a + b*log(log(x + 1)) + x * c/2)
+      }
+      else if (EqName == "loglogw4") {
+          y = exp(a + b*log(log(x + 1)) + x^2 * c/2)
+      }
+      else if (EqName == "expow1") {
+          y = exp(a+ b * (x) + (c/2))
+      }
+      else if (EqName == "lin") {
+          y = a + b * x
+      }
+      else if (EqName == "quad") {
+          y = a + b * x + c* x^2
+      }
+      else if (EqName == "cub") {
+          y = a+b * x+c *x^2 + d * x^3
+      }
+      else if (EqName == "quart") {
+          y = a+b * x+c *x^2 + d * x^3 + e * x^4
+      }
+      return(y)
+  }
 
 
 #+end_src
@@ -6465,43 +6467,43 @@ and with location.  However, for many species there is little
 
 
 #+begin_src R
-        eqn <- read.csv("data/RDS-2016-0005/Data/TS6_Growth_coefficients_fromNatalie.csv", stringsAsFactors = F) %>%
-              mutate(a = as.numeric(a))
+  eqn <- read.csv("data/RDS-2016-0005/Data/TS6_Growth_coefficients_fromNatalie.csv", stringsAsFactors = F) %>%
+      mutate(a = as.numeric(a))
 
-          eqn <- eqn %>%
-              filter(Predicts.component %in% c("crown dia"), Independent.variable == "dbh")
+  eqn <- eqn %>%
+      filter(Predicts.component %in% c("crown dia"), Independent.variable == "dbh")
 
-    dbh_min_max = d %>%
+  dbh_min_max = d %>%
       group_by(Region, SpCode) %>%
       summarize(minDBH = min(DBH, na.rm = T),
                 maxDBH = max(DBH, na.rm = T))
 
-    eqn <- left_join(eqn, dbh_min_max)
+  eqn <- left_join(eqn, dbh_min_max)
 
-    cdia_min_max = d %>%
+  cdia_min_max = d %>%
       group_by(Region, SpCode) %>%
       summarize(minCdia = min(AvgCdia, na.rm = T),
                 maxCdia = max(AvgCdia, na.rm = T))
 
-    eqn <- left_join(eqn, cdia_min_max)
+  eqn <- left_join(eqn, cdia_min_max)
 
 
-                                            # fill in the NAs due to equations existing for species in regions where they weren't sampled.
-    eqn$minDBH[is.na(eqn$minDBH)] <- 5
-    eqn$maxDBH[is.na(eqn$maxDBH)] <- 90
+                                          # fill in the NAs due to equations existing for species in regions where they weren't sampled.
+  eqn$minDBH[is.na(eqn$minDBH)] <- 5
+  eqn$maxDBH[is.na(eqn$maxDBH)] <- 90
 
-        newdata <- lapply(1:nrow(eqn), function(i) {
-            x <- seq(eqn$minDBH[i], eqn$maxDBH[i],  (eqn$maxDBH[i] - eqn$minDBH[i]) / 9)
-            cbind(x, eqn[i,])
-            })
+  newdata <- lapply(1:nrow(eqn), function(i) {
+      x <- seq(eqn$minDBH[i], eqn$maxDBH[i],  (eqn$maxDBH[i] - eqn$minDBH[i]) / 9)
+      cbind(x, eqn[i,])
+  })
 
-      newdata <- bind_rows(newdata)
+  newdata <- bind_rows(newdata)
 
-        predictions <- newdata %>% rowwise %>% mutate(predicted_Cdia = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
+  predictions <- newdata %>% rowwise %>% mutate(predicted_Cdia = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
 
 
 
-  #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
+                                          #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
   predictions_apprange <- predictions %>%
       filter(predicted_Cdia > Apps.min & predicted_Cdia < Apps.max)
 
@@ -6521,7 +6523,7 @@ and with location.  However, for many species there is little
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_Cdia, group = SpCode)) +
       geom_line() +
-    facet_wrap(~Region, scales = "free")
+      facet_wrap(~Region, scales = "free")
 
 #+end_src
 
@@ -6532,7 +6534,7 @@ and with location.  However, for many species there is little
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_Cdia, group = Region)) +
       geom_line() +
-    facet_wrap(~SpCode, scales = "free")
+      facet_wrap(~SpCode, scales = "free")
 
 #+end_src
 
@@ -6542,7 +6544,7 @@ and with location.  However, for many species there is little
 What's up with BUCA and PIPO?  Those equations seem wrong.
 
 #+begin_src R :exports results :results graphics :file figs/GulfCo_BUCA.png
-gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(DBH = x)
+  gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(DBH = x)
 
   ggplot(gcbuca, aes(x = DBH, y = predicted_Cdia)) + geom_line()
 #+end_src
@@ -6551,7 +6553,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 [[file:../figs/GulfCo_BUCA.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpeciesFull_wData.png :height 1200 :width 1200
-    predictions_apprange <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia)
+  predictions_apprange <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia)
 
   ggplot(d, aes( x = DBH, y = AvgCdia, color = Region)) +
       geom_point(alpha = .7, size = .5) +
@@ -6568,7 +6570,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies_wData.png :height 1200 :width 1200
-    predictions_apprange.sp.w.multiple.cities <- predictions_apprange %>%       filter(SpCode %in% d.sp.w.multiple.cities$SpCode)
+  predictions_apprange.sp.w.multiple.cities <- predictions_apprange %>%       filter(SpCode %in% d.sp.w.multiple.cities$SpCode)
 
 
   ggplot(d.sp.w.multiple.cities, aes( x = DBH, y = AvgCdia, color = Region)) +
@@ -6586,10 +6588,10 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 [[file:../figs/predictions_bySpecies_wData.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies_wData_ACPL.png
-    predictions_apprange.acpl <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
       filter(SpCode == "ACPL")
 
-    predictions_datarange.acpl <- predictions_datarange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
       filter(SpCode == "ACPL")
 
   ggplot(filter(d, SpCode == "ACPL"), aes( x = DBH, y = AvgCdia, color = Region)) +
@@ -6608,10 +6610,10 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
 [[file:../figs/predictions_bySpecies_wData_ACPL.png]]
 
 #+begin_src R :exports results :results graphics :file figs/predictions_bySpecies_wData_ACPL_facet.png
-    predictions_apprange.acpl <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
       filter(SpCode == "ACPL")
 
-    predictions_datarange.acpl <- predictions_datarange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(DBH = x, AvgCdia = predicted_Cdia) %>%
       filter(SpCode == "ACPL")
 
   ggplot(filter(d, SpCode == "ACPL"), aes( x = DBH, y = AvgCdia)) +
@@ -6622,7 +6624,7 @@ gcbuca <- filter(predictions, Region == "GulfCo", SpCode == "BUCA") %>% mutate(D
             legend.position = "none") +
       geom_line(data = predictions_datarange.acpl, aes(group = Region, color = Region), size = 1, linetype = "1111") +
       geom_line(data = predictions_apprange.acpl, aes(group = Region, color = Region), size = 1) +
-    facet_wrap(~Region)
+      facet_wrap(~Region)
 
 
 #+end_src
@@ -6673,28 +6675,28 @@ Just do the climate effects now
 
 Subset down to 5 species
 #+begin_src R
-sp.sub <- c("ACPL", "QURU", "PIST", "CEOC", "FRPE")
-ds <- filter(d, SpCode %in% sp.sub)
+  sp.sub <- c("ACPL", "QURU", "PIST", "CEOC", "FRPE")
+  ds <- filter(d, SpCode %in% sp.sub)
 #+end_src
 
 #+RESULTS:
 
 *** lme4
 #+begin_src R
-library(lme4)
+  library(lme4)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-ds <- mutate(ds, logAvgCdia = log(AvgCdia))
-mod <- lmer(logAvgCdia ~ log(DBH) + (1 + log(DBH) | SpCode) + ( 1 + log(DBH) | Region), data = ds)
+  ds <- mutate(ds, logAvgCdia = log(AvgCdia))
+  mod <- lmer(logAvgCdia ~ log(DBH) + (1 + log(DBH) | SpCode) + ( 1 + log(DBH) | Region), data = ds)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-mod
+  mod
 #+end_src
 
 #+RESULTS:
@@ -6716,11 +6718,11 @@ Fixed Effects:
 
 #+begin_src R
 
-    dsDBH_min_max = ds %>%
+  dsDBH_min_max = ds %>%
       group_by(Region, SpCode) %>%
       summarize(minDBH = min(DBH, na.rm = T),
                 maxDBH = max(DBH, na.rm = T)) %>%
-        data.frame()
+      data.frame()
 
   newdata <- lapply(1:nrow(dsDBH_min_max), function(i) {
       x <- seq(dsDBH_min_max$minDBH[i], dsDBH_min_max$maxDBH[i],  (dsDBH_min_max$maxDBH[i] - dsDBH_min_max$minDBH[i]) / 9)
@@ -6737,7 +6739,7 @@ Fixed Effects:
   pred <- predict(mod, newdata)
 
   pred <- cbind(newdata, pred) %>%
-    mutate(Cdia = exp(pred))
+      mutate(Cdia = exp(pred))
 
 #+end_src
 
@@ -6745,7 +6747,7 @@ Fixed Effects:
 
 #+begin_src R :exports results :results graphics :file figs/predictions_m1.png
   ggplot(pred, aes(x = DBH, y = Cdia)) + geom_line() +
-    facet_grid(Region~SpCode)
+      facet_grid(Region~SpCode)
 #+end_src
 
 #+RESULTS:
@@ -6754,25 +6756,25 @@ Fixed Effects:
 
 #+begin_src R
 
-      dsDBH_min_max = ds %>%
-        group_by(SpCode) %>%
-        summarize(minDBH = min(DBH, na.rm = T),
-                  maxDBH = max(DBH, na.rm = T)) %>%
-          data.frame()
+  dsDBH_min_max = ds %>%
+      group_by(SpCode) %>%
+      summarize(minDBH = min(DBH, na.rm = T),
+                maxDBH = max(DBH, na.rm = T)) %>%
+      data.frame()
 
-    newdata <- lapply(1:nrow(dsDBH_min_max), function(i) {
-        x <- seq(dsDBH_min_max$minDBH[i], dsDBH_min_max$maxDBH[i],  (dsDBH_min_max$maxDBH[i] - dsDBH_min_max$minDBH[i]) / 9)
-        cbind(dsDBH_min_max[i,], DBH = x)
-    })
+  newdata <- lapply(1:nrow(dsDBH_min_max), function(i) {
+      x <- seq(dsDBH_min_max$minDBH[i], dsDBH_min_max$maxDBH[i],  (dsDBH_min_max$maxDBH[i] - dsDBH_min_max$minDBH[i]) / 9)
+      cbind(dsDBH_min_max[i,], DBH = x)
+  })
 
-    newdata <- bind_rows(newdata)
+  newdata <- bind_rows(newdata)
 
-    newdata <- mutate(newdata, logDBH = log(DBH))
+  newdata <- mutate(newdata, logDBH = log(DBH))
 
 
   regions <- rep(unique(ds$Region), each = nrow(newdata))
 
-newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify = FALSE))
+  newdata <- do.call("rbind", replicate(length(unique(regions)), newdata, simplify = FALSE))
 
   newdata$Region <- regions
 
@@ -6797,7 +6799,7 @@ Warning messages:
   pred <- predict(mod, newdata)
 
   pred <- cbind(newdata, pred) %>%
-    mutate(AvgCdia = exp(pred))
+      mutate(AvgCdia = exp(pred))
 
 #+end_src
 
@@ -6805,7 +6807,7 @@ Warning messages:
 
 #+begin_src R :exports results :results graphics :file figs/predictions_m1_RegionsWoSpecies.png
   ggplot(pred, aes(x = DBH, y = AvgCdia)) + geom_line() +
-    facet_grid(Region~SpCode)
+      facet_grid(Region~SpCode)
 #+end_src
 
 #+RESULTS:
@@ -6813,8 +6815,8 @@ Warning messages:
 
 #+begin_src R :exports results :results graphics :file figs/predictions_m1_RegionsWoSpecies_wData.png :width 600 :height 600
   ggplot(pred, aes(x = DBH, y = AvgCdia)) + geom_line() +
-    facet_grid(Region~SpCode) +
-geom_point(data = ds, size = .5, alpha = .5)
+      facet_grid(Region~SpCode) +
+      geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
@@ -6823,8 +6825,8 @@ geom_point(data = ds, size = .5, alpha = .5)
 
 #+begin_src R :exports results :results graphics :file figs/predictions_m1_RegionsWoSpecies_wData_facetSpCode.png :width 1000 :height 300
   ggplot(pred, aes(x = DBH, y = AvgCdia, color = Region)) + geom_line() +
-  facet_wrap(~SpCode, ncol = 5) +
-  geom_point(data = ds, size = .5, alpha = .5)
+      facet_wrap(~SpCode, ncol = 5) +
+      geom_point(data = ds, size = .5, alpha = .5)
 #+end_src
 
 #+RESULTS:
@@ -6868,7 +6870,7 @@ really understand how they are calcuated.  Maybe the theshold
 temperature is what's driving it.  I don't think it matters here.
 
 #+begin_src R :var climate=city_climate
-str(climate)
+  str(climate)
 #+end_src
 
 #+RESULTS:
@@ -6881,7 +6883,7 @@ str(climate)
 
 
 #+begin_src R :exports results :results graphics :file figs/climatespace.png
-ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Precip)) + geom_text(hjust = .5, nudge_y = 80)
+  ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Precip)) + geom_text(hjust = .5, nudge_y = 80)
 #+end_src
 
 #+RESULTS:
@@ -6889,8 +6891,8 @@ ggplot(climate, aes(x = HDD, y = CDD,label = City)) + geom_point(aes(size = Prec
 
 Rescale precip, HDD, and CDD by dividing by 100
 #+begin_src R
-climate <- climate %>% mutate(HDD = HDD/100, CDD = CDD/100, Precip = Precip/100)
-ds <- left_join(ds, climate)
+  climate <- climate %>% mutate(HDD = HDD/100, CDD = CDD/100, Precip = Precip/100)
+  ds <- left_join(ds, climate)
 #+end_src
 
 #+RESULTS:
@@ -6903,13 +6905,13 @@ ds <- left_join(ds, climate)
 
 Just precip for now
 #+begin_src R
-mod_precip <- lmer(logAvgCdia ~ log(DBH) + Precip + Precip:log(DBH) + (1 + log(DBH) | SpCode) + ( 1 + log(DBH) | Region), data = ds)
+  mod_precip <- lmer(logAvgCdia ~ log(DBH) + Precip + Precip:log(DBH) + (1 + log(DBH) | SpCode) + ( 1 + log(DBH) | Region), data = ds)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-mod_hdd <- lmer(logAvgCdia ~ log(DBH) + HDD + HDD:log(DBH) + (1 + log(DBH) | SpCode) + ( 1 + log(DBH) | Region), data = ds)
+  mod_hdd <- lmer(logAvgCdia ~ log(DBH) + HDD + HDD:log(DBH) + (1 + log(DBH) | SpCode) + ( 1 + log(DBH) | Region), data = ds)
 #+end_src
 
 #+RESULTS:
@@ -6918,14 +6920,14 @@ mod_hdd <- lmer(logAvgCdia ~ log(DBH) + HDD + HDD:log(DBH) + (1 + log(DBH) | SpC
 
 *** rstanarm
 #+begin_src R
-library(rstanarm)
-options(mc.cores = parallel::detectCores())
+  library(rstanarm)
+  options(mc.cores = parallel::detectCores())
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R
-smod <- stan_glm(log(AvgCdia) ~ DBH, data = d, family = gaussian(link = "identity"))
+  smod <- stan_glm(log(AvgCdia) ~ DBH, data = d, family = gaussian(link = "identity"))
 #+end_src
 
 #+RESULTS:
@@ -7032,7 +7034,7 @@ Iteration: 2000 / 2000 [100%]  (Sampling)
 #+end_example
 
 #+begin_src R
-summary(smod)
+  summary(smod)
 #+end_src
 
 #+RESULTS:
@@ -7069,14 +7071,14 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 #+end_example
 
 #+begin_src R
-print(smod, digits = 5)
+  print(smod, digits = 5)
 #+end_src
 
 #+RESULTS:
 
 
 #+begin_src R
-smod_Sp <- stan_glmer(log(AvgCdia) ~ DBH | SpCode, data = d, family = gaussian(link = "identity"))
+  smod_Sp <- stan_glmer(log(AvgCdia) ~ DBH | SpCode, data = d, family = gaussian(link = "identity"))
 #+end_src
 
 #+RESULTS:
@@ -7112,11 +7114,11 @@ posterior predict with exp transform
 
 
 #+begin_src R
-x <- 1:100
-a <- seq(-.2, -1, -.2)
-b <- seq(1.2,2, .2)
-dq <- expand.grid(x = x, a = a,b = b)
-dq <- mutate(dq, y = a*(x^2)/100 + b * x)
+  x <- 1:100
+  a <- seq(-.2, -1, -.2)
+  b <- seq(1.2,2, .2)
+  dq <- expand.grid(x = x, a = a,b = b)
+  dq <- mutate(dq, y = a*(x^2)/100 + b * x)
 
 #+end_src
 
@@ -7124,8 +7126,8 @@ dq <- mutate(dq, y = a*(x^2)/100 + b * x)
 
 #+begin_src R :exports results :results graphics :file figs/understand_quad.png
   ggplot(dq, aes(x = x, y = y)) +
-    geom_line() +
-    facet_grid(a~ b)
+      geom_line() +
+      facet_grid(a~ b)
 #+end_src
 
 #+RESULTS:
@@ -7136,7 +7138,7 @@ dq <- mutate(dq, y = a*(x^2)/100 + b * x)
 2) SpCode: "lain" instead of "LAIN"; "list" instead of "LIST"
 
 * junk
- +
++
 geom_vline(xintercept = -coef(m)[1]/(2*coef(m)[2]), linetype = "dashed", color = "blue")
 
 * questions
