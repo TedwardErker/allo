@@ -1397,6 +1397,15 @@ smaller models to build:
 | many  | many    | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) |                |
 | many  | many    | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |
 
+#+begin_src sh :session a
+rsync -avz ../data/model_table.csv erker@krusty:~/data/model_table.csv
+#+end_src
+
+#+RESULTS:
+| erker@krusty's | password:  |              |        |       |          |          |        |       |          |    |                                                                                |                |
+| building       | file       | list         | ...    | done  |          |          |        |       |          |    |                                                                                |                |
+| rsync:         | connection | unexpectedly | closed | (8    | bytes    | received | so     | far)  | [sender] |    |                                                                                |                |
+| rsync          | error:     | error        | in     | rsync | protocol | data     | stream | (code |      12) | at | /BuildRoot/Library/Caches/com.apple.xbs/Sources/rsync/rsync-52/rsync/io.c(453) | [sender=2.6.9] |
 
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
