@@ -1378,7 +1378,10 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
-*** all the models  model_table
+*** TODO all the models  model_table  MAKE SURE MY PRIORS ARE CORRECT.  MAKE SURE MY syntax for group level effectis is correct.
+GROUP LEVEL EFFECTS SYNTAX:
+y ~ x1 + x2 + (1 + x1 | g)
+what does it mean when x1 is outside and inside the parenthesis?
 
 smaller models to build:
 #+name: model_table
@@ -2169,10 +2172,10 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password: 
+: erker@krusty's password:
 : building file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_smooth5.R
-: 
+:
 : sent 182 bytes  received 54 bytes  67.43 bytes/sec
 : total size is 1146  speedup is 4.86
 
@@ -2189,29 +2192,12 @@ run from krusty terminal
 
 **** pull back from krusty
 
-#+BEGIN_SRC sh :session a :results raw
+#+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth5.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_single_cities_single_climate_none_hetero_smooth5.rds
 
-sent 38 bytes  received 12405422 bytes  1305837.89 bytes/sec
-total size is 12501434  speedup is 1.01
-erker@krusty's password:
-receiving file list ... done
-
-sent 16 bytes  received 145 bytes  46.00 bytes/sec
-total size is 12029334  speedup is 74716.36
-You have new mail in /var/mail/erker
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_single_cities_single_climate_none_hetero_no.rds
-
-sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
-total size is 12029334  speedup is 1.01
 
 **** diagnostics
 :PROPERTIES:
@@ -2243,28 +2229,30 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ s(AGE, k = 3)
+         sigma ~ s(AGE, k = 5)
    Data: d (Number of observations: 2272)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
 Smooth Terms:
                   Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)    14.81      8.72     3.84    34.54        193 1.03
+sds(sigma_sAGE_1)     6.78      4.06     2.37    16.74         16 1.32
 
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.45      0.02     2.42     2.48       1573 1.00
-b0_Intercept        1.11      0.06     1.01     1.24       1208 1.00
-b1_Intercept        1.65      0.08     1.50     1.81       1470 1.00
-b2_Intercept        1.03      0.02     0.98     1.07       1063 1.01
-sigma_sAGE_1       -0.21      0.02    -0.24    -0.17       1881 1.00
+sigma_Intercept     2.43      0.01     2.40     2.46        157 1.03
+b0_Intercept        1.23      0.08     1.09     1.41        110 1.03
+b1_Intercept        1.58      0.07     1.45     1.72        788 1.02
+b2_Intercept        1.00      0.02     0.96     1.05        217 1.02
+sigma_sAGE_1        0.76      0.11     0.59     0.99         50 1.08
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 346 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 301 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -2292,7 +2280,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png
-  pp_check(mod)
+  pp_check(mod) +xlim(c(-20,130))
 #+end_src
 
 #+RESULTS:
@@ -2354,10 +2342,10 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password: 
+: erker@krusty's password:
 : building file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_smooth7.R
-: 
+:
 : sent 663 bytes  received 42 bytes  201.43 bytes/sec
 : total size is 1146  speedup is 1.63
 
@@ -2374,29 +2362,19 @@ run from krusty terminal
 
 **** pull back from krusty
 
-#+BEGIN_SRC sh :session a :results raw
+#+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds
+: Permission denied, please try again.
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds
+:
+: sent 38 bytes  received 12649781 bytes  648708.67 bytes/sec
+: total size is 12746132  speedup is 1.01
 
-sent 38 bytes  received 12405422 bytes  1305837.89 bytes/sec
-total size is 12501434  speedup is 1.01
-erker@krusty's password:
-receiving file list ... done
-
-sent 16 bytes  received 145 bytes  46.00 bytes/sec
-total size is 12029334  speedup is 74716.36
-You have new mail in /var/mail/erker
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_single_cities_single_climate_none_hetero_no.rds
-
-sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
-total size is 12029334  speedup is 1.01
 
 **** diagnostics
 :PROPERTIES:
@@ -2428,28 +2406,28 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ s(AGE, k = 3)
+         sigma ~ s(AGE, k = 7)
    Data: d (Number of observations: 2272)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
 Smooth Terms:
                   Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)    14.81      8.72     3.84    34.54        193 1.03
+sds(sigma_sAGE_1)     4.83      2.03     2.19    10.23        743 1.00
 
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.45      0.02     2.42     2.48       1573 1.00
-b0_Intercept        1.11      0.06     1.01     1.24       1208 1.00
-b1_Intercept        1.65      0.08     1.50     1.81       1470 1.00
-b2_Intercept        1.03      0.02     0.98     1.07       1063 1.01
-sigma_sAGE_1       -0.21      0.02    -0.24    -0.17       1881 1.00
+sigma_Intercept     2.42      0.02     2.39     2.45       3588 1.00
+b0_Intercept        1.27      0.09     1.12     1.48       1748 1.00
+b1_Intercept        1.56      0.08     1.40     1.71       2287 1.00
+b2_Intercept        0.99      0.02     0.95     1.03       2232 1.00
+sigma_sAGE_1        1.09      0.22     0.69     1.55       1683 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 346 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 36 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -3059,7 +3037,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_smooth.png]]
 
-*** genus: many;  species: many; cities: many; climate: b0; hetero: smooth
+*** TODO BETTER PRIORS genus: many;  species: many; cities: many; climate: b0; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0_hetero_smooth.R
 :END:
@@ -3099,15 +3077,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 10000)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
-
-#+RESULTS:
-: Error: The following priors do not correspond to any model parameter:
-: sds_sigma ~ normal(1, 0.3)
-: Intercept_sigma ~ normal(0, 1)
-: Function 'get_prior' might be helpful to you.
 
 **** tangle
 C-c C-v t
@@ -3118,6 +3090,14 @@ C-c C-v t
   rsync -avz genus_many_species_many_cities_many_climate_b0_hetero_smooth.R erker@krusty:~/allo/code/
 
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password: 
+: building file list ... done
+: genus_many_species_many_cities_many_climate_b0_hetero_smooth.R
+: 
+: sent 369 bytes  received 54 bytes  120.86 bytes/sec
+: total size is 1139  speedup is 2.69
 
 **** run on krusty
 
