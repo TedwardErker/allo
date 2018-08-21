@@ -5,9 +5,9 @@ none,single,single,none,smooth,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0
 none,many,single,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Species),b1 ~ (1 \vert Species),b2 ~ (1 \vert Species),
 many,many,single,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Genus / Species),b1 ~ (1 \vert Genus / Species),b2 ~ (1 \vert Genus / Species),
 many,many,single,none,yes,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Genus / Species),b1 ~ (1 \vert Genus / Species),b2 ~ (1 \vert Genus / Species),sigma ~ AGE -1
-none,single,many,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Cities),b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),
-none,single,many,b0,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities)",b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),
-none,single,many,none,yes,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Cities),b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),sigma ~ AGE -1
-none,single,many,b0,yes,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities)",b1 ~ (1 \vert Cities),b2 ~ (1 \vert Cities),sigma ~ AGE -1
-many,many,many,b0,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species)",b1 ~ (1 \vert Cities) + (1 \vert Genus / Species),b2 ~ (1 \vert Cities) + (1 \vert Genus / Species),
-many,many,many,b0,yes,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species)",b1 ~ (1 \vert Cities) + (1 \vert Genus / Species),b2 ~ (1 \vert Cities) + (1 \vert Genus / Species),sigma ~ AGE -1
+none,single,many,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert City),b1 ~ (1 \vert City),b2 ~ (1 \vert City),
+none,single,many,b0,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert City)",b1 ~ (1 \vert City),b2 ~ (1 \vert City),
+none,single,many,none,yes,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert City),b1 ~ (1 \vert City),b2 ~ (1 \vert City),sigma ~ AGE -1
+none,single,many,b0,yes,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert City)",b1 ~ (1 \vert City),b2 ~ (1 \vert City),sigma ~ AGE -1
+many,many,many,b0,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert City) + (1 \vert Genus / Species)",b1 ~ (1 \vert City) + (1 \vert Genus / Species),b2 ~ (1 \vert City) + (1 \vert Genus / Species),
+many,many,many,b0,smooth,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),"b0 ~ t2(Precip, HDD) +  (1 \vert City) + (1 \vert Genus / Species)",b1 ~ (1 \vert City) + (1 \vert Genus / Species),b2 ~ (1 \vert City) + (1 \vert Genus / Species),sigma ~ s(AGE)
