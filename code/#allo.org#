@@ -1936,27 +1936,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
@@ -1982,10 +1961,11 @@ Warning messages:
 
 **** fit model to real data
 #+begin_src R
-  d <- readRDS("../data/age_dbh_testing.rds")
+    d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+    mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000,
+               knots = list(k = -1))
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
 **** tangle
@@ -2361,6 +2341,14 @@ C-c C-v t
   rsync -avz genus_many_species_many_cities_many_climate_none_hetero_smooth.R erker@krusty:~/allo/code/
 
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password: 
+: building file list ... done
+: genus_many_species_many_cities_many_climate_none_hetero_smooth.R
+: 
+: sent 658 bytes  received 42 bytes  280.00 bytes/sec
+: total size is 1140  speedup is 1.63
 
 **** run on krusty
 
