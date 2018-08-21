@@ -1,6 +1,10 @@
 ## [[file:~/git/allo/code/allo.org::*Libraries%20and%20functions][Libraries and functions:2]]
 generate_formula <- function(model_table, gen, sp, cit, clim, het) {
       f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
+
+      f[] <- gsub("\\vert", "|", f, fixed = T)
+
+
       if(f$sigma == "") {
           bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
       } else {
