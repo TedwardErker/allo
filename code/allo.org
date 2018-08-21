@@ -1382,23 +1382,23 @@ are correlated.  I wonder if I could include that information in the prior?
 
 smaller models to build:
 #+name: model_table
-| genus | species | cities | climate | hetero | data                                           | b0                                                                   | b1                                                | b2                                                | sigma          |
-|-------+---------+--------+---------+--------+------------------------------------------------+----------------------------------------------------------------------+---------------------------------------------------+---------------------------------------------------+----------------|
-| none  | single  | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            |                |
-| none  | single  | single | none    | linear | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE -1 |
-| none  | single  | single | none    | smooth | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ s(AGE) |
-| none  | many    | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Species)                                               | b1 ~ (1 \vert Species)                            | b2 ~ (1 \vert Species)                            |                |
-| many  | many    | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    |                |
-| many  | many    | single | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1 |
-| none  | single  | many   | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                |
-| none  | single  | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                |
-| none  | single  | many   | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |
-| none  | single  | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1 |
-| many  | many    | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) |                |
-| many  | many    | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1 |
+| genus | species | cities | climate | hetero | data                                           | b0                                                                   | b1                                                | b2                                                | sigma           |
+|-------+---------+--------+---------+--------+------------------------------------------------+----------------------------------------------------------------------+---------------------------------------------------+---------------------------------------------------+-----------------|
+| none  | single  | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            |                 |
+| none  | single  | single | none    | linear | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ AGE - 1 |
+| none  | single  | single | none    | smooth | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                               | b1 ~ 1                                            | b2 ~ 1                                            | sigma ~ s(AGE)  |
+| none  | many    | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Species)                                               | b1 ~ (1 \vert Species)                            | b2 ~ (1 \vert Species)                            |                 |
+| many  | many    | single | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    |                 |
+| many  | many    | single | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                       | b1 ~ (1 \vert Genus / Species)                    | b2 ~ (1 \vert Genus / Species)                    | sigma ~ AGE -1  |
+| none  | single  | many   | none    | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                 |
+| none  | single  | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             |                 |
+| none  | single  | many   | none    | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Cities)                                                | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1  |
+| none  | single  | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities)                             | b1 ~ (1 \vert Cities)                             | b2 ~ (1 \vert Cities)                             | sigma ~ AGE -1  |
+| many  | many    | many   | b0      | no     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) |                 |
+| many  | many    | many   | b0      | yes    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, HDD) +  (1 \vert Cities) + (1 \vert Genus / Species) | b1 ~ (1 \vert Cities) + (1 \vert Genus / Species) | b2 ~ (1 \vert Cities) + (1 \vert Genus / Species) | sigma ~ AGE -1  |
 
 #+begin_src sh :session a
-rsync -avz ../data/model_table.csv erker@krusty:~/data/model_table.csv
+rsync -avz ../data/model_table.csv erker@krusty:~/data/
 #+end_src
 
 #+RESULTS:
@@ -1490,7 +1490,7 @@ then functions subset data, generate formula and prior, and fit model.
 
 Send functions to krusty
 #+BEGIN_SRC sh :session a
-rsync -avz allo_functions.R erker@krusty:~/allo/code
+rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
@@ -1813,7 +1813,6 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz allo_functions.R erker@krusty:~/allo/code/
   rsync -avz genus_none_species_single_cities_single_climate_none_hetero_linear.R erker@krusty:~/allo/code/
 
 #+END_SRC
@@ -1825,7 +1824,7 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no.R &
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_linear.R &
   exit
 #+END_SRC
 
