@@ -1388,6 +1388,8 @@ smaller models to build:
 | none  | single  | single | none    | linear  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ AGE - 1       |
 | none  | single  | single | none    | smooth2 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 2) |
 | none  | single  | single | none    | smooth3 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 3) |
+| none  | single  | single | none    | smooth5 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 5) |
+| none  | single  | single | none    | smooth7 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 7) |
 | none  | single  | single | none    | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE)        |
 | none  | many    | single | none    | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Species)                                             | b1 ~ (1 \vert Species)                          | b2 ~ (1 \vert Species)                          |                       |
 | many  | many    | single | none    | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                     | b1 ~ (1 \vert Genus / Species)                  | b2 ~ (1 \vert Genus / Species)                  |                       |
@@ -1407,13 +1409,12 @@ rsync -avz ../data/model_table.csv erker@krusty:~/allo/data/
 #+end_src
 
 #+RESULTS:
-| erker@krusty's  | password: |       |          |         |                 |       |           |
-| building        | file      | list  | ...      | done    |                 |       |           |
-| model_table.csv |           |       |          |         |                 |       |           |
-|                 |           |       |          |         |                 |       |           |
-| sent            | 356       | bytes | received | 66      | bytes           | 168.8 | bytes/sec |
-| total           | size      | is    | 2437     | speedup | is              |  5.77 |           |
-| You             | have      | new   | mail     | in      | /var/mail/erker |       |           |
+| erker@krusty's  | password: |       |          |         |       |       |           |
+| building        | file      | list  | ...      | done    |       |       |           |
+| model_table.csv |           |       |          |         |       |       |           |
+|                 |           |       |          |         |       |       |           |
+| sent            | 328       | bytes | received | 66      | bytes | 71.64 | bytes/sec |
+| total           | size      | is    | 2685     | speedup | is    |  6.81 |           |
 
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
@@ -1508,13 +1509,12 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
-| erker@krusty's   | password: |       |          |         |                 |        |           |
-| building         | file      | list  | ...      | done    |                 |        |           |
-| allo_functions.R |           |       |          |         |                 |        |           |
-|                  |           |       |          |         |                 |        |           |
-| sent             | 464       | bytes | received | 60      | bytes           | 149.71 | bytes/sec |
-| total            | size      | is    | 1700     | speedup | is              |   3.24 |           |
-| You              | have      | new   | mail     | in      | /var/mail/erker |        |           |
+: erker@krusty's password:
+: building file list ... done
+: allo_functions.R
+:
+: sent 129 bytes  received 60 bytes  42.00 bytes/sec
+: total size is 1700  speedup is 8.99
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -2004,10 +2004,22 @@ run from krusty terminal
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results raw
-rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth3.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_smooth3.rds
+
+sent 38 bytes  received 12405422 bytes  1305837.89 bytes/sec
+total size is 12501434  speedup is 1.01
+erker@krusty's password:
+receiving file list ... done
+
+sent 16 bytes  received 145 bytes  46.00 bytes/sec
+total size is 12029334  speedup is 74716.36
+You have new mail in /var/mail/erker
 erker@krusty's password:
 receiving file list ... done
 genus_none_species_single_cities_single_climate_none_hetero_no.rds
@@ -2045,26 +2057,29 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ s(AGE)
+         sigma ~ s(AGE, k = 3)
    Data: d (Number of observations: 2272)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
-Smooth3 Terms:
+Smooth Terms:
                   Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)     1.49      0.21     1.10     1.92       2393 1.00
+sds(sigma_sAGE_1)    14.81      8.72     3.84    34.54        193 1.03
 
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.42      0.02     2.39     2.45       4000 1.00
-b0_Intercept        1.26      0.09     1.12     1.47       1911 1.00
-b1_Intercept        1.57      0.08     1.42     1.73       3138 1.00
-b2_Intercept        0.99      0.02     0.95     1.04       2291 1.00
-sigma_sAGE_1        1.27      0.18     0.92     1.62       2263 1.00
+sigma_Intercept     2.45      0.02     2.42     2.48       1573 1.00
+b0_Intercept        1.11      0.06     1.01     1.24       1208 1.00
+b1_Intercept        1.65      0.08     1.50     1.81       1470 1.00
+b2_Intercept        1.03      0.02     0.98     1.07       1063 1.01
+sigma_sAGE_1       -0.21      0.02    -0.24    -0.17       1881 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 346 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth3.png
@@ -2082,7 +2097,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth3.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_smooth3s_genus_none_species_single_cities_single_climate_none_hetero_smooth3.png
-  marginal_smooth3s(mod)
+  marginal_smooths(mod)
 #+end_src
 
 #+RESULTS:
@@ -2096,6 +2111,379 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth3.png]]
+
+*** genus: none;  species: single; cities: single; climate: none; hetero: smooth5
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_smooth5.R
+:END:
+**** libraries and functions
+#+begin_src R
+  library(dplyr)
+  library(brms)
+  source("allo_functions.R")
+
+#+end_src
+
+#+RESULTS:
+
+**** set values
+#+begin_src R
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "smooth5"
+#+end_src
+
+#+RESULTS:
+**** generate formula and priors
+#+begin_src R
+
+  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+
+  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
+
+  nlprior <- generate_prior(genus, species, cities, climate)
+#+end_src
+
+#+RESULTS:
+
+**** fit model to real data
+#+begin_src R
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
+
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+#+end_src
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_smooth5.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_smooth5.R
+:
+: sent 663 bytes  received 42 bytes  282.00 bytes/sec
+: total size is 1146  speedup is 1.63
+: You have new mail in /var/mail/erker
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_smooth5.R &
+  exit
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results raw
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth5.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_smooth5.rds
+
+sent 38 bytes  received 12405422 bytes  1305837.89 bytes/sec
+total size is 12501434  speedup is 1.01
+erker@krusty's password:
+receiving file list ... done
+
+sent 16 bytes  received 145 bytes  46.00 bytes/sec
+total size is 12029334  speedup is 74716.36
+You have new mail in /var/mail/erker
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_no.rds
+
+sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
+total size is 12029334  speedup is 1.01
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+#+begin_src R
+mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth5.rds")
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         sigma ~ s(AGE, k = 3)
+   Data: d (Number of observations: 2272)
+Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 4000
+
+Smooth Terms:
+                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(sigma_sAGE_1)    14.81      8.72     3.84    34.54        193 1.03
+
+Population-Level Effects:
+                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma_Intercept     2.45      0.02     2.42     2.48       1573 1.00
+b0_Intercept        1.11      0.06     1.01     1.24       1208 1.00
+b1_Intercept        1.65      0.08     1.50     1.81       1470 1.00
+b2_Intercept        1.03      0.02     0.98     1.07       1063 1.01
+sigma_sAGE_1       -0.21      0.02    -0.24    -0.17       1881 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 346 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_smooth5s_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png
+  marginal_smooths(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_smooth5s_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png]]
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png
+  pp_check(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth5.png]]
+
+*** genus: none;  species: single; cities: single; climate: none; hetero: smooth7
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_smooth7.R
+:END:
+**** libraries and functions
+#+begin_src R
+  library(dplyr)
+  library(brms)
+  source("allo_functions.R")
+
+#+end_src
+
+#+RESULTS:
+
+**** set values
+#+begin_src R
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "smooth7"
+#+end_src
+
+#+RESULTS:
+**** generate formula and priors
+#+begin_src R
+
+  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+
+  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
+
+  nlprior <- generate_prior(genus, species, cities, climate)
+#+end_src
+
+#+RESULTS:
+
+**** fit model to real data
+#+begin_src R
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
+
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+#+end_src
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_smooth7.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: Permission denied, please try again.
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_smooth7.R
+:
+: sent 663 bytes  received 42 bytes  128.18 bytes/sec
+: total size is 1146  speedup is 1.63
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_smooth7.R &
+  exit
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results raw
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds
+
+sent 38 bytes  received 12405422 bytes  1305837.89 bytes/sec
+total size is 12501434  speedup is 1.01
+erker@krusty's password:
+receiving file list ... done
+
+sent 16 bytes  received 145 bytes  46.00 bytes/sec
+total size is 12029334  speedup is 74716.36
+You have new mail in /var/mail/erker
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_no.rds
+
+sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
+total size is 12029334  speedup is 1.01
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+#+begin_src R
+mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds")
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         sigma ~ s(AGE, k = 3)
+   Data: d (Number of observations: 2272)
+Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 4000
+
+Smooth Terms:
+                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(sigma_sAGE_1)    14.81      8.72     3.84    34.54        193 1.03
+
+Population-Level Effects:
+                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma_Intercept     2.45      0.02     2.42     2.48       1573 1.00
+b0_Intercept        1.11      0.06     1.01     1.24       1208 1.00
+b1_Intercept        1.65      0.08     1.50     1.81       1470 1.00
+b2_Intercept        1.03      0.02     0.98     1.07       1063 1.01
+sigma_sAGE_1       -0.21      0.02    -0.24    -0.17       1881 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 346 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_smooth7s_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png
+  marginal_smooths(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_smooth7s_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png]]
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png
+  pp_check(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth7.png]]
 
 *** genus: none;  species: single; cities: single; climate: none; hetero: smooth
 :PROPERTIES:
@@ -2152,6 +2540,14 @@ C-c C-v t
   rsync -avz genus_none_species_single_cities_single_climate_none_hetero_smooth.R erker@krusty:~/allo/code/
 
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_smooth.R
+:
+: sent 393 bytes  received 54 bytes  127.71 bytes/sec
+: total size is 1177  speedup is 2.63
 
 **** run on krusty
 
