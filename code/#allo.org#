@@ -2389,6 +2389,7 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 :END:
 #+begin_src R
 mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds")
+mod7 <- mod
 #+end_src
 
 #+RESULTS:
@@ -2549,13 +2550,13 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 #+END_SRC
 
 #+RESULTS:
-: Permission denied, please try again.
-: erker@krusty's password:
+: erker@krusty's password: 
 : receiving file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_smooth8.rds
-:
-: sent 38 bytes  received 12649781 bytes  648708.67 bytes/sec
-: total size is 12746132  speedup is 1.01
+: 
+: sent 38 bytes  received 12708937 bytes  2824216.67 bytes/sec
+: total size is 12810335  speedup is 1.01
+: You have new mail in /var/mail/erker
 
 
 **** diagnostics
@@ -2564,6 +2565,7 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 :END:
 #+begin_src R
 mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth8.rds")
+mod8 <- mod
 #+end_src
 
 #+RESULTS:
@@ -2582,34 +2584,34 @@ mod <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climat
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+ Family: gaussian 
+  Links: mu = identity; sigma = log 
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ s(AGE, k = 7)
-   Data: d (Number of observations: 2272)
+         sigma ~ s(AGE, k = 8)
+   Data: d (Number of observations: 3403) 
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
-Smooth Terms:
+Smooth Terms: 
                   Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)     4.83      2.03     2.19    10.23        743 1.00
+sds(sigma_sAGE_1)     3.48      1.38     1.74     7.22        741 1.01
 
-Population-Level Effects:
+Population-Level Effects: 
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.42      0.02     2.39     2.45       3588 1.00
-b0_Intercept        1.27      0.09     1.12     1.48       1748 1.00
-b1_Intercept        1.56      0.08     1.40     1.71       2287 1.00
-b2_Intercept        0.99      0.02     0.95     1.03       2232 1.00
-sigma_sAGE_1        1.09      0.22     0.69     1.55       1683 1.00
+sigma_Intercept     2.41      0.01     2.38     2.43       3127 1.00
+b0_Intercept        1.40      0.09     1.24     1.60       2023 1.00
+b1_Intercept        1.50      0.07     1.36     1.63       2448 1.00
+b2_Intercept        0.97      0.02     0.94     1.01       2392 1.00
+sigma_sAGE_1        1.65      0.29     1.11     2.23       1588 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 36 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 29 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
