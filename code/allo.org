@@ -1514,7 +1514,7 @@ then functions subset data, generate formula and prior, and fit model.
 
 #+RESULTS:
 
-Send functions to krusty
+Tangle (C-c C-v t) then send functions to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+END_SRC
@@ -1524,8 +1524,9 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 129 bytes  received 60 bytes  42.00 bytes/sec
-: total size is 1700  speedup is 8.99
+: sent 634 bytes  received 60 bytes  198.29 bytes/sec
+: total size is 1786  speedup is 2.57
+: You have new mail in /var/mail/erker
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -2023,6 +2024,12 @@ erker@krusty's password:
 receiving file list ... done
 genus_none_species_single_cities_single_climate_none_hetero_smooth3.rds
 
+sent 21302 bytes  received 12404826 bytes  1911712.00 bytes/sec
+total size is 12505253  speedup is 1.01
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_smooth3.rds
+
 sent 38 bytes  received 12405422 bytes  1305837.89 bytes/sec
 total size is 12501434  speedup is 1.01
 erker@krusty's password:
@@ -2204,6 +2211,12 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 #+END_SRC
 
 #+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_smooth5.rds
+:
+: sent 21398 bytes  received 12530484 bytes  2282160.36 bytes/sec
+: total size is 12627223  speedup is 1.01
 
 
 **** diagnostics
@@ -2374,13 +2387,12 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 #+END_SRC
 
 #+RESULTS:
-: Permission denied, please try again.
 : erker@krusty's password:
 : receiving file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_smooth7.rds
 :
-: sent 38 bytes  received 12649781 bytes  648708.67 bytes/sec
-: total size is 12746132  speedup is 1.01
+: sent 21476 bytes  received 12656193 bytes  2305030.73 bytes/sec
+: total size is 12752049  speedup is 1.01
 
 
 **** diagnostics
@@ -3282,7 +3294,7 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 10000)
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 8000)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
@@ -3303,8 +3315,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0_hetero_smooth.R
 :
-: sent 369 bytes  received 54 bytes  120.86 bytes/sec
-: total size is 1139  speedup is 2.69
+: sent 370 bytes  received 54 bytes  121.14 bytes/sec
+: total size is 1138  speedup is 2.68
 
 **** run on krusty
 
