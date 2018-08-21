@@ -2524,11 +2524,11 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password:
+: erker@krusty's password: 
 : building file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_smooth8.R
-:
-: sent 663 bytes  received 42 bytes  201.43 bytes/sec
+: 
+: sent 663 bytes  received 42 bytes  282.00 bytes/sec
 : total size is 1146  speedup is 1.63
 
 **** run on krusty
@@ -3557,12 +3557,12 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password:
+: erker@krusty's password: 
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R
-:
-: sent 375 bytes  received 54 bytes  171.60 bytes/sec
-: total size is 1144  speedup is 2.67
+: 
+: sent 375 bytes  received 54 bytes  122.57 bytes/sec
+: total size is 1145  speedup is 2.67
 
 **** run on krusty
 
