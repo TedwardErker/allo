@@ -1,6 +1,8 @@
 genus,species,cities,climate,hetero,data,b0,b1,b2,sigma
 none,single,single,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,
 none,single,single,none,linear,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,sigma ~ AGE - 1
+none,single,single,none,smooth2,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,"sigma ~ s(AGE, k = 2)"
+none,single,single,none,smooth3,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,"sigma ~ s(AGE, k = 3)"
 none,single,single,none,smooth,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ 1,b1 ~ 1,b2 ~ 1,sigma ~ s(AGE)
 none,many,single,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Species),b1 ~ (1 \vert Species),b2 ~ (1 \vert Species),
 many,many,single,none,no,DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)),b0 ~ (1 \vert Genus / Species),b1 ~ (1 \vert Genus / Species),b2 ~ (1 \vert Genus / Species),
