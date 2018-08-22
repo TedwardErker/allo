@@ -927,9 +927,8 @@ rsync -avz ../data/age_dbh_testing.rds erker@krusty:~/allo/data/
 : building file list ... done
 : age_dbh_testing.rds
 :
-: sent 36322 bytes  received 240 bytes  8124.89 bytes/sec
-: total size is 37472  speedup is 1.02
-: You have new mail in /var/mail/erker
+: sent 132 bytes  received 366 bytes  142.29 bytes/sec
+: total size is 37472  speedup is 75.24
 
 *** a couple plots
 **** species by city raster, black if the combination exists
@@ -3550,6 +3549,7 @@ run from krusty terminal
 
 **** pull back from krusty
 
+
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds ~/git/allo/models/
 #+END_SRC
@@ -3558,8 +3558,8 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 : erker@krusty's password:
 : receiving file list ... done
 :
-: sent 16 bytes  received 149 bytes  66.00 bytes/sec
-: total size is 25890214  speedup is 156910.39
+: sent 16 bytes  received 149 bytes  47.14 bytes/sec
+: total size is 79316075  speedup is 480703.48
 
 
 **** diagnostics
@@ -3594,42 +3594,42 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b2 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
    Data: d (Number of observations: 3403)
-Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 6000
+Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
+         total post-warmup samples = 30000
 
 Smooth Terms:
                   Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)     1.30      0.21     0.93     1.75       6000 1.01
+sds(sigma_sAGE_1)     1.32      0.21     0.93     1.76      30000 1.00
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.67      0.37     0.28     1.72          4 1.69
-sd(b1_Intercept)     0.32      0.10     0.18     0.57       1517 1.01
-sd(b2_Intercept)     0.14      0.04     0.08     0.22         32 1.08
+sd(b0_Intercept)     0.58      0.20     0.29     1.06         30 1.05
+sd(b1_Intercept)     0.32      0.10     0.18     0.56       8209 1.00
+sd(b2_Intercept)     0.13      0.03     0.08     0.21      15483 1.00
 
 ~Genus (Number of levels: 8)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.17      0.17     0.00     0.58         31 1.15
-sd(b1_Intercept)     0.13      0.16     0.00     0.68         16 1.46
-sd(b2_Intercept)     0.05      0.04     0.00     0.15         20 1.08
+sd(b0_Intercept)     0.14      0.14     0.00     0.52       3307 1.01
+sd(b1_Intercept)     0.09      0.08     0.00     0.29       9046 1.00
+sd(b2_Intercept)     0.04      0.03     0.00     0.12         69 1.02
 
 ~Genus:Species (Number of levels: 16)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.42      0.13     0.17     0.71         50 1.09
-sd(b1_Intercept)     0.24      0.11     0.10     0.51          5 1.55
-sd(b2_Intercept)     0.08      0.03     0.03     0.14         13 1.15
+sd(b0_Intercept)     0.41      0.12     0.22     0.70         74 1.02
+sd(b1_Intercept)     0.20      0.07     0.10     0.36       9499 1.01
+sd(b2_Intercept)     0.07      0.03     0.03     0.13          7 1.30
 
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.12      0.01     2.09     2.14       6000 1.03
-b0_Intercept        1.80      0.33     1.26     2.55          8 1.24
-b0_Precip           0.65      0.37     0.18     1.57          7 1.31
-b0_HDD              0.54      0.19     0.18     0.91         10 1.18
-b0_Precip:HDD       0.87      0.43     0.30     1.93         11 1.18
-b1_Intercept        1.20      0.20     0.89     1.75         19 1.30
-b2_Intercept        1.01      0.05     0.90     1.11         48 1.04
-sigma_sAGE_1        1.06      0.17     0.75     1.41         85 1.05
+sigma_Intercept     2.12      0.01     2.09     2.14      30000 1.00
+b0_Intercept        1.93      0.35     1.31     2.64          6 1.37
+b0_Precip           0.81      0.42     0.20     1.75          6 1.43
+b0_HDD              0.47      0.20     0.14     0.86          6 1.39
+b0_Precip:HDD       0.84      0.34     0.30     1.62         81 1.02
+b1_Intercept        1.12      0.14     0.85     1.42         17 1.09
+b2_Intercept        1.00      0.05     0.91     1.11         37 1.04
+sigma_sAGE_1        1.10      0.17     0.76     1.44      25237 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -3637,7 +3637,60 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning messages:
 1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
 We recommend running more iterations and/or setting stronger priors.
-2: There were 354 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+2: There were 63 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ Precip * HDD + (1 | City) + (1 | Genus/Species)
+         b1 ~ (1 | City) + (1 | Genus/Species)
+         b2 ~ (1 | City) + (1 | Genus/Species)
+         sigma ~ s(AGE)
+   Data: d (Number of observations: 3403)
+Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
+         total post-warmup samples = 30000
+
+Smooth Terms:
+                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(sigma_sAGE_1)     1.32      0.21     0.93     1.76      30000 1.00
+
+Group-Level Effects:
+~City (Number of levels: 15)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.58      0.20     0.29     1.06         30 1.05
+sd(b1_Intercept)     0.32      0.10     0.18     0.56       8209 1.00
+sd(b2_Intercept)     0.13      0.03     0.08     0.21      15483 1.00
+
+~Genus (Number of levels: 8)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.14      0.14     0.00     0.52       3307 1.01
+sd(b1_Intercept)     0.09      0.08     0.00     0.29       9046 1.00
+sd(b2_Intercept)     0.04      0.03     0.00     0.12         69 1.02
+
+~Genus:Species (Number of levels: 16)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.41      0.12     0.22     0.70         74 1.02
+sd(b1_Intercept)     0.20      0.07     0.10     0.36       9499 1.01
+sd(b2_Intercept)     0.07      0.03     0.03     0.13          7 1.30
+
+Population-Level Effects:
+                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma_Intercept     2.12      0.01     2.09     2.14      30000 1.00
+b0_Intercept        1.93      0.35     1.31     2.64          6 1.37
+b0_Precip           0.81      0.42     0.20     1.75          6 1.43
+b0_HDD              0.47      0.20     0.14     0.86          6 1.39
+b0_Precip:HDD       0.84      0.34     0.30     1.62         81 1.02
+b1_Intercept        1.12      0.14     0.85     1.42         17 1.09
+b2_Intercept        1.00      0.05     0.91     1.11         37 1.04
+sigma_sAGE_1        1.10      0.17     0.76     1.44      25237 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 63 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
