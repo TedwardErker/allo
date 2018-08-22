@@ -556,31 +556,6 @@ Equations:
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:plyr’:
-
-    arrange, count, desc, failwith, id, mutate, rename, summarise,
-    summarize
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Use suppressPackageStartupMessages() to eliminate package startup
-messages.
-
-Attaching package: ‘tidyr’
-
-The following object is masked from ‘package:ascii’:
-
-    expand
-#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -924,7 +899,8 @@ Joining, by = "TreeType"
 #+begin_src R :var clim=city_climate
   d <- readRDS("../data/tidy_age_dbh.rds")
 
-  species.to.filter <- c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "FRVE","ACPL", "ULAM", "ULPU", "TIAM", "TICO")
+#  species.to.filter <- c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "FRVE","ACPL", "ULAM", "ULPU", "TIAM", "TICO")
+species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
 
   d2 <- d %>%
       mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
@@ -946,6 +922,15 @@ Joining, by = "TreeType"
 rsync -avz ../data/age_dbh_testing.rds erker@krusty:~/allo/data/
 #+END_SRC
 
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: age_dbh_testing.rds
+:
+: sent 36322 bytes  received 240 bytes  8124.89 bytes/sec
+: total size is 37472  speedup is 1.02
+: You have new mail in /var/mail/erker
+
 *** a couple plots
 **** species by city raster, black if the combination exists
 #+begin_src R
@@ -964,18 +949,6 @@ rsync -avz ../data/age_dbh_testing.rds erker@krusty:~/allo/data/
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-#+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CityCentric.png :height 400 :width 1400
   ggplot(cs, aes(x = SpCode, y = City, fill = InData)) +
@@ -3313,10 +3286,9 @@ C-c C-v t
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_many_species_many_cities_many_climate_b0_hetero_smooth.R
 :
-: sent 370 bytes  received 54 bytes  121.14 bytes/sec
-: total size is 1138  speedup is 2.68
+: sent 133 bytes  received 20 bytes  61.20 bytes/sec
+: total size is 1138  speedup is 7.44
 
 **** run on krusty
 
@@ -3332,31 +3304,17 @@ run from krusty terminal
 **** pull back from krusty
 
 
-
-#+BEGIN_SRC sh :session a :results raw
+#+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-erker@krusty's password:
-receiving file list ... done
-genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds
+: erker@krusty's password:
+: receiving file list ... done
+:
+: sent 16 bytes  received 143 bytes  45.43 bytes/sec
+: total size is 58966646  speedup is 370859.41
 
-sent 27782 bytes  received 57309166 bytes  3954272.28 bytes/sec
-total size is 57458343  speedup is 1.00
-You have new mail in /var/mail/erker
-erker@krusty's password:
-receiving file list ... done
-genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds
-
-sent 22940 bytes  received 21134210 bytes  2227068.42 bytes/sec
-total size is 21305734  speedup is 1.01
-erker@krusty's password:
-receiving file list ... done
-genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds
-
-sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
-total size is 12029334  speedup is 1.01
 
 **** diagnostics
 :PROPERTIES:
@@ -3389,52 +3347,54 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
-   Data: d (Number of observations: 2272)
+   Data: d (Number of observations: 3403)
 Samples: 4 chains, each with iter = 10000; warmup = 5000; thin = 1;
          total post-warmup samples = 20000
 
 Smooth Terms:
                       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(b0_t2PrecipHDD_1)     0.35      0.21     0.03     0.80      20000 1.00
-sds(b0_t2PrecipHDD_2)     0.36      0.21     0.03     0.82      20000 1.00
-sds(b0_t2PrecipHDD_3)     0.35      0.21     0.03     0.81      20000 1.00
-sds(sigma_sAGE_1)         1.30      0.23     0.85     1.77      14208 1.00
+sds(b0_t2PrecipHDD_1)     0.57      0.26     0.05     0.80          3 1.86
+sds(b0_t2PrecipHDD_2)     0.58      0.26     0.05     0.81          3 1.82
+sds(b0_t2PrecipHDD_3)     0.69      0.37     0.05     1.12          2 2.66
+sds(sigma_sAGE_1)         1.11      0.27     0.78     1.68          3 1.88
 
 Group-Level Effects:
 ~City (Number of levels: 15)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.16      0.44     0.25     2.17        931 1.00
-sd(b1_Intercept)     0.26      0.07     0.15     0.43       7795 1.00
-sd(b2_Intercept)     0.14      0.04     0.09     0.23       4086 1.00
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
+sd(b0_Intercept)     1.07      0.25     0.53     1.60         10  1.10
+sd(b1_Intercept)     0.63      0.32     0.21     0.96          2  5.96
+sd(b2_Intercept)     0.65      0.51     0.09     1.22          2 23.28
 
-~Genus (Number of levels: 6)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.14      0.16     0.00     0.57       6007 1.00
-sd(b1_Intercept)     0.11      0.09     0.00     0.32       6050 1.00
-sd(b2_Intercept)     0.07      0.04     0.01     0.16       7024 1.00
+~Genus (Number of levels: 8)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
+sd(b0_Intercept)     0.56      0.47     0.01     1.16          2  6.21
+sd(b1_Intercept)     0.57      0.49     0.01     1.13          2 11.03
+sd(b2_Intercept)     0.64      0.61     0.00     1.31          2 38.32
 
-~Genus:Species (Number of levels: 10)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.52      0.18     0.26     0.97       8154 1.00
-sd(b1_Intercept)     0.15      0.07     0.04     0.32       5876 1.00
-sd(b2_Intercept)     0.04      0.03     0.00     0.11       4235 1.00
+~Genus:Species (Number of levels: 16)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
+sd(b0_Intercept)     0.68      0.32     0.23     1.04          2  4.64
+sd(b1_Intercept)     0.67      0.49     0.10     1.17          2 13.25
+sd(b2_Intercept)     0.46      0.42     0.03     0.99          2 37.62
 
 Population-Level Effects:
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept      2.07      0.02     2.04     2.10      20000 1.00
-b0_Intercept         2.27      0.46     1.41     3.24       6142 1.00
-b0_t2PrecipHDD_1     0.55      0.25     0.17     1.14       8814 1.00
-b0_t2PrecipHDD_2     0.50      0.23     0.15     1.05      12080 1.00
-b0_t2PrecipHDD_3     0.48      0.23     0.14     1.04       3571 1.00
-b1_Intercept         0.84      0.13     0.60     1.11       7879 1.00
-b2_Intercept         0.99      0.06     0.88     1.11       5779 1.00
-sigma_sAGE_1         1.01      0.18     0.67     1.37      13226 1.00
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample   Rhat
+sigma_Intercept      1.09      1.02     0.04     2.14          2 125.32
+b0_Intercept         1.37      0.56     0.77     2.43          2   2.53
+b0_t2PrecipHDD_1     0.70      0.34     0.15     1.10          2   2.62
+b0_t2PrecipHDD_2     0.60      0.23     0.16     0.86          3   1.83
+b0_t2PrecipHDD_3     0.74      0.42     0.12     1.22          2   3.87
+b1_Intercept         1.03      0.21     0.77     1.29          2   2.43
+b2_Intercept         0.93      0.06     0.87     1.06          3   2.01
+sigma_sAGE_1         0.64      0.49     0.14     1.40          2   4.26
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 336 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 10391 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -3574,8 +3534,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R
 :
-: sent 375 bytes  received 54 bytes  122.57 bytes/sec
-: total size is 1145  speedup is 2.67
+: sent 181 bytes  received 54 bytes  67.14 bytes/sec
+: total size is 1145  speedup is 4.87
 
 **** run on krusty
 
@@ -3590,8 +3550,6 @@ run from krusty terminal
 
 **** pull back from krusty
 
-
-
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds ~/git/allo/models/
 #+END_SRC
@@ -3599,11 +3557,9 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds
 :
-: sent 38 bytes  received 25732382 bytes  3430989.33 bytes/sec
-: total size is 25890214  speedup is 1.01
-: You have new mail in /var/mail/erker
+: sent 16 bytes  received 149 bytes  66.00 bytes/sec
+: total size is 25890214  speedup is 156910.39
 
 
 **** diagnostics
