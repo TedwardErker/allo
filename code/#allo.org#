@@ -3331,61 +3331,61 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+ Family: gaussian 
+  Links: mu = identity; sigma = log 
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
          b0 ~ t2(Precip, HDD) + (1 | City) + (1 | Genus/Species)
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
-   Data: d (Number of observations: 3403)
-Samples: 4 chains, each with iter = 10000; warmup = 5000; thin = 1;
-         total post-warmup samples = 20000
+   Data: d (Number of observations: 3403) 
+Samples: 6 chains, each with iter = 8000; warmup = 4000; thin = 1;
+         total post-warmup samples = 24000
 
-Smooth Terms:
+Smooth Terms: 
                       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(b0_t2PrecipHDD_1)     0.57      0.26     0.05     0.80          3 1.86
-sds(b0_t2PrecipHDD_2)     0.58      0.26     0.05     0.81          3 1.82
-sds(b0_t2PrecipHDD_3)     0.69      0.37     0.05     1.12          2 2.66
-sds(sigma_sAGE_1)         1.11      0.27     0.78     1.68          3 1.88
+sds(b0_t2PrecipHDD_1)     0.36      0.20     0.03     0.79      24000 1.00
+sds(b0_t2PrecipHDD_2)     0.40      0.24     0.03     0.90         24 1.15
+sds(b0_t2PrecipHDD_3)     0.36      0.20     0.03     0.80      24000 1.00
+sds(sigma_sAGE_1)         1.30      0.21     0.93     1.74        158 1.03
 
-Group-Level Effects:
-~City (Number of levels: 15)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     1.07      0.25     0.53     1.60         10  1.10
-sd(b1_Intercept)     0.63      0.32     0.21     0.96          2  5.96
-sd(b2_Intercept)     0.65      0.51     0.09     1.22          2 23.28
+Group-Level Effects: 
+~City (Number of levels: 15) 
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     1.24      0.47     0.16     2.24         46 1.14
+sd(b1_Intercept)     0.31      0.08     0.19     0.49       8936 1.00
+sd(b2_Intercept)     0.14      0.03     0.09     0.22         75 1.03
 
-~Genus (Number of levels: 8)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.56      0.47     0.01     1.16          2  6.21
-sd(b1_Intercept)     0.57      0.49     0.01     1.13          2 11.03
-sd(b2_Intercept)     0.64      0.61     0.00     1.31          2 38.32
+~Genus (Number of levels: 8) 
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.11      0.11     0.00     0.40        117 1.04
+sd(b1_Intercept)     0.07      0.06     0.00     0.23         72 1.07
+sd(b2_Intercept)     0.03      0.03     0.00     0.09        107 1.06
 
-~Genus:Species (Number of levels: 16)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.68      0.32     0.23     1.04          2  4.64
-sd(b1_Intercept)     0.67      0.49     0.10     1.17          2 13.25
-sd(b2_Intercept)     0.46      0.42     0.03     0.99          2 37.62
+~Genus:Species (Number of levels: 16) 
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.36      0.10     0.21     0.60       2877 1.01
+sd(b1_Intercept)     0.17      0.05     0.09     0.29       6972 1.00
+sd(b2_Intercept)     0.05      0.02     0.02     0.09        871 1.01
 
-Population-Level Effects:
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample   Rhat
-sigma_Intercept      1.09      1.02     0.04     2.14          2 125.32
-b0_Intercept         1.37      0.56     0.77     2.43          2   2.53
-b0_t2PrecipHDD_1     0.70      0.34     0.15     1.10          2   2.62
-b0_t2PrecipHDD_2     0.60      0.23     0.16     0.86          3   1.83
-b0_t2PrecipHDD_3     0.74      0.42     0.12     1.22          2   3.87
-b1_Intercept         1.03      0.21     0.77     1.29          2   2.43
-b2_Intercept         0.93      0.06     0.87     1.06          3   2.01
-sigma_sAGE_1         0.64      0.49     0.14     1.40          2   4.26
+Population-Level Effects: 
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma_Intercept      2.11      0.01     2.09     2.14         48 1.12
+b0_Intercept         1.67      0.38     0.92     2.35         12 1.15
+b0_t2PrecipHDD_1     0.58      0.21     0.25     1.07        825 1.01
+b0_t2PrecipHDD_2     0.54      0.19     0.23     0.99        554 1.01
+b0_t2PrecipHDD_3     0.47      0.17     0.19     0.89       2772 1.00
+b1_Intercept         0.96      0.11     0.75     1.20        101 1.03
+b2_Intercept         0.99      0.05     0.89     1.08        109 1.05
+sigma_sAGE_1         1.11      0.16     0.79     1.45      11714 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 10391 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results! 
+We recommend running more iterations and/or setting stronger priors. 
+2: There were 2511 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -3414,7 +3414,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
-  marginal_effects(mod, effects = "Precip:HDD", surface = F)
+  marginal_effects(mod, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
