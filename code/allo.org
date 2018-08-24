@@ -3556,7 +3556,7 @@ run from krusty terminal
 
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.rds ~/git/allo/models/
 #+END_SRC
 
 
@@ -3565,18 +3565,18 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds")
+mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.rds")
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
 #+begin_src R
   summary(mod)
@@ -3595,7 +3595,7 @@ Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
 Samples: 6 chains, each with iter = 8000; warmup = 4000; thin = 1;
          total post-warmup samples = 24000
 
-Smooth Terms:
+Smooth_fulldata Terms:
                       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sds(b0_t2PrecipHDD_1)     0.36      0.20     0.03     0.79      24000 1.00
 sds(b0_t2PrecipHDD_2)     0.40      0.24     0.03     0.90         24 1.15
@@ -3644,37 +3644,37 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png
   marginal_effects(mod, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png
   marginal_effects(mod, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png
   marginal_effects(mod, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png :width 800
   cond <- data.frame(Species = unique(d$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
@@ -3686,14 +3686,14 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png
   pp_check(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
 *** genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth
 :PROPERTIES:
@@ -3990,6 +3990,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+
 
 
 *** single species, single location, heteroskedasticity
