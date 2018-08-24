@@ -1031,8 +1031,10 @@ total size is 37472  speedup is 75.24
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_SciNameCentric.png]]
-
-
+**** look at climate variables
+#+begin_src R
+d <-   reaRDS(d3, "../data/age_dbh_testing.rds")
+#+end_src
 ** Modelling
 
 - Goal is to model tree dimensions as a function of age (and other factors).
@@ -3432,6 +3434,14 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 #+RESULTS:
 [[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_smooths_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+  marginal_smooths(mod, smooths = "s(AGE)", ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_smooths_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth.png :width 800
