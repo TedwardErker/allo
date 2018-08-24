@@ -3320,7 +3320,6 @@ run from krusty terminal
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds ~/git/allo/models/
 #+END_SRC
 
-
 **** diagnostics
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
