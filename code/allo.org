@@ -1039,11 +1039,21 @@ d <-   readRDS("../data/age_dbh_testing.rds")
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/d_testing_clim.png
+ggplot(d, aes(x = AGE, y = DBH, color = HDD)) + geom_point() + facet_wrap(~Precip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/d_testing_clim.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/d_testing_clim_list.png
 ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_point()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/d_testing_clim.png]]
+
+
+Is minneapolis an influential point?
 
 ** Modelling
 
@@ -4092,9 +4102,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R
 :
-: sent 676 bytes  received 42 bytes  205.14 bytes/sec
-: total size is 1151  speedup is 1.60
-: You have new mail in /var/mail/erker
+: sent 505 bytes  received 54 bytes  223.60 bytes/sec
+: total size is 1142  speedup is 2.04
 
 **** run on krusty
 
