@@ -1055,6 +1055,8 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 
 Is minneapolis an influential point?
 
+
+
 ** Modelling
 
 - Goal is to model tree dimensions as a function of age (and other factors).
@@ -3833,7 +3835,6 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :
 : sent 16 bytes  received 149 bytes  47.14 bytes/sec
 : total size is 79316075  speedup is 480703.48
-
 
 **** diagnostics
 :PROPERTIES:
