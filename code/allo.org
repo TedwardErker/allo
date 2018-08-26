@@ -1534,8 +1534,8 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 634 bytes  received 60 bytes  198.29 bytes/sec
-: total size is 1786  speedup is 2.57
+: sent 299 bytes  received 60 bytes  4.06 bytes/sec
+: total size is 1785  speedup is 4.97
 : You have new mail in /var/mail/erker
 
 
@@ -3255,27 +3255,6 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
@@ -3303,7 +3282,8 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 5000)
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 12000)
+
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
@@ -3321,13 +3301,11 @@ C-c C-v t
 
 #+RESULTS:
 : erker@krusty's password:
-: Permission denied, please try again.
-: erker@krusty's password:
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0_hetero_no.R
 :
-: sent 649 bytes  received 42 bytes  106.31 bytes/sec
-: total size is 1134  speedup is 1.64
+: sent 365 bytes  received 54 bytes  76.18 bytes/sec
+: total size is 1135  speedup is 2.71
 : You have new mail in /var/mail/erker
 
 **** run on krusty
