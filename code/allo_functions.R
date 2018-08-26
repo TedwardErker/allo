@@ -29,7 +29,7 @@ generate_formula <- function(model_table, gen, sp, cit, clim, het) {
 
       if(clim == "b0") {
           nlprior <- c(nlprior,
-                       prior(normal(.3,.25), class = "sds", nlpar = "b0"))
+                       prior(normal(0,.25), class = "sds", nlpar = "b0"))
       }
 
       if(hetero == "linear") {
