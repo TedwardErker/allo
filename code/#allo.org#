@@ -599,25 +599,30 @@ Column `station` joining factor and character vector, coercing into character ve
       coordinates(gdd) <- ~long + lat
       proj4string(gdd) <- CRS("+init=epsg:4326")
 
-      cdd.dists <- spDists(cities, cdd, longlat = T)
-      cdd.dists.min <- apply(cdd.dists, 1, function(x) which(x == min(x))[1])
-      cdd <- cdd[cdd.dists.min,]
+      gdd.dists <- spDists(cities, gdd, longlat = T)
+      gdd.dists.min <- apply(gdd.dists, 1, function(x) which(x == min(x))[1])
+      gdd <- gdd[cdd.dists.min,]
 
-    d <- bind_cols(cdd@data,cities@data, data.frame(coordinates(cities))) %>%
-        select(cdd, Precip, City, Longitude, Latitude) %>%
-      rename(GDD = cdd)
+    d <- bind_cols(gdd@data,cities@data, data.frame(coordinates(cities))) %>%
+        select(gdd, Precip, City, Longitude, Latitude) %>%
+      rename(GDD = gdd)
 
-    write.csv(d, "../data/cities_cdd50.csv")
+    write.csv(d, "../data/cities_gdd.csv")
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/CDD_Precip_Cities.png
-  ggplot(d, aes(x = CDD, y = Precip, label = City)) + geom_text()
+#+begin_src R :exports results :results graphics :file ../figs/GDD_Precip_Cities.png
+  ggplot(d, aes(x = GDD, y = Precip, label = City)) + geom_text()
 #+end_src
 
 #+RESULTS:
+[[file:../figs/GDD_Precip_Cities.png]]
+
+
+
+
 [[file:../figs/CDD_Precip_Cities.png]]
 
 *** Tree Dimensions
