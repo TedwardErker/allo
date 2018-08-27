@@ -3405,7 +3405,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_smooth.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b0; hetero: no
+*** genus: many;  species: many; cities: many; climate: b0; hetero: no
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0_hetero_no.R
 :END:
@@ -4098,7 +4098,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
 
-*** TODO FULL DATA genus: many;  species: many; cities: many; climate: b0; hetero: smooth
+*** FULL DATA genus: many;  species: many; cities: many; climate: b0; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.R
 :END:
@@ -4337,7 +4337,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
-*** genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth
+*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R
 :END:
@@ -4714,8 +4714,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R
 :
-: sent 505 bytes  received 54 bytes  223.60 bytes/sec
-: total size is 1142  speedup is 2.04
+: sent 190 bytes  received 54 bytes  69.71 bytes/sec
+: total size is 1151  speedup is 4.72
 
 **** run on krusty
 
@@ -4875,7 +4875,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
 
-*** genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
+*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_linear.R
 :END:
@@ -4935,10 +4935,9 @@ C-c C-v t
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_linear.R
 :
-: sent 664 bytes  received 42 bytes  282.40 bytes/sec
-: total size is 1144  speedup is 1.62
+: sent 139 bytes  received 20 bytes  63.60 bytes/sec
+: total size is 1184  speedup is 7.45
 
 **** run on krusty
 
@@ -4955,7 +4954,7 @@ run from krusty terminal
 
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_linear.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_linear_niter_10000.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
@@ -5094,6 +5093,227 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
+
+
+*** TODO FULL DATA genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_linear_fulldata.R
+:END:
+**** libraries and functions
+#+begin_src R
+  library(dplyr)
+  library(brms)
+  source("allo_functions.R")
+
+#+end_src
+
+#+RESULTS:
+
+**** set values
+#+begin_src R
+  genus <- "many"
+  species <- "many"
+  cities <- "many"
+  climate <- "b0linint"
+  hetero <- "linear"
+niter <- 10000
+#+end_src
+
+#+RESULTS:
+**** generate formula and priors
+#+begin_src R
+
+  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+
+  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
+
+  nlprior <- generate_prior(genus, species, cities, climate)
+#+end_src
+
+#+RESULTS:
+
+**** fit model to real data
+#+begin_src R
+  d <- readRDS("../data/age_dbh_full.rds")
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = niter)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_niter_",niter,"_fulldata.rds"))
+#+end_src
+
+#+RESULTS:
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz genus_many_species_many_cities_many_climate_b0linint_hetero_linear_fulldata.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_many_species_many_cities_many_climate_b0linint_hetero_linear_fulldata.R
+:
+: sent 687 bytes  received 42 bytes  291.60 bytes/sec
+: total size is 1190  speedup is 1.63
+: You have new mail in /var/mail/erker
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b0linint_hetero_linear_fulldata.R &
+  exit
+#+END_SRC
+
+**** pull back from krusty
+
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_linear_niter_10000_fulldata.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_many_climate_b0linint_hetero_linear.rds
+:
+: sent 38 bytes  received 21077175 bytes  1204412.17 bytes/sec
+: total size is 21230471  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+#+begin_src R
+mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_linear.rds")
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ Precip * GDD + (1 | City) + (1 | Genus/Species)
+         b1 ~ (1 | City) + (1 | Genus/Species)
+         b2 ~ (1 | City) + (1 | Genus/Species)
+         sigma ~ AGE - 1
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 3000
+
+Group-Level Effects:
+~City (Number of levels: 15)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.48      0.20     0.21     0.93          6 1.37
+sd(b1_Intercept)     0.33      0.10     0.18     0.55         17 1.13
+sd(b2_Intercept)     0.10      0.02     0.07     0.15        737 1.01
+
+~Genus (Number of levels: 18)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     3.48      1.42     1.68     6.98         11 1.23
+sd(b1_Intercept)     0.20      0.11     0.02     0.46         15 1.14
+sd(b2_Intercept)     0.11      0.03     0.04     0.18         61 1.05
+
+~Genus:Species (Number of levels: 25)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.36      0.23     0.13     0.94          5 1.53
+sd(b1_Intercept)     0.17      0.13     0.02     0.44          4 1.88
+sd(b2_Intercept)     0.06      0.03     0.02     0.13         12 1.16
+
+Population-Level Effects:
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      1.87      0.61     0.79     3.12         22 1.11
+b0_Precip         0.98      0.47     0.33     1.96          5 1.61
+b0_GDD            0.65      0.19     0.36     1.06          6 1.45
+b0_Precip:GDD     0.98      0.31     0.49     1.68          7 1.29
+b1_Intercept      0.97      0.17     0.68     1.33         26 1.11
+b2_Intercept      0.86      0.04     0.77     0.95        273 1.01
+sigma_AGE         0.08      0.00     0.08     0.08       1032 1.01
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 51 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  marginal_effects(mod, effects = "AGE:GDD")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  marginal_effects(mod, effects = "AGE:Precip")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  marginal_effects(mod, effects = "Precip:GDD", surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_PrecipGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png :width 800 :height 800
+  cond <- unique(select(mod$data, Genus, Species))
+  me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
+
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = d, aes(x = AGE, y = DBH), alpha = .3) +
+      facet_wrap(~Species, nrow = 4)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  pp_check(mod) + xlim(c(-20,150))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
 
 
