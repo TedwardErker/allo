@@ -293,7 +293,47 @@ DBH for illustrative purposes.
 
 cite:nothdurft_e_2006
 
+cite:yang_e_2009
+
 cite:hall_bailey_2001
+
+cite:Weiskittel_ForestGrowthAndYieldModeling
+
+Growth estimate of Eucalyptus stands
+based on nonlinear multilevel mixed-effects model theory
+
+Miina, J., Heinonen, J., 2008. Stochastic simulation of forest regeneration establishment using a
+multilevel multivariate model. Forest Science 54, 206–219.
+
+Miina, J., Saksa, T., 2006. Predicting regeneration establishment in Norway spruce plantations
+using a multivariate multilevel model. New Forests 32, 265–283.
+
+Uzoh, F.C.C., Oliver, W.W., 2008. Individual tree diameter increment
+model for managed even- aged stands of ponderosa pine throughout the
+western United States using a multilevel linear mixed effects
+model. Forest Ecology and Management 256, 438–445.
+
+Kershaw Jr., J.A., Benjamin, J.G., Weiskittel, A.R., 2009. Approaches
+for modeling vertical distribution of maximum knot size in black
+spruce: A comparison of fixed- and mixed-effects nonlinear
+models. Forest Science 55, 230–237.
+
+Gregoire, T.G., Schabenberger, O., 1996. A non-linear mixed-effects
+model to predict cumulative bole volume of standing trees. Journal of
+Applied Statistics 23, 257–271.
+
+Leites, L.P., Robinson, A.P., 2004. Improving taper equations of
+loblolly pine with crown dimensions in a mixed-effects modeling
+framework. Forest Science 50, 204–212.
+
+Sharma, M., Parton, J., 2007. Height-diameter equations for boreal tree species in Ontario using a
+mixed-effects modeling approach. Forest Ecology and Management 249,
+187–198.
+
+Wang, Y., LeMay, V.M., Baker, T.G., 2007b. Modelling and prediction of dominant height and site
+index of Eucalyptus globulus plantations using a nonlinear mixed-effects model approach.
+Canadian Journal of Forest Research 37, 1390–1403.
+
 
 
 
@@ -4921,9 +4961,11 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_many_species_many_cities_many_climate_b0linint_hetero_linear.rds
 :
-: sent 16 bytes  received 149 bytes  47.14 bytes/sec
-: total size is 79316075  speedup is 480703.48
+: sent 38 bytes  received 21077175 bytes  1204412.17 bytes/sec
+: total size is 21230471  speedup is 1.01
+: You have new mail in /var/mail/erker
 
 **** diagnostics
 :PROPERTIES:
@@ -4952,47 +4994,42 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
  Family: gaussian
   Links: mu = identity; sigma = log
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ Precip * HDD + (1 | City) + (1 | Genus/Species)
+         b0 ~ Precip * GDD + (1 | City) + (1 | Genus/Species)
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
-         sigma ~ s(AGE)
-   Data: d (Number of observations: 3403)
-Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
-         total post-warmup samples = 30000
-
-Linear Terms:
-                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)     1.32      0.21     0.93     1.76      30000 1.00
+         sigma ~ AGE - 1
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 3000
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.58      0.20     0.29     1.06         30 1.05
-sd(b1_Intercept)     0.32      0.10     0.18     0.56       8209 1.00
-sd(b2_Intercept)     0.13      0.03     0.08     0.21      15483 1.00
+sd(b0_Intercept)     0.48      0.20     0.21     0.93          6 1.37
+sd(b1_Intercept)     0.33      0.10     0.18     0.55         17 1.13
+sd(b2_Intercept)     0.10      0.02     0.07     0.15        737 1.01
 
-~Genus (Number of levels: 8)
+~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.14      0.14     0.00     0.52       3307 1.01
-sd(b1_Intercept)     0.09      0.08     0.00     0.29       9046 1.00
-sd(b2_Intercept)     0.04      0.03     0.00     0.12         69 1.02
+sd(b0_Intercept)     3.48      1.42     1.68     6.98         11 1.23
+sd(b1_Intercept)     0.20      0.11     0.02     0.46         15 1.14
+sd(b2_Intercept)     0.11      0.03     0.04     0.18         61 1.05
 
-~Genus:Species (Number of levels: 16)
+~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.41      0.12     0.22     0.70         74 1.02
-sd(b1_Intercept)     0.20      0.07     0.10     0.36       9499 1.01
-sd(b2_Intercept)     0.07      0.03     0.03     0.13          7 1.30
+sd(b0_Intercept)     0.36      0.23     0.13     0.94          5 1.53
+sd(b1_Intercept)     0.17      0.13     0.02     0.44          4 1.88
+sd(b2_Intercept)     0.06      0.03     0.02     0.13         12 1.16
 
 Population-Level Effects:
-                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.12      0.01     2.09     2.14      30000 1.00
-b0_Intercept        1.93      0.35     1.31     2.64          6 1.37
-b0_Precip           0.81      0.42     0.20     1.75          6 1.43
-b0_HDD              0.47      0.20     0.14     0.86          6 1.39
-b0_Precip:HDD       0.84      0.34     0.30     1.62         81 1.02
-b1_Intercept        1.12      0.14     0.85     1.42         17 1.09
-b2_Intercept        1.00      0.05     0.91     1.11         37 1.04
-sigma_sAGE_1        1.10      0.17     0.76     1.44      25237 1.00
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      1.87      0.61     0.79     3.12         22 1.11
+b0_Precip         0.98      0.47     0.33     1.96          5 1.61
+b0_GDD            0.65      0.19     0.36     1.06          6 1.45
+b0_Precip:GDD     0.98      0.31     0.49     1.68          7 1.29
+b1_Intercept      0.97      0.17     0.68     1.33         26 1.11
+b2_Intercept      0.86      0.04     0.77     0.95        273 1.01
+sigma_AGE         0.08      0.00     0.08     0.08       1032 1.01
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -5000,60 +5037,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning messages:
 1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
 We recommend running more iterations and/or setting stronger priors.
-2: There were 63 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
- Family: gaussian
-  Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ Precip * HDD + (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
-         b2 ~ (1 | City) + (1 | Genus/Species)
-         sigma ~ s(AGE)
-   Data: d (Number of observations: 3403)
-Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
-         total post-warmup samples = 30000
-
-Linear Terms:
-                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(sigma_sAGE_1)     1.32      0.21     0.93     1.76      30000 1.00
-
-Group-Level Effects:
-~City (Number of levels: 15)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.58      0.20     0.29     1.06         30 1.05
-sd(b1_Intercept)     0.32      0.10     0.18     0.56       8209 1.00
-sd(b2_Intercept)     0.13      0.03     0.08     0.21      15483 1.00
-
-~Genus (Number of levels: 8)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.14      0.14     0.00     0.52       3307 1.01
-sd(b1_Intercept)     0.09      0.08     0.00     0.29       9046 1.00
-sd(b2_Intercept)     0.04      0.03     0.00     0.12         69 1.02
-
-~Genus:Species (Number of levels: 16)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.41      0.12     0.22     0.70         74 1.02
-sd(b1_Intercept)     0.20      0.07     0.10     0.36       9499 1.01
-sd(b2_Intercept)     0.07      0.03     0.03     0.13          7 1.30
-
-Population-Level Effects:
-                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.12      0.01     2.09     2.14      30000 1.00
-b0_Intercept        1.93      0.35     1.31     2.64          6 1.37
-b0_Precip           0.81      0.42     0.20     1.75          6 1.43
-b0_HDD              0.47      0.20     0.14     0.86          6 1.39
-b0_Precip:HDD       0.84      0.34     0.30     1.62         81 1.02
-b1_Intercept        1.12      0.14     0.85     1.42         17 1.09
-b2_Intercept        1.00      0.05     0.91     1.11         37 1.04
-sigma_sAGE_1        1.10      0.17     0.76     1.44      25237 1.00
-
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 63 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+2: There were 51 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -5066,12 +5050,12 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
-  marginal_effects(mod, effects = "AGE:HDD")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  marginal_effects(mod, effects = "AGE:GDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+[[file:../figs/marginal_effects_AGEGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
   marginal_effects(mod, effects = "AGE:Precip")
@@ -5081,30 +5065,30 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
-  marginal_effects(mod, effects = "Precip:HDD", surface = T)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
+  marginal_effects(mod, effects = "Precip:GDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
+[[file:../figs/marginal_effects_surface_PrecipGDD_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png :width 800
-  cond <- data.frame(Species = unique(d$Species))
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png :width 800 :height 800
+  cond <- unique(select(mod$data, Genus, Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
       geom_point(data = d, aes(x = AGE, y = DBH), alpha = .3) +
-      facet_wrap(~Species, nrow = 2)
+      facet_wrap(~Species, nrow = 4)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_linear.png
-  pp_check(mod)
+  pp_check(mod) + xlim(c(-20,150))
 #+end_src
 
 #+RESULTS:
