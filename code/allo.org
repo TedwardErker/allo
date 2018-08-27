@@ -502,25 +502,26 @@ that are important for urban environments?
 
 
 #+name: city_climate
-| Region | city             | CityState        |  CDD |  HDD | Precip |
-|--------+------------------+------------------+------+------+--------|
-| CenFla | Orlando          | Orlando, FL      | 1806 |  289 |   1367 |
-| GulfCo | Charleston       | Charleston, SC   | 1124 | 1221 |   1555 |
-| InlEmp | Claremont        | Claremont, CA    |  134 |  872 |    523 |
-| InlVal | Modesto          | Modesto, CA      | 1052 | 1439 |    315 |
-| SacVal | Sacramento       | Sacramento, CA   |  773 | 1718 |    470 |
-| InterW | Albuquerque      | Albuquerque, NM  |  677 | 2416 |    250 |
-| LoMidW | Indianapolis     | Indianapolis, IN |  510 | 3153 |    392 |
-| MidWst | Minneapolis      | Minneapolis, MN  |  355 | 4436 |    622 |
-| NMtnPr | Fort Collins     | Fort Collins, CO |  349 | 3332 |    452 |
-| NoCalC | Berkeley         | Berkeley, CA     |   39 | 1786 |    564 |
-| NoEast | Queens           | Queens, NY       |  560 | 2819 |   1041 |
-| PacfNW | Longview         | Longview, WA     |  157 | 2468 |   1059 |
-| Piedmt | Charlotte        | Charlotte, NC    |  847 | 1891 |   1426 |
-| SoCalC | Santa Monica     | Santa Monica, CA |  266 |  710 |    570 |
-| SWDsrt | Glendale         | Glendale, AZ     | 2128 |  637 |    174 |
-| TpIntW | Boise            | Boise, ID        |  387 | 3325 |    417 |
-| Tropic | Honolulu         | Honolulu, HI     | 2416 |    0 |   2206 |
+| Region | City             |  CDD |  HDD | Precip |  Longitude | Latitude |
+|--------+------------------+------+------+--------+------------+----------|
+| CenFla | Orlando, FL      | 1806 |  289 |   1367 |  -81.37924 | 28.53834 |
+| GulfCo | Charleston, SC   | 1124 | 1221 |   1555 |   -79.9311 |  32.7765 |
+| InlEmp | Claremont, CA    |  134 |  872 |    523 |  -117.7198 |  34.0967 |
+| InlVal | Modesto, CA      | 1052 | 1439 |    315 | -120.99688 | 37.63910 |
+| SacVal | Sacramento, CA   |  773 | 1718 |    470 | -121.49440 | 38.58157 |
+| InterW | Albuquerque, NM  |  677 | 2416 |    250 | -106.60555 | 35.08533 |
+| LoMidW | Indianapolis, IN |  510 | 3153 |    392 |  -86.15807 | 39.76840 |
+| MidWst | Minneapolis, MN  |  355 | 4436 |    622 |  -93.26501 | 44.97775 |
+| NMtnPr | Fort Collins, CO |  349 | 3332 |    452 | -105.08442 | 40.58526 |
+| NoCalC | Berkeley, CA     |   39 | 1786 |    564 | -122.27275 | 37.87159 |
+| NoEast | Queens, NY       |  560 | 2819 |   1041 |   -73.7949 |  40.7282 |
+| PacfNW | Longview, WA     |  157 | 2468 |   1059 |  -94.74049 | 32.50070 |
+| Piedmt | Charlotte, NC    |  847 | 1891 |   1426 |  -80.84313 | 35.22709 |
+| SoCalC | Santa Monica, CA |  266 |  710 |    570 | -118.49119 | 34.01945 |
+| SWDsrt | Glendale, AZ     | 2128 |  637 |    174 |  -112.1860 |  33.5387 |
+| TpIntW | Boise, ID        |  387 | 3325 |    417 |  -116.2023 |  43.6150 |
+| Tropic | Honolulu, HI     | 2416 |    0 |   2206 | -157.85833 | 21.30694 |
+
 
 *** Get new climate data.  Growing degree days and Precip.  HDD is super high for minneapolis, but harsh winters aren't relevant.
 
@@ -564,34 +565,36 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
   write.csv(dl, "../data/cdd50_qt_ll.csv")
 #+end_src
 
-#+begin_src R
-    library(sp)
-      library(jsonlite)
-    library(dplyr)
-    json_file <- "https://gist.githubusercontent.com/TedwardErker/d97e19ed23a0dea4106076961d4f22e0/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json"
-      cities <- jsonlite::fromJSON(json_file) %>%
-        select(city, latitude, longitude, population)
-    coordinates(cities) <- ~ longitude + latitude
-    proj4string(cities) <- CRS("+init=epsg:4326")
+#+begin_src R :var city_climate=city_climate
 
-    cdd <- read.csv("../data/cdd50_qt_ll.csv", stringsAsFactors =F)
-    coordinates(cdd) <- ~long + lat
-    proj4string(cdd) <- CRS("+init=epsg:4326")
+      library(sp)
+        library(jsonlite)
+      library(dplyr)
 
-    cdd.dists <- spDists(cities, cdd, longlat = T)
-    cdd.dists.min <- apply(cdd.dists, 1, function(x) which(x == min(x))[1])
-    cdd <- cdd[cdd.dists.min,]
+  cities <- city_climate %>%
+          select(City, Latitude, Longitude)
 
-  d <- bind_cols(cdd@data,cities@data, data.frame(coordinates(cities))) %>%
-      select(cdd, city, longitude, latitude, population)
+      coordinates(cities) <- ~ longitude + latitude
+      proj4string(cities) <- CRS("+init=epsg:4326")
 
-  write.csv(d, "../data/cities_cdd50.csv")
+      cdd <- read.csv("../data/cdd50_qt_ll.csv", stringsAsFactors =F)
+      coordinates(cdd) <- ~long + lat
+      proj4string(cdd) <- CRS("+init=epsg:4326")
+
+      cdd.dists <- spDists(cities, cdd, longlat = T)
+      cdd.dists.min <- apply(cdd.dists, 1, function(x) which(x == min(x))[1])
+      cdd <- cdd[cdd.dists.min,]
+
+    d <- bind_cols(cdd@data,cities@data, data.frame(coordinates(cities))) %>%
+        select(cdd, city, longitude, latitude, population)
+
+    write.csv(d, "../data/cities_cdd50.csv")
 #+end_src
 
 
 #+begin_src R :var city_climate=city_climate
-    cdd <- read.csv("../data/cities_cdd50.csv", stringsAsFactors = F) %>%
-      rename(City = city)
+    cdd <- read.csv("../data/cities_cdd50.csv", stringsAsFactors = F)
+
   str(city_climate)
     test <- left_join(city_climate,cdd)
   str(test)
@@ -600,24 +603,26 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 
 #+RESULTS:
 #+begin_example
-'data.frame':	17 obs. of  5 variables:
- $ Region: chr  "CenFla" "GulfCo" "InlEmp" "InlVal" ...
- $ City  : chr  "Orlando, FL" "Charleston, SC" "Claremont, CA" "Modesto, CA" ...
- $ CDD   : int  1806 1124 134 1052 773 677 510 355 349 39 ...
- $ HDD   : int  289 1221 872 1439 1718 2416 3153 4436 3332 1786 ...
- $ Precip: int  1367 1555 523 315 470 250 392 622 452 564 ...
-Joining, by = "City"
-'data.frame':	17 obs. of  10 variables:
- $ Region    : chr  "CenFla" "GulfCo" "InlEmp" "InlVal" ...
- $ City      : chr  "Orlando, FL" "Charleston, SC" "Claremont, CA" "Modesto, CA" ...
- $ CDD       : int  1806 1124 134 1052 773 677 510 355 349 39 ...
- $ HDD       : int  289 1221 872 1439 1718 2416 3153 4436 3332 1786 ...
- $ Precip    : int  1367 1555 523 315 470 250 392 622 452 564 ...
- $ X         : int  NA NA NA NA NA NA NA NA NA NA ...
- $ cdd       : int  NA NA NA NA NA NA NA NA NA NA ...
- $ longitude : num  NA NA NA NA NA NA NA NA NA NA ...
- $ latitude  : num  NA NA NA NA NA NA NA NA NA NA ...
- $ population: int  NA NA NA NA NA NA NA NA NA NA ...
+'data.frame':	17 obs. of  6 variables:
+ $ Region   : chr  "CenFla" "GulfCo" "InlEmp" "InlVal" ...
+ $ city     : chr  "Orlando" "Charleston" "Claremont" "Modesto" ...
+ $ CityState: chr  "Orlando, FL" "Charleston, SC" "Claremont, CA" "Modesto, CA" ...
+ $ CDD      : int  1806 1124 134 1052 773 677 510 355 349 39 ...
+ $ HDD      : int  289 1221 872 1439 1718 2416 3153 4436 3332 1786 ...
+ $ Precip   : int  1367 1555 523 315 470 250 392 622 452 564 ...
+Joining, by = "city"
+'data.frame':	19 obs. of  11 variables:
+ $ Region    : chr  "CenFla" "GulfCo" "GulfCo" "InlEmp" ...
+ $ city      : chr  "Orlando" "Charleston" "Charleston" "Claremont" ...
+ $ CityState : chr  "Orlando, FL" "Charleston, SC" "Charleston, SC" "Claremont, CA" ...
+ $ CDD       : int  1806 1124 1124 134 1052 773 677 510 355 349 ...
+ $ HDD       : int  289 1221 1221 872 1439 1718 2416 3153 4436 3332 ...
+ $ Precip    : int  1367 1555 1555 523 315 470 250 392 622 452 ...
+ $ X         : int  77 200 725 NA 105 35 32 12 46 160 ...
+ $ cdd       : int  8539 6375 3836 NA 5259 4917 4065 3330 3140 2655 ...
+ $ longitude : num  -81.4 -79.9 -81.6 NA -121 ...
+ $ latitude  : num  28.5 32.8 38.3 NA 37.6 ...
+ $ population: int  255483 127999 50821 NA 204933 479686 556495 843393 400070 152061 ...
 #+end_example
 
 *** Tree Dimensions
