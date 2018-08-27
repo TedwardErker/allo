@@ -9,7 +9,7 @@ genus <- "many"
 species <- "many"
 cities <- "many"
 climate <- "b0linint"
-hetero <- "smooth"
+hetero <- "no"
 ## set values:1 ends here
 
 ## [[file:~/git/allo/code/allo.org::*generate%20formula%20and%20priors][generate formula and priors:1]]
@@ -21,8 +21,9 @@ nlprior <- generate_prior(genus, species, cities, climate)
 ## generate formula and priors:1 ends here
 
 ## [[file:~/git/allo/code/allo.org::*fit%20model%20to%20real%20data][fit model to real data:1]]
-d <- readRDS("../data/age_dbh_full.rds")
+d <- readRDS("../data/age_dbh_testing.rds")
 
-mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 10000)
-saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_fulldata.rds"))
+mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000)
+
+saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 ## fit model to real data:1 ends here
