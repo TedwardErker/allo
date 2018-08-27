@@ -994,27 +994,27 @@ Joining, by = "TreeType"
 
 #+RESULTS:
 **** save subset of data for testing
-#+begin_src R :var clim=city_climate
-    d <- readRDS("../data/tidy_age_dbh.rds")
+#+begin_src R
+  d <- readRDS("../data/tidy_age_dbh.rds")
+  city_clim <- read.csv("../data/cities_gdd.csv", stringsAsFactors = F)
 
-  #  species.to.filter <- c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "FRVE","ACPL", "ULAM", "ULPU", "TIAM", "TICO")
-  species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
+    species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
 
-    d2 <- d %>%
-        mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
-        rename(Species = SpCode) %>%
-        select(-Leaf,-TreeID) %>%
-        left_join(.,clim) %>%
-        mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-               HDD = round((HDD - mean(HDD))/ 1000, 4),
-               CDD = round((CDD - mean(CDD))/ 1000, 4))
+      d2 <- d %>%
+          mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
+          rename(Species = SpCode) %>%
+          select(-Leaf,-TreeID) %>%
+          left_join(.,clim) %>%
+          mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+                 GDD = round((GDD - mean(GDD))/ 1000, 4)
 
-    saveRDS(d2, "../data/age_dbh_full.rds")
 
-  d3 <- d2 %>%
-        filter(Species %in% species.to.filter)
+      saveRDS(d2, "../data/age_dbh_full.rds")
 
-    saveRDS(d3, "../data/age_dbh_testing.rds")
+    d3 <- d2 %>%
+          filter(Species %in% species.to.filter)
+
+      saveRDS(d3, "../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
@@ -3580,7 +3580,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_no.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: no
+*** genus: many;  species: many; cities: many; climate: b0linint; hetero: no
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_no.R
 :END:
@@ -3668,8 +3668,8 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 : receiving file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_no.rds
 :
-: sent 54470 bytes  received 62280669 bytes  6561593.58 bytes/sec
-: total size is 62409970  speedup is 1.00
+: sent 38 bytes  received 30050331 bytes  1397691.58 bytes/sec
+: total size is 30189254  speedup is 1.00
 : You have new mail in /var/mail/erker
 
 **** diagnostics
@@ -3698,57 +3698,51 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0linint * (1 - exp(-(b1/100) * AGE^b2))
-         b0linint ~ t2(Precip, HDD) + (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ Precip * CDD + (1 | City) + (1 | Genus/Species)
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
-Samples: 6 chains, each with iter = 5000; warmup = 2500; thin = 1;
-         total post-warmup samples = 15000
-
-Smooth Terms:
-                      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(b0linint_t2PrecipHDD_1)     0.20      0.15     0.01     0.56      15000 1.00
-sds(b0linint_t2PrecipHDD_2)     0.20      0.15     0.01     0.56      15000 1.00
-sds(b0linint_t2PrecipHDD_3)     0.20      0.16     0.01     0.58      15000 1.00
+Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 6000
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0linint_Intercept)     0.76      0.35     0.32     1.67       2173 1.00
-sd(b1_Intercept)     0.33      0.08     0.21     0.53       7051 1.00
-sd(b2_Intercept)     0.13      0.03     0.09     0.20       6350 1.00
+sd(b0_Intercept)     0.46      0.15     0.25     0.81       2489 1.00
+sd(b1_Intercept)     0.32      0.08     0.19     0.51       3747 1.00
+sd(b2_Intercept)     0.13      0.03     0.08     0.19       3350 1.00
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0linint_Intercept)     0.28      0.38     0.00     1.36        652 1.01
-sd(b1_Intercept)     0.07      0.06     0.00     0.24       2859 1.00
-sd(b2_Intercept)     0.05      0.04     0.00     0.14       2672 1.00
+sd(b0_Intercept)     0.28      0.37     0.00     1.38        298 1.02
+sd(b1_Intercept)     0.08      0.07     0.00     0.25       1372 1.00
+sd(b2_Intercept)     0.05      0.04     0.00     0.14       1246 1.00
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0linint_Intercept)     1.02      0.30     0.42     1.65       1316 1.01
-sd(b1_Intercept)     0.29      0.06     0.17     0.43       3947 1.00
-sd(b2_Intercept)     0.13      0.03     0.08     0.19       3388 1.00
+sd(b0_Intercept)     1.05      0.31     0.44     1.73        580 1.01
+sd(b1_Intercept)     0.30      0.07     0.19     0.44       2921 1.00
+sd(b2_Intercept)     0.13      0.03     0.08     0.19       2753 1.00
 
 Population-Level Effects:
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0linint_Intercept         2.08      0.34     1.38     2.73       4387 1.00
-b0linint_t2PrecipHDD_1     0.64      0.20     0.33     1.10       5948 1.00
-b0linint_t2PrecipHDD_2     0.45      0.20     0.17     0.93       3256 1.00
-b0linint_t2PrecipHDD_3     0.62      0.21     0.29     1.10       5018 1.00
-b1_Intercept         1.10      0.12     0.86     1.35       3411 1.00
-b2_Intercept         0.88      0.05     0.78     0.98       3931 1.00
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      2.36      0.30     1.75     2.94       2771 1.00
+b0_Precip         0.76      0.23     0.37     1.26       6000 1.00
+b0_CDD            0.96      0.23     0.54     1.45       4593 1.00
+b0_Precip:CDD     0.96      0.31     0.42     1.65       6000 1.00
+b1_Intercept      1.13      0.12     0.91     1.37       2769 1.00
+b2_Intercept      0.88      0.05     0.79     0.97       2584 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma     9.71      0.09     9.53     9.90      15000 1.00
+sigma     9.72      0.10     9.53     9.91       6000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 224 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+There were 97 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -3761,12 +3755,12 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png
-  marginal_effects(mod, effects = "AGE:HDD")
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png
+  marginal_effects(mod, effects = "AGE:CDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
+[[file:../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png
   marginal_effects(mod, effects = "AGE:Precip")
@@ -3776,16 +3770,16 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png
-  marginal_effects(mod, effects = "Precip:HDD", surface = T)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png
+  marginal_effects(mod, effects = "Precip:CDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
+[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_no.png :width 800
-  cond <- data.frame(Species = unique(d$Species))
+  cond <- data.frame(Species = unique(mod$data$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
   ggplot(me$AGE) +
@@ -3805,7 +3799,10 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_no.png]]
 
-
+**** thoughts
+[2018-08-27 Mon]
+this looks good.  it has everthing but the heteroskedasticity.  I need
+to include that.  I switched to CDD and things improved.
 *** genus: many;  species: many; cities: many; climate: b0; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0_hetero_smooth.R
