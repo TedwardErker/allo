@@ -897,26 +897,26 @@ Joining, by = "TreeType"
 #+RESULTS:
 **** save subset of data for testing
 #+begin_src R :var clim=city_climate
-  d <- readRDS("../data/tidy_age_dbh.rds")
+    d <- readRDS("../data/tidy_age_dbh.rds")
 
-#  species.to.filter <- c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "FRVE","ACPL", "ULAM", "ULPU", "TIAM", "TICO")
-species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
+  #  species.to.filter <- c("LIST","GLTR","ACRU","MAGR","PYCA", "ACSA1", "ACSA2", "ACNE", "FRPE", "FRAM", "FRVE","ACPL", "ULAM", "ULPU", "TIAM", "TICO")
+  species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
 
-  d2 <- d %>%
-      mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
-      rename(Species = SpCode) %>%
-      select(-Leaf,-TreeID) %>%
-      left_join(.,clim) %>%
-      mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-             HDD = round((HDD - mean(HDD))/ 1000, 4),
-             CDD = round((CDD - mean(CDD))/ 1000, 4))
+    d2 <- d %>%
+        mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
+        rename(Species = SpCode) %>%
+        select(-Leaf,-TreeID) %>%
+        left_join(.,clim) %>%
+        mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+               HDD = round((HDD - mean(HDD))/ 1000, 4),
+               CDD = round((CDD - mean(CDD))/ 1000, 4))
 
-  saveRDS(d2, "../data/age_dbh_full.rds")
+    saveRDS(d2, "../data/age_dbh_full.rds")
 
-d3 <- d2 %>%
-      filter(Species %in% species.to.filter)
+  d3 <- d2 %>%
+        filter(Species %in% species.to.filter)
 
-  saveRDS(d3, "../data/age_dbh_testing.rds")
+    saveRDS(d3, "../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
@@ -3222,18 +3222,34 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no.png :width 800
-  cond <- data.frame(Species = unique(d$Species))
+  cond <- data.frame(Species = unique(mod$data$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-      geom_point(data = d, aes(x = AGE, y = DBH), alpha = .3) +
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), alpha = .3) +
       facet_wrap(~Species, nrow = 2)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no.png :width 1000 :height 1000
+  cond <- expand.grid(Species = unique(mod$data$Species), City = unique(mod$data$City))
+#  cond <- unique(select(mod$data, Species, City))
+  me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
+
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), alpha = .3) +
+      facet_grid(City~Species)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_smooth.png
   pp_check(mod)
@@ -4490,6 +4506,26 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
 
 *** why are the precip and hdd effects backwards??  look at data?
+
+*** Meeting with Jun [2018-08-27 Mon]
+
+What should the structure of the paper be?
+- Premise of paper: showing a new method to fit multilevel non-linear
+  growth models for trees
+- Our working example is the urban tree
+
+- Show different types of posterior predictions (e.g. new tree in a
+  observed city of an observed species, versus new tree in an
+  unobserved city of an unobserved species, but known climate and genus)
+
+- Show predictions compared to the existing method.
+  - will show better potential to extrapolate, both to unobserved ages
+    and unobserved species/city combinations.
+
+- Model selection
+
+- posterior predicitive checks
+
 
 *** single species, single location, heteroskedasticity
 no sigma at low ages.  the width of a twig is genetically controlled.
@@ -7956,6 +7992,8 @@ Model selection
 *** explaining priors
 can't be negative...  in brms nonlinear advanced, mention the
 importance of setting strong priors.  Also non negative.
+
+
 
 * Results
 * Discussoins
