@@ -522,6 +522,13 @@ that are important for urban environments?
 | Tropic | Honolulu, HI     | 2416 |    0 |   2206 |
 
 *** Get new climate data.  Growing degree days and Precip.  HDD is super high for minneapolis, but harsh winters aren't relevant.
+
+#+BEGIN_SRC sh
+wget -O ../data/cdd50.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/products/temperature/ann-cldd-base50.txt
+#+END_SRC
+
+#+RESULTS:
+
 *** Tree Dimensions
 | Tree Dimension            | abbr |
 |---------------------------+------|
