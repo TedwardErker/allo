@@ -572,9 +572,9 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
       library(dplyr)
 
   cities <- city_climate %>%
-          select(City, Latitude, Longitude)
+          select(City, Latitude, Longitude, Precip)
 
-      coordinates(cities) <- ~ longitude + latitude
+      coordinates(cities) <- ~ Longitude + Latitude
       proj4string(cities) <- CRS("+init=epsg:4326")
 
       cdd <- read.csv("../data/cdd50_qt_ll.csv", stringsAsFactors =F)
@@ -586,44 +586,21 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
       cdd <- cdd[cdd.dists.min,]
 
     d <- bind_cols(cdd@data,cities@data, data.frame(coordinates(cities))) %>%
-        select(cdd, city, longitude, latitude, population)
+        select(cdd, Precip, City, Longitude, Latitude) %>%
+      rename(GDD = cdd)
 
     write.csv(d, "../data/cities_cdd50.csv")
 #+end_src
 
+#+RESULTS:
 
-#+begin_src R :var city_climate=city_climate
-    cdd <- read.csv("../data/cities_cdd50.csv", stringsAsFactors = F)
 
-  str(city_climate)
-    test <- left_join(city_climate,cdd)
-  str(test)
-
+#+begin_src R :exports results :results graphics :file ../figs/CDD_Precip_Cities.png
+  ggplot(d, aes(x = CDD, y = Precip, label = City)) + geom_text()
 #+end_src
 
 #+RESULTS:
-#+begin_example
-'data.frame':	17 obs. of  6 variables:
- $ Region   : chr  "CenFla" "GulfCo" "InlEmp" "InlVal" ...
- $ city     : chr  "Orlando" "Charleston" "Claremont" "Modesto" ...
- $ CityState: chr  "Orlando, FL" "Charleston, SC" "Claremont, CA" "Modesto, CA" ...
- $ CDD      : int  1806 1124 134 1052 773 677 510 355 349 39 ...
- $ HDD      : int  289 1221 872 1439 1718 2416 3153 4436 3332 1786 ...
- $ Precip   : int  1367 1555 523 315 470 250 392 622 452 564 ...
-Joining, by = "city"
-'data.frame':	19 obs. of  11 variables:
- $ Region    : chr  "CenFla" "GulfCo" "GulfCo" "InlEmp" ...
- $ city      : chr  "Orlando" "Charleston" "Charleston" "Claremont" ...
- $ CityState : chr  "Orlando, FL" "Charleston, SC" "Charleston, SC" "Claremont, CA" ...
- $ CDD       : int  1806 1124 1124 134 1052 773 677 510 355 349 ...
- $ HDD       : int  289 1221 1221 872 1439 1718 2416 3153 4436 3332 ...
- $ Precip    : int  1367 1555 1555 523 315 470 250 392 622 452 ...
- $ X         : int  77 200 725 NA 105 35 32 12 46 160 ...
- $ cdd       : int  8539 6375 3836 NA 5259 4917 4065 3330 3140 2655 ...
- $ longitude : num  -81.4 -79.9 -81.6 NA -121 ...
- $ latitude  : num  28.5 32.8 38.3 NA 37.6 ...
- $ population: int  255483 127999 50821 NA 204933 479686 556495 843393 400070 152061 ...
-#+end_example
+[[file:../figs/CDD_Precip_Cities.png]]
 
 *** Tree Dimensions
 | Tree Dimension            | abbr |
