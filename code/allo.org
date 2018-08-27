@@ -4849,6 +4849,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   cities <- "many"
   climate <- "b0linint"
   hetero <- "linear"
+niter <- 10000
 #+end_src
 
 #+RESULTS:
@@ -4868,8 +4869,8 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 1000)
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = niter)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_niter_",niter,".rds"))
 #+end_src
 
 #+RESULTS:
@@ -4889,8 +4890,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_linear.R
 :
-: sent 181 bytes  received 54 bytes  67.14 bytes/sec
-: total size is 1145  speedup is 4.87
+: sent 664 bytes  received 42 bytes  282.40 bytes/sec
+: total size is 1144  speedup is 1.62
 
 **** run on krusty
 
