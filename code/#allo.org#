@@ -3156,41 +3156,41 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_no
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+ Family: gaussian 
+  Links: mu = identity; sigma = log 
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
          b0 ~ (1 | City) + (1 | Genus/Species)
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
-   Data: d (Number of observations: 2272)
+   Data: d (Number of observations: 2272) 
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
-Smooth Terms:
+Smooth Terms: 
                   Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sds(sigma_sAGE_1)     1.30      0.23     0.85     1.76       4000 1.00
 
-Group-Level Effects:
-~City (Number of levels: 15)
+Group-Level Effects: 
+~City (Number of levels: 15) 
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sd(b0_Intercept)     0.69      0.23     0.34     1.23         11 1.09
 sd(b1_Intercept)     0.26      0.08     0.15     0.46         25 1.04
 sd(b2_Intercept)     0.13      0.04     0.07     0.21         12 1.08
 
-~Genus (Number of levels: 6)
+~Genus (Number of levels: 6) 
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sd(b0_Intercept)     0.15      0.16     0.00     0.60       1590 1.00
 sd(b1_Intercept)     0.11      0.09     0.00     0.35        610 1.01
 sd(b2_Intercept)     0.07      0.04     0.01     0.17        120 1.02
 
-~Genus:Species (Number of levels: 10)
+~Genus:Species (Number of levels: 10) 
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sd(b0_Intercept)     0.55      0.21     0.27     1.03       2462 1.00
 sd(b1_Intercept)     0.20      0.09     0.06     0.40         40 1.03
 sd(b2_Intercept)     0.04      0.03     0.00     0.11         41 1.03
 
-Population-Level Effects:
+Population-Level Effects: 
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma_Intercept     2.07      0.02     2.04     2.11       4000 1.01
 b0_Intercept        2.13      0.35     1.45     2.86        619 1.01
@@ -3198,8 +3198,8 @@ b1_Intercept        0.92      0.14     0.67     1.21        203 1.02
 b2_Intercept        1.00      0.06     0.89     1.11       2305 1.00
 sigma_sAGE_1        1.00      0.18     0.65     1.36       4000 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
 There were 16 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
@@ -3222,18 +3222,34 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no.png :width 800
-  cond <- data.frame(Species = unique(d$Species))
+  cond <- data.frame(Species = unique(mod$data$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-      geom_point(data = d, aes(x = AGE, y = DBH), alpha = .3) +
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), alpha = .3) +
       facet_wrap(~Species, nrow = 2)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no.png :width 1000 :height 1000
+  cond <- expand.grid(Species = unique(mod$data$Species), City = unique(mod$data$City))
+  cond <- unique(select(mod$data, Species, City))
+  me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
+
+  ggplot(me$AGE) +
+      geom_line(aes(x = AGE, y = estimate__)) +
+      geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), alpha = .3) +
+      facet_grid(City~Species)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_smooth.png
   pp_check(mod)
@@ -4494,12 +4510,22 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 *** Meeting with Jun [2018-08-27 Mon]
 
 What should the structure of the paper be?
+- Premise of paper: showing a new method to fit multilevel non-linear
+  growth models for trees
+- Our working example is the urban tree
 
-Show different types of posterior predictions (e.g. new tree in a
-observed city of an observed species, versus new tree in an unobserved
-city of an unobserved species, but known climate and genus)
+- Show different types of posterior predictions (e.g. new tree in a
+  observed city of an observed species, versus new tree in an
+  unobserved city of an unobserved species, but known climate and genus)
 
-Show predictions compared to the existing method.
+- Show predictions compared to the existing method.
+  - will show better potential to extrapolate, both to unobserved ages
+    and unobserved species/city combinations.
+
+- Model selection
+
+- posterior predicitive checks
+
 
 *** single species, single location, heteroskedasticity
 no sigma at low ages.  the width of a twig is genetically controlled.
