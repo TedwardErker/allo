@@ -522,6 +522,63 @@ that are important for urban environments?
 | Tropic | Honolulu, HI     | 2416 |    0 |   2206 |
 
 *** Get new climate data.  Growing degree days and Precip.  HDD is super high for minneapolis, but harsh winters aren't relevant.
+
+#+BEGIN_SRC sh
+wget -O ../data/cdd50.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/products/temperature/ann-cldd-base50.txt
+#+END_SRC
+
+#+RESULTS:
+
+#+begin_src R
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+d <- read.table("data/cdd50.txt")
+
+          colnames(d) <- c("station", "cldd")
+
+        d <- d %>%
+            mutate(cdd = as.numeric(str_match(cldd, "-*[0-9]+")[,1]),
+                   qual = str_match(cldd, "[A-Z]")[,1])
+  head(d)
+dim(d)
+
+d <- d %>%
+    filter(qual %in% c("C","S","R"),
+           hdd >= 0)
+dim(d)
+
+    ll <- read.table("data/temp-station-info.txt", fill = T, stringsAsFactors = F)
+    ll <- ll[,1:3] # get station, lat, and long
+    colnames(ll) <- c("station","lat","long")
+
+ll <-  ll %>%
+    mutate(station = as.character(station),
+           lat = as.numeric(lat))
+
+dl <- left_join(d, ll)
+#+end_src
+
+#+begin_src R
+library(sp)
+  library(jsonlite)
+library(dplyr)
+json_file <- "https://gist.githubusercontent.com/TedwardErker/d97e19ed23a0dea4106076961d4f22e0/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json"
+  cities <- jsonlite::fromJSON(json_file) %>%
+    select(city, latitude, longitude, population)
+coordinates(cities) <- ~ longitude + latitude
+proj4string(cities) <- CRS("+init=epsg:4326")
+
+cdd <- read.csv("data/cdd_qt_ll.csv", stringsAsFactors =F)
+coordinates(cdd) <- ~long + lat
+proj4string(cdd) <- CRS("+init=epsg:4326")
+
+cdd.dists <- spDists(cities, cdd, longlat = T)
+cdd.dists.min <- apply(cdd.dists, 1, function(x) which(x == min(x))[1])
+cdd <- cdd[cdd.dists.min,]
+#+end_src
+
 *** Tree Dimensions
 | Tree Dimension            | abbr |
 |---------------------------+------|
@@ -3320,9 +3377,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0_hetero_no.R
 :
-: sent 365 bytes  received 54 bytes  76.18 bytes/sec
+: sent 365 bytes  received 54 bytes  167.60 bytes/sec
 : total size is 1135  speedup is 2.71
-: You have new mail in /var/mail/erker
 
 **** run on krusty
 
@@ -3545,8 +3601,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_no.R
 :
-: sent 365 bytes  received 54 bytes  76.18 bytes/sec
-: total size is 1135  speedup is 2.71
+: sent 658 bytes  received 42 bytes  280.00 bytes/sec
+: total size is 1141  speedup is 1.63
 : You have new mail in /var/mail/erker
 
 **** run on krusty
