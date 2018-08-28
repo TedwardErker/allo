@@ -1668,7 +1668,7 @@ then functions subset data, generate formula and prior, and fit model.
 
         if(hetero == "linear") {
           nlprior <- c(nlprior,
-                       prior(normal(.2,.3), class = "b", dpar = "sigma"))
+                       prior(gamma(.2,.3), class = "b", dpar = "sigma"))
         }
 
         if(hetero == "smooth") {
@@ -1728,6 +1728,16 @@ beta called rate
 
 #+RESULTS:
 [[file:../figs/ftest2.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/ftest_bsigma.png
+  x <- seq(0,8,.1)
+  y <- dgamma(x, shape = 10, rate = 20)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftest_bsigma.png]]
+
 
 
 #+begin_src R :exports results :results graphics :file ../figs/ttest.png
