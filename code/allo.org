@@ -3240,7 +3240,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_many_cities_single_climate_none_hetero_no.png]]
 
-*** genus: many;  species: many; cities: many; climate: none; hetero: smooth
+*** TODO genus: many;  species: many; cities: many; climate: none; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_none_hetero_smooth.R
 :END:
@@ -3429,7 +3429,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_smooths_genus_many_species_many_cities_many_climate_none_hetero_smooth.png
-  marginal_effects(mod, )
+  marginal_smooths(mod, spaghetti = T, nsamples = 100)
 #+end_src
 
 #+RESULTS:
@@ -3439,7 +3439,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no.png :width 800
   cond <- data.frame(Species = unique(mod$data$Species))
-  me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
+  me <- marginal_effects(mod, conditions = cond, re_formula = NULL, method = "predict")
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
@@ -3451,10 +3451,10 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no.png :width 1000 :height 1000
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no_predict.png :width 1000 :height 1000
   cond <- expand.grid(Species = unique(mod$data$Species), City = unique(mod$data$City))
-#  cond <- unique(select(mod$data, Species, City))
-  me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
+  cond <- unique(select(mod$data, Genus, Species, City))
+  me <- marginal_effects(mod, conditions = cond, re_formula = NULL, method = "predict")
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
@@ -3463,7 +3463,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
       facet_grid(City~Species)
 #+end_src
 
-#+RESULTS:
+
+
+
 [[file:../figs/marginal_effects_BySpeciesCity_none_species_many_cities_single_climate_none_hetero_no.png]]
 
 
