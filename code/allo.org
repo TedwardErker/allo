@@ -291,6 +291,8 @@ DBH for illustrative purposes.
 
 ** past work
 
+
+
 cite:nothdurft_e_2006
 
 cite:yang_e_2009
@@ -334,6 +336,18 @@ Wang, Y., LeMay, V.M., Baker, T.G., 2007b. Modelling and prediction of dominant 
 index of Eucalyptus globulus plantations using a nonlinear mixed-effects model approach.
 Canadian Journal of Forest Research 37, 1390–1403.
 
+
+
+Urban Tree Database and Allometric Equations
+E. Gregory McPherson, Natalie S. van Doorn, and Paula J. Peper
+
+The economic, social, and ecological benefits of trees are directly
+related to their size, as indicated by leaf area, crown volume, and
+bio- mass (Scott et al. 1998, Stoffberg et al. 2010, Xiao et
+al. 2000a). Growth equa- tions underpin the calculations produced by
+many computer models used in urban forestry, such as i-Tree, National
+Tree Benefit Calculator, OpenTreeMap, and ecoSmart Landscapes
+(fig. 1).
 
 
 
@@ -10798,3 +10812,4 @@ Questions:
 
 #+RESULTS:
 | simple.stan |
+
