@@ -4965,9 +4965,10 @@ C-c C-v t
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: genus_many_species_many_cities_many_climate_b0linint_hetero_linear.R
 :
-: sent 139 bytes  received 20 bytes  63.60 bytes/sec
-: total size is 1184  speedup is 7.45
+: sent 181 bytes  received 54 bytes  67.14 bytes/sec
+: total size is 1184  speedup is 5.04
 
 **** run on krusty
 
