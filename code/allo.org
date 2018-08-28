@@ -1668,7 +1668,7 @@ then functions subset data, generate formula and prior, and fit model.
 
         if(hetero == "linear") {
           nlprior <- c(nlprior,
-                       prior(normal(1,.3), class = "b", dpar = "sigma"))
+                       prior(gamma(1,10), class = "b", dpar = "sigma"))
         }
 
         if(hetero == "smooth") {
@@ -1695,9 +1695,8 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 299 bytes  received 60 bytes  4.06 bytes/sec
-: total size is 1785  speedup is 4.97
-: You have new mail in /var/mail/erker
+: sent 299 bytes  received 60 bytes  143.60 bytes/sec
+: total size is 1784  speedup is 4.97
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -1729,6 +1728,16 @@ beta called rate
 #+RESULTS:
 [[file:../figs/ftest2.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/ftest_bsigma.png
+  x <- seq(0,1,.01)
+  y <- dgamma(x, shape = 10, rate = 100)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftest_bsigma.png]]
+
+
 
 #+begin_src R :exports results :results graphics :file ../figs/ttest.png
   x <- seq(0,5,.1)
@@ -1739,7 +1748,6 @@ beta called rate
 
 #+RESULTS:
 [[file:../figs/ttest.png]]
-
 
 *** genus: none;  species: single; cities: single; climate: none; hetero: no
 :PROPERTIES:

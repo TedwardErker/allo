@@ -34,7 +34,7 @@ generate_formula <- function(model_table, gen, sp, cit, clim, het) {
 
       if(hetero == "linear") {
         nlprior <- c(nlprior,
-                     prior(normal(1,.3), class = "b", dpar = "sigma"))
+                     prior(gamma(1,10), class = "b", dpar = "sigma"))
       }
 
       if(hetero == "smooth") {
