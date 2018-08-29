@@ -1578,6 +1578,7 @@ smaller models to build:
 | none  | single  | many   | none     | yes     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City)                                                | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             | sigma ~ AGE -1        |
 | none  | single  | many   | b0       | yes     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City)                             | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             | sigma ~ AGE -1        |
 | many  | many    | many   | none     | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
+| many  | many    | many   | none     | linear  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
 | many  | many    | many   | b0       | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
 | many  | many    | many   | b0linint | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
 | many  | many    | many   | b0       | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
@@ -1591,12 +1592,13 @@ rsync -avz ../data/model_table.csv erker@krusty:~/allo/data/
 #+end_src
 
 #+RESULTS:
-| erker@krusty's  | password: |       |          |         |       |       |           |
-| building        | file      | list  | ...      | done    |       |       |           |
-| model_table.csv |           |       |          |         |       |       |           |
-|                 |           |       |          |         |       |       |           |
-| sent            | 170       | bytes | received | 72      | bytes |  96.8 | bytes/sec |
-| total           | size      | is    | 3709     | speedup | is    | 15.33 |           |
+| erker@krusty's  | password: |       |          |         |                 |       |           |
+| building        | file      | list  | ...      | done    |                 |       |           |
+| model_table.csv |           |       |          |         |                 |       |           |
+|                 |           |       |          |         |                 |       |           |
+| sent            | 128       | bytes | received | 78      | bytes           | 31.69 | bytes/sec |
+| total           | size      | is    | 3709     | speedup | is              |  18.0 |           |
+| You             | have      | new   | mail     | in      | /var/mail/erker |       |           |
 
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
