@@ -1592,13 +1592,12 @@ rsync -avz ../data/model_table.csv erker@krusty:~/allo/data/
 #+end_src
 
 #+RESULTS:
-| erker@krusty's  | password: |       |          |         |                 |       |           |
-| building        | file      | list  | ...      | done    |                 |       |           |
-| model_table.csv |           |       |          |         |                 |       |           |
-|                 |           |       |          |         |                 |       |           |
-| sent            | 128       | bytes | received | 78      | bytes           | 31.69 | bytes/sec |
-| total           | size      | is    | 3709     | speedup | is              |  18.0 |           |
-| You             | have      | new   | mail     | in      | /var/mail/erker |       |           |
+| erker@krusty's  | password: |       |          |         |       |       |           |
+| building        | file      | list  | ...      | done    |       |       |           |
+| model_table.csv |           |       |          |         |       |       |           |
+|                 |           |       |          |         |       |       |           |
+| sent            | 206       | bytes | received | 78      | bytes | 43.69 | bytes/sec |
+| total           | size      | is    | 3943     | speedup | is    | 13.88 |           |
 
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
@@ -1750,7 +1749,7 @@ beta called rate
 
 #+RESULTS:
 [[file:../figs/ttest.png]]
-
+*** CHANGE THE FAMILY TO BE STRICTLY POSITIVVE , maybe GAmma.
 *** genus: none;  species: single; cities: single; climate: none; hetero: no
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no.R
