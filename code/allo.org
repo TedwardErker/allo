@@ -1793,6 +1793,27 @@ beta called rate
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -1847,6 +1868,10 @@ beta called rate
   m <- brm(form, chains = 1, cores = 1, data = dt, prior = nlprior, iter = 500)
 #+end_src
 
+#+RESULTS:
+: Error: The following variables are missing in 'data':
+: 'DBH', 'AGE'
+
 #+begin_src R :tangle no
   summary(m)
 #+end_src
@@ -1873,9 +1898,12 @@ beta called rate
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 500, , family = Gamma('log'))
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
+
+#+RESULTS:
+: Error: Family 'poisson' requires integer responses.
 
 
 **** tangle
