@@ -1634,136 +1634,137 @@ then functions subset data, generate formula and prior, and fit model.
 
 #+begin_src R :tangle allo_functions.R
 
-    generate_formula <- function(model_table, gen, sp, cit, clim, het) {
-        f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
+      generate_formula <- function(model_table, gen, sp, cit, clim, het) {
+          f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
 
-        f[] <- gsub("\\vert", "|", f, fixed = T)
+          f[] <- gsub("\\vert", "|", f, fixed = T)
 
 
-        if(f$sigma == "") {
-            bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
-        } else {
-            bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
-        }
+          if(f$sigma == "") {
+              bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
+          } else {
+              bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
+          }
+      }
+
+      generate_formula <- function(gen, sp, cit, clim, het, family) {
+          if(family == "gaussian") {
+              data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
+              if(het == "linear") {
+                  v_form <- formula(sigma ~ AGE - 1)
+              }
+              if (het == "smooth") {
+                  v_form <- formula(sigma ~  s(AGE))
+              }
+              if (het == "no") {
+                  v_form <- formula(sigma ~ 1)
+              }
+          }
+          if (family == "Gamma") {
+              data_form <- formula(DBH ~ b0 * (1 - exp(-(b1) * AGE ^ b2)))
+              if (het == "no") {
+                  v_form <- formula(shape ~ 1)
+              }
+          }
+          if(sp == "single") {
+              if(cit == "single") {
+                  b0_form <- formula(b0 ~ 1)
+                  b1_form <- formula(b1 ~ 1)
+                  b2_form <- formula(b2 ~ 1)
+              }
+              if (cit == "many") {
+                  b0_form <- formula(b0 ~ (1 | City))
+                  b1_form <- formula(b1 ~ (1 | City))
+                  b2_form <- formula(b2 ~ (1 | City))
+              }
+          }
+          if (sp == "many") {
+              if (gen == "none") {
+                  if(cit == "single") {
+                      b0_form <- formula(b0 ~ (1 | Species))
+                      b1_form <- formula(b1 ~ (1 | Species))
+                      b2_form <- formula(b2 ~ (1 | Species))
+                  }
+                  if (cit == "many") {
+                      b0_form <- formula(b0 ~ (1 | City) + (1 | Species))
+                      b1_form <- formula(b1 ~ (1 | City) + (1 | Species))
+                      b2_form <- formula(b2 ~ (1 | City) + (1 | Species))
+                  }
+              }
+              if (gen == "many") {
+                  if(cit == "single") {
+                      b0_form <- formula(b0 ~ (1 | Genus/Species))
+                      b1_form <- formula(b1 ~ (1 | Genus/Species))
+                      b2_form <- formula(b2 ~ (1 | Genus/Species))
+                  }
+                  if (cit == "many") {
+                      b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
+                      b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
+                      b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
+                  }
+              }
+          }
+
+              f <- bf(data_form, b0_form, b1_form, b2_form, v_form, nl = T)
+              return(f)
+
+
     }
 
-    generate_formula <- function(gen, sp, cit, clim, het, family) {
-        if(family == "gaussian") {
-            data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
-            if(het == "linear") {
-                v_form <- formula(sigma ~ AGE - 1)
-            }
-            if (het == "smooth") {
-                v_form <- formula(sigma ~  s(AGE))
-            }
-            if (het == "no") {
-                v_form <- formula(sigma ~ 1)
-            }
-        }
-        if (family == "Gamma") {
-            data_form <- formula(DBH ~ b0 * (1 - exp(-(b1) * AGE ^ b2)))
-            if (het == "no") {
-                v_form <- formula(shape ~ 1)
-            }
-        }
-        if(sp == "single") {
-            if(cit == "single") {
-                b0_form <- formula(b0 ~ 1)
-                b1_form <- formula(b1 ~ 1)
-                b2_form <- formula(b2 ~ 1)
-            }
-            if (cit == "many") {
-                b0_form <- formula(b0 ~ (1 | City))
-                b1_form <- formula(b1 ~ (1 | City))
-                b2_form <- formula(b2 ~ (1 | City))
-            }
-        }
-        if (sp == "many") {
-            if (gen == "none") {
-                if(cit == "single") {
-                    b0_form <- formula(b0 ~ (1 | Species))
-                    b1_form <- formula(b1 ~ (1 | Species))
-                    b2_form <- formula(b2 ~ (1 | Species))
-                }
-                if (cit == "many") {
-                    b0_form <- formula(b0 ~ (1 | City) + (1 | Species))
-                    b1_form <- formula(b1 ~ (1 | City) + (1 | Species))
-                    b2_form <- formula(b2 ~ (1 | City) + (1 | Species))
-                }
-            }
-            if (gen == "many") {
-                if(cit == "single") {
-                    b0_form <- formula(b0 ~ (1 | Genus/Species))
-                    b1_form <- formula(b1 ~ (1 | Genus/Species))
-                    b2_form <- formula(b2 ~ (1 | Genus/Species))
-                }
-                if (cit == "many") {
-                    b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
-                    b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
-                    b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
-                }
-            }
 
-            f <- bf(data_form, b0_form, b1_form, b2_form, v_form, nl = T)
-          f
-
-        }
-  }
+          ##     b0 ~ 1
+          ##     b0 ~ (1 \vert Species)
+          ##     b0 ~ (1 \vert Genus / Species)
+          ##     b0 ~ (1 \vert Genus / Species)
+          ##     b0 ~ (1 \vert City)
+          ##     b0 ~ t2(Precip, GDD) +  (1 \vert City)
+          ##     b0 ~ t2(Precip, GDD, k = ) +  (1 \vert City)
+          ##     b0 ~ (1 \vert City)
+          ##     b0 ~ t2(Precip, GDD) +  (1 \vert City)
+          ##     b0 ~ (1 \vert City) + (1 \vert Genus / Species)
+          ##     b0 ~ (1 \vert City) + (1 \vert Genus / Species)
+          ##     b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species)
+          ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
+          ##     b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species)
+          ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
+          ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
 
 
-        ##     b0 ~ 1
-        ##     b0 ~ (1 \vert Species)
-        ##     b0 ~ (1 \vert Genus / Species)
-        ##     b0 ~ (1 \vert Genus / Species)
-        ##     b0 ~ (1 \vert City)
-        ##     b0 ~ t2(Precip, GDD) +  (1 \vert City)
-        ##     b0 ~ t2(Precip, GDD, k = ) +  (1 \vert City)
-        ##     b0 ~ (1 \vert City)
-        ##     b0 ~ t2(Precip, GDD) +  (1 \vert City)
-        ##     b0 ~ (1 \vert City) + (1 \vert Genus / Species)
-        ##     b0 ~ (1 \vert City) + (1 \vert Genus / Species)
-        ##     b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species)
-        ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
-        ##     b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species)
-        ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
-        ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
+          generate_prior <- function (gen, sp, cit, clim) {
+
+              nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
+                           prior(gamma(8, 8), nlpar = "b1", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
+                           prior(gamma(8, 8), nlpar = "b2",lb = 0))
+
+              if("many" %in% c(gen, sp, cit)) {
+
+                  nlprior <- c(nlprior,
+                               prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
+                               prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
+                               prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+
+              }
+
+              if(clim == "b0") {
+                  nlprior <- c(nlprior,
+                               prior(normal(0,.25), class = "sds", nlpar = "b0"))
+              }
+
+              if(hetero == "linear") {
+                  nlprior <- c(nlprior,
+                               prior(gamma(1,10), class = "b", dpar = "sigma"))
+              }
+
+              if(hetero == "smooth") {
+                  nlprior <- c(nlprior,
+                               prior(normal(1,.3), class = "b", dpar = "sigma"),
+                               prior(normal(1,.3), class = "sds", dpar = "sigma"),
+                               prior(normal(0,1), class = "Intercept", dpar = "sigma"))
+              }
 
 
-        generate_prior <- function (gen, sp, cit, clim) {
-
-            nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
-                         prior(gamma(8, 8), nlpar = "b1", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
-                         prior(gamma(8, 8), nlpar = "b2",lb = 0))
-
-            if("many" %in% c(gen, sp, cit)) {
-
-                nlprior <- c(nlprior,
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
-
-            }
-
-            if(clim == "b0") {
-                nlprior <- c(nlprior,
-                             prior(normal(0,.25), class = "sds", nlpar = "b0"))
-            }
-
-            if(hetero == "linear") {
-                nlprior <- c(nlprior,
-                             prior(gamma(1,10), class = "b", dpar = "sigma"))
-            }
-
-            if(hetero == "smooth") {
-                nlprior <- c(nlprior,
-                             prior(normal(1,.3), class = "b", dpar = "sigma"),
-                             prior(normal(1,.3), class = "sds", dpar = "sigma"),
-                             prior(normal(0,1), class = "Intercept", dpar = "sigma"))
-            }
-
-
-            nlprior
-        }
+              nlprior
+          }
 #+end_src
 
 #+RESULTS:
@@ -1774,12 +1775,14 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
+: Permission denied, please try again.
 : erker@krusty's password:
 : building file list ... done
 : allo_functions.R
 :
-: sent 299 bytes  received 60 bytes  143.60 bytes/sec
-: total size is 1784  speedup is 4.97
+: sent 1110 bytes  received 60 bytes  30.39 bytes/sec
+: total size is 5024  speedup is 4.29
+: You have new mail in /var/mail/erker
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -1832,7 +1835,7 @@ beta called rate
 #+RESULTS:
 [[file:../figs/ttest.png]]
 *** CHANGE THE FAMILY TO BE STRICTLY POSITIVVE , maybe GAmma.
-*** genus: none;  species: single; cities: single; climate: none; hetero: no
+*** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no.R
 :END:
@@ -1844,15 +1847,16 @@ beta called rate
   cities <- "single"
   climate <- "none"
   hetero <- "no"
+  family <- "Gamma"
 #+end_src
 
 #+RESULTS:
 **** generate formula and priors
 #+begin_src R
 
-  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+#  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
+  form <- generate_formula(genus, species, cities, climate, hetero, family)
 
   nlprior <- generate_prior(genus, species, cities, climate)
 #+end_src
@@ -1918,10 +1922,16 @@ beta called rate
 
 **** fit model to real data
 #+begin_src R
-  d <- readRDS("../data/age_dbh_testing.rds")
-fam <- Gamma('log')
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 500, family = fam)
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+    d <- readRDS("../data/age_dbh_testing.rds")
+
+  if(family == "Gaussian") {
+    fam <- gaussian()
+}
+if(family == "Gamma" {
+  fam <- Gamma('log')
+}
+    mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 500, family = fam)
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
 #+RESULTS:
