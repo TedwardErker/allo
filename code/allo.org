@@ -1898,7 +1898,7 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 500, , family = Gamma('log'))
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 500, family = Gamma('log'))
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
@@ -1919,8 +1919,8 @@ C-c C-v t
 : building file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_no.R
 :
-: sent 186 bytes  received 66 bytes  72.00 bytes/sec
-: total size is 2128  speedup is 8.44
+: sent 483 bytes  received 66 bytes  64.59 bytes/sec
+: total size is 2152  speedup is 3.92
 
 
 **** run on krusty
@@ -1939,6 +1939,14 @@ run from krusty terminal
 #+BEGIN_SRC sh :session a :results raw
 rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
 #+END_SRC
+
+#+RESULTS:
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_no.rds
+
+sent 20876 bytes  received 11518907 bytes  923182.64 bytes/sec
+total size is 11609727  speedup is 1.01
 
 
 **** diagnostics
@@ -1966,25 +1974,25 @@ mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_h
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
+ Family: gamma
+  Links: mu = log; shape = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-   Data: d (Number of observations: 2272)
-Samples: 4 chains, each with iter = 1000; warmup = 500; thin = 1;
-         total post-warmup samples = 2000
+   Data: d (Number of observations: 5548)
+Samples: 4 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 1000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.13      0.06     1.03     1.26        692 1.00
-b1_Intercept     1.51      0.11     1.28     1.73        692 1.00
-b2_Intercept     1.05      0.04     0.98     1.12        579 1.00
+b0_Intercept     0.05      0.00     0.05     0.05        330 1.00
+b1_Intercept    28.55      0.39    27.79    29.30        720 1.00
+b2_Intercept     0.48      0.01     0.46     0.50        348 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma    13.87      0.21    13.45    14.28       1202 1.00
+shape     6.11      0.11     5.91     6.31        322 1.01
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -2007,7 +2015,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png
-  pp_check(mod)
+  pp_check(mod) +xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
@@ -3135,7 +3143,7 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
+  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma('log'))
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
 
@@ -4008,7 +4016,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000)
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma('log'))
 
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
 #+end_src
