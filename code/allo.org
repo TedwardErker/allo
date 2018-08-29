@@ -3277,7 +3277,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_many_cities_single_climate_none_hetero_no.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: none; hetero: smooth
+*** genus: many;  species: many; cities: many; climate: none; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_none_hetero_smooth.R
 :END:
@@ -3513,7 +3513,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_smooth.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: none; hetero: linear
+*** genus: many;  species: many; cities: many; climate: none; hetero: linear
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_none_hetero_linear.R
 :END:
@@ -3976,7 +3976,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_no.png]]
 
-*** genus: many;  species: many; cities: many; climate: b0linint; hetero: no
+*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: no  Changed to Gamma Family
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_no.R
 :END:
@@ -4038,8 +4038,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_no.R
 :
-: sent 658 bytes  received 42 bytes  280.00 bytes/sec
-: total size is 1141  speedup is 1.63
+: sent 390 bytes  received 54 bytes  59.20 bytes/sec
+: total size is 1164  speedup is 2.62
 : You have new mail in /var/mail/erker
 
 **** run on krusty
@@ -4684,7 +4684,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth_fulldata.png]]
 
 
-*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth  NO CONVERGE
+*** genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth  NO CONVERGE
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R
 :END:
@@ -4928,7 +4928,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
 
-*** TODO FULL DATA genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth
+*** FULL DATA genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R
 :END:
@@ -5171,7 +5171,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
+*** genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_linear.R
 :END:
@@ -5406,7 +5406,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-*** TODO FULL DATA genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
+*** FULL DATA genus: many;  species: many; cities: many; climate: b0linint; hetero: linear
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_linear_fulldata.R
 :END:
