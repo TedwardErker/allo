@@ -1661,7 +1661,7 @@ then functions subset data, generate formula and prior, and fit model.
             }
         }
         if (family == "Gamma") {
-            data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
+            data_form <- formula(DBH ~ b0 * (1 - exp(-(b1) * AGE ^ b2)))
             if (het == "no") {
                 v_form <- formula(shape ~ 1)
             }
@@ -1767,14 +1767,6 @@ then functions subset data, generate formula and prior, and fit model.
 #+end_src
 
 #+RESULTS:
-: Error: unexpected ',' in "      (gen,"
-: Error in "many" %in% c(gen, sp, cit) : object 'gen' not found
-: Error: object 'clim' not found
-:         prior class coef group resp dpar nlpar     bound
-: 1 gamma(7, 7)     b                         b0 <lower=0>
-: 2 gamma(8, 8)     b                         b1 <lower=0>
-: 3 gamma(8, 8)     b                         b2 <lower=0>
-: Error: unexpected '}' in "      }"
 
 Tangle (C-c C-v t) then send functions to krusty
 #+BEGIN_SRC sh :session a :results verbatim
