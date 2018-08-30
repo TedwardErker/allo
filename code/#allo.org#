@@ -1561,7 +1561,7 @@ are correlated.  I wonder if I could include that information in the prior?
     b0 <- 1.2
     b1 <- 2
     b2 <- 1
-    shape <- 6
+    shape <- 20
 
     w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
                                               #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
