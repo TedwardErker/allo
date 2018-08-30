@@ -1555,6 +1555,10 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
+*** a look at gamma
+#+begin_src R
+mu <- 
+#+end_src
 *** TODO all the models  model_table  MAKE SURE MY PRIORS ARE CORRECT.
 
 smaller models to build:
@@ -2036,26 +2040,26 @@ mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_h
 
 #+RESULTS:
 #+begin_example
- Family: gaussian 
-  Links: mu = identity; sigma = log 
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
          sigma ~ 1
-   Data: d (Number of observations: 5548) 
+   Data: d (Number of observations: 5548)
 Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
          total post-warmup samples = 500
 
-Population-Level Effects: 
+Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma_Intercept     2.68      0.01     2.66     2.70        438 1.00
 b0_Intercept        1.43      0.10     1.26     1.63        146 1.00
 b1_Intercept        1.40      0.06     1.29     1.51        254 1.00
 b2_Intercept        0.97      0.03     0.92     1.02        140 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
-is a crude measure of effective sample size, and Rhat is the potential 
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
