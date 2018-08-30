@@ -1557,8 +1557,26 @@ are correlated.  I wonder if I could include that information in the prior?
 [[file:../figs/w5.png]]
 *** a look at gamma
 #+begin_src R
-mu <- 
+    n <- 100
+    b0 <- 1.2
+    b1 <- 2
+    b2 <- 1
+    shape <- 6
+
+    w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+                                              #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+    x <- runif(n , 0, 150)
+
+    mu <- w(b0,b1,b2, x)
+
+  y <- rgamma(n, rate = shape / mu, shape = shape)
+df <- data.frame(x,y) 
+
 #+end_src
+
+#+RESULTS:
+
 *** TODO all the models  model_table  MAKE SURE MY PRIORS ARE CORRECT.
 
 smaller models to build:
