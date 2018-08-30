@@ -1648,7 +1648,7 @@ then functions subset data, generate formula and prior, and fit model.
     }
 
     generate_formula <- function(gen, sp, cit, clim, het, family) {
-        if(family == "gaussian") {
+        if(family == "Gaussian") {
             data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
             if(het == "linear") {
                 v_form <- formula(sigma ~ AGE - 1)
@@ -1880,6 +1880,7 @@ beta called rate
   climate <- "none"
   hetero <- "no"
   family <- "Gamma"
+  family <- "Gaussian"
 #+end_src
 
 #+RESULTS:
@@ -1894,6 +1895,8 @@ beta called rate
 #+end_src
 
 #+RESULTS:
+: Error in bf(data_form, b0_form, b1_form, b2_form, v_form, nl = T) :
+:   object 'data_form' not found
 
 **** test model on generated data
 #+begin_src R :tangle no
@@ -1967,7 +1970,9 @@ if(family == "Gamma") {
 #+end_src
 
 #+RESULTS:
-: Error: Family 'poisson' requires integer responses.
+: Error: Priors on population-level effects are required in non-linear models, but none were found for parameter 'shape'. See help(set_prior) for more details.
+: Error in saveRDS(mod, paste0("../models/genus_", genus, "_species_", species,  :
+:   object 'mod' not found
 
 
 **** tangle
