@@ -66,6 +66,9 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
                 b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
                 b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
                 b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
+                if (clim == "b0linint") {
+                    b0_form <- formula(b0 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
+                }
             }
         }
     }

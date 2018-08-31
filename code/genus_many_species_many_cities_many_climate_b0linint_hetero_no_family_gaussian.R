@@ -5,12 +5,12 @@ source("allo_functions.R")
 ## libraries and functions:1 ends here
 
 ## [[file:~/git/allo/code/allo.org::*set%20values][set values:1]]
-genus <- "none"
+genus <- "many"
 species <- "many"
-cities <- "single"
-climate <- "none"
+cities <- "many"
+climate <- "b0linint"
 hetero <- "no"
-family <- "Gamma"
+family <- "gaussian"
 ## set values:1 ends here
 
 ## [[file:~/git/allo/code/allo.org::*generate%20formula%20and%20priors][generate formula and priors:1]]
@@ -22,6 +22,6 @@ nlprior <- generate_prior(genus, species, cities, climate, family)
 ## [[file:~/git/allo/code/allo.org::*fit%20model%20to%20real%20data][fit model to real data:1]]
 d <- readRDS("../data/age_dbh_testing.rds")
 
-mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
+mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
 saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## fit model to real data:1 ends here
