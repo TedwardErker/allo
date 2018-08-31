@@ -23,5 +23,5 @@ nlprior <- generate_prior(genus, species, cities, climate, family)
 d <- readRDS("../data/age_dbh_testing.rds")
 
 mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma('log'))
-saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## fit model to real data:1 ends here
