@@ -13,7 +13,7 @@
 ## }
 
 generate_formula <- function(gen, sp, cit, clim, het, family) {
-    if(family == "Gaussian") {
+    if(family == "gaussian") {
         data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
         if(het == "linear") {
             v_form <- formula(sigma ~ AGE - 1)
@@ -81,7 +81,7 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
 }
 
 generate_prior <- function (gen, sp, cit, clim, fam) {
-    if(fam == "Gaussian") {
+    if(fam == "gaussian") {
         nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
                      prior(gamma(8, 8), nlpar = "b1", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
                      prior(gamma(8, 8), nlpar = "b2",lb = 0))

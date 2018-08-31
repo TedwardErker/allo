@@ -1699,7 +1699,7 @@ The following object is masked from ‘package:dplyr’:
   ## }
 
   generate_formula <- function(gen, sp, cit, clim, het, family) {
-      if(family == "Gaussian") {
+      if(family == "gaussian") {
           data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
           if(het == "linear") {
               v_form <- formula(sigma ~ AGE - 1)
@@ -1767,7 +1767,7 @@ The following object is masked from ‘package:dplyr’:
   }
 
   generate_prior <- function (gen, sp, cit, clim, fam) {
-      if(fam == "Gaussian") {
+      if(fam == "gaussian") {
           nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
                        prior(gamma(8, 8), nlpar = "b1", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
                        prior(gamma(8, 8), nlpar = "b2",lb = 0))
@@ -1847,9 +1847,8 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 1076 bytes  received 90 bytes  259.11 bytes/sec
-: total size is 5258  speedup is 4.51
-: You have new mail in /var/mail/erker
+: sent 340 bytes  received 90 bytes  122.86 bytes/sec
+: total size is 5258  speedup is 12.23
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -2377,9 +2376,9 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
 
-*** genus: none;  species: single; cities: single; climate: none; hetero: linear
+*** genus: none;  species: single; cities: single; climate: none; hetero: linear; family gaussian
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_linear.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_linear_family_gaussian.R
 :END:
 **** libraries and functions
 #+begin_src R
@@ -2390,27 +2389,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
@@ -2419,6 +2397,7 @@ Warning messages:
   cities <- "single"
   climate <- "none"
   hetero <- "linear"
+  family <- "gaussian"
 #+end_src
 
 #+RESULTS:
@@ -2427,9 +2406,9 @@ Warning messages:
 
   model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
-  form <- generate_formula(model_table, genus, species, cities, climate, hetero)
+  form <- generate_formula(genus, species, cities, climate, hetero, family)
 
-  nlprior <- generate_prior(genus, species, cities, climate)
+  nlprior <- generate_prior(genus, species, cities, climate, family)
 #+end_src
 
 #+RESULTS:
@@ -2438,8 +2417,8 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000)
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, ".rds"))
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
 **** tangle
