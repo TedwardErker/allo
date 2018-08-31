@@ -1650,7 +1650,7 @@ then functions subset data, generate formula and prior, and fit model.
   library(ggplot2)
   library(gridExtra)
 
-  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
+#  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
 #+end_src
 
@@ -1685,18 +1685,18 @@ The following object is masked from ‘package:dplyr’:
 
 #+begin_src R :tangle allo_functions.R
 
-  generate_formula <- function(model_table, gen, sp, cit, clim, het) {
-      f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
+  ## generate_formula <- function(model_table, gen, sp, cit, clim, het) {
+  ##     f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
 
-      f[] <- gsub("\\vert", "|", f, fixed = T)
+  ##     f[] <- gsub("\\vert", "|", f, fixed = T)
 
 
-      if(f$sigma == "") {
-          bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
-      } else {
-          bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
-      }
-  }
+  ##     if(f$sigma == "") {
+  ##         bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
+  ##     } else {
+  ##         bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
+  ##     }
+  ## }
 
   generate_formula <- function(gen, sp, cit, clim, het, family) {
       if(family == "Gaussian") {
@@ -1765,25 +1765,6 @@ The following object is masked from ‘package:dplyr’:
 
 
   }
-
-
-  ##     b0 ~ 1
-  ##     b0 ~ (1 \vert Species)
-  ##     b0 ~ (1 \vert Genus / Species)
-  ##     b0 ~ (1 \vert Genus / Species)
-  ##     b0 ~ (1 \vert City)
-  ##     b0 ~ t2(Precip, GDD) +  (1 \vert City)
-  ##     b0 ~ t2(Precip, GDD, k = ) +  (1 \vert City)
-  ##     b0 ~ (1 \vert City)
-  ##     b0 ~ t2(Precip, GDD) +  (1 \vert City)
-  ##     b0 ~ (1 \vert City) + (1 \vert Genus / Species)
-  ##     b0 ~ (1 \vert City) + (1 \vert Genus / Species)
-  ##     b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species)
-  ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
-  ##     b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species)
-  ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
-  ##     b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)
-
 
   generate_prior <- function (gen, sp, cit, clim, fam) {
       if(fam == "Gaussian") {
@@ -1862,13 +1843,12 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
-: Permission denied, please try again.
 : erker@krusty's password:
 : building file list ... done
 : allo_functions.R
 :
-: sent 1110 bytes  received 60 bytes  30.39 bytes/sec
-: total size is 5024  speedup is 4.29
+: sent 1076 bytes  received 90 bytes  259.11 bytes/sec
+: total size is 5258  speedup is 4.51
 : You have new mail in /var/mail/erker
 
 
@@ -1926,6 +1906,38 @@ beta called rate
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :END:
+**** libraries and functions
+#+begin_src R
+  library(dplyr)
+  library(brms)
+  source("allo_functions.R")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Want to understand how all the pieces fit together? See the R for Data
+Science book: http://r4ds.had.co.nz/
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -1941,8 +1953,6 @@ beta called rate
 #+RESULTS:
 **** generate formula and priors
 #+begin_src R
-
-#  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
   form <- generate_formula(genus, species, cities, climate, hetero, family)
 
@@ -2010,17 +2020,10 @@ beta called rate
 
 **** fit model to real data
 #+begin_src R
-      d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing.rds")
 
-    if(family == "Gaussian") {
-      fam <- gaussian()
-  }
-  if(family == "Gamma") {
-    fam <- Gamma('log')
-  }
-
-  mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = family)
-      saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
 #+end_src
 
 **** tangle
@@ -2028,16 +2031,16 @@ C-c C-v t
 
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
-  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no.R erker@krusty:~/allo/code/
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_no.R
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :
-: sent 483 bytes  received 66 bytes  64.59 bytes/sec
-: total size is 2152  speedup is 3.92
+: sent 524 bytes  received 54 bytes  88.92 bytes/sec
+: total size is 1122  speedup is 1.94
 
 
 **** run on krusty
@@ -2047,7 +2050,216 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no.R &
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R &
+  exit
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results raw
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+erker@krusty's password:
+receiving file list ... done
+genus_none_species_single_cities_single_climate_none_hetero_no.rds
+
+sent 20876 bytes  received 11518907 bytes  923182.64 bytes/sec
+total size is 11609727  speedup is 1.01
+
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+
+#+begin_src R
+mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         sigma ~ 1
+   Data: d (Number of observations: 5548)
+Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 500
+
+Population-Level Effects:
+                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma_Intercept     2.68      0.01     2.66     2.70        438 1.00
+b0_Intercept        1.43      0.10     1.26     1.63        146 1.00
+b1_Intercept        1.40      0.06     1.29     1.51        254 1.00
+b2_Intercept        0.97      0.03     0.92     1.02        140 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+
+
+
+#+begin_example
+ Family: gamma
+  Links: mu = log; shape = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: d (Number of observations: 5548)
+Samples: 4 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 1000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     0.05      0.00     0.05     0.05        330 1.00
+b1_Intercept    28.55      0.39    27.79    29.30        720 1.00
+b2_Intercept     0.48      0.01     0.46     0.50        348 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape     6.11      0.11     5.91     6.31        322 1.01
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png
+  pp_check(mod) +xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+
+*** genus: none;  species: single; cities: single; climate: none; hetero: no; family gaussian
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.R
+:END:
+**** libraries and functions
+#+begin_src R
+  library(dplyr)
+  library(brms)
+  source("allo_functions.R")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Want to understand how all the pieces fit together? See the R for Data
+Science book: http://r4ds.had.co.nz/
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
+
+**** set values
+#+begin_src R
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "no"
+  family <- "gaussian"
+
+#+end_src
+
+#+RESULTS:
+**** generate formula and priors
+#+begin_src R
+
+  form <- generate_formula(genus, species, cities, climate, hetero, family)
+
+  nlprior <- generate_prior(genus, species, cities, climate, family)
+#+end_src
+
+#+RESULTS:
+
+**** fit model to real data
+#+begin_src R
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
+#+end_src
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.R
+:
+: sent 323 bytes  received 54 bytes  58.00 bytes/sec
+: total size is 1125  speedup is 2.98
+
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.R &
   exit
 #+END_SRC
 
