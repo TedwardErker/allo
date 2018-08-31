@@ -2041,7 +2041,6 @@ C-c C-v t
 : sent 524 bytes  received 54 bytes  88.92 bytes/sec
 : total size is 1122  speedup is 1.94
 
-
 **** run on krusty
 
 run from krusty terminal
@@ -2055,17 +2054,9 @@ run from krusty terminal
 
 **** pull back from krusty
 
-#+BEGIN_SRC sh :session a :results raw
-rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
-
-#+RESULTS:
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_single_cities_single_climate_none_hetero_no.rds
-
-sent 20876 bytes  received 11518907 bytes  923182.64 bytes/sec
-total size is 11609727  speedup is 1.01
 
 
 **** diagnostics
@@ -2074,18 +2065,19 @@ total size is 11609727  speedup is 1.01
 :END:
 
 #+begin_src R
-mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
+mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds")
+mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 #+begin_src R
   summary(mod)
@@ -2093,79 +2085,52 @@ mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_h
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1
-         b1 ~ 1
-         b2 ~ 1
-         sigma ~ 1
-   Data: d (Number of observations: 5548)
-Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
-         total post-warmup samples = 500
-
-Population-Level Effects:
-                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.68      0.01     2.66     2.70        438 1.00
-b0_Intercept        1.43      0.10     1.26     1.63        146 1.00
-b1_Intercept        1.40      0.06     1.29     1.51        254 1.00
-b2_Intercept        0.97      0.03     0.92     1.02        140 1.00
-
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).
-#+end_example
-
-
-
-
-#+begin_example
  Family: gamma
   Links: mu = log; shape = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
    Data: d (Number of observations: 5548)
-Samples: 4 chains, each with iter = 500; warmup = 250; thin = 1;
-         total post-warmup samples = 1000
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     0.05      0.00     0.05     0.05        330 1.00
-b1_Intercept    28.55      0.39    27.79    29.30        720 1.00
-b2_Intercept     0.48      0.01     0.46     0.50        348 1.00
+b0_Intercept     4.96      0.06     4.84     5.08        786 1.00
+b1_Intercept     0.29      0.00     0.28     0.29        802 1.00
+b2_Intercept     0.48      0.01     0.46     0.50        735 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     6.11      0.11     5.91     6.31        322 1.01
+shape     6.10      0.11     5.89     6.31       1429 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
   marginal_effects(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
   pp_check(mod) +xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 *** genus: none;  species: single; cities: single; climate: none; hetero: no; family gaussian
 :PROPERTIES:
@@ -2264,17 +2229,17 @@ run from krusty terminal
 
 **** pull back from krusty
 
-#+BEGIN_SRC sh :session a :results raw
-rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no.rds ~/git/allo/models/
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_single_cities_single_climate_none_hetero_no.rds
+: erker@krusty's password:
+: receiving file list ... done
+:
+: sent 16 bytes  received 161 bytes  27.23 bytes/sec
+: total size is 11811795  speedup is 66733.31
 
-sent 20876 bytes  received 11518907 bytes  923182.64 bytes/sec
-total size is 11609727  speedup is 1.01
 
 
 **** diagnostics
@@ -2283,18 +2248,19 @@ total size is 11609727  speedup is 1.01
 :END:
 
 #+begin_src R
-mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no.rds")
+mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.rds")
+mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png]]
 
 #+begin_src R
   summary(mod)
@@ -2303,22 +2269,24 @@ mod <- readRDS("../models/genus_none_species_single_cities_single_climate_none_h
 #+RESULTS:
 #+begin_example
  Family: gaussian
-  Links: mu = identity; sigma = log
+  Links: mu = identity; sigma = identity
 Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
          b0 ~ 1
          b1 ~ 1
          b2 ~ 1
-         sigma ~ 1
    Data: d (Number of observations: 5548)
-Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
-         total post-warmup samples = 500
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
 
 Population-Level Effects:
-                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_Intercept     2.68      0.01     2.66     2.70        438 1.00
-b0_Intercept        1.43      0.10     1.26     1.63        146 1.00
-b1_Intercept        1.40      0.06     1.29     1.51        254 1.00
-b2_Intercept        0.97      0.03     0.92     1.02        140 1.00
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.45      0.10     1.29     1.68        845 1.00
+b1_Intercept     1.42      0.06     1.31     1.54       1063 1.00
+b2_Intercept     0.96      0.02     0.91     1.00        901 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma    14.54      0.14    14.27    14.81       1318 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -2354,28 +2322,33 @@ is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png
   marginal_effects(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png
   pp_check(mod) +xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no.png]]
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian.png]]
 
+*** compare gamma to gaussian
+#+begin_src R
+  loo_res <- loo(mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma,
+                 mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_gaussian)
+#+end_src
 *** genus: none;  species: single; cities: single; climate: none; hetero: linear; family gaussian
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_linear_family_gaussian.R
@@ -2389,6 +2362,27 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -2403,8 +2397,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 **** generate formula and priors
 #+begin_src R
-
-  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
   form <- generate_formula(genus, species, cities, climate, hetero, family)
 
