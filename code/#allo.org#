@@ -2784,7 +2784,7 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 4000, family = family)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -2819,24 +2819,18 @@ run from krusty terminal
 
 **** pull back from krusty
 
-#+BEGIN_SRC sh :session a :results raw
+#+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.rds ~/git/allo/models/
 #+END_SRC
 
-#+RESULTS:
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.rds
-
-sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
-total size is 12029334  speedup is 1.01
 
 **** diagnostics
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.rds")
+mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian <- readRDS("~/git/allo/models/genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.rds")
+mod <- mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian
 #+end_src
 
 #+RESULTS:
@@ -2855,38 +2849,40 @@ mod <- readRDS("~/git/allo/models/genus_none_species_many_cities_single_climate_
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+ Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2)) 
          b0 ~ (1 | Species)
          b1 ~ (1 | Species)
          b2 ~ (1 | Species)
-   Data: d (Number of observations: 2272)
+   Data: d (Number of observations: 5548) 
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
-Group-Level Effects:
-~Species (Number of levels: 10)
+Group-Level Effects: 
+~Species (Number of levels: 25) 
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.33      0.14     0.15     0.66       1668 1.00
-sd(b1_Intercept)     0.49      0.18     0.23     0.94       1218 1.00
-sd(b2_Intercept)     0.12      0.05     0.05     0.24       1267 1.01
+sd(b0_Intercept)     0.72      0.26     0.33     1.30          6 1.22
+sd(b1_Intercept)     0.64      0.18     0.36     1.06         19 1.06
+sd(b2_Intercept)     0.23      0.04     0.17     0.33       1446 1.01
 
-Population-Level Effects:
+Population-Level Effects: 
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.27      0.16     1.01     1.63       1345 1.00
-b1_Intercept     1.41      0.19     1.06     1.83       1920 1.00
-b2_Intercept     1.07      0.05     0.95     1.16       1868 1.00
+b0_Intercept     1.47      0.22     1.10     1.94          6 1.21
+b1_Intercept     1.39      0.15     1.11     1.71       1575 1.00
+b2_Intercept     1.00      0.06     0.89     1.13          6 1.22
 
-Family Specific Parameters:
+Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma    12.11      0.19    11.75    12.48       4000 1.00
+sigma    12.35      0.12    12.11    12.59       4000 1.00
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 10 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results! 
+We recommend running more iterations and/or setting stronger priors. 
+2: There were 1 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
@@ -2926,7 +2922,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.png]]
 
-*** TODO genus: none;  species: many; cities: single; climate: none; hetero: no; family: gamma
+*** genus: none;  species: many; cities: single; climate: none; hetero: no; family: gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
 :END:
@@ -3026,20 +3022,20 @@ run from krusty terminal
 rsync -avz erker@krusty:~/allo/models/genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
 
-
-erker@krusty's password:
-receiving file list ... done
-genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds
-
-sent 20666 bytes  received 11936322 bytes  2173997.82 bytes/sec
-total size is 12029334  speedup is 1.01
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+:
+: sent 16 bytes  received 156 bytes  18.11 bytes/sec
+: total size is 17134696  speedup is 99620.33
 
 **** diagnostics
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds")
+mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds")
+mod <- mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma
 #+end_src
 
 #+RESULTS:
@@ -3058,39 +3054,36 @@ mod <- readRDS("~/git/allo/models/genus_none_species_many_cities_single_climate_
 
 #+RESULTS:
 #+begin_example
- Family: gaussian
-  Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+ Family: gamma
+  Links: mu = log; shape = identity
+Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
          b0 ~ (1 | Species)
          b1 ~ (1 | Species)
          b2 ~ (1 | Species)
-   Data: d (Number of observations: 2272)
+   Data: d (Number of observations: 5548)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
 Group-Level Effects:
-~Species (Number of levels: 10)
+~Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.33      0.14     0.15     0.66       1668 1.00
-sd(b1_Intercept)     0.49      0.18     0.23     0.94       1218 1.00
-sd(b2_Intercept)     0.12      0.05     0.05     0.24       1267 1.01
+sd(b0_Intercept)     0.45      0.08     0.32     0.64       1309 1.00
+sd(b1_Intercept)     0.06      0.02     0.04     0.10        834 1.01
+sd(b2_Intercept)     0.07      0.02     0.04     0.12        917 1.01
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.27      0.16     1.01     1.63       1345 1.00
-b1_Intercept     1.41      0.19     1.06     1.83       1920 1.00
-b2_Intercept     1.07      0.05     0.95     1.16       1868 1.00
+b0_Intercept     4.70      0.10     4.50     4.92       1000 1.00
+b1_Intercept     0.29      0.01     0.26     0.32        617 1.02
+b2_Intercept     0.54      0.02     0.50     0.57       1486 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma    12.11      0.19    11.75    12.48       4000 1.00
+shape     7.41      0.14     7.15     7.68       4000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 10 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png
@@ -3108,22 +3101,22 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/marginal_effects_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png :width 800
-  cond <- data.frame(Species = unique(d$Species))
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png :width 600 :height 600
+  cond <- data.frame(Species = unique(mod$data$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
   ggplot(me$AGE) +
       geom_line(aes(x = AGE, y = estimate__)) +
       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-      geom_point(data = d, aes(x = AGE, y = DBH), alpha = .3) +
-      facet_wrap(~Species, nrow = 2)
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), alpha = .3) +
+      facet_wrap(~Species, nrow = 5)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png
-  pp_check(mod)
+  pp_check(mod) +xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
@@ -3186,10 +3179,10 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password: 
+: erker@krusty's password:
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.R
-: 
+:
 : sent 660 bytes  received 42 bytes  82.59 bytes/sec
 : total size is 1127  speedup is 1.61
 
