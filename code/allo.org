@@ -1574,10 +1574,68 @@ are correlated.  I wonder if I could include that information in the prior?
 df <- data.frame(AGE, DBH)
 
 
-  mod <- brm(form, chains = 2, cores = 2, data = df, init_r = .3, prior = nlprior, iter = 500, family = family)
+  mod <- brm(form, chains = 2, cores = 2, data = df, init_r = .3, prior = nlprior, iter = 300, family = family)
 #+end_src
 
 #+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.000643 seconds
+1000 transitions using 10 leapfrog steps per transition would take 6.43 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 300 [  0%]  (Warmup)
+Iteration:  30 / 300 [ 10%]  (Warmup)
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000612 seconds
+1000 transitions using 10 leapfrog steps per transition would take 6.12 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 300 [  0%]  (Warmup)
+Iteration:  30 / 300 [ 10%]  (Warmup)
+Iteration:  60 / 300 [ 20%]  (Warmup)
+Iteration:  90 / 300 [ 30%]  (Warmup)
+Iteration: 120 / 300 [ 40%]  (Warmup)
+Iteration:  60 / 300 [ 20%]  (Warmup)
+Iteration: 150 / 300 [ 50%]  (Warmup)
+Iteration: 151 / 300 [ 50%]  (Sampling)
+Iteration: 180 / 300 [ 60%]  (Sampling)
+Iteration: 210 / 300 [ 70%]  (Sampling)
+Iteration: 240 / 300 [ 80%]  (Sampling)
+Iteration: 270 / 300 [ 90%]  (Sampling)
+Iteration: 300 / 300 [100%]  (Sampling)
+
+ Elapsed Time: 4.46588 seconds (Warm-up)
+               0.692581 seconds (Sampling)
+               5.15846 seconds (Total)
+
+Iteration:  90 / 300 [ 30%]  (Warmup)
+Iteration: 120 / 300 [ 40%]  (Warmup)
+Iteration: 150 / 300 [ 50%]  (Warmup)
+Iteration: 151 / 300 [ 50%]  (Sampling)
+Iteration: 180 / 300 [ 60%]  (Sampling)
+Iteration: 210 / 300 [ 70%]  (Sampling)
+Iteration: 240 / 300 [ 80%]  (Sampling)
+Iteration: 270 / 300 [ 90%]  (Sampling)
+Iteration: 300 / 300 [100%]  (Sampling)
+
+ Elapsed Time: 6.47648 seconds (Warm-up)
+               0.713819 seconds (Sampling)
+               7.1903 seconds (Total)
+
+Warning messages:
+1: There were 92 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+2: Examine the pairs() plot to diagnose sampling problems
+#+end_example
 
 *** TODO all the models  model_table  MAKE SURE MY PRIORS ARE CORRECT.
 
@@ -1712,7 +1770,7 @@ The following object is masked from ‘package:dplyr’:
           }
       }
       if (family == "Gamma") {
-          data_form <- formula(DBH ~ b0 * (1 - exp(-(b1) * AGE ^ b2)))
+          data_form <- formula(DBH ~ b0 * (1 - exp(-(b1*10) * AGE ^ (b2*10))))
           if (het == "no") {
               v_form <- formula(shape ~ 1)
           }
@@ -1904,7 +1962,7 @@ beta called rate
 
 #+RESULTS:
 [[file:../figs/ttest.png]]
-*** CAN I DO IDENTITY LINK WITH GAMMA FAMILY?????
+
 *** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
@@ -2937,29 +2995,6 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   source("allo_functions.R")
 
 #+end_src
-
-#+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
