@@ -1712,7 +1712,7 @@ The following object is masked from ‘package:dplyr’:
           }
       }
       if (family == "Gamma") {
-          data_form <- formula(DBH ~ b0 * (1 - exp(-(b1) * AGE ^ b2)))
+          data_form <- formula(DBH ~ b0 * (1 - exp(-(b1*10) * AGE ^ (b2*10))))
           if (het == "no") {
               v_form <- formula(shape ~ 1)
           }
@@ -1904,7 +1904,7 @@ beta called rate
 
 #+RESULTS:
 [[file:../figs/ttest.png]]
-*** CAN I DO IDENTITY LINK WITH GAMMA FAMILY?????
+
 *** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
@@ -2937,29 +2937,6 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   source("allo_functions.R")
 
 #+end_src
-
-#+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
