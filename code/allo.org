@@ -3610,6 +3610,27 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -3688,7 +3709,8 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.rds")
+mod_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.rds")
+mod <- mod_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma
 #+end_src
 
 #+RESULTS:
@@ -3808,7 +3830,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
-  pp_check(mod)
+   pp_check(mod) + xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
