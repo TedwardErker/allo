@@ -26,7 +26,7 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
         }
     }
     if (family == "Gamma") {
-        data_form <- formula(DBH ~ b0 * (1 - exp(-(b1) * AGE ^ b2)))
+        data_form <- formula(DBH ~ b0 * (1 - exp(-(b1*10) * AGE ^ (b2*10))))
         if (het == "no") {
             v_form <- formula(shape ~ 1)
         }

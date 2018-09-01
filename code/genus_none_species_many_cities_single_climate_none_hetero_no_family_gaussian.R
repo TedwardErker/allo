@@ -25,3 +25,7 @@ d <- readRDS("../data/age_dbh_testing.rds")
 mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 4000, family = family)
 saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## fit model to real data:1 ends here
+
+## [[file:~/git/allo/code/allo.org::*run%20on%20krusty][run on krusty:2]]
+cat genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.Rout
+## run on krusty:2 ends here
