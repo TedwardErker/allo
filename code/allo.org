@@ -3701,8 +3701,9 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 : receiving file list ... done
 : genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.rds
 :
-: sent 32978 bytes  received 65335855 bytes  3352247.85 bytes/sec
-: total size is 65456067  speedup is 1.00
+: sent 56689 bytes  received 100644316 bytes  3098492.46 bytes/sec
+: total size is 100748798  speedup is 1.00
+: You have new mail in /var/mail/erker
 
 **** diagnostics
 :PROPERTIES:
@@ -3736,40 +3737,40 @@ Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
-Samples: 6 chains, each with iter = 6000; warmup = 3000; thin = 1;
-         total post-warmup samples = 18000
+Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
+         total post-warmup samples = 30000
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.52      0.16     0.29     0.91         26 1.06
-sd(b1_Intercept)     0.05      0.01     0.03     0.07        106 1.02
-sd(b2_Intercept)     0.09      0.02     0.06     0.13       8005 1.00
+sd(b0_Intercept)     0.50      0.14     0.28     0.85      13468 1.00
+sd(b1_Intercept)     0.05      0.01     0.03     0.07         25 1.06
+sd(b2_Intercept)     0.08      0.02     0.04     0.13         14 1.12
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.47      0.39     0.01     1.22         23 1.08
-sd(b1_Intercept)     0.04      0.01     0.01     0.07         13 1.13
-sd(b2_Intercept)     0.06      0.03     0.01     0.12         14 1.12
+sd(b0_Intercept)     0.53      0.39     0.01     1.26       1526 1.01
+sd(b1_Intercept)     0.04      0.02     0.01     0.08         13 1.13
+sd(b2_Intercept)     0.06      0.03     0.00     0.12         27 1.06
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.52      0.24     0.19     1.01        467 1.03
-sd(b1_Intercept)     0.01      0.01     0.00     0.04       2541 1.00
-sd(b2_Intercept)     0.04      0.02     0.00     0.09         12 1.14
+sd(b0_Intercept)     0.53      0.25     0.18     1.02        167 1.02
+sd(b1_Intercept)     0.02      0.01     0.00     0.04         13 1.13
+sd(b2_Intercept)     0.05      0.02     0.01     0.09        120 1.02
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      5.56      0.35     4.86     6.24          8 1.26
-b0_Precip         0.67      0.36     0.06     1.44      11466 1.00
-b0_GDD            0.30      0.16     0.01     0.60          6 1.38
-b0_Precip:GDD     0.31      0.21     0.02     0.80         38 1.04
-b1_Intercept      0.27      0.02     0.23     0.30         72 1.03
-b2_Intercept      0.46      0.04     0.39     0.54          9 1.19
+b0_Intercept      5.56      0.37     4.77     6.25          7 1.29
+b0_Precip         0.57      0.37     0.02     1.37         10 1.17
+b0_GDD            0.30      0.16     0.00     0.60          5 1.50
+b0_Precip:GDD     0.31      0.21     0.02     0.78         29 1.05
+b1_Intercept      0.27      0.02     0.23     0.31         60 1.03
+b2_Intercept      0.46      0.04     0.39     0.54         10 1.18
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     9.43      0.18     9.08     9.78      18000 1.01
+shape     9.44      0.18     9.09     9.78      30000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -3777,7 +3778,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning messages:
 1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
 We recommend running more iterations and/or setting stronger priors.
-2: There were 107 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+2: There were 31 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
