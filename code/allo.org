@@ -2783,7 +2783,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
 
-*** genus: none;  species: single; cities: single; climate: none; hetero: sqrt; family: gaussian
+*** NOT TRIED YET genus: none;  species: single; cities: single; climate: none; hetero: sqrt; family: gaussian
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.R
 :END:
@@ -6900,3 +6900,20 @@ Example 3 in ... cites ... who mention that the ... is right skewed
 https://journal.r-project.org/archive/2018/RJ-2018-017/RJ-2018-017.pdf
 
 https://magesblog.com/post/2015-11-10-hierarchical-loss-reserving-with-stan/
+
+
+#+begin_src R
+url <- paste0("https://raw.githubusercontent.com/mages/",
+"diesunddas/master/Data/ClarkTriangle.csv")
+loss <- read.csv(url)
+head(loss)
+#+end_src
+
+#+RESULTS:
+:     AY dev      cum premium
+: 1 1991   6  357.848   10000
+: 2 1991  18 1124.788   10000
+: 3 1991  30 1735.330   10000
+: 4 1991  42 2182.708   10000
+: 5 1991  54 2745.596   10000
+: 6 1991  66 3319.994   10000

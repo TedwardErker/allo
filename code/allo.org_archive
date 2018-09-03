@@ -6227,3 +6227,68 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [2018-08-27 Mon]
 this looks good.  it has everthing but the heteroskedasticity.  I need
 to include that.  I switched to CDD and things improved.
+
+* test model on generated data
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-03 Mon 14:08
+:ARCHIVE_FILE: ~/git/allo/code/allo.org
+:ARCHIVE_OLPATH: Methods/Modelling/genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
+:ARCHIVE_CATEGORY: allo
+:ARCHIVE_ITAGS: work allo
+:END:
+#+begin_src R :tangle no
+  n <- 100
+  b0 <- 1.2
+  b1 <- 2
+  b2 <- 1
+  sigma <- 5
+
+
+  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+                                          #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+  x <- cumsum(rep((150 - 0) / n, n))
+  y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
+
+  dt <- data.frame(x, y)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png :tangle no
+  ggplot(dt, aes(x = x, y = y)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png]]
+
+#+begin_src R :tangle no
+  m <- brm(form, chains = 1, cores = 1, data = dt, prior = nlprior, iter = 500)
+#+end_src
+
+#+RESULTS:
+: Error: The following variables are missing in 'data':
+: 'DBH', 'AGE'
+
+#+begin_src R :tangle no
+  summary(m)
+#+end_src
+
+
+#+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png :tangle no
+  plot(m)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png :tangle no
+  marginal_effects(m, points = T)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png :tangle no
+  pairs(m)
+#+end_src
+
+#+begin_src R :tangle no
+                                          #standata(m)
+                                          #stancode(m)
+#+end_src
+
