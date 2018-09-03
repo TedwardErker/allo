@@ -1557,26 +1557,39 @@ are correlated.  I wonder if I could include that information in the prior?
 [[file:../figs/w5.png]]
 *** a look at gamma
 #+begin_src R
-library(brms)
-source("allo_functions.R")
-    n <- 100
-    b0 <- 1.2
-    b1 <- 2
-    b2 <- 1
-    shape <- 20
+    library(brms)
+    source("allo_functions.R")
 
-    w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-                                              #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
-
-    AGE <- runif(n , 0, 150)
-
-    mu <- w(b0,b1,b2, AGE)
-
-  DBH <- rgamma(n, rate = shape / mu, shape = shape)
-df <- data.frame(AGE, DBH)
+    genus <- "none"
+    species <- "single"
+    cities <- "single"
+    climate <- "none"
+    hetero <- "no"
+    family <- "Gamma"
 
 
-  mod <- brm(form, chains = 2, cores = 2, data = df, init_r = .3, prior = nlprior, iter = 300, family = family)
+    form <- generate_formula(genus, species, cities, climate, hetero, family)
+
+    nlprior <- generate_prior(genus, species, cities, climate, family)
+
+  n <- 100
+        b0 <- 1.2
+        b1 <- 2
+        b2 <- 1
+        shape <- 20
+
+        w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
+                                                  #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+
+        AGE <- runif(n , 0, 150)
+
+        mu <- w(b0,b1,b2, AGE)
+
+      DBH <- rgamma(n, rate = shape / mu, shape = shape)
+    df <- data.frame(AGE, DBH)
+
+
+  mod <- brm(form, chains = 2, cores = 2, data = df, init_r = .3, prior = nlprior, iter = 1000, family = Gamma(link = "identity"))
 #+end_src
 
 #+RESULTS:
@@ -1586,58 +1599,91 @@ Start sampling
 
 SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
 
-Gradient evaluation took 0.000643 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.43 seconds.
+Gradient evaluation took 0.000672 seconds
+1000 transitions using 10 leapfrog steps per transition would take 6.72 seconds.
 Adjust your expectations accordingly!
 
 
-Iteration:   1 / 300 [  0%]  (Warmup)
-Iteration:  30 / 300 [ 10%]  (Warmup)
+Iteration:   1 / 1000 [  0%]  (Warmup)
 
 SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
 
-Gradient evaluation took 0.000612 seconds
-1000 transitions using 10 leapfrog steps per transition would take 6.12 seconds.
+Gradient evaluation took 0.00056 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.6 seconds.
 Adjust your expectations accordingly!
 
 
-Iteration:   1 / 300 [  0%]  (Warmup)
-Iteration:  30 / 300 [ 10%]  (Warmup)
-Iteration:  60 / 300 [ 20%]  (Warmup)
-Iteration:  90 / 300 [ 30%]  (Warmup)
-Iteration: 120 / 300 [ 40%]  (Warmup)
-Iteration:  60 / 300 [ 20%]  (Warmup)
-Iteration: 150 / 300 [ 50%]  (Warmup)
-Iteration: 151 / 300 [ 50%]  (Sampling)
-Iteration: 180 / 300 [ 60%]  (Sampling)
-Iteration: 210 / 300 [ 70%]  (Sampling)
-Iteration: 240 / 300 [ 80%]  (Sampling)
-Iteration: 270 / 300 [ 90%]  (Sampling)
-Iteration: 300 / 300 [100%]  (Sampling)
+Iteration:   1 / 1000 [  0%]  (Warmup)
+Iteration: 100 / 1000 [ 10%]  (Warmup)
+Iteration: 100 / 1000 [ 10%]  (Warmup)
+Iteration: 200 / 1000 [ 20%]  (Warmup)
+Iteration: 200 / 1000 [ 20%]  (Warmup)
+Iteration: 300 / 1000 [ 30%]  (Warmup)
+Iteration: 300 / 1000 [ 30%]  (Warmup)
+Iteration: 400 / 1000 [ 40%]  (Warmup)
+Iteration: 400 / 1000 [ 40%]  (Warmup)
+Iteration: 500 / 1000 [ 50%]  (Warmup)
+Iteration: 501 / 1000 [ 50%]  (Sampling)
+Iteration: 500 / 1000 [ 50%]  (Warmup)
+Iteration: 501 / 1000 [ 50%]  (Sampling)
+Iteration: 600 / 1000 [ 60%]  (Sampling)
+Iteration: 700 / 1000 [ 70%]  (Sampling)
+Iteration: 600 / 1000 [ 60%]  (Sampling)
+Iteration: 800 / 1000 [ 80%]  (Sampling)
+Iteration: 700 / 1000 [ 70%]  (Sampling)
+Iteration: 900 / 1000 [ 90%]  (Sampling)
+Iteration: 800 / 1000 [ 80%]  (Sampling)
+Iteration: 1000 / 1000 [100%]  (Sampling)
 
- Elapsed Time: 4.46588 seconds (Warm-up)
-               0.692581 seconds (Sampling)
-               5.15846 seconds (Total)
+ Elapsed Time: 5.63711 seconds (Warm-up)
+               4.44767 seconds (Sampling)
+               10.0848 seconds (Total)
 
-Iteration:  90 / 300 [ 30%]  (Warmup)
-Iteration: 120 / 300 [ 40%]  (Warmup)
-Iteration: 150 / 300 [ 50%]  (Warmup)
-Iteration: 151 / 300 [ 50%]  (Sampling)
-Iteration: 180 / 300 [ 60%]  (Sampling)
-Iteration: 210 / 300 [ 70%]  (Sampling)
-Iteration: 240 / 300 [ 80%]  (Sampling)
-Iteration: 270 / 300 [ 90%]  (Sampling)
-Iteration: 300 / 300 [100%]  (Sampling)
+Iteration: 900 / 1000 [ 90%]  (Sampling)
+Iteration: 1000 / 1000 [100%]  (Sampling)
 
- Elapsed Time: 6.47648 seconds (Warm-up)
-               0.713819 seconds (Sampling)
-               7.1903 seconds (Total)
-
-Warning messages:
-1: There were 92 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
-http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-2: Examine the pairs() plot to diagnose sampling problems
+ Elapsed Time: 5.94742 seconds (Warm-up)
+               4.96327 seconds (Sampling)
+               10.9107 seconds (Total)
 #+end_example
+
+#+begin_src R
+mod
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^(b2)))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+   Data: df (Number of observations: 100)
+Samples: 2 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 1000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     1.17      0.09     1.04     1.38        397 1.00
+b1_Intercept     2.19      0.25     1.74     2.76        453 1.00
+b2_Intercept     0.97      0.05     0.87     1.06        442 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape    24.82      3.40    18.66    31.75        458 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/test_gamma.png
+pp_check(mod) + xlim(c(-10,200))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/test_gamma.png]]
 
 *** TODO all the models  model_table  MAKE SURE MY PRIORS ARE CORRECT.
 
@@ -1772,7 +1818,7 @@ The following object is masked from ‘package:dplyr’:
           }
       }
       if (family == "Gamma") {
-          data_form <- formula(DBH ~ b0 * (1 - exp(-(b1*10) * AGE ^ (b2*10))))
+          data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ (b2))))
           if (het == "no") {
               v_form <- formula(shape ~ 1)
           }
