@@ -18,7 +18,7 @@ form <- generate_formula(genus, species, cities, climate, hetero, family)
 
 nlprior <- generate_prior(genus, species, cities, climate, family)
 
-        nlprior <- c(prior(gamma(7, 3.5), nlpar = "b1",lb = 0),
+        nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
                      prior(gamma(7, 7), nlpar = "b1",lb = 0),
                      prior(gamma(8, 8), nlpar = "b2", lb = 0),
                      prior(gamma(8, 8), nlpar = "b3",lb = 0),

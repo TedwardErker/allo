@@ -362,6 +362,9 @@ In their dataset, AGE refers to years after planting.  Not true age.
 This adds some noise and is the reason why in the dataset trees can
 have significant dbh at "age" 0.
 
+"AGE" it not actually known.  A modelling extension could incorporate
+that uncertainty.  How would it be down?  multivariate?
+
 *** Species
 **** taxonomy
 Nesting of taxonomy.
@@ -1852,6 +1855,7 @@ then functions subset data, generate formula and prior, and fit model.
                   b3_form <- formula(b3 ~ (1 | Genus/Species))
               }
               if (cit == "many") {
+                  b0_form <- formula(b0 ~ 1)
                   b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
                   b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
                   b3_form <- formula(b3 ~ (1 | City) + (1 | Genus/Species))
@@ -1863,9 +1867,9 @@ then functions subset data, generate formula and prior, and fit model.
       }
 
       if (het == "no") {
-          f <- bf(data_form, b1_form, b2_form, b3_form, nl = T)
+          f <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
       } else {
-          f <- bf(data_form, b1_form, b2_form, b3_form, v_form, nl = T)
+          f <- bf(data_form, b0_form, b1_form, b2_form, b3_form, v_form, nl = T)
       }
       return(f)
 
@@ -2033,27 +2037,6 @@ beta called rate
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
