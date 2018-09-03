@@ -2071,7 +2071,7 @@ beta called rate
           nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),       
                        prior(gamma(8, 8), nlpar = "b1", lb = 0),      
                        prior(gamma(8, 8), nlpar = "b2",lb = 0),
-                       prior(gamma(7, .3), class = "shape"))
+                       prior(gamma(20, 1), class = "shape"))
 
 #+end_src
 
@@ -2094,810 +2094,810 @@ Start sampling
 SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 
 SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
-
-Rejecting initial value:
-  Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 
 Initialization between (-0.3, 0.3) failed after 100 attempts. 
  Try specifying initial values, reducing ranges of constrained values, or reparameterizing the model.
-[1]Rejecting initial value:
+Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
- "Error in sampler$call_sampler(args_list[[i]]) : Initialization failed."
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
+[1] "Error in sampler$call_sampler(args_list[[i]]) : Initialization failed."
 error occurred during calling the sampler; sampling not done
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 Rejecting initial value:
   Error evaluating the log probability at the initial value.
-Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d379567b6_file930d65dd99b1' at line 46)
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is inf, but must be finite!  (in 'model930d488bdd67_file930dc6d01b8' at line 46)
 
 
 Initialization between (-0.3, 0.3) failed after 100 attempts. 
@@ -7530,3 +7530,9 @@ Questions:
 #+RESULTS:
 | simple.stan |
 
+* model loss function with gamma family
+
+Example 3 in ... cites ... who mention that the ... is right skewed
+https://journal.r-project.org/archive/2018/RJ-2018-017/RJ-2018-017.pdf
+
+https://magesblog.com/post/2015-11-10-hierarchical-loss-reserving-with-stan/
