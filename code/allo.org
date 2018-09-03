@@ -1817,11 +1817,13 @@ then functions subset data, generate formula and prior, and fit model.
       }
       if(sp == "single") {
           if(cit == "single") {
+              b0_form <- formula(b0 ~ 1)
               b1_form <- formula(b1 ~ 1)
               b2_form <- formula(b2 ~ 1)
               b3_form <- formula(b3 ~ 1)
           }
           if (cit == "many") {
+              b0_form <- formula(b0 ~ 1)
               b1_form <- formula(b1 ~ (1 | City))
               b2_form <- formula(b2 ~ (1 | City))
               b3_form <- formula(b3 ~ (1 | City))
@@ -1830,11 +1832,13 @@ then functions subset data, generate formula and prior, and fit model.
       if (sp == "many") {
           if (gen == "none") {
               if(cit == "single") {
+                  b0_form <- formula(b0 ~ 1)
                   b1_form <- formula(b1 ~ (1 | Species))
                   b2_form <- formula(b2 ~ (1 | Species))
                   b3_form <- formula(b3 ~ (1 | Species))
               }
               if (cit == "many") {
+                  b0_form <- formula(b0 ~ 1)
                   b1_form <- formula(b1 ~ (1 | City) + (1 | Species))
                   b2_form <- formula(b2 ~ (1 | City) + (1 | Species))
                   b3_form <- formula(b3 ~ (1 | City) + (1 | Species))
@@ -1842,6 +1846,7 @@ then functions subset data, generate formula and prior, and fit model.
           }
           if (gen == "many") {
               if(cit == "single") {
+                  b0_form <- formula(b0 ~ 1)
                   b1_form <- formula(b1 ~ (1 | Genus/Species))
                   b2_form <- formula(b2 ~ (1 | Genus/Species))
                   b3_form <- formula(b3 ~ (1 | Genus/Species))
@@ -1869,7 +1874,8 @@ then functions subset data, generate formula and prior, and fit model.
 
   generate_prior <- function (gen, sp, cit, clim, fam) {
       if(fam == "gaussian") {
-          nlprior <- c(prior(gamma(7, 7), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
+          nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
+                       prior(gamma(7, 7), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
                        prior(gamma(8, 8), nlpar = "b2", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
                        prior(gamma(8, 8), nlpar = "b3",lb = 0))
 
@@ -1901,9 +1907,10 @@ then functions subset data, generate formula and prior, and fit model.
       }
 
       if(fam == "Gamma") {
-          nlprior <- c(prior(gamma(1, .2), nlpar = "b1",lb = 0),
-                       prior(gamma(1, .2), nlpar = "b2", lb = 0),
-                       prior(gamma(1, .2), nlpar = "b3",lb = 0))
+          nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
+                       prior(gamma(7, 7), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
+                       prior(gamma(8, 8), nlpar = "b2", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
+                       prior(gamma(8, 8), nlpar = "b3",lb = 0))
 
           if("many" %in% c(gen, sp, cit)) {
 
@@ -2026,6 +2033,27 @@ beta called rate
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -2042,14 +2070,15 @@ beta called rate
 **** generate formula and priors
 #+begin_src R
 
-  form <- generate_formula(genus, species, cities, climate, hetero, family)
+    form <- generate_formula(genus, species, cities, climate, hetero, family)
 
-  nlprior <- generate_prior(genus, species, cities, climate, family)
+    nlprior <- generate_prior(genus, species, cities, climate, family)
 
-          nlprior <- c(prior(gamma(7, 7), nlpar = "b1",lb = 0),
-                       prior(gamma(8, 8), nlpar = "b2", lb = 0),
-                       prior(gamma(8, 8), nlpar = "b3",lb = 0),
-                       prior(gamma(20, 1), class = "shape"))
+            nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
+                         prior(gamma(7, 7), nlpar = "b1",lb = 0),
+                         prior(gamma(8, 8), nlpar = "b2", lb = 0),
+                         prior(gamma(8, 8), nlpar = "b3",lb = 0),
+                         prior(gamma(20, 1), class = "shape"))
 
 #+end_src
 
@@ -2057,12 +2086,18 @@ beta called rate
 
 **** fit model to real data
 #+begin_src R
-  d <- readRDS("../data/age_dbh_testing.rds")
+    d <- readRDS("../data/age_dbh_testing.rds")
 
-#  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma("identity"))
-  mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = Gamma("identity"))
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
+  #  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma("identity"))
+    mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = Gamma("identity"))
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
 #+end_src
+
+#+RESULTS:
+: Error: The following variables are missing in 'data':
+: 'b0'
+: Error in saveRDS(mod, paste0("../models/genus_", genus, "_species_", species,  :
+:   object 'mod' not found
 
 **** tangle
 C-c C-v t

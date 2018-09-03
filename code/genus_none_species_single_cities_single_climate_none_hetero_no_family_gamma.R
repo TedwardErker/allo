@@ -17,11 +17,18 @@ family <- "Gamma"
 form <- generate_formula(genus, species, cities, climate, hetero, family)
 
 nlprior <- generate_prior(genus, species, cities, climate, family)
+
+        nlprior <- c(prior(gamma(7, 3.5), nlpar = "b1",lb = 0),
+                     prior(gamma(7, 7), nlpar = "b1",lb = 0),
+                     prior(gamma(8, 8), nlpar = "b2", lb = 0),
+                     prior(gamma(8, 8), nlpar = "b3",lb = 0),
+                     prior(gamma(20, 1), class = "shape"))
 ## generate formula and priors:1 ends here
 
 ## [[file:~/git/allo/code/allo.org::*fit%20model%20to%20real%20data][fit model to real data:1]]
 d <- readRDS("../data/age_dbh_testing.rds")
 
-mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
-saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
+#  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma("identity"))
+  mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = Gamma("identity"))
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
 ## fit model to real data:1 ends here
