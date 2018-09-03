@@ -358,6 +358,10 @@ repeat measures on the same individuals would help much.
 I wonder if the UFIA would have this eventually and if I could write
 the code to incorporate the data.
 
+In their dataset, AGE refers to years after planting.  Not true age.
+This adds some noise and is the reason why in the dataset trees can
+have significant dbh at "age" 0.
+
 *** Species
 **** taxonomy
 Nesting of taxonomy.
@@ -1443,11 +1447,11 @@ dbh values, impossible
 [[file:../figs/weibull.png]]
 
 range of realistic values:
-b0 : 50 - 250
-b1 : 0.01 - 0.1
-b2 : .5 - 1.5
+b1 : 50 - 250
+b2 : 0.01 - 0.1
+b3 : .5 - 1.5
 
-the higher values of b1 only make sense with lower values of b2.  they
+the higher values of b2 only make sense with lower values of b3.  they
 are correlated.  I wonder if I could include that information in the prior?
 
 
@@ -1573,9 +1577,9 @@ are correlated.  I wonder if I could include that information in the prior?
     nlprior <- generate_prior(genus, species, cities, climate, family)
 
   n <- 100
-        b0 <- 1.2
-        b1 <- 2
-        b2 <- 1
+        b1 <- 1.2
+        b2 <- 2
+        b3 <- 1
         shape <- 40
 
         w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
@@ -1583,7 +1587,7 @@ are correlated.  I wonder if I could include that information in the prior?
 
         AGE <- runif(n , 0, 150)
 
-        mu <- w(b0,b1,b2, AGE)
+        mu <- w(b1,b2,b3, AGE)
 
       DBH <- rgamma(n, rate = shape / mu, shape = shape)
     df <- data.frame(AGE, DBH)
@@ -1669,19 +1673,19 @@ mod
 #+begin_example
  Family: gamma
   Links: mu = identity; shape = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^(b2)))
-         b0 ~ 1
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
    Data: df (Number of observations: 100)
 Samples: 2 chains, each with iter = 1000; warmup = 500; thin = 1;
          total post-warmup samples = 1000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.17      0.09     1.04     1.38        397 1.00
-b1_Intercept     2.19      0.25     1.74     2.76        453 1.00
-b2_Intercept     0.97      0.05     0.87     1.06        442 1.00
+b1_Intercept     1.17      0.09     1.04     1.38        397 1.00
+b2_Intercept     2.19      0.25     1.74     2.76        453 1.00
+b3_Intercept     0.97      0.05     0.87     1.06        442 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -1703,31 +1707,31 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 
 smaller models to build:
 #+name: model_table
-| genus | species | cities | climate  | hetero  | data                                           | b0                                                                 | b1                                              | b2                                              | sigma                 |
+| genus | species | cities | climate  | hetero  | data                                           | b1                                                                 | b2                                              | b3                                              | sigma                 |
 |-------+---------+--------+----------+---------+------------------------------------------------+--------------------------------------------------------------------+-------------------------------------------------+-------------------------------------------------+-----------------------|
-| none  | single  | single | none     | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          |                       |
-| none  | single  | single | none     | linear  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ AGE - 1       |
-| none  | single  | single | none     | smooth2 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 2) |
-| none  | single  | single | none     | smooth3 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 3) |
-| none  | single  | single | none     | smooth5 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 5) |
-| none  | single  | single | none     | smooth7 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 7) |
-| none  | single  | single | none     | smooth8 | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE, k = 8) |
-| none  | single  | single | none     | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ 1                                                             | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ s(AGE)        |
-| none  | many    | single | none     | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Species)                                             | b1 ~ (1 \vert Species)                          | b2 ~ (1 \vert Species)                          |                       |
-| many  | many    | single | none     | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                     | b1 ~ (1 \vert Genus / Species)                  | b2 ~ (1 \vert Genus / Species)                  |                       |
-| many  | many    | single | none     | yes     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert Genus / Species)                                     | b1 ~ (1 \vert Genus / Species)                  | b2 ~ (1 \vert Genus / Species)                  | sigma ~ AGE -1        |
-| none  | single  | many   | none     | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City)                                                | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             |                       |
-| none  | single  | many   | b0       | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City)                             | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             |                       |
-| none  | single  | many   | b0       | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD, k = ) +  (1 \vert City)                       | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             |                       |
-| none  | single  | many   | none     | yes     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City)                                                | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             | sigma ~ AGE -1        |
-| none  | single  | many   | b0       | yes     | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City)                             | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             | sigma ~ AGE -1        |
-| many  | many    | many   | none     | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
-| many  | many    | many   | none     | linear  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
-| many  | many    | many   | b0       | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
-| many  | many    | many   | b0linint | no      | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
-| many  | many    | many   | b0       | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
-| many  | many    | many   | b0linint | smooth  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
-| many  | many    | many   | b0linint | linear  | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
+| none  | single  | single | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          |                       |
+| none  | single  | single | none     | linear  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ AGE - 1       |
+| none  | single  | single | none     | smooth2 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 2) |
+| none  | single  | single | none     | smooth3 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 3) |
+| none  | single  | single | none     | smooth5 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 5) |
+| none  | single  | single | none     | smooth7 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 7) |
+| none  | single  | single | none     | smooth8 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 8) |
+| none  | single  | single | none     | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE)        |
+| none  | many    | single | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert Species)                                             | b2 ~ (1 \vert Species)                          | b3 ~ (1 \vert Species)                          |                       |
+| many  | many    | single | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert Genus / Species)                                     | b2 ~ (1 \vert Genus / Species)                  | b3 ~ (1 \vert Genus / Species)                  |                       |
+| many  | many    | single | none     | yes     | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert Genus / Species)                                     | b2 ~ (1 \vert Genus / Species)                  | b3 ~ (1 \vert Genus / Species)                  | sigma ~ AGE -1        |
+| none  | single  | many   | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City)                                                | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             |                       |
+| none  | single  | many   | b1       | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City)                             | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             |                       |
+| none  | single  | many   | b1       | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD, k = ) +  (1 \vert City)                       | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             |                       |
+| none  | single  | many   | none     | yes     | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City)                                                | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             | sigma ~ AGE -1        |
+| none  | single  | many   | b1       | yes     | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City)                             | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             | sigma ~ AGE -1        |
+| many  | many    | many   | none     | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
+| many  | many    | many   | none     | linear  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
+| many  | many    | many   | b1       | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
+| many  | many    | many   | b1linint | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
+| many  | many    | many   | b1       | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
+| many  | many    | many   | b1linint | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
+| many  | many    | many   | b1linint | linear  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
 
 export the table to ../data/model_table.csv
 
@@ -1746,12 +1750,12 @@ rsync -avz ../data/model_table.csv erker@krusty:~/allo/data/
 build up to the full model, then test relaxing some of the effects on
 the different betas.  Thinking about it, the full model makes the most sense...
 
-| genus | species | cities | climate predictors | heteroskedasticity | data                                           | b0                                                                 | b1                                              | b2                                              | sigma          | formula |
+| genus | species | cities | climate predictors | heteroskedasticity | data                                           | b1                                                                 | b2                                              | b3                                              | sigma          | formula |
 |-------+---------+--------+--------------------+--------------------+------------------------------------------------+--------------------------------------------------------------------+-------------------------------------------------+-------------------------------------------------+----------------+---------|
-| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE -1 |         |
-|       |         |        |                    |                    | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert City)                             | b2 ~ (1 \vert City)                             | sigma ~ AGE -1 |         |
-| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ (1 \vert Genus / Species)                  | b2 ~ (1 \vert Genus / Species)                  | sigma ~ AGE -1 |         |
-| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)) | b0 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b1 ~ 1                                          | b2 ~ 1                                          | sigma ~ AGE -1 |         |
+| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE -1 |         |
+|       |         |        |                    |                    | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             | sigma ~ AGE -1 |         |
+| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert Genus / Species)                  | b3 ~ (1 \vert Genus / Species)                  | sigma ~ AGE -1 |         |
+| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ AGE -1 |         |
 *** Libraries and functions
 
 There are many models.  Some will be quite big and take a long time.
@@ -1763,7 +1767,7 @@ I can generate a script for each model.
 
 each script specifies genus, species, cities, climate, and hetero.
 then functions subset data, generate formula and prior, and fit model.
-
+**** libraries
 #+begin_src R
   library(dplyr)
   library(brms)
@@ -1773,36 +1777,7 @@ then functions subset data, generate formula and prior, and fit model.
 #  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
 #+end_src
-
-#+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-
-Attaching package: ‘gridExtra’
-
-The following object is masked from ‘package:dplyr’:
-
-    combine
-#+end_example
-
+**** functions
 #+begin_src R :tangle allo_functions.R
 
   ## generate_formula <- function(model_table, gen, sp, cit, clim, het) {
@@ -1812,15 +1787,15 @@ The following object is masked from ‘package:dplyr’:
 
 
   ##     if(f$sigma == "") {
-  ##         bf(formula(f$data), formula(f$b0), formula(f$b1), formula(f$b2), nl = T)
+  ##         bf(formula(f$data), formula(f$b1), formula(f$b2), formula(f$b3), nl = T)
   ##     } else {
-  ##         bf(f$data, f$b0, f$b1, f$b2, f$sigma, nl = T)
+  ##         bf(f$data, f$b1, f$b2, f$b3, f$sigma, nl = T)
   ##     }
   ## }
 
   generate_formula <- function(gen, sp, cit, clim, het, family) {
       if(family == "gaussian") {
-          data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
+          data_form <- formula(DBH ~ b0 + 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)))
           if(het == "linear") {
               v_form <- formula(sigma ~ AGE - 1)
           }
@@ -1835,57 +1810,57 @@ The following object is masked from ‘package:dplyr’:
           }
       }
       if (family == "Gamma") {
-          data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ (b2))))
+          data_form <- formula(DBH ~ b0 + 100*b1 * (1 - exp(-(b2/100) * AGE ^ (b3))))
           if (het == "no") {
               v_form <- formula(shape ~ 1)
           }
       }
       if(sp == "single") {
           if(cit == "single") {
-              b0_form <- formula(b0 ~ 1)
               b1_form <- formula(b1 ~ 1)
               b2_form <- formula(b2 ~ 1)
+              b3_form <- formula(b3 ~ 1)
           }
           if (cit == "many") {
-              b0_form <- formula(b0 ~ (1 | City))
               b1_form <- formula(b1 ~ (1 | City))
               b2_form <- formula(b2 ~ (1 | City))
+              b3_form <- formula(b3 ~ (1 | City))
           }
       }
       if (sp == "many") {
           if (gen == "none") {
               if(cit == "single") {
-                  b0_form <- formula(b0 ~ (1 | Species))
                   b1_form <- formula(b1 ~ (1 | Species))
                   b2_form <- formula(b2 ~ (1 | Species))
+                  b3_form <- formula(b3 ~ (1 | Species))
               }
               if (cit == "many") {
-                  b0_form <- formula(b0 ~ (1 | City) + (1 | Species))
                   b1_form <- formula(b1 ~ (1 | City) + (1 | Species))
                   b2_form <- formula(b2 ~ (1 | City) + (1 | Species))
+                  b3_form <- formula(b3 ~ (1 | City) + (1 | Species))
               }
           }
           if (gen == "many") {
               if(cit == "single") {
-                  b0_form <- formula(b0 ~ (1 | Genus/Species))
                   b1_form <- formula(b1 ~ (1 | Genus/Species))
                   b2_form <- formula(b2 ~ (1 | Genus/Species))
+                  b3_form <- formula(b3 ~ (1 | Genus/Species))
               }
               if (cit == "many") {
-                  b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
                   b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
                   b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
-                  if (clim == "b0linint") {
-                      b0_form <- formula(b0 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
+                  b3_form <- formula(b3 ~ (1 | City) + (1 | Genus/Species))
+                  if (clim == "b1linint") {
+                      b1_form <- formula(b1 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
                   }
               }
           }
       }
 
       if (het == "no") {
-          f <- bf(data_form, b0_form, b1_form, b2_form, nl = T)
+          f <- bf(data_form, b1_form, b2_form, b3_form, nl = T)
       } else {
-          f <- bf(data_form, b0_form, b1_form, b2_form, v_form, nl = T)
+          f <- bf(data_form, b1_form, b2_form, b3_form, v_form, nl = T)
       }
       return(f)
 
@@ -1894,22 +1869,22 @@ The following object is masked from ‘package:dplyr’:
 
   generate_prior <- function (gen, sp, cit, clim, fam) {
       if(fam == "gaussian") {
-          nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
-                       prior(gamma(8, 8), nlpar = "b1", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
-                       prior(gamma(8, 8), nlpar = "b2",lb = 0))
+          nlprior <- c(prior(gamma(7, 7), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
+                       prior(gamma(8, 8), nlpar = "b2", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
+                       prior(gamma(8, 8), nlpar = "b3",lb = 0))
 
           if("many" %in% c(gen, sp, cit)) {
 
               nlprior <- c(nlprior,
-                           prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                            prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                           prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b3"))
 
           }
 
-          if(clim == "b0") {
+          if(clim == "b1") {
               nlprior <- c(nlprior,
-                           prior(normal(0,.25), class = "sds", nlpar = "b0"))
+                           prior(normal(0,.25), class = "sds", nlpar = "b1"))
           }
 
           if(hetero == "linear") {
@@ -1926,22 +1901,22 @@ The following object is masked from ‘package:dplyr’:
       }
 
       if(fam == "Gamma") {
-          nlprior <- c(prior(gamma(1, .2), nlpar = "b0",lb = 0),
-                       prior(gamma(1, .2), nlpar = "b1", lb = 0),
-                       prior(gamma(1, .2), nlpar = "b2",lb = 0))
+          nlprior <- c(prior(gamma(1, .2), nlpar = "b1",lb = 0),
+                       prior(gamma(1, .2), nlpar = "b2", lb = 0),
+                       prior(gamma(1, .2), nlpar = "b3",lb = 0))
 
           if("many" %in% c(gen, sp, cit)) {
 
               nlprior <- c(nlprior,
-                           prior(cauchy(0,.1), class = "sd", nlpar = "b0"),
                            prior(cauchy(0,.1), class = "sd", nlpar = "b1"),
-                           prior(cauchy(0,.1), class = "sd", nlpar = "b2"))
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b2"),
+                           prior(cauchy(0,.1), class = "sd", nlpar = "b3"))
 
           }
 
-          if(clim == "b0") {
+          if(clim == "b1") {
               nlprior <- c(nlprior,
-                           prior(normal(0,.25), class = "sds", nlpar = "b0"))
+                           prior(normal(0,.25), class = "sds", nlpar = "b1"))
           }
 
           if(hetero == "linear") {
@@ -2071,9 +2046,9 @@ beta called rate
 
   nlprior <- generate_prior(genus, species, cities, climate, family)
 
-          nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),
-                       prior(gamma(8, 8), nlpar = "b1", lb = 0),
-                       prior(gamma(8, 8), nlpar = "b2",lb = 0),
+          nlprior <- c(prior(gamma(7, 7), nlpar = "b1",lb = 0),
+                       prior(gamma(8, 8), nlpar = "b2", lb = 0),
+                       prior(gamma(8, 8), nlpar = "b3",lb = 0),
                        prior(gamma(20, 1), class = "shape"))
 
 #+end_src
@@ -2151,19 +2126,19 @@ mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_no_family
 #+begin_example
  Family: gamma
   Links: mu = log; shape = identity
-Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
-         b0 ~ 1
+Formula: DBH ~ b1 * (1 - exp(-(b2) * AGE^b3))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
    Data: d (Number of observations: 5548)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     4.96      0.06     4.84     5.08        786 1.00
-b1_Intercept     0.29      0.00     0.28     0.29        802 1.00
-b2_Intercept     0.48      0.01     0.46     0.50        735 1.00
+b1_Intercept     4.96      0.06     4.84     5.08        786 1.00
+b2_Intercept     0.29      0.00     0.28     0.29        802 1.00
+b3_Intercept     0.48      0.01     0.46     0.50        735 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -2334,19 +2309,19 @@ mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_no_family
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
    Data: d (Number of observations: 5548)
 Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 2000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.45      0.10     1.29     1.68        845 1.00
-b1_Intercept     1.42      0.06     1.31     1.54       1063 1.00
-b2_Intercept     0.96      0.02     0.91     1.00        901 1.00
+b1_Intercept     1.45      0.10     1.29     1.68        845 1.00
+b2_Intercept     1.42      0.06     1.31     1.54       1063 1.00
+b3_Intercept     0.96      0.02     0.91     1.00        901 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -2363,19 +2338,19 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+begin_example
  Family: gamma
   Links: mu = log; shape = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
    Data: d (Number of observations: 5548)
 Samples: 4 chains, each with iter = 500; warmup = 250; thin = 1;
          total post-warmup samples = 1000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     0.05      0.00     0.05     0.05        330 1.00
-b1_Intercept    28.55      0.39    27.79    29.30        720 1.00
-b2_Intercept     0.48      0.01     0.46     0.50        348 1.00
+b1_Intercept     0.05      0.00     0.05     0.05        330 1.00
+b2_Intercept    28.55      0.39    27.79    29.30        720 1.00
+b3_Intercept     0.48      0.01     0.46     0.50        348 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -2548,10 +2523,10 @@ mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_linear_fa
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
          sigma ~ AGE - 1
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
@@ -2559,9 +2534,9 @@ Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.90      0.31     1.38     2.56        974 1.01
-b1_Intercept     1.38      0.21     1.01     1.82       1026 1.01
-b2_Intercept     0.87      0.01     0.85     0.89       1098 1.01
+b1_Intercept     1.90      0.31     1.38     2.56        974 1.01
+b2_Intercept     1.38      0.21     1.01     1.82       1026 1.01
+b3_Intercept     0.87      0.01     0.85     0.89       1098 1.01
 sigma_AGE        0.10      0.00     0.10     0.10       5347 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
@@ -2727,10 +2702,10 @@ mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_smooth_fa
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
          sigma ~ s(AGE)
    Data: d (Number of observations: 5548)
 Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
@@ -2743,9 +2718,9 @@ sds(sigma_sAGE_1)     1.73      0.20     1.37     2.15        319 1.00
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma_Intercept     2.46      0.01     2.44     2.48        500 1.00
-b0_Intercept        1.89      0.19     1.60     2.28        246 1.00
-b1_Intercept        1.30      0.10     1.11     1.48        317 1.00
-b2_Intercept        0.89      0.01     0.86     0.92        260 1.01
+b1_Intercept        1.89      0.19     1.60     2.28        246 1.00
+b2_Intercept        1.30      0.10     1.11     1.48        317 1.00
+b3_Intercept        0.89      0.01     0.86     0.92        260 1.01
 sigma_sAGE_1        1.52      0.17     1.20     1.82        249 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
@@ -2919,10 +2894,10 @@ mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_smooth_fa
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ 1
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
          b1 ~ 1
          b2 ~ 1
+         b3 ~ 1
          sigma ~ s(AGE)
    Data: d (Number of observations: 5548)
 Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
@@ -2935,9 +2910,9 @@ sds(sigma_sAGE_1)     1.73      0.20     1.37     2.15        319 1.00
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma_Intercept     2.46      0.01     2.44     2.48        500 1.00
-b0_Intercept        1.89      0.19     1.60     2.28        246 1.00
-b1_Intercept        1.30      0.10     1.11     1.48        317 1.00
-b2_Intercept        0.89      0.01     0.86     0.92        260 1.01
+b1_Intercept        1.89      0.19     1.60     2.28        246 1.00
+b2_Intercept        1.30      0.10     1.11     1.48        317 1.00
+b3_Intercept        0.89      0.01     0.86     0.92        260 1.01
 sigma_sAGE_1        1.52      0.17     1.20     1.82        249 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
@@ -3115,10 +3090,10 @@ mod <- mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_g
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ (1 | Species)
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
          b1 ~ (1 | Species)
          b2 ~ (1 | Species)
+         b3 ~ (1 | Species)
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 4000; warmup = 2000; thin = 1;
          total post-warmup samples = 12000
@@ -3126,15 +3101,15 @@ Samples: 6 chains, each with iter = 4000; warmup = 2000; thin = 1;
 Group-Level Effects:
 ~Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.80      0.24     0.42     1.37       3375 1.00
-sd(b1_Intercept)     0.68      0.18     0.40     1.10       4825 1.00
-sd(b2_Intercept)     0.23      0.04     0.17     0.32       5139 1.00
+sd(b1_Intercept)     0.80      0.24     0.42     1.37       3375 1.00
+sd(b2_Intercept)     0.68      0.18     0.40     1.10       4825 1.00
+sd(b3_Intercept)     0.23      0.04     0.17     0.32       5139 1.00
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     1.54      0.20     1.18     1.99       4399 1.00
-b1_Intercept     1.39      0.16     1.09     1.73       6513 1.00
-b2_Intercept     0.98      0.05     0.88     1.08       4862 1.00
+b1_Intercept     1.54      0.20     1.18     1.99       4399 1.00
+b2_Intercept     1.39      0.16     1.09     1.73       6513 1.00
+b3_Intercept     0.98      0.05     0.88     1.08       4862 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -3295,10 +3270,10 @@ mod <- mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_G
 #+begin_example
  Family: gamma
   Links: mu = log; shape = identity
-Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
-         b0 ~ (1 | Species)
+Formula: DBH ~ b1 * (1 - exp(-(b2) * AGE^b3))
          b1 ~ (1 | Species)
          b2 ~ (1 | Species)
+         b3 ~ (1 | Species)
    Data: d (Number of observations: 5548)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
@@ -3306,15 +3281,15 @@ Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
 Group-Level Effects:
 ~Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.45      0.08     0.32     0.64       1309 1.00
-sd(b1_Intercept)     0.06      0.02     0.04     0.10        834 1.01
-sd(b2_Intercept)     0.07      0.02     0.04     0.12        917 1.01
+sd(b1_Intercept)     0.45      0.08     0.32     0.64       1309 1.00
+sd(b2_Intercept)     0.06      0.02     0.04     0.10        834 1.01
+sd(b3_Intercept)     0.07      0.02     0.04     0.12        917 1.01
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     4.70      0.10     4.50     4.92       1000 1.00
-b1_Intercept     0.29      0.01     0.26     0.32        617 1.02
-b2_Intercept     0.54      0.02     0.50     0.57       1486 1.00
+b1_Intercept     4.70      0.10     4.50     4.92       1000 1.00
+b2_Intercept     0.29      0.01     0.26     0.32        617 1.02
+b3_Intercept     0.54      0.02     0.50     0.57       1486 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -3396,12 +3371,12 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-| gamma(1, 0.2)  | b  |   |   |   |   | b0 | <lower=0> |
 | gamma(1, 0.2)  | b  |   |   |   |   | b1 | <lower=0> |
 | gamma(1, 0.2)  | b  |   |   |   |   | b2 | <lower=0> |
-| cauchy(0, 0.1) | sd |   |   |   |   | b0 |           |
+| gamma(1, 0.2)  | b  |   |   |   |   | b3 | <lower=0> |
 | cauchy(0, 0.1) | sd |   |   |   |   | b1 |           |
 | cauchy(0, 0.1) | sd |   |   |   |   | b2 |           |
+| cauchy(0, 0.1) | sd |   |   |   |   | b3 |           |
 
 **** fit model to real data
 #+begin_src R
@@ -3482,10 +3457,10 @@ mod <- mod_genus_many_species_many_cities_many_climate_none_hetero_no_family_Gam
 #+begin_example
  Family: gamma
   Links: mu = log; shape = identity
-Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
-         b0 ~ (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ b1 * (1 - exp(-(b2) * AGE^b3))
          b1 ~ (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 3000; warmup = 1500; thin = 1;
          total post-warmup samples = 9000
@@ -3493,27 +3468,27 @@ Samples: 6 chains, each with iter = 3000; warmup = 1500; thin = 1;
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.57      0.22     0.29     1.12          5 1.56
-sd(b1_Intercept)     0.05      0.01     0.03     0.08         36 1.04
-sd(b2_Intercept)     0.07      0.02     0.04     0.12          8 1.24
+sd(b1_Intercept)     0.57      0.22     0.29     1.12          5 1.56
+sd(b2_Intercept)     0.05      0.01     0.03     0.08         36 1.04
+sd(b3_Intercept)     0.07      0.02     0.04     0.12          8 1.24
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.48      0.38     0.01     1.24          9 1.22
-sd(b1_Intercept)     0.05      0.02     0.01     0.11         26 1.06
-sd(b2_Intercept)     0.08      0.03     0.01     0.14         20 1.08
+sd(b1_Intercept)     0.48      0.38     0.01     1.24          9 1.22
+sd(b2_Intercept)     0.05      0.02     0.01     0.11         26 1.06
+sd(b3_Intercept)     0.08      0.03     0.01     0.14         20 1.08
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.43      0.21     0.15     0.93         80 1.05
-sd(b1_Intercept)     0.02      0.01     0.00     0.05         10 1.18
-sd(b2_Intercept)     0.03      0.02     0.00     0.09         13 1.12
+sd(b1_Intercept)     0.43      0.21     0.15     0.93         80 1.05
+sd(b2_Intercept)     0.02      0.01     0.00     0.05         10 1.18
+sd(b3_Intercept)     0.03      0.02     0.00     0.09         13 1.12
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     5.15      0.32     4.61     5.91          8 1.24
-b1_Intercept     0.27      0.02     0.23     0.32         87 1.03
-b2_Intercept     0.49      0.04     0.41     0.56          9 1.20
+b1_Intercept     5.15      0.32     4.61     5.91          8 1.24
+b2_Intercept     0.27      0.02     0.23     0.32         87 1.03
+b3_Intercept     0.49      0.04     0.41     0.56          9 1.20
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -3567,9 +3542,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_no_family_Gamma.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: no; family: gaussian
+*** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: gaussian
 :PROPERTIES:
-  :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.R
+  :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.R
 :END:
 **** libraries and functions
 #+begin_src R
@@ -3586,7 +3561,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   genus <- "many"
   species <- "many"
   cities <- "many"
-  climate <- "b0linint"
+  climate <- "b1linint"
   hetero <- "no"
   family <- "gaussian"
 #+end_src
@@ -3618,14 +3593,14 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.R erker@krusty:~/allo/code/
+  rsync -avz genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.R
+: genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.R
 :
 : sent 660 bytes  received 42 bytes  82.59 bytes/sec
 : total size is 1127  speedup is 1.61
@@ -3637,20 +3612,20 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.R &
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.R &
   exit
 #+END_SRC
 
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.rds
+: genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.rds
 :
 : sent 55366 bytes  received 30871852 bytes  2290905.04 bytes/sec
 : total size is 31017908  speedup is 1.00
@@ -3660,18 +3635,18 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.rds")
+mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.rds")
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
 #+begin_src R
   summary(mod)
@@ -3681,47 +3656,47 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = identity
-Formula: DBH ~ 100 * b0linint * (1 - exp(-(b1/100) * AGE^b2))
-         b0linint ~ t2(Precip, CDD) + (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ 100 * b1linint * (1 - exp(-(b2/100) * AGE^b3))
+         b1linint ~ t2(Precip, CDD) + (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 6000
 
 Smooth Terms:
                       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(b0linint_t2PrecipCDD_1)     0.48      0.40     0.01     1.08          4 2.50
-sds(b0linint_t2PrecipCDD_2)     0.47      0.39     0.00     1.04          4 2.10
-sds(b0linint_t2PrecipCDD_3)     0.58      0.52     0.01     1.30          3 3.24
+sds(b1linint_t2PrecipCDD_1)     0.48      0.40     0.01     1.08          4 2.50
+sds(b1linint_t2PrecipCDD_2)     0.47      0.39     0.00     1.04          4 2.10
+sds(b1linint_t2PrecipCDD_3)     0.58      0.52     0.01     1.30          3 3.24
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0linint_Intercept)     0.93      0.36     0.30     1.66          5 1.59
-sd(b1_Intercept)     0.75      0.38     0.16     1.30          3 3.16
-sd(b2_Intercept)     0.50      0.50     0.10     2.06          6 1.90
+sd(b1linint_Intercept)     0.93      0.36     0.30     1.66          5 1.59
+sd(b2_Intercept)     0.75      0.38     0.16     1.30          3 3.16
+sd(b3_Intercept)     0.50      0.50     0.10     2.06          6 1.90
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0linint_Intercept)     0.46      0.42     0.01     1.02          5 1.84
-sd(b1_Intercept)     0.64      0.53     0.01     1.42          4 2.12
-sd(b2_Intercept)     0.41      0.41     0.01     1.00          4 3.41
+sd(b1linint_Intercept)     0.46      0.42     0.01     1.02          5 1.84
+sd(b2_Intercept)     0.64      0.53     0.01     1.42          4 2.12
+sd(b3_Intercept)     0.41      0.41     0.01     1.00          4 3.41
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0linint_Intercept)     0.97      0.31     0.41     1.57          5 1.67
-sd(b1_Intercept)     0.56      0.30     0.12     1.09          6 1.62
-sd(b2_Intercept)     0.45      0.43     0.06     1.14          3 4.71
+sd(b1linint_Intercept)     0.97      0.31     0.41     1.57          5 1.67
+sd(b2_Intercept)     0.56      0.30     0.12     1.09          6 1.62
+sd(b3_Intercept)     0.45      0.43     0.06     1.14          3 4.71
 
 Population-Level Effects:
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0linint_Intercept         1.40      0.46     0.69     2.56          4 1.98
-b0linint_t2PrecipCDD_1     0.84      0.38     0.20     1.49          4 2.45
-b0linint_t2PrecipCDD_2     0.68      0.34     0.15     1.23          4 2.72
-b0linint_t2PrecipCDD_3     0.96      0.48     0.21     1.89          3 3.04
-b1_Intercept         0.98      0.22     0.64     1.48          6 1.47
-b2_Intercept         0.86      0.08     0.76     1.04          4 1.78
+b1linint_Intercept         1.40      0.46     0.69     2.56          4 1.98
+b1linint_t2PrecipCDD_1     0.84      0.38     0.20     1.49          4 2.45
+b1linint_t2PrecipCDD_2     0.68      0.34     0.15     1.23          4 2.72
+b1linint_t2PrecipCDD_3     0.96      0.48     0.21     1.89          3 3.04
+b2_Intercept         0.98      0.22     0.64     1.48          6 1.47
+b3_Intercept         0.86      0.08     0.76     1.04          4 1.78
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -3739,37 +3714,37 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png
   marginal_effects(mod, effects = "AGE:CDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png
   marginal_effects(mod, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png
   marginal_effects(mod, effects = "Precip:CDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png :width 800
   cond <- data.frame(Species = unique(d$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
@@ -3781,18 +3756,18 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png
   pp_check(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_gaussian.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b0linint; hetero: no; family: Gamma NO CONVERGE; DO MATH, FIND BETTER PRIORS
+*** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma NO CONVERGE; DO MATH, FIND BETTER PRIORS
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :END:
 **** libraries and functions
 #+begin_src R
@@ -3830,7 +3805,7 @@ Warning messages:
   genus <- "many"
   species <- "many"
   cities <- "many"
-  climate <- "b0linint"
+  climate <- "b1linint"
   hetero <- "no"
   family <- "Gamma"
 #+end_src
@@ -3860,14 +3835,14 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.R erker@krusty:~/allo/code/
+  rsync -avz genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.R
+: genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :
 : sent 402 bytes  received 54 bytes  130.29 bytes/sec
 : total size is 1125  speedup is 2.47
@@ -3879,20 +3854,20 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.R &
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R &
   exit
 #+END_SRC
 
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.rds
+: genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.rds
 :
 : sent 56689 bytes  received 100644316 bytes  3098492.46 bytes/sec
 : total size is 100748798  speedup is 1.00
@@ -3903,19 +3878,19 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.rds")
-mod <- mod_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma
+mod_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.rds")
+mod <- mod_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
 #+begin_src R
   summary(mod)
@@ -3925,10 +3900,10 @@ mod <- mod_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family
 #+begin_example
  Family: gamma
   Links: mu = log; shape = identity
-Formula: DBH ~ b0 * (1 - exp(-(b1) * AGE^b2))
-         b0 ~ Precip * GDD + (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ b1 * (1 - exp(-(b2) * AGE^b3))
+         b1 ~ Precip * GDD + (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
          total post-warmup samples = 30000
@@ -3936,30 +3911,30 @@ Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.50      0.14     0.28     0.85      13468 1.00
-sd(b1_Intercept)     0.05      0.01     0.03     0.07         25 1.06
-sd(b2_Intercept)     0.08      0.02     0.04     0.13         14 1.12
+sd(b1_Intercept)     0.50      0.14     0.28     0.85      13468 1.00
+sd(b2_Intercept)     0.05      0.01     0.03     0.07         25 1.06
+sd(b3_Intercept)     0.08      0.02     0.04     0.13         14 1.12
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.53      0.39     0.01     1.26       1526 1.01
-sd(b1_Intercept)     0.04      0.02     0.01     0.08         13 1.13
-sd(b2_Intercept)     0.06      0.03     0.00     0.12         27 1.06
+sd(b1_Intercept)     0.53      0.39     0.01     1.26       1526 1.01
+sd(b2_Intercept)     0.04      0.02     0.01     0.08         13 1.13
+sd(b3_Intercept)     0.06      0.03     0.00     0.12         27 1.06
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.53      0.25     0.18     1.02        167 1.02
-sd(b1_Intercept)     0.02      0.01     0.00     0.04         13 1.13
-sd(b2_Intercept)     0.05      0.02     0.01     0.09        120 1.02
+sd(b1_Intercept)     0.53      0.25     0.18     1.02        167 1.02
+sd(b2_Intercept)     0.02      0.01     0.00     0.04         13 1.13
+sd(b3_Intercept)     0.05      0.02     0.01     0.09        120 1.02
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      5.56      0.37     4.77     6.25          7 1.29
-b0_Precip         0.57      0.37     0.02     1.37         10 1.17
-b0_GDD            0.30      0.16     0.00     0.60          5 1.50
-b0_Precip:GDD     0.31      0.21     0.02     0.78         29 1.05
-b1_Intercept      0.27      0.02     0.23     0.31         60 1.03
-b2_Intercept      0.46      0.04     0.39     0.54         10 1.18
+b1_Intercept      5.56      0.37     4.77     6.25          7 1.29
+b1_Precip         0.57      0.37     0.02     1.37         10 1.17
+b1_GDD            0.30      0.16     0.00     0.60          5 1.50
+b1_Precip:GDD     0.31      0.21     0.02     0.78         29 1.05
+b2_Intercept      0.27      0.02     0.23     0.31         60 1.03
+b3_Intercept      0.46      0.04     0.39     0.54         10 1.18
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
@@ -3977,49 +3952,49 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:GDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_AGECDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
 precip.gdd <-   marginal_effects(mod, effects = "Precip:GDD", surface = T)
 precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma_wCities.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma_wCities.png
   plot(precip.gdd)[[1]] +
       geom_point(data = unique(select(mod$data, City, GDD, Precip)), aes(x = Precip, y = GDD)) +
       geom_label(data = unique(select(mod$data, City, GDD, Precip)), aes(x = Precip, y = GDD, label = City), nudge_y = .15)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma_wCities.png]]
+[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma_wCities.png]]
 
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png :width 1000 :height 100
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png :width 1000 :height 100
     cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, Precip, GDD)))
@@ -4044,21 +4019,21 @@ precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
    pp_check(mod) + xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_no_family_Gamma.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
 
 
 
-*** genus: many;  species: many; cities: many; climate: b0; hetero: smooth
+*** genus: many;  species: many; cities: many; climate: b1; hetero: smooth
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0_hetero_smooth.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1_hetero_smooth.R
 :END:
 **** libraries and functions
 #+begin_src R
@@ -4096,7 +4071,7 @@ Warning messages:
   genus <- "many"
   species <- "many"
   cities <- "many"
-  climate <- "b0"
+  climate <- "b1"
   hetero <- "smooth"
 #+end_src
 
@@ -4129,7 +4104,7 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_many_species_many_cities_many_climate_b0_hetero_smooth.R erker@krusty:~/allo/code/
+  rsync -avz genus_many_species_many_cities_many_climate_b1_hetero_smooth.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
@@ -4147,7 +4122,7 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b0_hetero_smooth.R &
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b1_hetero_smooth.R &
   exit
 #+END_SRC
 
@@ -4155,7 +4130,7 @@ run from krusty terminal
 
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b1_hetero_smooth.rds ~/git/allo/models/
 #+END_SRC
 
 **** diagnostics
@@ -4163,18 +4138,18 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0_hetero_smooth.rds")
+mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b1_hetero_smooth.rds")
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
 #+begin_src R
   summary(mod)
@@ -4184,10 +4159,10 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ t2(Precip, HDD) + (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
+         b1 ~ t2(Precip, HDD) + (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
    Data: d (Number of observations: 3403)
 Samples: 6 chains, each with iter = 8000; warmup = 4000; thin = 1;
@@ -4195,39 +4170,39 @@ Samples: 6 chains, each with iter = 8000; warmup = 4000; thin = 1;
 
 Smooth Terms:
                       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sds(b0_t2PrecipHDD_1)     0.36      0.20     0.03     0.79      24000 1.00
-sds(b0_t2PrecipHDD_2)     0.40      0.24     0.03     0.90         24 1.15
-sds(b0_t2PrecipHDD_3)     0.36      0.20     0.03     0.80      24000 1.00
+sds(b1_t2PrecipHDD_1)     0.36      0.20     0.03     0.79      24000 1.00
+sds(b1_t2PrecipHDD_2)     0.40      0.24     0.03     0.90         24 1.15
+sds(b1_t2PrecipHDD_3)     0.36      0.20     0.03     0.80      24000 1.00
 sds(sigma_sAGE_1)         1.30      0.21     0.93     1.74        158 1.03
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.24      0.47     0.16     2.24         46 1.14
-sd(b1_Intercept)     0.31      0.08     0.19     0.49       8936 1.00
-sd(b2_Intercept)     0.14      0.03     0.09     0.22         75 1.03
+sd(b1_Intercept)     1.24      0.47     0.16     2.24         46 1.14
+sd(b2_Intercept)     0.31      0.08     0.19     0.49       8936 1.00
+sd(b3_Intercept)     0.14      0.03     0.09     0.22         75 1.03
 
 ~Genus (Number of levels: 8)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.11      0.11     0.00     0.40        117 1.04
-sd(b1_Intercept)     0.07      0.06     0.00     0.23         72 1.07
-sd(b2_Intercept)     0.03      0.03     0.00     0.09        107 1.06
+sd(b1_Intercept)     0.11      0.11     0.00     0.40        117 1.04
+sd(b2_Intercept)     0.07      0.06     0.00     0.23         72 1.07
+sd(b3_Intercept)     0.03      0.03     0.00     0.09        107 1.06
 
 ~Genus:Species (Number of levels: 16)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.36      0.10     0.21     0.60       2877 1.01
-sd(b1_Intercept)     0.17      0.05     0.09     0.29       6972 1.00
-sd(b2_Intercept)     0.05      0.02     0.02     0.09        871 1.01
+sd(b1_Intercept)     0.36      0.10     0.21     0.60       2877 1.01
+sd(b2_Intercept)     0.17      0.05     0.09     0.29       6972 1.00
+sd(b3_Intercept)     0.05      0.02     0.02     0.09        871 1.01
 
 Population-Level Effects:
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sigma_Intercept      2.11      0.01     2.09     2.14         48 1.12
-b0_Intercept         1.67      0.38     0.92     2.35         12 1.15
-b0_t2PrecipHDD_1     0.58      0.21     0.25     1.07        825 1.01
-b0_t2PrecipHDD_2     0.54      0.19     0.23     0.99        554 1.01
-b0_t2PrecipHDD_3     0.47      0.17     0.19     0.89       2772 1.00
-b1_Intercept         0.96      0.11     0.75     1.20        101 1.03
-b2_Intercept         0.99      0.05     0.89     1.08        109 1.05
+b1_Intercept         1.67      0.38     0.92     2.35         12 1.15
+b1_t2PrecipHDD_1     0.58      0.21     0.25     1.07        825 1.01
+b1_t2PrecipHDD_2     0.54      0.19     0.23     0.99        554 1.01
+b1_t2PrecipHDD_3     0.47      0.17     0.19     0.89       2772 1.00
+b2_Intercept         0.96      0.11     0.75     1.20        101 1.03
+b3_Intercept         0.99      0.05     0.89     1.08        109 1.05
 sigma_sAGE_1         1.11      0.16     0.79     1.45      11714 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
@@ -4242,45 +4217,45 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   marginal_effects(mod, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   marginal_effects(mod, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   marginal_effects(mod, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_smooths_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_smooths_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   marginal_smooths(mod, smooths = "s(AGE)", ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_smooths_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_smooths_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1_hetero_smooth.png :width 800
   cond <- data.frame(Species = unique(d$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
@@ -4292,18 +4267,18 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png
   pp_check(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0_hetero_smooth.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1_hetero_smooth.png]]
 
-*** genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth  NO CONVERGE
+*** genus: many;  species: many; cities: many; climate: b1linint; hetero: smooth  NO CONVERGE
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.R
 :END:
 **** libraries and functions
 #+begin_src R
@@ -4341,7 +4316,7 @@ Warning messages:
   genus <- "many"
   species <- "many"
   cities <- "many"
-  climate <- "b0linint"
+  climate <- "b1linint"
   hetero <- "smooth"
 #+end_src
 
@@ -4374,14 +4349,14 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R erker@krusty:~/allo/code/
+  rsync -avz genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R
+: genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.R
 :
 : sent 181 bytes  received 54 bytes  67.14 bytes/sec
 : total size is 1145  speedup is 4.87
@@ -4393,7 +4368,7 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.R &
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.R &
   exit
 #+END_SRC
 
@@ -4401,13 +4376,13 @@ run from krusty terminal
 
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds
+: genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.rds
 :
 : sent 38 bytes  received 97053567 bytes  4313493.56 bytes/sec
 : total size is 97181497  speedup is 1.00
@@ -4418,18 +4393,18 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds")
+mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.rds")
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
 #+begin_src R
   summary(mod)
@@ -4439,10 +4414,10 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ Precip * GDD + (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
+         b1 ~ Precip * GDD + (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
@@ -4455,31 +4430,31 @@ sds(sigma_sAGE_1)     1.41      0.22     1.15     1.88          7 1.32
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.52      0.35     0.15     1.13          3  3.81
-sd(b1_Intercept)     0.58      0.33     0.24     1.12          3  5.20
-sd(b2_Intercept)     0.38      0.35     0.09     0.94          3 16.15
+sd(b1_Intercept)     0.52      0.35     0.15     1.13          3  3.81
+sd(b2_Intercept)     0.58      0.33     0.24     1.12          3  5.20
+sd(b3_Intercept)     0.38      0.35     0.09     0.94          3 16.15
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     1.37      0.49     0.08     2.43         36  1.06
-sd(b1_Intercept)     0.40      0.46     0.01     1.26          3  7.66
-sd(b2_Intercept)     0.41      0.50     0.01     1.30          3 15.35
+sd(b1_Intercept)     1.37      0.49     0.08     2.43         36  1.06
+sd(b2_Intercept)     0.40      0.46     0.01     1.26          3  7.66
+sd(b3_Intercept)     0.41      0.50     0.01     1.30          3 15.35
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.59      0.31     0.20     1.28          7  1.30
-sd(b1_Intercept)     0.53      0.39     0.16     1.13          3  8.84
-sd(b2_Intercept)     0.42      0.45     0.06     1.20          3 21.87
+sd(b1_Intercept)     0.59      0.31     0.20     1.28          7  1.30
+sd(b2_Intercept)     0.53      0.39     0.16     1.13          3  8.84
+sd(b3_Intercept)     0.42      0.45     0.06     1.20          3 21.87
 
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample   Rhat
 sigma_Intercept     1.47      0.92     0.01     2.13          3 117.66
-b0_Intercept        1.60      0.60     0.79     2.62          4   1.96
-b0_Precip           0.64      0.17     0.30     0.88          7   1.30
-b0_GDD              0.63      0.34     0.27     1.19          3   5.43
-b0_Precip:GDD       0.66      0.19     0.34     0.97          4   1.71
-b1_Intercept        1.09      0.15     0.89     1.38          5   1.51
-b2_Intercept        0.86      0.05     0.80     0.97          5   1.48
+b1_Intercept        1.60      0.60     0.79     2.62          4   1.96
+b1_Precip           0.64      0.17     0.30     0.88          7   1.30
+b1_GDD              0.63      0.34     0.27     1.19          3   5.43
+b1_Precip:GDD       0.66      0.19     0.34     0.97          4   1.71
+b2_Intercept        1.09      0.15     0.89     1.38          5   1.51
+b3_Intercept        0.86      0.05     0.80     0.97          5   1.48
 sigma_sAGE_1        0.84      0.67    -0.27     1.60          3   5.07
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
@@ -4494,37 +4469,37 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png
   marginal_effects(mod, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png
   marginal_effects(mod, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png
   marginal_effects(mod, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png :width 800
   cond <- data.frame(Species = unique(d$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
@@ -4536,18 +4511,18 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png
   pp_check(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.png]]
 
-*** FULL DATA genus: many;  species: many; cities: many; climate: b0linint; hetero: smooth
+*** FULL DATA genus: many;  species: many; cities: many; climate: b1linint; hetero: smooth
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.R
 :END:
 **** libraries and functions
 #+begin_src R
@@ -4585,7 +4560,7 @@ Warning messages:
   genus <- "many"
   species <- "many"
   cities <- "many"
-  climate <- "b0linint"
+  climate <- "b1linint"
   hetero <- "smooth"
 #+end_src
 
@@ -4618,14 +4593,14 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R erker@krusty:~/allo/code/
+  rsync -avz genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R
+: genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.R
 :
 : sent 190 bytes  received 54 bytes  69.71 bytes/sec
 : total size is 1151  speedup is 4.72
@@ -4637,20 +4612,20 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.R &
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.R &
   exit
 #+END_SRC
 
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b0linint_hetero_smooth.rds
+: genus_many_species_many_cities_many_climate_b1linint_hetero_smooth.rds
 :
 : sent 62394 bytes  received 350744374 bytes  5524516.03 bytes/sec
 : total size is 350727547  speedup is 1.00
@@ -4661,18 +4636,18 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
 :END:
 #+begin_src R
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.rds")
+mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.rds")
 #+end_src
 
 #+RESULTS:
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png
   pairs(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
 #+begin_src R
   summary(mod)
@@ -4682,10 +4657,10 @@ mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b0
 #+begin_example
  Family: gaussian
   Links: mu = identity; sigma = log
-Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
-         b0 ~ Precip * HDD + (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
+Formula: DBH ~ 100 * b1 * (1 - exp(-(b2/100) * AGE^b3))
+         b1 ~ Precip * HDD + (1 | City) + (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ (1 | City) + (1 | Genus/Species)
          sigma ~ s(AGE)
    Data: d (Number of observations: 12687)
 Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
@@ -4698,31 +4673,31 @@ sds(sigma_sAGE_1)     2.77      0.81     1.00     3.50          3 5.00
 Group-Level Effects:
 ~City (Number of levels: 16)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.73      0.20     0.43     1.17         13  1.15
-sd(b1_Intercept)     0.41      0.20     0.21     0.82          3  3.37
-sd(b2_Intercept)     0.27      0.36     0.07     1.07          3 18.33
+sd(b1_Intercept)     0.73      0.20     0.43     1.17         13  1.15
+sd(b2_Intercept)     0.41      0.20     0.21     0.82          3  3.37
+sd(b3_Intercept)     0.27      0.36     0.07     1.07          3 18.33
 
 ~Genus (Number of levels: 83)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.62      0.77     0.01     2.39          3  5.14
-sd(b1_Intercept)     0.57      0.36     0.03     1.27          4  2.55
-sd(b2_Intercept)     0.30      0.42     0.01     1.22          3 10.55
+sd(b1_Intercept)     0.62      0.77     0.01     2.39          3  5.14
+sd(b2_Intercept)     0.57      0.36     0.03     1.27          4  2.55
+sd(b3_Intercept)     0.30      0.42     0.01     1.22          3 10.55
 
 ~Genus:Species (Number of levels: 161)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.68      0.19     0.27     1.02          4  2.21
-sd(b1_Intercept)     0.56      0.33     0.22     1.27          3  5.93
-sd(b2_Intercept)     0.42      0.38     0.09     1.25          3 20.55
+sd(b1_Intercept)     0.68      0.19     0.27     1.02          4  2.21
+sd(b2_Intercept)     0.56      0.33     0.22     1.27          3  5.93
+sd(b3_Intercept)     0.42      0.38     0.09     1.25          3 20.55
 
 Population-Level Effects:
                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample   Rhat
 sigma_Intercept     1.86      0.80     0.08     2.23          3 155.27
-b0_Intercept        1.90      0.56     0.82     2.76          4   2.58
-b0_Precip           1.07      0.29     0.48     1.70          9   1.23
-b0_HDD              0.46      0.32     0.13     1.10          3   3.19
-b0_Precip:HDD       0.64      0.25     0.26     0.99          5   1.57
-b1_Intercept        1.27      0.21     0.96     1.65          5   1.87
-b2_Intercept        0.94      0.06     0.85     1.05          5   1.69
+b1_Intercept        1.90      0.56     0.82     2.76          4   2.58
+b1_Precip           1.07      0.29     0.48     1.70          9   1.23
+b1_HDD              0.46      0.32     0.13     1.10          3   3.19
+b1_Precip:HDD       0.64      0.25     0.26     0.99          5   1.57
+b2_Intercept        1.27      0.21     0.96     1.65          5   1.87
+b3_Intercept        0.94      0.06     0.85     1.05          5   1.69
 sigma_sAGE_1        0.48      0.19     0.13     0.80          4   1.89
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
@@ -4737,37 +4712,37 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png
   plot(mod, ask = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png
   marginal_effects(mod, effects = "AGE:HDD")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/marginal_effects_AGEHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png
   marginal_effects(mod, effects = "AGE:Precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png
   marginal_effects(mod, effects = "Precip:HDD", surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/marginal_effects_surface_PrecipHDD_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png :width 800
   cond <- data.frame(Species = unique(d$Species))
   me <- marginal_effects(mod, conditions = cond, re_formula = NULL)
 
@@ -4779,14 +4754,14 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png
   pp_check(mod)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b0linint_hetero_smooth_fulldata.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
 
 
@@ -6917,3 +6892,186 @@ head(loss)
 : 4 1991  42 2182.708   10000
 : 5 1991  54 2745.596   10000
 : 6 1991  66 3319.994   10000
+
+#+begin_src R
+  nlform <- bf(cum ~ ult * (1 - exp(-(dev / theta)^omega)),
+               ult ~ 1 + (1|AY), omega ~ 1, theta ~ 1, nl = TRUE)
+  nlprior <- c(prior(normal(5000, 1000), nlpar = "ult"),
+               prior(normal(1, 2), nlpar = "omega"),
+               prior(normal(45, 10), nlpar = "theta"))
+  fit_loss1 <- brm(formula = nlform, data = loss, family = gaussian(), prior = nlprior,
+                   chains = 2,
+                   cores = 2,
+                   control = list(adapt_delta = 0.9))
+
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_fit_loss1.png
+pp_check(fit_loss1) + xlim(c(-500,5500))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_fit_loss1.png]]
+
+
+#+begin_src R
+  nlform <- bf(cum ~ ult * (1 - exp(-(dev / theta)^omega)),
+               ult ~ 1 + (1|AY), omega ~ 1, theta ~ 1, nl = TRUE)
+  nlprior <- c(prior(normal(5000, 1000), nlpar = "ult"),
+               prior(normal(1, 2), nlpar = "omega"),
+               prior(normal(45, 10), nlpar = "theta"))
+  fit_loss3 <- brm(formula = nlform, data = loss, family = Gamma("identity"), prior = nlprior,
+                   chains = 2,
+                   cores = 2,
+                   control = list(adapt_delta = 0.9))
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is nan, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is nan, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[11] is -0.110338, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is nan, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is -19.0419, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is -0.069164, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is -0.0750579, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is nan, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[11] is -2.99082, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+Rejecting initial value:
+  Error evaluating the log probability at the initial value.
+Exception: gamma_lpdf: Inverse scale parameter[1] is -0.305499, but must be > 0!  (in 'model930d52c1e5cf_file930d4fe72f0c' at line 56)
+
+
+Gradient evaluation took 0.00054 seconds
+1000 transitions using 10 leapfrog steps per transition would take 5.4 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.000434 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.34 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:    1 / 2000 [  0%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  200 / 2000 [ 10%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  400 / 2000 [ 20%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  600 / 2000 [ 30%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration:  800 / 2000 [ 40%]  (Warmup)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 22.7133 seconds (Warm-up)
+               11.1468 seconds (Sampling)
+               33.8601 seconds (Total)
+
+Iteration: 2000 / 2000 [100%]  (Sampling)
+
+ Elapsed Time: 22.8441 seconds (Warm-up)
+               13.3994 seconds (Sampling)
+               36.2436 seconds (Total)
+#+end_example
+
+
+#+begin_src R
+fit_loss3
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: cum ~ ult * (1 - exp(-(dev/theta)^omega))
+         ult ~ 1 + (1 | AY)
+         omega ~ 1
+         theta ~ 1
+   Data: loss (Number of observations: 55)
+Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 2000
+
+Group-Level Effects:
+~AY (Number of levels: 10)
+                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(ult_Intercept)   552.47    185.71   298.64  1051.96        747 1.00
+
+Population-Level Effects:
+                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+ult_Intercept    5396.17    347.61  4794.76  6135.68        517 1.00
+omega_Intercept     1.27      0.03     1.21     1.33        928 1.00
+theta_Intercept    48.95      3.82    42.26    57.05        737 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape   111.15     23.42    68.73   162.17       1454 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_fit_loss3.png
+pp_check(fit_loss3)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_fit_loss3.png]]
+
+
+#+begin_src R
+loo(fit_loss1,fit_loss3)
+#+end_src
+
+#+RESULTS:
+:                        LOOIC    SE
+: fit_loss1             715.96 19.54
+: fit_loss3             741.67 13.09
+: fit_loss1 - fit_loss3 -25.71 17.27
