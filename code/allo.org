@@ -1555,7 +1555,7 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
-*** a look at gamma
+*** a look at gamma family
 #+begin_src R
     library(brms)
     source("allo_functions.R")
@@ -1576,7 +1576,7 @@ are correlated.  I wonder if I could include that information in the prior?
         b0 <- 1.2
         b1 <- 2
         b2 <- 1
-        shape <- 20
+        shape <- 40
 
         w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
                                                   #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
@@ -1587,6 +1587,20 @@ are correlated.  I wonder if I could include that information in the prior?
 
       DBH <- rgamma(n, rate = shape / mu, shape = shape)
     df <- data.frame(AGE, DBH)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/testest.png
+plot(df)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/testest.png]]
+
+
+#+begin_src R
 
 
   mod <- brm(form, chains = 2, cores = 2, data = df, init_r = .3, prior = nlprior, iter = 1000, family = Gamma(link = "identity"))
@@ -1679,7 +1693,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/test_gamma.png
-pp_check(mod) + xlim(c(-10,200))
+pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 #+end_src
 
 #+RESULTS:
@@ -1809,6 +1823,9 @@ The following object is masked from ‘package:dplyr’:
           data_form <- formula(DBH ~ 100*b0 * (1 - exp(-(b1/100) * AGE ^ b2)))
           if(het == "linear") {
               v_form <- formula(sigma ~ AGE - 1)
+          }
+          if(het == "sqrt") {
+              v_form <- formula(sigma ~ sqrt(AGE))
           }
           if (het == "smooth") {
               v_form <- formula(sigma ~  s(AGE))
@@ -2000,6 +2017,16 @@ beta called rate
 [[file:../figs/ftest_bsigma.png]]
 
 
+#+begin_src R :exports results :results graphics :file ../figs/ftestt.png
+  x <- seq(0,40,.1)
+  y <- dgamma(x, 7, .3)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftestt.png]]
+
+
 
 #+begin_src R :exports results :results graphics :file ../figs/ttest.png
   x <- seq(0,5,.1)
@@ -2024,29 +2051,6 @@ beta called rate
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Want to understand how all the pieces fit together? See the R for Data
-Science book: http://r4ds.had.co.nz/
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
@@ -2066,72 +2070,22 @@ Warning messages:
   form <- generate_formula(genus, species, cities, climate, hetero, family)
 
   nlprior <- generate_prior(genus, species, cities, climate, family)
+
+          nlprior <- c(prior(gamma(7, 7), nlpar = "b0",lb = 0),
+                       prior(gamma(8, 8), nlpar = "b1", lb = 0),
+                       prior(gamma(8, 8), nlpar = "b2",lb = 0),
+                       prior(gamma(20, 1), class = "shape"))
+
 #+end_src
 
 #+RESULTS:
-
-**** test model on generated data
-#+begin_src R :tangle no
-  n <- 100
-  b0 <- 1.2
-  b1 <- 2
-  b2 <- 1
-  sigma <- 5
-
-
-  w <- function(a,b,c,x) 100 * a * (1 - exp(-(b/100) * x^c))
-                                          #  w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
-
-  x <- cumsum(rep((150 - 0) / n, n))
-  y <- w(b0,b1,b2, x) + rnorm(n, 0, sigma)
-
-  dt <- data.frame(x, y)
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R :exports results :results graphics :file ../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png :tangle no
-  ggplot(dt, aes(x = x, y = y)) + geom_point()
-#+end_src
-
-#+RESULTS:
-[[file:../figs/test_gen_none_sp_single_cities_single_climate_none_hetero_no.png]]
-
-#+begin_src R :tangle no
-  m <- brm(form, chains = 1, cores = 1, data = dt, prior = nlprior, iter = 500)
-#+end_src
-
-#+RESULTS:
-: Error: The following variables are missing in 'data':
-: 'DBH', 'AGE'
-
-#+begin_src R :tangle no
-  summary(m)
-#+end_src
-
-
-#+begin_src R :exports results :results graphics :file ../figs/test_1_plot.png :tangle no
-  plot(m)
-#+end_src
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_1.png :tangle no
-  marginal_effects(m, points = T)
-#+end_src
-
-#+begin_src R :exports results :results graphics :file ../figs/pairs_1.png :tangle no
-  pairs(m)
-#+end_src
-
-#+begin_src R :tangle no
-                                          #standata(m)
-                                          #stancode(m)
-#+end_src
 
 **** fit model to real data
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
+#  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma("identity"))
+  mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = Gamma("identity"))
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
 #+end_src
 
@@ -2829,6 +2783,197 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
 
+*** genus: none;  species: single; cities: single; climate: none; hetero: sqrt; family: gaussian
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.R
+:END:
+**** libraries and functions
+#+begin_src R
+  library(dplyr)
+  library(brms)
+  source("allo_functions.R")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
+
+**** set values
+#+begin_src R
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "sqrt"
+  family <- "gaussian"
+#+end_src
+
+#+RESULTS:
+**** generate formula and priors
+#+begin_src R
+
+  form <- generate_formula(genus, species, cities, climate, hetero, family)
+
+  nlprior <- generate_prior(genus, species, cities, climate, family)
+#+end_src
+
+#+RESULTS:
+
+**** fit model to real data
+#+begin_src R
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500,
+             knots = list(k = -1))
+
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+#+end_src
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.R
+:
+: sent 677 bytes  received 42 bytes  68.48 bytes/sec
+: total size is 1147  speedup is 1.60
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.R &
+  exit
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+:
+: sent 16 bytes  received 165 bytes  51.71 bytes/sec
+: total size is 11953842  speedup is 66043.33
+
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+#+begin_src R
+mod_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian <- readRDS("~/git/allo/models/genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.rds")
+mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gaussian
+  Links: mu = identity; sigma = log
+Formula: DBH ~ 100 * b0 * (1 - exp(-(b1/100) * AGE^b2))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         sigma ~ s(AGE)
+   Data: d (Number of observations: 5548)
+Samples: 2 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 500
+
+Smooth Terms:
+                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sds(sigma_sAGE_1)     1.73      0.20     1.37     2.15        319 1.00
+
+Population-Level Effects:
+                Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma_Intercept     2.46      0.01     2.44     2.48        500 1.00
+b0_Intercept        1.89      0.19     1.60     2.28        246 1.00
+b1_Intercept        1.30      0.10     1.11     1.48        317 1.00
+b2_Intercept        0.89      0.01     0.86     0.92        260 1.01
+sigma_sAGE_1        1.52      0.17     1.20     1.82        249 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_smooths_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png
+  marginal_smooths(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_smooths_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png
+  pp_check(mod) + xlim(c(-30,200))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_smooth_family_gaussian.png]]
 
 *** genus: none;  species: many; cities: single; climate: none; hetero: no; family: gaussian
 :PROPERTIES:
@@ -6749,3 +6894,9 @@ Questions:
 #+RESULTS:
 | simple.stan |
 
+* model loss function with gamma family
+
+Example 3 in ... cites ... who mention that the ... is right skewed
+https://journal.r-project.org/archive/2018/RJ-2018-017/RJ-2018-017.pdf
+
+https://magesblog.com/post/2015-11-10-hierarchical-loss-reserving-with-stan/
