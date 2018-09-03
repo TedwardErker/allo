@@ -42,7 +42,7 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
             b3_form <- formula(b3 ~ 1)
         }
         if (cit == "many") {
-            b0_form <- formula(b0 ~ 1)
+            b0_form <- formula(b0 ~ (1 | City))
             b1_form <- formula(b1 ~ (1 | City))
             b2_form <- formula(b2 ~ (1 | City))
             b3_form <- formula(b3 ~ (1 | City))
@@ -51,13 +51,13 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
     if (sp == "many") {
         if (gen == "none") {
             if(cit == "single") {
-                b0_form <- formula(b0 ~ 1)
+                b0_form <- formula(b0 ~ (1 | Species))
                 b1_form <- formula(b1 ~ (1 | Species))
                 b2_form <- formula(b2 ~ (1 | Species))
                 b3_form <- formula(b3 ~ (1 | Species))
             }
             if (cit == "many") {
-                b0_form <- formula(b0 ~ 1)
+                b0_form <- formula(b0 ~ (1 | City) + (1 | Species))
                 b1_form <- formula(b1 ~ (1 | City) + (1 | Species))
                 b2_form <- formula(b2 ~ (1 | City) + (1 | Species))
                 b3_form <- formula(b3 ~ (1 | City) + (1 | Species))
@@ -65,13 +65,13 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
         }
         if (gen == "many") {
             if(cit == "single") {
-                b0_form <- formula(b0 ~ 1)
+                b0_form <- formula(b0 ~ (1 | Genus/Species))
                 b1_form <- formula(b1 ~ (1 | Genus/Species))
                 b2_form <- formula(b2 ~ (1 | Genus/Species))
                 b3_form <- formula(b3 ~ (1 | Genus/Species))
             }
             if (cit == "many") {
-                b0_form <- formula(b0 ~ 1)
+                b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
                 b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
                 b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
                 b3_form <- formula(b3 ~ (1 | City) + (1 | Genus/Species))
