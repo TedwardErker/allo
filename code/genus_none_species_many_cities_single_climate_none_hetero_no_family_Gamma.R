@@ -15,8 +15,9 @@ family <- "Gamma"
 
 ## [[file:~/git/allo/code/allo.org::*generate%20formula%20and%20priors][generate formula and priors:1]]
 form <- generate_formula(genus, species, cities, climate, hetero, family)
-
+form
 nlprior <- generate_prior(genus, species, cities, climate, family)
+nlprior
 ## generate formula and priors:1 ends here
 
 ## [[file:~/git/allo/code/allo.org::*fit%20model%20to%20real%20data][fit model to real data:1]]

@@ -2068,11 +2068,13 @@ beta called rate
 
 **** fit model to real data
 #+begin_src R
-    d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing.rds")
 
-  #  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = Gamma("identity"))
-    mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = Gamma("identity"))
-    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
+  if(family == "Gamma") fam <- Gamma("identity")
+  if(family == "gaussian") fam <- gaussian()
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
 #+end_src
 
 **** tangle
@@ -2086,10 +2088,9 @@ C-c C-v t
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :
-: sent 524 bytes  received 54 bytes  88.92 bytes/sec
-: total size is 1122  speedup is 1.94
+: sent 148 bytes  received 20 bytes  37.33 bytes/sec
+: total size is 1521  speedup is 9.05
 
 **** run on krusty
 
@@ -2100,6 +2101,10 @@ run from krusty terminal
   cd allo/code
   nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R &
   exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+
 #+END_SRC
 
 **** pull back from krusty
@@ -3170,7 +3175,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_many_cities_single_climate_none_hetero_no_family_gaussian.png]]
 
-*** genus: none;  species: many; cities: single; climate: none; hetero: no; family: gamma
+*** TODO genus: none;  species: many; cities: single; climate: none; hetero: no; family: gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
 :END:
@@ -3231,7 +3236,6 @@ if(family == "gaussian") fam <- gaussian()
   mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
-
 
 **** tangle
 C-c C-v t
@@ -3407,9 +3411,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-| gamma(1, 0.2)  | b  |   |   |   |   | b1 | <lower=0> |
-| gamma(1, 0.2)  | b  |   |   |   |   | b2 | <lower=0> |
-| gamma(1, 0.2)  | b  |   |   |   |   | b3 | <lower=0> |
+| gamma(7, 3.5)  | b  |   |   |   |   | b0 | <lower=0> |
+| gamma(7, 7)    | b  |   |   |   |   | b1 | <lower=0> |
+| gamma(8, 8)    | b  |   |   |   |   | b2 | <lower=0> |
+| gamma(8, 8)    | b  |   |   |   |   | b3 | <lower=0> |
 | cauchy(0, 0.1) | sd |   |   |   |   | b1 |           |
 | cauchy(0, 0.1) | sd |   |   |   |   | b2 |           |
 | cauchy(0, 0.1) | sd |   |   |   |   | b3 |           |
