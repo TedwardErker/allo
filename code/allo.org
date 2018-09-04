@@ -4070,7 +4070,7 @@ precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_surface_PrecipGDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma_wCities.png
   plot(precip.gdd)[[1]] +
@@ -4082,18 +4082,18 @@ precip.gdd
 [[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma_wCities.png]]
 
 
-
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png :width 1000 :height 100
+#+begin_src R
     cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, Precip, GDD)))
 #    cond <- filter(cond, Species %in%  c("LIST"))
 
      me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png :width 1000 :height 100
 
   #arrange the cities by precip * GDD
-
   me2 <- me$AGE  %>% mutate(GDDPrecip = GDD * Precip,
                           City = factor(City, levels=unique(City[order(GDDPrecip)]), ordered=TRUE))
 
