@@ -2113,6 +2113,15 @@ run from krusty terminal
 rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
 
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+:
+: sent 10226 bytes  received 12216499 bytes  627011.54 bytes/sec
+: total size is 12312658  speedup is 1.01
+: You have new mail in /var/mail/erker
+
 
 **** diagnostics
 :PROPERTIES:
@@ -2141,24 +2150,26 @@ mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_no_family
 #+RESULTS:
 #+begin_example
  Family: gamma
-  Links: mu = log; shape = identity
-Formula: DBH ~ b1 * (1 - exp(-(b2) * AGE^b3))
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ 1
          b1 ~ 1
          b2 ~ 1
          b3 ~ 1
    Data: d (Number of observations: 5548)
-Samples: 2 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 2000
+Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 6000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b1_Intercept     4.96      0.06     4.84     5.08        786 1.00
-b2_Intercept     0.29      0.00     0.28     0.29        802 1.00
-b3_Intercept     0.48      0.01     0.46     0.50        735 1.00
+b0_Intercept     2.77      0.08     2.61     2.93       3416 1.00
+b1_Intercept     1.12      0.05     1.03     1.24       2694 1.00
+b2_Intercept     1.08      0.04     1.00     1.17       3530 1.00
+b3_Intercept     1.11      0.02     1.08     1.14       2806 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     6.10      0.11     5.89     6.31       1429 1.00
+shape     7.69      0.14     7.42     7.96       3579 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -3233,7 +3244,7 @@ b3 ~ (1 | Species)
 if(family == "Gamma") fam <- Gamma("identity")
 if(family == "gaussian") fam <- gaussian()
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 10000, family = fam)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -3252,9 +3263,8 @@ C-c C-v t
 : building file list ... done
 : genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
 :
-: sent 440 bytes  received 54 bytes  109.78 bytes/sec
-: total size is 1214  speedup is 2.46
-: You have new mail in /var/mail/erker
+: sent 699 bytes  received 54 bytes  215.14 bytes/sec
+: total size is 1227  speedup is 1.63
 
 **** run on krusty
 
@@ -3279,9 +3289,11 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_many_cities_single_clim
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds
 :
-: sent 16 bytes  received 156 bytes  18.11 bytes/sec
-: total size is 17134696  speedup is 99620.33
+: sent 24896 bytes  received 22362068 bytes  2356522.53 bytes/sec
+: total size is 22466780  speedup is 1.00
+: You have new mail in /var/mail/erker
 
 **** diagnostics
 :PROPERTIES:
@@ -3309,35 +3321,43 @@ mod <- mod_genus_none_species_many_cities_single_climate_none_hetero_no_family_G
 #+RESULTS:
 #+begin_example
  Family: gamma
-  Links: mu = log; shape = identity
-Formula: DBH ~ b1 * (1 - exp(-(b2) * AGE^b3))
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ (1 | Species)
          b1 ~ (1 | Species)
          b2 ~ (1 | Species)
          b3 ~ (1 | Species)
    Data: d (Number of observations: 5548)
-Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 4000
+Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 6000
 
 Group-Level Effects:
 ~Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b1_Intercept)     0.45      0.08     0.32     0.64       1309 1.00
-sd(b2_Intercept)     0.06      0.02     0.04     0.10        834 1.01
-sd(b3_Intercept)     0.07      0.02     0.04     0.12        917 1.01
+sd(b0_Intercept)     0.20      0.12     0.01     0.46       1398 1.01
+sd(b1_Intercept)     0.37      0.12     0.21     0.66          8 1.27
+sd(b2_Intercept)     0.76      0.21     0.43     1.25       1058 1.01
+sd(b3_Intercept)     0.18      0.04     0.11     0.27         11 1.16
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b1_Intercept     4.70      0.10     4.50     4.92       1000 1.00
-b2_Intercept     0.29      0.01     0.26     0.32        617 1.02
-b3_Intercept     0.54      0.02     0.50     0.57       1486 1.00
+b0_Intercept     2.84      0.09     2.66     3.02       6000 1.02
+b1_Intercept     0.99      0.11     0.80     1.24          7 1.30
+b2_Intercept     1.17      0.16     0.87     1.50        939 1.01
+b3_Intercept     1.21      0.05     1.11     1.30          8 1.26
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     7.41      0.14     7.15     7.68       4000 1.00
+shape     9.90      0.19     9.52    10.28       6000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 21 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png
@@ -3442,9 +3462,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_none_hetero_no_family_Gamma.R
 :
-: sent 647 bytes  received 42 bytes  196.86 bytes/sec
-: total size is 1120  speedup is 1.63
-: You have new mail in /var/mail/erker
+: sent 186 bytes  received 54 bytes  43.64 bytes/sec
+: total size is 1120  speedup is 4.67
 
 **** run on krusty
 
@@ -3806,7 +3825,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma NO CONVERGE; DO MATH, FIND BETTER PRIORS
+*** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :END:
@@ -3885,8 +3904,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :
-: sent 402 bytes  received 54 bytes  130.29 bytes/sec
-: total size is 1125  speedup is 2.47
+: sent 657 bytes  received 42 bytes  82.24 bytes/sec
+: total size is 1125  speedup is 1.61
 
 **** run on krusty
 
