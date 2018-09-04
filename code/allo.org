@@ -3443,7 +3443,11 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 3000, family = family)
+if(family == "Gamma") fam <- Gamma("identity")
+if(family == "gaussian") fam <- gaussian()
+
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 3000, family = fam)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -3885,7 +3889,10 @@ Warning messages:
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 10000, family = family)
+if(family == "Gamma") fam <- Gamma("identity")
+if(family == "gaussian") fam <- gaussian()
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 10000, family = fam)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -3916,6 +3923,10 @@ run from krusty terminal
   cd allo/code
   nohup R CMD BATCH genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R &
   exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.Rout
 #+END_SRC
 
 **** pull back from krusty
