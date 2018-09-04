@@ -4084,7 +4084,7 @@ precip.gdd
     cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, Precip, GDD)))
-    cond <- filter(cond, Species %in%  c("LIST"))
+#    cond <- filter(cond, Species %in%  c("LIST"))
 
      me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
 
@@ -4100,7 +4100,7 @@ precip.gdd
       ggplot(me2) +
           geom_line(aes(x = AGE, y = estimate__), size = 1) +
           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-          geom_point(data = filter(dd, Species == "List"), aes(x = AGE, y = DBH), alpha = .3, size = .5) +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = .3, size = .5) +
           facet_grid(Species~City*GDDPrecip)
 #+end_src
 
