@@ -1085,16 +1085,6 @@ Joining, by = "TreeType"
 
       saveRDS(d3, "../data/age_dbh_testing.rds")
 #+end_src
-
-#+RESULTS:
-: Error: unexpected ',' in:
-: "        left_join(.,clim) %>%
-:         mutate(Precip = round((Precip/ 1000,"
-: Error: unexpected ',' in "               GDD = round((GDD/ 1000,"
-: Error in saveRDS(d2, "../data/age_dbh_full.rds") : object 'd2' not found
-: Error in eval(lhs, parent, parent) : object 'd2' not found
-: Error in saveRDS(d3, "../data/age_dbh_testing.rds") :
-:   object 'd3' not found
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz ../data/age_dbh_full.rds erker@krusty:~/allo/data/
@@ -1107,15 +1097,14 @@ erker@krusty's password:
 building file list ... done
 age_dbh_full.rds
 
-sent 84869 bytes  received 798 bytes  34266.80 bytes/sec
-total size is 88566  speedup is 1.03
-You have new mail in /var/mail/erker
+sent 26672 bytes  received 804 bytes  2616.76 bytes/sec
+total size is 88550  speedup is 3.22
 erker@krusty's password:
 building file list ... done
 age_dbh_testing.rds
 
-sent 36481 bytes  received 366 bytes  14738.80 bytes/sec
-total size is 37868  speedup is 1.03
+sent 36460 bytes  received 372 bytes  4910.93 bytes/sec
+total size is 37842  speedup is 1.03
 #+end_example
 
 *** a couple plots
@@ -1713,7 +1702,7 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 #+RESULTS:
 [[file:../figs/test_gamma.png]]
 
-*** TODO all the models  model_table  MAKE SURE MY PRIORS ARE CORRECT.
+*** all the models  model_table
 
 smaller models to build:
 #+name: model_table
@@ -3620,7 +3609,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_none_hetero_no_family_Gamma.png]]
 
-*** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: gaussian
+*** genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: gaussian
 :PROPERTIES:
   :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_gaussian.R
 :END:
@@ -3928,8 +3917,8 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :
-: sent 441 bytes  received 54 bytes  198.00 bytes/sec
-: total size is 1217  speedup is 2.46
+: sent 440 bytes  received 54 bytes  76.00 bytes/sec
+: total size is 1214  speedup is 2.46
 
 **** run on krusty
 
