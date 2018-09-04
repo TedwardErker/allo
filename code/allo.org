@@ -3851,6 +3851,27 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+#+end_example
 
 **** set values
 #+begin_src R
@@ -4069,7 +4090,7 @@ precip.gdd
 
   #arrange the cities by precip * GDD
 
-  me2 <- me$AGE  %>% mutate(GDDPrecip = (GDD - min(GDD)) * (Precip - min(Precip)),
+  me2 <- me$AGE  %>% mutate(GDDPrecip = GDD * Precip,
                           City = factor(City, levels=unique(City[order(GDDPrecip)]), ordered=TRUE))
 
   dd <- mod$data %>%
@@ -4077,10 +4098,10 @@ precip.gdd
              City = factor(City, levels=unique(City[order(GDDPrecip)]), ordered=TRUE))
 
       ggplot(me2) +
-          geom_line(aes(x = AGE, y = estimate__, color = GDDPrecip), size = 2) +
+          geom_line(aes(x = AGE, y = estimate__), size = 1) +
           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
           geom_point(data = filter(dd, Species == "List"), aes(x = AGE, y = DBH), alpha = .3, size = .5) +
-          facet_grid(Species~City)
+          facet_grid(Species~City*GDDPrecip)
 #+end_src
 
 #+RESULTS:
