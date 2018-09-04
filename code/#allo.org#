@@ -3924,12 +3924,12 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password:
+: erker@krusty's password: 
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
-:
-: sent 441 bytes  received 54 bytes  198.00 bytes/sec
-: total size is 1217  speedup is 2.46
+: 
+: sent 440 bytes  received 54 bytes  76.00 bytes/sec
+: total size is 1214  speedup is 2.46
 
 **** run on krusty
 

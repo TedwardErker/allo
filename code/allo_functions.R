@@ -130,7 +130,8 @@ generate_prior <- function (gen, sp, cit, clim, fam) {
         nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
                      prior(gamma(7, 7), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
                      prior(gamma(8, 8), nlpar = "b2", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
-                     prior(gamma(8, 8), nlpar = "b3",lb = 0))
+                     prior(gamma(8, 8), nlpar = "b3",lb = 0),
+                     prior(gamma(5, .3), class = "shape"))
 
         if("many" %in% c(gen, sp, cit)) {
 
