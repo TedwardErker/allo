@@ -3865,7 +3865,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
   nlprior <- generate_prior(genus, species, cities, climate, family)
 
-nlprior <- c(nlprior, prior(gamma(10, 1), class = "shape"))
+#nlprior <- c(nlprior, prior(gamma(100, 10), class = "shape"))
 #+end_src
 
 #+RESULTS:
@@ -3880,8 +3880,7 @@ nlprior <- c(nlprior, prior(gamma(10, 1), class = "shape"))
   get_prior(form, d, fam)
 
   #mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 10000, family = fam)
-  mod <- brm(form, chains = 2, cores = 2, data = d, init_r = .3, prior = nlprior, iter = 500, family = fam)
-
+  mod <- brm(form, chains = 1, cores = 1, data = d, init_r = 5, prior = nlprior, iter = 500, family = fam)
 
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
@@ -6936,6 +6935,12 @@ Example 3 in ... cites ... who mention that the ... is right skewed
 https://journal.r-project.org/archive/2018/RJ-2018-017/RJ-2018-017.pdf
 
 https://magesblog.com/post/2015-11-10-hierarchical-loss-reserving-with-stan/
+
+https://cran.r-project.org/web/packages/brms/vignettes/brms_nonlinear.html
+
+"Thus, please make sure that you set the link function to identity,
+whenever your non-linear predictor term already contains the desired
+link function"
 
 
 #+begin_src R
