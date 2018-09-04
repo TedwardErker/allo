@@ -1959,9 +1959,8 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 273 bytes  received 90 bytes  38.21 bytes/sec
-: total size is 5414  speedup is 14.91
-: You have new mail in /var/mail/erker
+: sent 1131 bytes  received 90 bytes  348.86 bytes/sec
+: total size is 6049  speedup is 4.95
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -3184,27 +3183,6 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 **** set values
 #+begin_src R
@@ -3221,17 +3199,36 @@ Warning messages:
 #+begin_src R
 
   form <- generate_formula(genus, species, cities, climate, hetero, family)
-
+  form
   nlprior <- generate_prior(genus, species, cities, climate, family)
+  nlprior
 #+end_src
 
 #+RESULTS:
+#+begin_example
+DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+b0 ~ (1 | Species)
+b1 ~ (1 | Species)
+b2 ~ (1 | Species)
+b3 ~ (1 | Species)
+           prior class coef group resp dpar nlpar     bound
+1  gamma(7, 3.5)     b                         b0 <lower=0>
+2    gamma(7, 7)     b                         b1 <lower=0>
+3    gamma(8, 8)     b                         b2 <lower=0>
+4    gamma(8, 8)     b                         b3 <lower=0>
+5 cauchy(0, 0.1)    sd                         b1
+6 cauchy(0, 0.1)    sd                         b2
+7 cauchy(0, 0.1)    sd                         b3
+#+end_example
 
 **** fit model to real data
 #+begin_src R
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  mod <- brm(form, chains = 4, cores = 4, data = d, init_r = .3, prior = nlprior, iter = 2000, family = family)
+if(family == "Gamma") fam <- Gamma("identity")
+if(family == "gaussian") fam <- gaussian()
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -3251,8 +3248,9 @@ C-c C-v t
 : building file list ... done
 : genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
 :
-: sent 662 bytes  received 42 bytes  281.60 bytes/sec
-: total size is 1128  speedup is 1.60
+: sent 440 bytes  received 54 bytes  109.78 bytes/sec
+: total size is 1214  speedup is 2.46
+: You have new mail in /var/mail/erker
 
 **** run on krusty
 
@@ -3265,6 +3263,9 @@ run from krusty terminal
   exit
 #+END_SRC
 
+#+BEGIN_SRC sh
+cat genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.Rout
+#+END_SRC
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
