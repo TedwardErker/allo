@@ -1959,9 +1959,8 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 335 bytes  received 96 bytes  172.40 bytes/sec
-: total size is 6258  speedup is 14.52
-: You have new mail in /var/mail/erker
+: sent 329 bytes  received 96 bytes  77.27 bytes/sec
+: total size is 6282  speedup is 14.78
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
