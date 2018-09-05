@@ -52,9 +52,9 @@ generate_formula <- function(gen, sp, cit, clim, het, family) {
         if (gen == "none") {
             if(cit == "single") {
                 b0_form <- formula(b0 ~ (1 | Species))
-                b1_form <- formula(b1 ~ (1 | Species))
+                b1_form <- formula(b1 ~ (1 | ID | Species))
                 b2_form <- formula(b2 ~ (1 | Species))
-                b3_form <- formula(b3 ~ (1 | Species))
+                b3_form <- formula(b3 ~ (1 | ID | Species))
             }
             if (cit == "many") {
                 b0_form <- formula(b0 ~ (1 | City) + (1 | Species))
