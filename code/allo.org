@@ -1882,10 +1882,10 @@ then functions subset data, generate formula and prior, and fit model.
             if("many" %in% c(gen, sp, cit)) {
 
                 nlprior <- c(nlprior,
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b2"),
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b3"))
+                             prior(cauchy(0,1), class = "sd", nlpar = "b0"),
+                             prior(cauchy(0,1), class = "sd", nlpar = "b1"),
+                             prior(cauchy(0,1), class = "sd", nlpar = "b2"),
+                             prior(cauchy(0,1), class = "sd", nlpar = "b3"))
 
             }
 
@@ -1917,10 +1917,10 @@ then functions subset data, generate formula and prior, and fit model.
             if("many" %in% c(gen, sp, cit)) {
 
                 nlprior <- c(nlprior,
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b2"),
-                             prior(cauchy(0,.3), class = "sd", nlpar = "b3"))
+                             prior(cauchy(0,1), class = "sd", nlpar = "b0"),
+                             prior(cauchy(0,1), class = "sd", nlpar = "b1"),
+                             prior(cauchy(0,1), class = "sd", nlpar = "b2"),
+                             prior(cauchy(0,1), class = "sd", nlpar = "b3"))
 
             }
 
@@ -1959,8 +1959,9 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 : building file list ... done
 : allo_functions.R
 :
-: sent 239 bytes  received 96 bytes  134.00 bytes/sec
-: total size is 6266  speedup is 18.70
+: sent 335 bytes  received 96 bytes  172.40 bytes/sec
+: total size is 6258  speedup is 14.52
+: You have new mail in /var/mail/erker
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -2016,7 +2017,7 @@ beta called rate
 #+begin_src R :exports results :results graphics :file ../figs/cauchtest.png
   x <- seq(0,5,.1)
   y <- dt(x,.2)
-  y <- dcauchy(x,0,.3)
+  y <- dcauchy(x,0,1)
   plot(x, y, type = "l")
 #+end_src
 
@@ -3279,7 +3280,7 @@ b3 ~ (1 | Species)
 if(family == "Gamma") fam <- Gamma("identity")
 if(family == "gaussian") fam <- gaussian()
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
+  mod <- brm(form, chains = 7, cores = 7, data = d, init_r = .3, prior = nlprior, iter = 1000, family = fam)
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -3324,10 +3325,9 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_many_cities_single_clim
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds
 :
-: sent 55723 bytes  received 22989318 bytes  4190007.45 bytes/sec
-: total size is 23108206  speedup is 1.00
+: sent 16 bytes  received 156 bytes  49.14 bytes/sec
+: total size is 23108206  speedup is 134350.03
 : You have new mail in /var/mail/erker
 
 **** diagnostics
