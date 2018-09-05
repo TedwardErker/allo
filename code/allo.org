@@ -1882,6 +1882,7 @@ then functions subset data, generate formula and prior, and fit model.
             if("many" %in% c(gen, sp, cit)) {
 
                 nlprior <- c(nlprior,
+                             prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
                              prior(cauchy(0,.3), class = "sd", nlpar = "b1"),
                              prior(cauchy(0,.3), class = "sd", nlpar = "b2"),
                              prior(cauchy(0,.3), class = "sd", nlpar = "b3"))
@@ -1916,6 +1917,7 @@ then functions subset data, generate formula and prior, and fit model.
             if("many" %in% c(gen, sp, cit)) {
 
                 nlprior <- c(nlprior,
+                             prior(cauchy(0,.3), class = "sd", nlpar = "b0"),
                              prior(cauchy(0,.3), class = "sd", nlpar = "b1"),
                              prior(cauchy(0,.3), class = "sd", nlpar = "b2"),
                              prior(cauchy(0,.3), class = "sd", nlpar = "b3"))
@@ -1955,10 +1957,10 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: allo_functions.R
 :
-: sent 87 bytes  received 20 bytes  42.80 bytes/sec
-: total size is 6108  speedup is 57.08
-: You have new mail in /var/mail/erker
+: sent 341 bytes  received 96 bytes  58.27 bytes/sec
+: total size is 6256  speedup is 14.32
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -3447,7 +3449,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
   if(family == "gaussian") fam <- gaussian()
 
 
-    mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 3000, family = fam)
+    mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 15000, family = fam)
     saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
@@ -3903,7 +3905,7 @@ Warning messages:
   if(family == "Gamma") fam <- Gamma("identity")
   if(family == "gaussian") fam <- gaussian()
 
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 10000, family = fam)
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 20000, family = fam)
 
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
@@ -3923,8 +3925,9 @@ C-c C-v t
 : building file list ... done
 : genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :
-: sent 440 bytes  received 54 bytes  76.00 bytes/sec
+: sent 440 bytes  received 54 bytes  65.87 bytes/sec
 : total size is 1214  speedup is 2.46
+: You have new mail in /var/mail/erker
 
 **** run on krusty
 
