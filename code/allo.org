@@ -3274,8 +3274,9 @@ C-c C-v t
 : building file list ... done
 : genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
 :
-: sent 188 bytes  received 54 bytes  32.27 bytes/sec
+: sent 188 bytes  received 54 bytes  28.47 bytes/sec
 : total size is 1227  speedup is 5.07
+: You have new mail in /var/mail/erker
 
 **** run on krusty
 
