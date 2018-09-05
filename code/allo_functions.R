@@ -102,10 +102,10 @@ generate_prior <- function (gen, sp, cit, clim, fam) {
         if("many" %in% c(gen, sp, cit)) {
 
             nlprior <- c(nlprior,
-                         prior(cauchy(0,1), class = "sd", nlpar = "b0"),
-                         prior(cauchy(0,1), class = "sd", nlpar = "b1"),
-                         prior(cauchy(0,1), class = "sd", nlpar = "b2"),
-                         prior(cauchy(0,1), class = "sd", nlpar = "b3"))
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b1"),
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
 
         }
 
@@ -137,10 +137,10 @@ generate_prior <- function (gen, sp, cit, clim, fam) {
         if("many" %in% c(gen, sp, cit)) {
 
             nlprior <- c(nlprior,
-                         prior(cauchy(0,1), class = "sd", nlpar = "b0"),
-                         prior(cauchy(0,1), class = "sd", nlpar = "b1"),
-                         prior(cauchy(0,1), class = "sd", nlpar = "b2"),
-                         prior(cauchy(0,1), class = "sd", nlpar = "b3"))
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b1"),
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
+                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
 
         }
 

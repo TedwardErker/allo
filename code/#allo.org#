@@ -1882,10 +1882,10 @@ then functions subset data, generate formula and prior, and fit model.
             if("many" %in% c(gen, sp, cit)) {
 
                 nlprior <- c(nlprior,
-                             prior(cauchy(0,1), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,1), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,1), class = "sd", nlpar = "b2"),
-                             prior(cauchy(0,1), class = "sd", nlpar = "b3"))
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b1"),
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
 
             }
 
@@ -1917,10 +1917,10 @@ then functions subset data, generate formula and prior, and fit model.
             if("many" %in% c(gen, sp, cit)) {
 
                 nlprior <- c(nlprior,
-                             prior(cauchy(0,1), class = "sd", nlpar = "b0"),
-                             prior(cauchy(0,1), class = "sd", nlpar = "b1"),
-                             prior(cauchy(0,1), class = "sd", nlpar = "b2"),
-                             prior(cauchy(0,1), class = "sd", nlpar = "b3"))
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b1"),
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
+                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
 
             }
 
@@ -1955,13 +1955,12 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password:
+: erker@krusty's password: 
 : building file list ... done
 : allo_functions.R
-:
-: sent 335 bytes  received 96 bytes  172.40 bytes/sec
-: total size is 6258  speedup is 14.52
-: You have new mail in /var/mail/erker
+: 
+: sent 329 bytes  received 96 bytes  77.27 bytes/sec
+: total size is 6282  speedup is 14.78
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -2015,7 +2014,7 @@ beta called rate
 
 #+begin_src R :exports results :results graphics :file ../figs/ftesttt.png
   x <- seq(0,5,.1)
-  y <- dgamma(x, 1.1, .3)
+  y <- dgamma(x, 1.3, 1.3)
   plot(x, y, type = "l")
 #+end_src
 
@@ -2026,7 +2025,7 @@ beta called rate
 #+begin_src R :exports results :results graphics :file ../figs/cauchtest.png
   x <- seq(0,5,.1)
   y <- dt(x,.2)
-  y <- dcauchy(x,0,1)
+  y <- dcauchy(x,0,2)
   plot(x, y, type = "l")
 #+end_src
 
