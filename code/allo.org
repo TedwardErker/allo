@@ -3299,7 +3299,7 @@ C-c C-v t
 : building file list ... done
 : genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
 :
-: sent 440 bytes  received 54 bytes  197.60 bytes/sec
+: sent 441 bytes  received 54 bytes  141.43 bytes/sec
 : total size is 1226  speedup is 2.48
 
 **** run on krusty
@@ -3325,9 +3325,10 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_many_cities_single_clim
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds
 :
-: sent 16 bytes  received 156 bytes  49.14 bytes/sec
-: total size is 23108206  speedup is 134350.03
+: sent 28928 bytes  received 18695712 bytes  4161031.11 bytes/sec
+: total size is 18809670  speedup is 1.00
 : You have new mail in /var/mail/erker
 
 **** diagnostics
@@ -3363,34 +3364,34 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b2 ~ (1 | Species)
          b3 ~ (1 | ID | Species)
    Data: d (Number of observations: 5548)
-Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 6000
+Samples: 7 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 3500
 
 Group-Level Effects:
 ~Species (Number of levels: 25)
                                Estimate Est.Error l-95% CI u-95% CI Eff.Sample
-sd(b0_Intercept)                   0.14      0.10     0.01     0.37       1904
-sd(b1_Intercept)                   0.59      0.28     0.19     1.14          4
-sd(b3_Intercept)                   0.23      0.04     0.17     0.31       1002
-sd(b2_Intercept)                   0.41      0.10     0.26     0.63       1488
-cor(b1_Intercept,b3_Intercept)    -0.88      0.09    -0.98    -0.63         10
+sd(b0_Intercept)                   0.17      0.10     0.01     0.40       1074
+sd(b1_Intercept)                   0.73      0.26     0.22     1.23          7
+sd(b3_Intercept)                   0.23      0.04     0.17     0.31        970
+sd(b2_Intercept)                   0.42      0.10     0.27     0.66       1180
+cor(b1_Intercept,b3_Intercept)    -0.90      0.08    -0.98    -0.70         11
                                Rhat
 sd(b0_Intercept)               1.01
-sd(b1_Intercept)               1.80
-sd(b3_Intercept)               1.02
-sd(b2_Intercept)               1.01
-cor(b1_Intercept,b3_Intercept) 1.20
+sd(b1_Intercept)               1.43
+sd(b3_Intercept)               1.01
+sd(b2_Intercept)               1.00
+cor(b1_Intercept,b3_Intercept) 1.19
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     2.82      0.08     2.65     2.98       6000 1.01
-b1_Intercept     1.22      0.19     0.94     1.62          6 1.36
-b2_Intercept     1.00      0.10     0.82     1.20         38 1.04
-b3_Intercept     1.17      0.05     1.07     1.27         10 1.17
+b0_Intercept     2.81      0.09     2.65     2.99       3500 1.01
+b1_Intercept     1.27      0.19     0.96     1.65         12 1.18
+b2_Intercept     0.99      0.10     0.80     1.20        516 1.02
+b3_Intercept     1.16      0.05     1.06     1.26         22 1.09
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     9.83      0.18     9.49    10.18       6000 1.00
+shape     9.84      0.19     9.46    10.21       3500 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -3398,7 +3399,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning messages:
 1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
 We recommend running more iterations and/or setting stronger priors.
-2: There were 8 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+2: There were 14 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
