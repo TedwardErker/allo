@@ -3303,10 +3303,10 @@ C-c C-v t
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password:
+: erker@krusty's password: 
 : building file list ... done
 : genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.R
-:
+: 
 : sent 441 bytes  received 54 bytes  141.43 bytes/sec
 : total size is 1226  speedup is 2.48
 
