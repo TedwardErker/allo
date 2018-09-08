@@ -3335,8 +3335,8 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_many_cities_single_clim
 : receiving file list ... done
 : genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.rds
 :
-: sent 26072 bytes  received 18676284 bytes  1781176.76 bytes/sec
-: total size is 18796552  speedup is 1.01
+: sent 26102 bytes  received 30709928 bytes  2927240.95 bytes/sec
+: total size is 30822923  speedup is 1.00
 : You have new mail in /var/mail/erker
 
 **** diagnostics
@@ -3372,45 +3372,47 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b2 ~ (1 | Species)
          b3 ~ (1 | ID | Species)
    Data: d (Number of observations: 5548)
-Samples: 7 chains, each with iter = 1000; warmup = 500; thin = 1;
-         total post-warmup samples = 3500
+Samples: 7 chains, each with iter = 3000; warmup = 1500; thin = 1;
+         total post-warmup samples = 10500
 
 Group-Level Effects:
 ~Species (Number of levels: 25)
                                Estimate Est.Error l-95% CI u-95% CI Eff.Sample
-sd(b0_Intercept)                   0.17      0.10     0.02     0.40       1284
-sd(b1_Intercept)                   0.81      0.20     0.48     1.29        720
-sd(b3_Intercept)                   0.23      0.04     0.18     0.32       1089
-sd(b2_Intercept)                   0.42      0.10     0.27     0.64       1096
-cor(b1_Intercept,b3_Intercept)    -0.92      0.05    -0.98    -0.79       1009
+sd(b0_Intercept)                   0.17      0.10     0.02     0.40       3500
+sd(b1_Intercept)                   0.71      0.24     0.26     1.19          7
+sd(b3_Intercept)                   0.23      0.04     0.16     0.31        159
+sd(b2_Intercept)                   0.46      0.13     0.27     0.78         13
+cor(b1_Intercept,b3_Intercept)    -0.89      0.09    -0.98    -0.63          9
                                Rhat
 sd(b0_Intercept)               1.00
-sd(b1_Intercept)               1.00
-sd(b3_Intercept)               1.01
-sd(b2_Intercept)               1.00
-cor(b1_Intercept,b3_Intercept) 1.00
+sd(b1_Intercept)               1.43
+sd(b3_Intercept)               1.02
+sd(b2_Intercept)               1.16
+cor(b1_Intercept,b3_Intercept) 1.25
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     2.80      0.09     2.64     2.98       3500 1.00
-b1_Intercept     1.30      0.18     0.97     1.67        468 1.01
-b2_Intercept     0.99      0.10     0.80     1.18        623 1.01
-b3_Intercept     1.15      0.05     1.06     1.25        501 1.01
+b0_Intercept     2.81      0.09     2.65     2.99      10500 1.02
+b1_Intercept     1.24      0.20     0.89     1.64          9 1.27
+b2_Intercept     1.01      0.11     0.81     1.25         41 1.05
+b3_Intercept     1.17      0.06     1.06     1.29          9 1.25
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     9.84      0.19     9.48    10.23       3500 1.00
+shape     9.86      0.18     9.50    10.22      10500 1.01
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 12 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+2: There were 80 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png
-  plot(mod, ask = F)
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_many_cities_single_climate_none_hetero_no_family_Gamma.png :height 1500
+  plot(mod, ask = F, N = 50)
 #+end_src
 
 #+RESULTS:
