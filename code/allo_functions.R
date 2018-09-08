@@ -129,16 +129,16 @@ generate_prior <- function (gen, sp, cit, clim, fam) {
 
     if(fam == "Gamma") {
         nlprior <- c(prior(gamma(7.5, 3), nlpar = "b0",lb = 0),
-                     prior(gamma(8, 8), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
-                     prior(gamma(8, 8), nlpar = "b2", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
-                     prior(gamma(8, 8), nlpar = "b3",lb = 0),
+                     prior(gamma(8, 6), nlpar = "b1",lb = 0),
+                     prior(gamma(8, 8), nlpar = "b2", lb = 0),
+                     prior(gamma(8, 6), nlpar = "b3",lb = 0),
                      prior(gamma(5, .3), class = "shape"))
 
         if("many" %in% c(gen, sp, cit)) {
 
             nlprior <- c(nlprior,
                          prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
-                         prior(gamma(1.3,1.3), class = "sd", nlpar = "b1"),
+                         prior(gamma(10,10), class = "sd", nlpar = "b1"),
                          prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
                          prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
 
