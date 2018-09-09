@@ -25,7 +25,7 @@ d <- readRDS("../data/age_dbh_testing.rds")
 if(family == "Gamma") fam <- Gamma("identity")
 if(family == "gaussian") fam <- gaussian()
 
-mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 20000, family = fam)
+mod <- brm(form, chains = 8, cores = 8, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
 
 saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## fit model to real data:1 ends here
