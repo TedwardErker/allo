@@ -1776,6 +1776,36 @@ then functions subset data, generate formula and prior, and fit model.
 #  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
 
 #+end_src
+
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+Loading required package: Rcpp
+Loading required package: ggplot2
+Loading 'brms' package (version 2.3.1). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+
+Attaching package: ‘gridExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+#+end_example
+
 **** functions
 #+begin_src R :tangle allo_functions.R
 
@@ -1957,9 +1987,11 @@ rsync -avz allo_functions.R erker@krusty:~/allo/code/
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: allo_functions.R
 :
-: sent 87 bytes  received 20 bytes  30.57 bytes/sec
-: total size is 6194  speedup is 57.89
+: sent 129 bytes  received 96 bytes  26.47 bytes/sec
+: total size is 6194  speedup is 27.53
+: You have new mail in /var/mail/erker
 
 
 What is the prior on sigma in hetero models?  Can I adjust that prior?
@@ -3547,8 +3579,8 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 : receiving file list ... done
 : genus_many_species_many_cities_many_climate_none_hetero_no_family_Gamma.rds
 :
-: sent 43522 bytes  received 47346463 bytes  3791198.80 bytes/sec
-: total size is 47510547  speedup is 1.00
+: sent 48324 bytes  received 43323122 bytes  858840.51 bytes/sec
+: total size is 43485636  speedup is 1.00
 
 **** diagnostics
 :PROPERTIES:
@@ -4002,9 +4034,11 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.rds
 :
-: sent 16 bytes  received 158 bytes  69.60 bytes/sec
-: total size is 123529082  speedup is 709937.25
+: sent 77857 bytes  received 43656452 bytes  2364016.70 bytes/sec
+: total size is 43833742  speedup is 1.00
+: You have new mail in /var/mail/erker
 
 **** diagnostics
 :PROPERTIES:
@@ -4039,59 +4073,57 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b2 ~ (1 | City) + (1 | Genus/Species)
          b3 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
-Samples: 6 chains, each with iter = 10000; warmup = 5000; thin = 1;
-         total post-warmup samples = 30000
+Samples: 8 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 8000
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.69      0.43     1.03     2.47          9 1.22
-sd(b1_Intercept)     0.48      0.40     0.16     1.64         23 1.12
-sd(b2_Intercept)     0.33      0.07     0.21     0.50        192 1.03
-sd(b3_Intercept)     0.17      0.04     0.12     0.25         22 1.10
+sd(b0_Intercept)     1.41      0.31     0.90     2.12        231 1.03
+sd(b1_Intercept)     0.85      0.27     0.43     1.48       1625 1.01
+sd(b2_Intercept)     0.34      0.08     0.22     0.53       3866 1.00
+sd(b3_Intercept)     0.19      0.04     0.12     0.29       3661 1.00
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     2.07      1.97     0.12     5.95         19 1.37
-sd(b1_Intercept)     0.89      0.69     0.01     2.13         17 1.37
-sd(b2_Intercept)     0.08      0.08     0.00     0.28         13 1.41
-sd(b3_Intercept)     0.05      0.05     0.00     0.17         11 1.21
+sd(b0_Intercept)     0.42      0.20     0.05     0.83       1916 1.00
+sd(b1_Intercept)     1.16      0.29     0.63     1.78       1825 1.01
+sd(b2_Intercept)     0.13      0.07     0.01     0.29       1529 1.01
+sd(b3_Intercept)     0.11      0.05     0.01     0.21       1268 1.01
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.23      0.16     0.02     0.63         39 1.04
-sd(b1_Intercept)     0.33      0.14     0.15     0.57         12 1.16
-sd(b2_Intercept)     0.12      0.04     0.04     0.20         12 1.16
-sd(b3_Intercept)     0.09      0.03     0.04     0.17         23 1.27
+sd(b0_Intercept)     0.27      0.16     0.02     0.60       1542 1.01
+sd(b1_Intercept)     0.64      0.21     0.31     1.14       3183 1.00
+sd(b2_Intercept)     0.14      0.05     0.06     0.24       2888 1.00
+sd(b3_Intercept)     0.11      0.03     0.05     0.18       2355 1.01
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.29      0.52     1.30     3.53        414 1.02
-b1_Intercept      0.48      0.18     0.19     0.92         61 1.06
-b1_Precip         0.51      0.18     0.22     0.96        422 1.01
-b1_GDD            0.18      0.06     0.08     0.30         34 1.10
-b1_Precip:GDD     0.18      0.06     0.09     0.34         15 1.13
-b2_Intercept      0.81      0.09     0.62     1.00        187 1.03
-b3_Intercept      1.05      0.05     0.95     1.16         21 1.10
+b0_Intercept      2.31      0.37     1.57     3.04       3547 1.00
+b1_Intercept      0.68      0.23     0.31     1.19       8000 1.00
+b1_Precip         0.67      0.23     0.29     1.19       8000 1.00
+b1_GDD            0.22      0.06     0.11     0.35       8000 1.00
+b1_Precip:GDD     0.19      0.06     0.09     0.32       8000 1.02
+b2_Intercept      0.80      0.11     0.60     1.02       2819 1.00
+b3_Intercept      1.05      0.06     0.93     1.18       3680 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    15.03      0.27    14.49    15.55        130 1.04
+shape    15.06      0.29    14.50    15.64       8000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 9754 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+Warning message:
+There were 3 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
-  plot(mod, ask = F)
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png :height 1300
+  plot(mod, ask = F, N = 40)
 #+end_src
 
 #+RESULTS:
@@ -4116,6 +4148,8 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+begin_src R
 precip.gdd <-   marginal_effects(mod, effects = "Precip:GDD", surface = T)
 #+end_src
+
+#+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipGDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
 precip.gdd
