@@ -667,6 +667,11 @@ that are important for urban environments?
 
 [[file:../../../org/attachments/Methods/p_2018-09-10_16-28-08.png]]
 
+The ironic thing about this figure is that Fort Collins is the
+"North".  This includes a great variety of areas including Cheyenne,
+WY, which according to figure 5 (McPherson and Peper 2012) in the same
+document have greeen ash trees that have 55% of the leaf area of Fort
+Collins green ash at age 60.  This incredible variability within
 
 Get a figure showing the climate of census tracts.  Basically remake
 the above figure to be more continuous
@@ -675,7 +680,9 @@ Make a figure showing the reference cities in GDD and Precip space to
 reveal where there are significant holes that could be filled.  What
 future cities to sample.
 
-When I make the marginal effects plot of 
+When I make the marginal effects plot of GDD versus Precip, I should
+make the plot cover the values seen in the US.
+
 *** Get new climate data.  Growing degree days and Precip.  HDD is super high for minneapolis, but harsh winters aren't relevant.
 
 #+BEGIN_SRC sh
