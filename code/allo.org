@@ -6,7 +6,9 @@
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
 * Objective
-To create better allometric equations for urban trees
+Concept: Application of bayesian multilevel modelling approach using
+Stan via the R package brms.
+Motivation: To create better allometric equations for urban trees.
 * Caveat
 I am not an expert on this, but I think I have a contribution to
 make.  I'm using a dataset I did not work to collect and it may have
@@ -349,10 +351,69 @@ many computer models used in urban forestry, such as i-Tree, National
 Tree Benefit Calculator, OpenTreeMap, and ecoSmart Landscapes
 (fig. 1).
 
+Quotes from the utd publication:
+#+BEGIN_QUOTE
+The development of allometric equations for urban open-grown trees has
+been sporadic. Fleming (1988) measured trees in New Jersey having full
+healthy crowns to develop linear relationships between d.b.h., height,
+crown spread, and age. Frelich (1992) measured only healthy trees (12 species, 221
+trees total) growing in Minneapolis and St. Paul, Minnesota, to
+predict linear size relation- ships. Nowak (1994b) developed an
+allometric equation for leaf area based on data from park trees in
+Chicago. Tree dimensions and leaf area were predicted for the most
+abundant street tree species in Modesto and Santa Monica, Califor- nia
+(Peper et al. 2001a, 2001b). In New Haven, Connecticut, Troxel et
+al. (2013) developed allometric equations for predicting d.b.h. from
+age and height, crown diameter, and crown volume from d.b.h. for early
+growth (15 years) of 10 street tree species. Outside of North America,
+growth equations have been developed for street-side Tilia species in
+Copenhagen, Denmark (Larsen and Kristoffersen 2002), and T. cordata
+Mill., Fraxinus excelsior L. and Aesculus hippocastanum L. in Warsaw,
+Poland (Lukaszkiewicz and Kosmala 2008, Lukaszkiewicz et
+al. 2005). Predictive models were developed from allometric data for
+five street tree species in northeastern Italy by Semenzato et
+al. (2011). Stoffberg et al. (2008) used allometric relationships
+between age and d.b.h., height, and crown diameter to estimate
+dimensions at 10, 15, and 30 years after planting for three street
+tree species in Tshwane, South Africa. The allometric equations from
+all these studies reflect the effects of local site conditions,
+management practices, and growing season on growth, limiting
+application outside their region of origin (fig. 5).
 
+
+
+#+END_QUOTE
+
+
+** urban trees equations
+
+"Growth equa- tions for forest trees may not be directly transferable
+to open-grown urban trees because they grow and partition bole,
+branch, twig, and leaf biomass differently (Anderegg et al. 2015,
+Nowak 1994a, Peper and McPherson 1998) (fig. 4). For example, in
+forests, tree crowns compete for limited space and may not reach their
+maximum expansion potential (Martin et al. 2012)." from the
+
+
+** past modelling
+#+BEGIN_QUOTE
+This report presents the third, most recent and most complete sets of
+growth equations. The equations presented in this report were
+developed using more sophisticated statistical methods than
+before. For example, in the first studies, logarithmic regression and
+exponential models predominantly provided the best fits to measured
+data (Peper et al. 2001a, 2001b). In these equations, the best model
+fits ranged from polynomials (from simple linear to quartic) to
+logarithmic and exponential models (Peper et al. 2014). The newest
+equations have been integrated with numerical models of tree benefits
+in the ecoSmart Landscapes software (McPherson et al. 2014).
+
+#+END_QUOTE
 
 * Methods
 ** Data
+
+
 
 How many species X City combinations are there for dbh ~ age? 309.
 
@@ -367,6 +428,16 @@ have significant dbh at "age" 0.
 
 "AGE" it not actually known.  A modelling extension could incorporate
 that uncertainty.  How would it be down?  multivariate?
+
+uncertainty about age:
+#+BEGIN_QUOTE
+Records of planting dates seldom extend beyond 30 to 40
+years. Similarly, detecting the presence and size of individual trees
+using high-resolution aerial imagery becomes difficult prior
+to 1990. As a result, predictions of urban tree dimensions reflect the
+increasing uncertainty about true tree age compounded by naturally
+increasing variability associated with aging (fig. 8).
+#+END_QUOTE
 
 *** Species
 **** taxonomy
@@ -571,6 +642,7 @@ that are important for urban environments?
 *** Cities and Climate
 
 
+
 #+name: city_climate
 | Region | City             |  CDD |  HDD | Precip |  Longitude | Latitude |
 |--------+------------------+------+------+--------+------------+----------|
@@ -591,6 +663,9 @@ that are important for urban environments?
 | SWDsrt | Glendale, AZ     | 2128 |  637 |    174 |  -112.1860 |  33.5387 |
 | TpIntW | Boise, ID        |  387 | 3325 |    417 |  -116.2023 |  43.6150 |
 | Tropic | Honolulu, HI     | 2416 |    0 |   2206 | -157.85833 | 21.30694 |
+
+
+[[file:../../../org/attachments/Methods/p_2018-09-10_16-28-08.png]]
 
 *** Get new climate data.  Growing degree days and Precip.  HDD is super high for minneapolis, but harsh winters aren't relevant.
 
