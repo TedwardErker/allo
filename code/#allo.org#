@@ -413,8 +413,6 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 * Methods
 ** Data
 
-
-
 How many species X City combinations are there for dbh ~ age? 309.
 
 repeat measures on the same individuals would help much.
@@ -1317,7 +1315,6 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 
 
 Is minneapolis an influential point?
-
 
 
 ** Modelling
@@ -5424,7 +5421,6 @@ Model selection
 *** explaining priors
 can't be negative...  in brms nonlinear advanced, mention the
 importance of setting strong priors.  Also non negative.
-
 
 
 * Results
