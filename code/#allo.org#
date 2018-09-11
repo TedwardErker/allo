@@ -679,7 +679,7 @@ WY, which according to figure 5 (McPherson and Peper 2012) in the same
 document have greeen ash trees that have 55% of the leaf area of Fort
 Collins green ash at age 60.  This incredible variability within
 regions, hence the need for more continuous approach.  Notice how
-often the refere
+often the reference city is on the border of the climate zone.
 
 Get a figure showing the climate of census tracts.  Basically remake
 the above figure to be more continuous
@@ -5435,6 +5435,9 @@ comparison.
 figure showing the marginal effects smooth plot of GDD versus precip,
 with a contour showing in what climate space 50%, 75%, and 95% of the
 US population lives.
+The marginal effects and the uncertainty in them could also be mapped back into geographic space
+and the map could show that.  That would be neat.
+
 * Discussoins
 
 make better
