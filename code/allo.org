@@ -439,6 +439,12 @@ increasing uncertainty about true tree age compounded by naturally
 increasing variability associated with aging (fig. 8).
 #+END_QUOTE
 
+dbh is cm
+
+utd equations sometimes predict negative values. see top of page 25.
+
+Think about Apps Min and Apps Max
+
 *** Species
 **** taxonomy
 Nesting of taxonomy.
@@ -5421,6 +5427,13 @@ importance of setting strong priors.  Also non negative.
 
 
 * Results
+figure showing the age versus dbh for several species and city
+combinations.  overlay our models and the existing models for
+comparison.
+
+figure showing the marginal effects smooth plot of GDD versus precip,
+with a contour showing in what climate space 50%, 75%, and 95% of the
+US population lives.
 * Discussoins
 
 make better

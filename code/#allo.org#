@@ -678,7 +678,8 @@ The ironic thing about this figure is that Fort Collins is the
 WY, which according to figure 5 (McPherson and Peper 2012) in the same
 document have greeen ash trees that have 55% of the leaf area of Fort
 Collins green ash at age 60.  This incredible variability within
-regions, hence the need for more continuous approach.
+regions, hence the need for more continuous approach.  Notice how
+often the refere
 
 Get a figure showing the climate of census tracts.  Basically remake
 the above figure to be more continuous
@@ -5427,6 +5428,13 @@ importance of setting strong priors.  Also non negative.
 
 
 * Results
+figure showing the age versus dbh for several species and city
+combinations.  overlay our models and the existing models for
+comparison.
+
+figure showing the marginal effects smooth plot of GDD versus precip,
+with a contour showing in what climate space 50%, 75%, and 95% of the
+US population lives.
 * Discussoins
 
 make better
