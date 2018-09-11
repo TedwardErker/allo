@@ -413,8 +413,6 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 * Methods
 ** Data
 
-
-
 How many species X City combinations are there for dbh ~ age? 309.
 
 repeat measures on the same individuals would help much.
@@ -678,7 +676,8 @@ The ironic thing about this figure is that Fort Collins is the
 WY, which according to figure 5 (McPherson and Peper 2012) in the same
 document have greeen ash trees that have 55% of the leaf area of Fort
 Collins green ash at age 60.  This incredible variability within
-regions, hence the need for more continuous approach.
+regions, hence the need for more continuous approach.  Notice how
+often the reference city is on the border of the climate zone.
 
 Get a figure showing the climate of census tracts.  Basically remake
 the above figure to be more continuous
@@ -1316,7 +1315,6 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 
 
 Is minneapolis an influential point?
-
 
 
 ** Modelling
@@ -5425,7 +5423,6 @@ can't be negative...  in brms nonlinear advanced, mention the
 importance of setting strong priors.  Also non negative.
 
 
-
 * Results
 figure showing the age versus dbh for several species and city
 combinations.  overlay our models and the existing models for
@@ -5434,6 +5431,9 @@ comparison.
 figure showing the marginal effects smooth plot of GDD versus precip,
 with a contour showing in what climate space 50%, 75%, and 95% of the
 US population lives.
+The marginal effects and the uncertainty in them could also be mapped back into geographic space
+and the map could show that.  That would be neat.
+
 * Discussoins
 
 make better
