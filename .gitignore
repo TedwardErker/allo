@@ -2,6 +2,7 @@
 *bbl
 *tex
 *history
+.Rhistory
 models/*
 figs/*
 code/#*
