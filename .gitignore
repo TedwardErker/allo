@@ -7,3 +7,4 @@ models/*
 figs/*
 code/#*
 \.#*
+.DS_Store
