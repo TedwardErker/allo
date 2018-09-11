@@ -2,3 +2,7 @@
 *bbl
 *tex
 *history
+models/*
+figs/*
+code/#*
+\.#*
