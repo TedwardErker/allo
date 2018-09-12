@@ -4346,8 +4346,47 @@ precip.gdd
 #+end_src
 **** tangle
 **** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: ssh: Could not resolve hostname krusty: nodename nor servname provided, or not known
+: rsync: connection unexpectedly closed (0 bytes received so far) [sender]
+: rsync error: error in rsync protocol data stream (code 12) at /BuildRoot/Library/Caches/com.apple.xbs/Sources/rsync/rsync-52/rsync/io.c(453) [sender=2.6.9]
+
 **** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.Rout
+#+END_SRC
+
 **** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.rds
+:
+: sent 77857 bytes  received 43656452 bytes  2364016.70 bytes/sec
+: total size is 43833742  speedup is 1.00
+: You have new mail in /var/mail/erker
+
 **** assess model
 
 
