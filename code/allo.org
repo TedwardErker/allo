@@ -693,77 +693,57 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 #+RESULTS:
 
 #+begin_src R
-  library(ggplot2)
-  library(dplyr)
-  library(tidyr)
-  library(stringr)
-  d <- read.table("../data/gdd.txt")
+    library(ggplot2)
+    library(dplyr)
+    library(tidyr)
+    library(stringr)
+    d <- read.table("../data/gdd.txt")
 
-  colnames(d) <- c("station", "grdd")
+    colnames(d) <- c("station", "grdd")
 
-  d <- d %>%
-      mutate(gdd = as.numeric(str_match(grdd, "-*[0-9]+")[,1]),
-             qual = str_match(grdd, "[A-Z]")[,1])
-  head(d)
-  dim(d)
+    d <- d %>%
+        mutate(gdd = as.numeric(str_match(grdd, "-*[0-9]+")[,1]),
+               qual = str_match(grdd, "[A-Z]")[,1])
+    head(d)
+    dim(d)
 
-  d <- d %>%
-      filter(qual %in% c("C","S","R"),
-             gdd >= 0)
-  dim(d)
+    d <- d %>%
+        filter(qual %in% c("C","S","R"),
+               gdd >= 0)
+    dim(d)
 
-  ll <- read.table("../data/temp-station-info.txt", fill = T, stringsAsFactors = F)
-  ll <- ll[,1:3] # get station, lat, and long
-  colnames(ll) <- c("station","lat","long")
+    ll <- read.table("../data/temp-station-info.txt", fill = T, stringsAsFactors = F)
+    ll <- ll[,1:3] # get station, lat, and long
+    colnames(ll) <- c("station","lat","long")
 
-  ll <-  ll %>%
-      mutate(station = as.character(station),
-             lat = as.numeric(lat))
+    ll <-  ll %>%
+        mutate(station = as.character(station),
+               lat = as.numeric(lat))
 
-  dl <- left_join(d, ll)
+    dl <- left_join(d, ll)
 
-  write.csv(dl, "../data/gdd_qt_ll.csv")
-
-
-p <- read.table("../data/precip.txt")
-  colnames(p) <- c("station", "precip")
-
-  p <- p %>%
-      mutate(precip = as.numeric(str_match(precip, "-*[0-9]+")[,1]),
-             qual = str_match(precip, "[A-Z]")[,1])
-  head(p)
-  dim(p)
-
-  p <- p %>%
-      filter(qual %in% c("C","S","R"),
-             precip >= 0)
-  dim(p)
+    write.csv(dl, "../data/gdd_qt_ll.csv")
 
 
-  pl <- left_join(p, ll)
+  p <- read.table("../data/precip.txt")
+  colnames(p) <- c("station", "precip_qual")
 
-  write.csv(pl, "../data/gdd_qt_ll.csv")
+    p <- p %>%
+        mutate(precip = as.numeric(str_match(precip_qual, "[0-9]+")[,1]),
+               qual = str_match(precip_qual, "[A-Z]")[,1])
+    head(p)
+    dim(p)
+
+    p <- p %>%
+        filter(qual %in% c("C","S","R"),
+               precip >= 0)
+    dim(p)
 
 
+    pl <- left_join(p, ll)
+
+    write.csv(pl, "../data/gdd_qt_ll.csv")
 #+end_src
-
-#+RESULTS:
-#+begin_example
-      station   grdd   gdd qual
-1 AQW00061705 12073C 12073    C
-2 CAW00064757  2636Q  2636    Q
-3 CQC00914080 11168P 11168    P
-4 CQC00914801 11656R 11656    R
-5 FMC00914395 11423P 11423    P
-6 FMC00914419 11860P 11860    P
-[1] 7501    4
-[1] 6340    4
-Warning message:
-In evalq(as.numeric(lat), <environment>) : NAs introduced by coercion
-Joining, by = "station"
-Warning message:
-Column `station` joining factor and character vector, coercing into character vector
-#+end_example
 
 #+begin_src R :var city_climate=city_climate
 
@@ -803,11 +783,55 @@ Column `station` joining factor and character vector, coercing into character ve
 [[file:../figs/GDD_Precip_Cities.png]]
 
 
-*** GDD Precip and US Population
-#+BEGIN_SRC sh
 
-wget -O ../data/gdd.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/supplemental/products/agricultural/ann-grdd-tb4886.txt
-#+END_SRC
+#+begin_src R :exports results :results graphics :file ../figs/precip.png
+  ggplot(pl, aes(x = long, y = lat, color = precip)) +
+      geom_point() +
+    scale_color_distiller(palette = "Blues", direction = 1)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/precip.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/precip_cont.png
+    ggplot(dplyr::filter(pl, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = precip)) +
+        geom_point() +
+      coord_map(projection = "albers", parameters = c(29,45)) +
+      scale_color_distiller("Precip",palette = "Blues", direction = 1) +
+      theme_bw() +
+      theme(legend.position = c(.9,.23),
+            text = element_text(size = 18),
+            legend.direction = "vertical") +
+      labs(x = "longitude", y = "latitude")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/precip_cont.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_map.png
+  ggplot(dl, aes(x = long, y = lat, color = gdd)) +
+      geom_point() +
+    scale_color_distiller(palette = "Greens", direction = 1)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_map.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_cont.png
+    ggplot(dplyr::filter(dl, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = gdd)) +
+        geom_point() +
+      coord_map(projection = "albers", parameters = c(29,45)) +
+      scale_color_distiller("Growing\nDegree\nDays",palette = "Greens", direction = 1) +
+      theme_bw() +
+      theme(legend.position = c(.9,.23),
+            text = element_text(size = 18),
+            legend.direction = "vertical") +
+      labs(x = "longitude", y = "latitude")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_cont.png]]
+
 
 *** Tree Dimensions
 | Tree Dimension            | abbr |
