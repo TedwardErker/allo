@@ -135,14 +135,9 @@ Mancuccini, 2004)."
 
 * What should the structure of the equations be?
 
-
-
 DBH ~ age
 
 assymetrical
-
-
-
 
 ** Height
 from cite:Weiskittel_ForestGrowthAndYieldModeling:
@@ -176,7 +171,6 @@ Chapman–Richards, Weibull, and a modified logistic-type function were
 consistently among the best performing models because they were
 flexible, able to assume a variety of shapes, and extrapolated well.
 #+END_QUOTE
-
 
 ** DBH
 cite:Weiskittel_ForestGrowthAndYieldModeling
