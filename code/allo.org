@@ -833,6 +833,11 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 [[file:../figs/gdd_cont.png]]
 
 
+#+begin_src R
+
+#+end_src
+
+
 *** Tree Dimensions
 | Tree Dimension            | abbr |
 |---------------------------+------|
