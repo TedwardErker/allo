@@ -686,6 +686,7 @@ make the plot cover the values seen in the US.
 
 #+BEGIN_SRC sh
 wget -O ../data/gdd.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/supplemental/products/agricultural/ann-grdd-tb4886.txt
+wget -O ../data/precip.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/products/precipitation/ann-prcp-normal.txt
 wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/station-inventories/temp-inventory.txt
 #+END_SRC
 
@@ -698,12 +699,12 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
   library(stringr)
   d <- read.table("../data/gdd.txt")
 
-            colnames(d) <- c("station", "grdd")
+  colnames(d) <- c("station", "grdd")
 
-          d <- d %>%
-              mutate(gdd = as.numeric(str_match(grdd, "-*[0-9]+")[,1]),
-                     qual = str_match(grdd, "[A-Z]")[,1])
-    head(d)
+  d <- d %>%
+      mutate(gdd = as.numeric(str_match(grdd, "-*[0-9]+")[,1]),
+             qual = str_match(grdd, "[A-Z]")[,1])
+  head(d)
   dim(d)
 
   d <- d %>%
@@ -711,9 +712,9 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
              gdd >= 0)
   dim(d)
 
-      ll <- read.table("../data/temp-station-info.txt", fill = T, stringsAsFactors = F)
-      ll <- ll[,1:3] # get station, lat, and long
-      colnames(ll) <- c("station","lat","long")
+  ll <- read.table("../data/temp-station-info.txt", fill = T, stringsAsFactors = F)
+  ll <- ll[,1:3] # get station, lat, and long
+  colnames(ll) <- c("station","lat","long")
 
   ll <-  ll %>%
       mutate(station = as.character(station),
@@ -722,6 +723,28 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
   dl <- left_join(d, ll)
 
   write.csv(dl, "../data/gdd_qt_ll.csv")
+
+
+p <- read.table("../data/precip.txt")
+  colnames(p) <- c("station", "precip")
+
+  p <- p %>%
+      mutate(precip = as.numeric(str_match(precip, "-*[0-9]+")[,1]),
+             qual = str_match(precip, "[A-Z]")[,1])
+  head(p)
+  dim(p)
+
+  p <- p %>%
+      filter(qual %in% c("C","S","R"),
+             precip >= 0)
+  dim(p)
+
+
+  pl <- left_join(p, ll)
+
+  write.csv(pl, "../data/gdd_qt_ll.csv")
+
+
 #+end_src
 
 #+RESULTS:
@@ -778,6 +801,13 @@ Column `station` joining factor and character vector, coercing into character ve
 
 #+RESULTS:
 [[file:../figs/GDD_Precip_Cities.png]]
+
+
+*** GDD Precip and US Population
+#+BEGIN_SRC sh
+
+wget -O ../data/gdd.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/supplemental/products/agricultural/ann-grdd-tb4886.txt
+#+END_SRC
 
 *** Tree Dimensions
 | Tree Dimension            | abbr |
@@ -4353,9 +4383,12 @@ precip.gdd
 #+END_SRC
 
 #+RESULTS:
-: ssh: Could not resolve hostname krusty: nodename nor servname provided, or not known
-: rsync: connection unexpectedly closed (0 bytes received so far) [sender]
-: rsync error: error in rsync protocol data stream (code 12) at /BuildRoot/Library/Caches/com.apple.xbs/Sources/rsync/rsync-52/rsync/io.c(453) [sender=2.6.9]
+: erker@krusty's password:
+: building file list ... done
+: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R
+:
+: sent 783 bytes  received 42 bytes  330.00 bytes/sec
+: total size is 1553  speedup is 1.88
 
 **** run on krusty
 
