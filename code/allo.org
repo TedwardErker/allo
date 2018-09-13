@@ -991,7 +991,7 @@ The dots should instead be a contour plot of the US population.
 #+RESULTS:
 [[file:../figs/gdd_precip_cont.png]]
 
-
+Trying to do log scale
 #+begin_src R
   d <- bind_cols(dsp.trks@data, trks@data) %>%
      dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
@@ -1017,22 +1017,24 @@ The dots should instead be a contour plot of the US population.
 
 The dots should instead be a contour plot of the US population.
 #+begin_src R :exports results :results graphics :file ../figs/space_log.png :width 300 :height 300
-      pal <- expand.grid(gdd = seq(40,100,5), precip = seq(15,100,5)) %>%
-        mutate(red = f(gdd, m = 80) + 50,
-               green = f(precip,100) + f(gdd,150),
-               blue = f(precip, m = 180) + 30,
-            col = rgb(red, green, blue, maxColorValue = 255))
+    pal <- expand.grid(gdd = seq(2000,10000,100), precip = seq(500,7000,100)) %>%
+      mutate(red = f(gdd, m = 80) + 50,
+             green = f(precip,100) + f(gdd,150),
+             blue = f(precip, m = 180) + 30,
+          col = rgb(red, green, blue, maxColorValue = 255))
 
     con <-  ggtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
     con2 <- expand.grid(gdd = con$x, precip = con$y)
     con2$z <- as.vector(con$z)
 
-    ggplot2::ggplot(d, aes(x = gdd_col, y = precip_col)) +
-#          geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
-        geom_point(alpha = 1, size = .5) +
+    ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
+          geom_tile(data = pal, aes(x = gdd, y = precip, fill = col)) +
+        geom_point(alpha = .01, size = .5) +
   #          geom_contour(data = con2, aes(z = z), color = "white") +
           scale_fill_identity() +
-            theme_bw()
+            theme_bw() +
+      coord_trans("log", "log", limx = c(2000,10000), limy = c(500,7000))
+
 
 #+end_src
 
