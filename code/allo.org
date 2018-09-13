@@ -975,13 +975,14 @@ The dots should instead be a contour plot of the US population.
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/space.png :width 300 :height 300
-    ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
-          geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
-        geom_point(alpha = .01, size = .5) +
-            geom_contour(data = con3, aes(z = z), color = "white", ) +
-          scale_fill_identity() +
-            theme_bw() +
-    ylim(c(0,7500))
+  ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
+        geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+      geom_point(alpha = .01, size = .5) +
+      geom_contour(data = con3, aes(z = z), color = "white", breaks = con2$falpha) +
+#      stat_contour(breaks=c(120,140,160))
+        scale_fill_identity() +
+          theme_bw() +
+  ylim(c(0,7500))
 #+end_src
 
 #+RESULTS:
