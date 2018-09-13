@@ -953,10 +953,8 @@ rm census_centroid_pop.zip
 
 
 The dots should instead be a contour plot of the US population.
-#+begin_src R :exports results :results graphics :file ../figs/space.png :width 300 :height 300
+#+begin_src R
   library(hdrcde)
-
-
 
   pal <- expand.grid(gdd = seq(2000,10000,100), precip = seq(100,7000,100)) %>%
         mutate(red = f(gdd, m = 80) + 50,
@@ -965,16 +963,23 @@ The dots should instead be a contour plot of the US population.
             col = rgb(red, green, blue, maxColorValue = 255))
 
   con <-  gtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
-  hdr.2d(
+
+  con2 <- hdr.2d(x = con$x, y = con$y, den = con)
+
+  con3 <- expand.grid(gdd = con2$x, precip = con2$y)
+
+    con3$z <- as.vector(con$z)
+
+#+end_src
 
 
-    con2 <- expand.grid(gdd = con$x, precip = con$y)
-    con2$z <- as.vector(con$z)
 
+
+#+begin_src R :exports results :results graphics :file ../figs/space.png :width 300 :height 300
     ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
           geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
         geom_point(alpha = .01, size = .5) +
-  #          geom_contour(data = con2, aes(z = z), color = "white") +
+            geom_contour(data = con3, aes(z = z), color = "white") +
           scale_fill_identity() +
             theme_bw() +
     ylim(c(0,7500))
