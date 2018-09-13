@@ -930,11 +930,6 @@ rm census_centroid_pop.zip
 #+begin_src R
   d <- bind_cols(dsp.trks@data, trks@data) %>%
      dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R
 
   f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
 
@@ -942,15 +937,15 @@ rm census_centroid_pop.zip
       rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
         filter(complete.cases(.)) %>%
         filter( lat < 50, lat > 25, long < 0) %>%
-        mutate(gdd_col = ifelse(gdd > 8750, NA, gdd),
-               gdd_col = ifelse(gdd < 1250, NA, gdd_col),
+        mutate(gdd_col = ifelse(gdd > 10000, NA, gdd),
+               gdd_col = ifelse(gdd < 2000, NA, gdd_col),
                precip_col = ifelse(precip > 7000, NA, precip),
                precip_col = ifelse(precip < 100, NA, precip_col),
                red = f(gdd_col, m = 80) + 50,
                green = f(precip_col,100) + f(gdd_col,150),
                blue = f(precip_col, m = 180) + 30) %>%
         rowwise() %>%
-        mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), NA))
+        mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), "gray"))
 
 #+end_src
 
@@ -959,22 +954,23 @@ rm census_centroid_pop.zip
 
 The dots should instead be a contour plot of the US population.
 #+begin_src R :exports results :results graphics :file ../figs/space.png :width 300 :height 300
-    pal <- expand.grid(gdd = seq(1250,8750,100), precip = seq(100,7000,100)) %>%
-      mutate(red = f(gdd, m = 80) + 50,
-             green = f(precip,100) + f(gdd,150),
-             blue = f(precip, m = 180) + 30,
-          col = rgb(red, green, blue, maxColorValue = 255))
+      pal <- expand.grid(gdd = seq(2000,10000,100), precip = seq(100,7000,100)) %>%
+        mutate(red = f(gdd, m = 80) + 50,
+               green = f(precip,100) + f(gdd,150),
+               blue = f(precip, m = 180) + 30,
+            col = rgb(red, green, blue, maxColorValue = 255))
 
-  con <-  ggtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
-  con2 <- expand.grid(gdd = con$x, precip = con$y)
-  con2$z <- as.vector(con$z)
+    con <-  ggtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
+    con2 <- expand.grid(gdd = con$x, precip = con$y)
+    con2$z <- as.vector(con$z)
 
-  ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
-        geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
-      geom_point(alpha = .4, size = .5) +
-          geom_contour(data = con2, aes(z = z), color = "white") +
-        scale_fill_identity() +
-          theme_bw()
+    ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
+          geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+        geom_point(alpha = .01, size = .5) +
+  #          geom_contour(data = con2, aes(z = z), color = "white") +
+          scale_fill_identity() +
+            theme_bw() +
+    ylim(c(0,7500))
 #+end_src
 
 #+RESULTS:
@@ -994,6 +990,71 @@ The dots should instead be a contour plot of the US population.
 
 #+RESULTS:
 [[file:../figs/gdd_precip_cont.png]]
+
+
+#+begin_src R
+  d <- bind_cols(dsp.trks@data, trks@data) %>%
+     dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
+
+  f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
+
+    d <- d %>%
+      rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
+        filter(complete.cases(.)) %>%
+        filter( lat < 50, lat > 25, long < 0) %>%
+        mutate(gdd_col = log(gdd),
+               precip_col = log(precip),
+               red = f(gdd_col, m = 80) + 50,
+               green = f(precip_col,100) + f(gdd_col,150),
+               blue = f(precip_col, m = 180) + 30) %>%
+        rowwise() %>%
+        mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), "gray"))
+
+#+end_src
+
+#+RESULTS:
+
+
+The dots should instead be a contour plot of the US population.
+#+begin_src R :exports results :results graphics :file ../figs/space_log.png :width 300 :height 300
+      pal <- expand.grid(gdd = seq(40,100,5), precip = seq(15,100,5)) %>%
+        mutate(red = f(gdd, m = 80) + 50,
+               green = f(precip,100) + f(gdd,150),
+               blue = f(precip, m = 180) + 30,
+            col = rgb(red, green, blue, maxColorValue = 255))
+
+    con <-  ggtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
+    con2 <- expand.grid(gdd = con$x, precip = con$y)
+    con2$z <- as.vector(con$z)
+
+    ggplot2::ggplot(d, aes(x = gdd_col, y = precip_col)) +
+#          geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+        geom_point(alpha = 1, size = .5) +
+  #          geom_contour(data = con2, aes(z = z), color = "white") +
+          scale_fill_identity() +
+            theme_bw()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/space_log.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont.png :width 600 :height 400
+    ggplot(dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = col)) +
+        geom_point() +
+      coord_map(projection = "albers", parameters = c(29,45)) +
+      scale_color_identity() +
+      theme_bw() +
+      theme(legend.position = c(.9,.23),
+            text = element_text(size = 18),
+            legend.direction = "vertical") +
+      labs(x = "longitude", y = "latitude")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_precip_cont.png]]
+
+
 
 
 *** Tree Dimensions
