@@ -834,47 +834,47 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 
 
 #+begin_src R
-  f <- function(x) {round(255 * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
+    f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
 
-    d <- left_join(dl, pl) %>%
-      select(station, gdd, lat, long, precip) %>%
-      filter(complete.cases(.)) %>%
-        filter( lat < 50, lat > 25, long < 0) %>%
-        mutate(precip_255 = f(sqrt(precip)),
-             gdd_255 = f(sqrt(gdd)),
-             col = rgb(10,gdd_255, precip_255, maxColorValue = 255))
+      d <- left_join(dl, pl) %>%
+        select(station, gdd, lat, long, precip) %>%
+        filter(complete.cases(.)) %>%
+          filter( lat < 50, lat > 25, long < 0) %>%
+          mutate(gdd_col = ifelse(gdd > 8750, NA, gdd),
+                 gdd_col = ifelse(gdd < 1250, NA, gdd_col),
+                 precip_col = ifelse(precip > 7000, NA, precip),
+                 precip_col = ifelse(precip < 100, NA, precip_col),
+                 red = f(gdd_col, m = 80) + 50,
+                 green = f(precip_col,100) + f(gdd_col,150),
+                 blue = f(precip_col, m = 180) + 30) %>%
+          rowwise() %>%
+          mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), NA))
 
 #+end_src
 
 #+RESULTS:
 : Joining, by = c("station", "qual", "lat", "long")
 
-#+begin_src R :exports results :results graphics :file ../figs/space.png
+
+The dots should instead be a contour plot of the US population.
+#+begin_src R :exports results :results graphics :file ../figs/space.png :width 300 :height 300
     pal <- expand.grid(gdd = seq(1250,8750,100), precip = seq(100,7000,100)) %>%
-      mutate(col = rgb(80, f(gdd), f(precip), maxColorValue = 255))
+      mutate(red = f(gdd, m = 80) + 50,
+             green = f(precip,100) + f(gdd,150),
+             blue = f(precip, m = 180) + 30,
+          col = rgb(red, green, blue, maxColorValue = 255))
 
       ggplot(d, aes(x = gdd, y = precip)) +
         geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
-          geom_point(alpha = .4) +
-        scale_fill_identity()
+          geom_point(alpha = .4, size = .75) +
+        scale_fill_identity() +
+          theme_bw()
 #+end_src
 
 #+RESULTS:
 [[file:../figs/space.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/palette.png
-    pal <- expand.grid(gdd_255 = 1:255, precip_255 = 1:255) %>%
-      mutate(col = rgb(10,gdd_255, precip_255, maxColorValue = 255))
-
-  ggplot(pal, aes(x = gdd_255, y = precip_255, fill = col)) + geom_raster() +
-    scale_fill_identity() +
-    geom_point(data = dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = gdd_255, y = precip_255))
-#+end_src
-
-#+RESULTS:
-[[file:../figs/palette.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/gdd_cont.png
+#+begin_src R :exports results :results graphics :file ../figs/gdd_cont.png :width 600 :height 400
     ggplot(dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = col)) +
         geom_point() +
       coord_map(projection = "albers", parameters = c(29,45)) +
