@@ -834,8 +834,60 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 
 
 #+begin_src R
+  f <- function(x) {round(255 * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
+
+    d <- left_join(dl, pl) %>%
+      select(station, gdd, lat, long, precip) %>%
+      filter(complete.cases(.)) %>%
+        filter( lat < 50, lat > 25, long < 0) %>%
+        mutate(precip_255 = f(sqrt(precip)),
+             gdd_255 = f(sqrt(gdd)),
+             col = rgb(10,gdd_255, precip_255, maxColorValue = 255))
 
 #+end_src
+
+#+RESULTS:
+: Joining, by = c("station", "qual", "lat", "long")
+
+#+begin_src R :exports results :results graphics :file ../figs/space.png
+    pal <- expand.grid(gdd = seq(1250,8750,100), precip = seq(100,7000,100)) %>%
+      mutate(col = rgb(80, f(gdd), f(precip), maxColorValue = 255))
+
+      ggplot(d, aes(x = gdd, y = precip)) +
+        geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+          geom_point(alpha = .4) +
+        scale_fill_identity()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/space.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/palette.png
+    pal <- expand.grid(gdd_255 = 1:255, precip_255 = 1:255) %>%
+      mutate(col = rgb(10,gdd_255, precip_255, maxColorValue = 255))
+
+  ggplot(pal, aes(x = gdd_255, y = precip_255, fill = col)) + geom_raster() +
+    scale_fill_identity() +
+    geom_point(data = dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = gdd_255, y = precip_255))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/palette.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_cont.png
+    ggplot(dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = col)) +
+        geom_point() +
+      coord_map(projection = "albers", parameters = c(29,45)) +
+      scale_color_identity() +
+      theme_bw() +
+      theme(legend.position = c(.9,.23),
+            text = element_text(size = 18),
+            legend.direction = "vertical") +
+      labs(x = "longitude", y = "latitude")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_cont.png]]
 
 
 *** Tree Dimensions
