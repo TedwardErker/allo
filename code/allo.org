@@ -833,6 +833,64 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 [[file:../figs/gdd_cont.png]]
 
 
+
+Get census tract centroids and join
+
+#+BEGIN_SRC sh
+mkdir ../data/census_centroid_pop
+wget -O census_centroid_pop.zip http://faculty.baruch.cuny.edu/geoportal/data/us_popctr/popctr_tracts2010.zip
+unzip census_centroid_pop.zip -d ../data/census_centroid_pop/
+wget -O ../data/census_centroid_pop/metadata.xml http://faculty.baruch.cuny.edu/geoportal/metadata/us_popctr/popctr_blkgrp2010_ISO.xml
+rm census_centroid_pop.zip
+#+END_SRC
+
+#+RESULTS:
+| Archive:   | census_centroid_pop.zip                               |
+| inflating: | ../data/census_centroid_pop/popctr_tracts2010.shp     |
+| inflating: | ../data/census_centroid_pop/popctr_tracts2010.shx     |
+| inflating: | ../data/census_centroid_pop/popctr_tracts2010_ISO.xml |
+| inflating: | ../data/census_centroid_pop/popctr_tracts2010.dbf     |
+| inflating: | ../data/census_centroid_pop/popctr_tracts2010.prj     |
+
+#+begin_src R
+
+    library(sp)
+    library(raster)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+      trks <- shapefile("../data/census_centroid_pop/popctr_tracts2010.shp")
+
+      trks <- trks[trks@data$POPULATION != 0,]
+
+    trks <- spTransform(trks, CRS("+init=epsg:4326"))
+
+
+    d <- left_join(dl, pl) %>%
+        dplyr::select(station, gdd, lat, long, precip)
+
+  dsp <- d
+    coordinates(dsp) <- ~long + lat
+    proj4string(dsp) <- CRS("+init=epsg:4326")
+
+    # find closest gdd
+
+      out <- lapply(1:length(trks), function(i) {
+          dists <- spDists(trks[i,], dsp, longlat = T)
+          dists.min <- apply(dists, 1, function(x) which(x == min(x))[1])
+          out <- dsp[dists.min,]
+    })
+
+    dsp.trks <- do.call("rbind", out)
+
+#+end_src
+
+
+#+begin_src R
+  d <- bind_cols(cdd.trks@data, hdd.trks@data, trks@data) %>%
+     dplyr::select(LATITUDE, LONGITUDE, POPULATION, hdd, cdd, TRACT)
+#+end_src
+
 #+begin_src R
     f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
 
@@ -874,7 +932,7 @@ The dots should instead be a contour plot of the US population.
 #+RESULTS:
 [[file:../figs/space.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/gdd_cont.png :width 600 :height 400
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont.png :width 600 :height 400
     ggplot(dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = col)) +
         geom_point() +
       coord_map(projection = "albers", parameters = c(29,45)) +
@@ -887,7 +945,7 @@ The dots should instead be a contour plot of the US population.
 #+end_src
 
 #+RESULTS:
-[[file:../figs/gdd_cont.png]]
+[[file:../figs/gdd_precip_cont.png]]
 
 
 *** Tree Dimensions
