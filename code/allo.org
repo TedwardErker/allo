@@ -954,13 +954,20 @@ rm census_centroid_pop.zip
 
 The dots should instead be a contour plot of the US population.
 #+begin_src R :exports results :results graphics :file ../figs/space.png :width 300 :height 300
-      pal <- expand.grid(gdd = seq(2000,10000,100), precip = seq(100,7000,100)) %>%
+  library(hdrcde)
+
+
+
+  pal <- expand.grid(gdd = seq(2000,10000,100), precip = seq(100,7000,100)) %>%
         mutate(red = f(gdd, m = 80) + 50,
                green = f(precip,100) + f(gdd,150),
                blue = f(precip, m = 180) + 30,
             col = rgb(red, green, blue, maxColorValue = 255))
 
-    con <-  ggtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
+  con <-  gtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
+  hdr.2d(
+
+
     con2 <- expand.grid(gdd = con$x, precip = con$y)
     con2$z <- as.vector(con$z)
 
