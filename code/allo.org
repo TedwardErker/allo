@@ -745,6 +745,46 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
     write.csv(pl, "../data/gdd_qt_ll.csv")
 #+end_src
 
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+      station   grdd   gdd qual
+1 AQW00061705 12073C 12073    C
+2 CAW00064757  2636Q  2636    Q
+3 CQC00914080 11168P 11168    P
+4 CQC00914801 11656R 11656    R
+5 FMC00914395 11423P 11423    P
+6 FMC00914419 11860P 11860    P
+[1] 7501    4
+[1] 6340    4
+Warning message:
+In evalq(as.numeric(lat), <environment>) : NAs introduced by coercion
+Joining, by = "station"
+Warning message:
+Column `station` joining factor and character vector, coercing into character vector
+      station precip_qual precip qual
+1 AQC00914000      21392R  21392    R
+2 AQW00061705      12263C  12263    C
+3 CAW00064757       3172Q   3172    Q
+4 CQC00914080       8339P   8339    P
+5 CQC00914801       9124R   9124    R
+6 CQC00914855       6976P   6976    P
+[1] 9307    4
+[1] 7440    4
+Joining, by = "station"
+Warning message:
+Column `station` joining factor and character vector, coercing into character vector
+#+end_example
+
 #+begin_src R :var city_climate=city_climate
 
       library(sp)
@@ -859,6 +899,7 @@ rm census_centroid_pop.zip
     library(dplyr)
     library(tidyr)
     library(ggplot2)
+
       trks <- shapefile("../data/census_centroid_pop/popctr_tracts2010.shp")
 
       trks <- trks[trks@data$POPULATION != 0,]
@@ -887,31 +928,33 @@ rm census_centroid_pop.zip
 
 
 #+begin_src R
-  d <- bind_cols(cdd.trks@data, hdd.trks@data, trks@data) %>%
-     dplyr::select(LATITUDE, LONGITUDE, POPULATION, hdd, cdd, TRACT)
+  d <- bind_cols(dsp.trks@data, trks@data) %>%
+     dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
 #+end_src
 
-#+begin_src R
-    f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
+#+RESULTS:
 
-      d <- left_join(dl, pl) %>%
-        select(station, gdd, lat, long, precip) %>%
+#+begin_src R
+
+  f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
+
+    d <- d %>%
+      rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
         filter(complete.cases(.)) %>%
-          filter( lat < 50, lat > 25, long < 0) %>%
-          mutate(gdd_col = ifelse(gdd > 8750, NA, gdd),
-                 gdd_col = ifelse(gdd < 1250, NA, gdd_col),
-                 precip_col = ifelse(precip > 7000, NA, precip),
-                 precip_col = ifelse(precip < 100, NA, precip_col),
-                 red = f(gdd_col, m = 80) + 50,
-                 green = f(precip_col,100) + f(gdd_col,150),
-                 blue = f(precip_col, m = 180) + 30) %>%
-          rowwise() %>%
-          mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), NA))
+        filter( lat < 50, lat > 25, long < 0) %>%
+        mutate(gdd_col = ifelse(gdd > 8750, NA, gdd),
+               gdd_col = ifelse(gdd < 1250, NA, gdd_col),
+               precip_col = ifelse(precip > 7000, NA, precip),
+               precip_col = ifelse(precip < 100, NA, precip_col),
+               red = f(gdd_col, m = 80) + 50,
+               green = f(precip_col,100) + f(gdd_col,150),
+               blue = f(precip_col, m = 180) + 30) %>%
+        rowwise() %>%
+        mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), NA))
 
 #+end_src
 
 #+RESULTS:
-: Joining, by = c("station", "qual", "lat", "long")
 
 
 The dots should instead be a contour plot of the US population.
@@ -922,9 +965,14 @@ The dots should instead be a contour plot of the US population.
              blue = f(precip, m = 180) + 30,
           col = rgb(red, green, blue, maxColorValue = 255))
 
-      ggplot(d, aes(x = gdd, y = precip)) +
+  con <-  ggtern::kde2d.weighted(x = d$gdd, y = d$precip, n = 100, lims = c(range(d$gdd), range(d$precip)), w = d$pop)
+  con2 <- expand.grid(gdd = con$x, precip = con$y)
+  con2$z <- as.vector(con$z)
+
+  ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
         geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
-          geom_point(alpha = .4, size = .75) +
+      geom_point(alpha = .4, size = .5) +
+          geom_contour(data = con2, aes(z = z), color = "white") +
         scale_fill_identity() +
           theme_bw()
 #+end_src
