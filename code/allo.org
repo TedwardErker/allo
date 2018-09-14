@@ -221,7 +221,9 @@ also
 * Introduction
 
 Multilevel models have been used for decades in forestry growth
-equations (Lappi 1991).
+equations (Lappi and Bailey 1988).
+
+
 
 
 
