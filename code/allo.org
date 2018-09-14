@@ -220,6 +220,8 @@ look at his equation form.
 also
 * Introduction
 
+Multilevel models have been used for decades in forestry growth
+equations (Lappi 1991).
 
 
 
@@ -286,8 +288,6 @@ species and the climate of the city.
 DBH for illustrative purposes.
 
 ** past work
-
-
 
 cite:nothdurft_e_2006
 
@@ -983,8 +983,8 @@ The dots should instead be a contour plot of the US population.
       geom_point(alpha = .01, size = .5) +
       geom_contour(data = con3, aes(z = z), color = "light gray") + #, breaks = con2$falpha) +
         scale_fill_identity() +
-          theme_bw()
-#  ylim(c(0,7500))
+          theme_bw() +
+  ylim(c(0,7500))
 #+end_src
 
 #+RESULTS:
