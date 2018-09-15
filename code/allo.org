@@ -241,6 +241,8 @@ dwellers.
 
 
 
+
+
 | Existing Approach                                                                                                                                                                                                                                     | This Paper                                                                                                                          |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------|
 | Can predict negative diameters                                                                                                                                                                                                                        | diameter is constrained to be positive                                                                                              |
@@ -434,7 +436,12 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 * Methods
 ** Data
 
-How many species X City combinations are there for dbh ~ age? 309.
+The urban tree database consists of measurements on XXX trees of XX
+species in XX cities.  However, because of the difficulty is measuring
+tree age, there are only XX trees with complete age and diameter
+data (XX species, XX cities, 309 species x city combinations).
+
+
 
 repeat measures on the same individuals would help much.
 
@@ -1631,6 +1638,9 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 Is minneapolis an influential point?
 
 ** Modelling
+
+WRITE OUT THE MODEL.....
+then convert to latex.
 
 - Goal is to model tree dimensions as a function of age (and other factors).
   - I'm not doing allometric models (relating dimensions to one
