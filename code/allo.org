@@ -1680,7 +1680,7 @@ y = diameter at breast height (cm)
 x = age since transplant (years)
 
 \[
-y_i \sim Gamma(\mu_i, \alpha)
+y_i \sim Gamma(\mu_i, \alpha_y)
 \]
 
 \[
@@ -1711,21 +1711,32 @@ where \mu_j is the mean for \beta coefficient \beta_j. \gamma_jk is the species
 effect for species k on \beta_j.  \delta_jl is the city effect for city l on \beta_j.
 \alpha_j is the shape parameter for \beta_j.
 
-for i = 0,2,3
+
+for each i.  Species random effect:
 \[
-\delta_{ik} \sim N(0, \sigma_{\delta i})
+\gamma_{ij} \sim N(0, \sigma_{\gamma i})
 \]
 
-for i = 1
+species nested within Genus.  Genus nested within functional group.
+
+
+for each j. City random effect:
 \[
-\delta_{ik} \sim N(0, \sigma_{\delta i})
+\delta_{jk} \sim N(0, \sigma_{\delta j})
 \]
 
 
-for i = 0,2,3
+for j = 1
 \[
-\gamma_{ij} \sim N(0, \sigma_i)
+\mu_1 = \tau_0 + \tau_1 * precip + \tau_2 * gdd
 \]
+
+
+How does the model know precip and gdd are measured at the city level?
+Does it matter?  If I tried to include them in the \delta term they
+could be separated out algebraically.  I think having the intercept
+vary by city covers things, but I'm not 100% sure.
+
 
 
 
