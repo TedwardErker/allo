@@ -220,8 +220,33 @@ look at his equation form.
 also
 * Introduction
 
-Multilevel models have been used for decades in forestry growth
-equations (Lappi and Bailey 1988).
+Multilevel models have been used for decades in tree growth equations
+(Lappi and Bailey 1988).  Indeed the test dataset, "orange", in R is
+used to demonstrate the fitting of nonlinear mixed effects models
+[[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][cite]].  Multilevel modeling .... (why it is effective for this type of
+data).  This paper has two main contributions.  First, we demonstrate
+the use of Stan via the "brms" package in R to fit bayesian nonlinear
+multilevel models.  Second, we apply the method to the Urban Tree
+Database cite:utd_2016.  This dataset represents an enormous effort to
+collect age and size data on thousands of trees in 17? cities across
+the US.
+
+
+
+
+| Existing Approach                                                                                                                                                                                                                                     | This Paper                                                                                                                          |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------|
+| Can predict negative diameters                                                                                                                                                                                                                        | diameter is constrained to be positive                                                                                              |
+| Tests several model forms                                                                                                                                                                                                                             | only uses the weibull curve                                                                                                         |
+| extrapolation to higher ages than measured is fraught because equation form determined by best fit, not biology                                                                                                                                       | extrapolation to unobserved ages less fraught because weibull is biologically realistic                                             |
+| a separate model for each species and city combination.  in a case with 2 observations the model had to be a line                                                                                                                                     | by borrowing information across species and city combinations, in the case with two observations, weibull was still possible to fit |
+| what equation to use for unobserved species and city combinations is not clear.  (e.g. should species or city be weighted more?  use equation of different (but similar) species in the same city or of same species in different (but similar city)? | Provides predictions for all species and city combinations.                                                                         |
+| Equations derived in the 17 cities are meant to apply to work in 17 large and heterogeneous regions.                                                                                                                                                  | Using climate data as city level predictors we can vary model parameter continuously across the entire US.                          |
+|                                                                                                                                                                                                                                                       |                                                                                                                                     |
+|                                                                                                                                                                                                                                                       |                                                                                                                                     |
+
+
+
 
 
 
