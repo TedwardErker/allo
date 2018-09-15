@@ -1707,6 +1707,20 @@ for each beta, i, species, j, and each city, k.
 \beta_{ijk} \sim Gamma(\mu_i} + \gamma_{ij}+\delta_{ik}, \alpha_{i})
 \]
 
+where \mu_i is the mean for \beta coefficient i.
+
+for i = 0,1,2,3
+\[
+\delta_{ik} \sim N(0, \sigma_{\delta i})
+\]
+
+for i = 0,2,3
+\[
+\gamma_{ij} \sim N(0, \sigma_i)
+\]
+
+
+
 for \beta_1,
 
 \[
