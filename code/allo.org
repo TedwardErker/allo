@@ -1680,11 +1680,11 @@ y = diameter at breast height (cm)
 x = age since transplant (years)
 
 \[
-y \sim Gamma(\mu, \alpha)
+y_i \sim Gamma(\mu_i, \alpha)
 \]
 
 \[
-\mu = \beta_0 + \beta_1 (1 - \exp(\beta_2 x^{\beta_3}))
+\mu_i = \beta_0 + \beta_1 (1 - \exp(\beta_2 x_i^{\beta_3}))
 \]
 
 \beta_0 is intercept.  x is transplant age so when x = 0, y can be
@@ -1701,18 +1701,26 @@ All \beta's must be positive and they are likely correlated with one
 another.
 
 
-for each beta, i, species, j, and each city, k.
+for each beta, j, species, k, and each city, l.
 
 \[
-\beta_{ijk} \sim Gamma(\mu_i} + \gamma_{ij}+\delta_{ik}, \alpha_{i})
+\beta_{jkl} \sim Gamma(\mu_j} + \gamma_{jk}+\delta_{jl}, \alpha_{j})
 \]
 
-where \mu_i is the mean for \beta coefficient i.
+where \mu_j is the mean for \beta coefficient \beta_j. \gamma_jk is the species
+effect for species k on \beta_j.  \delta_jl is the city effect for city l on \beta_j.
+\alpha_j is the shape parameter for \beta_j.
 
-for i = 0,1,2,3
+for i = 0,2,3
 \[
 \delta_{ik} \sim N(0, \sigma_{\delta i})
 \]
+
+for i = 1
+\[
+\delta_{ik} \sim N(0, \sigma_{\delta i})
+\]
+
 
 for i = 0,2,3
 \[
