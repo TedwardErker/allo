@@ -2,7 +2,7 @@
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
-#+startup: indent
+#+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
 * Objective
@@ -1676,15 +1676,44 @@ then convert to latex.
 - think hard about smart priors to help with convergence.
   - I need to address the initial value errors.
 
-y = diameter at breast height
-x = age since transplant
+y = diameter at breast height (cm)
+x = age since transplant (years)
+
 \[
 y \sim Gamma(\mu, \alpha)
 \]
 
 \[
-\mu = \beta_0 + \beta_1 (1 - \exp(\beta_2
+\mu = \beta_0 + \beta_1 (1 - \exp(\beta_2 x^{\beta_3}))
 \]
+
+\beta_0 is intercept.  x is transplant age so when x = 0, y can be
+well above 0.
+
+\beta_1 is asymptote of sigmoidal weibull curve.  For most species there are no data near the
+asymptote and this should not be considered the real maximum dbh of a
+tree.
+
+\beta_2 and \beta_3 affect the rate of growth.  \beta_2 provides flexibility to have
+slow or fast growth at young ages (small x).
+
+All \beta's must be positive and they are likely correlated with one
+another.
+
+
+for each beta, i, species, j, and each city, k.
+
+\[
+\beta_{ijk} \sim Gamma(\mu_i} + \gamma_{ij}+\delta_{ik}, \alpha_{i})
+\]
+
+for \beta_1,
+
+\[
+\beta_{1ij} \sim Gamma(\mu_{1} + \gamma_{\beta_1i} +\delta_{\beta_1j}, \alpha_{\beta_1})
+\]
+
+
 
 
 *** notes on how to do modeling in brms
