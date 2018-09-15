@@ -1676,6 +1676,17 @@ then convert to latex.
 - think hard about smart priors to help with convergence.
   - I need to address the initial value errors.
 
+y = diameter at breast height
+x = age since transplant
+\[
+y \sim Gamma(\mu, \alpha)
+\]
+
+\[
+\mu = \beta_0 + \beta_1 (1 - \exp(\beta_2
+\]
+
+
 *** notes on how to do modeling in brms
 IN STAN:
 vignette("brms_nonlinear")
