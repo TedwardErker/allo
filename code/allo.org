@@ -1731,6 +1731,11 @@ for j = 1
 \mu_1 = \tau_0 + \tau_1 * precip + \tau_2 * gdd
 \]
 
+
+I think that I should make the priors on the betas normal?  would that
+allow for better correlation modelling?
+
+
 think about adding subscripts to precip and gdd, maybe k for each city.?
 
 How does the model know precip and gdd are measured at the city level?
