@@ -1493,8 +1493,8 @@ Joining, by = "TreeType"
           rename(Species = SpCode) %>%
           select(-Leaf,-TreeID) %>%
           left_join(.,clim) %>%
-          mutate(Precip = round(Precip/ 1000, 4),
-                 GDD = round(GDD/ 1000, 4))
+          mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
+                 GDD = round((GDD - mean(GDD))/ 1000, 4))
 
 
       saveRDS(d2, "../data/age_dbh_full.rds")
@@ -1504,6 +1504,10 @@ Joining, by = "TreeType"
 
       saveRDS(d3, "../data/age_dbh_testing.rds")
 #+end_src
+
+#+RESULTS:
+: Joining, by = "City"
+
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz ../data/age_dbh_full.rds erker@krusty:~/allo/data/
@@ -1641,6 +1645,8 @@ Is minneapolis an influential point?
 
 WRITE OUT THE MODEL.....
 then convert to latex.
+
+Use brm(..., sample_prior = "only")
 
 - Goal is to model tree dimensions as a function of age (and other factors).
   - I'm not doing allometric models (relating dimensions to one
@@ -5741,6 +5747,9 @@ can't be negative...  in brms nonlinear advanced, mention the
 importance of setting strong priors.  Also non negative.
 
 
+
+*** for diagnostics
+https://arxiv.org/pdf/1709.01449.pdf
 * Results
 figure showing the age versus dbh for several species and city
 combinations.  overlay our models and the existing models for
