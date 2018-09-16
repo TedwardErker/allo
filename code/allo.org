@@ -1111,6 +1111,10 @@ could one use the champion trees to set a maximum asymptote for a
 species in the model?  The prior would have no mass above the maximum
 dbh of the champion tree, but would have mass below it because the
 asymptote in the urban context may be much lower.
+
+maybe i would have to give up the species random effect for this term
+and model them separately?
+
 *** Tree Dimensions
 | Tree Dimension            | abbr |
 |---------------------------+------|
