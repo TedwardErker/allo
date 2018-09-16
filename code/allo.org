@@ -1962,22 +1962,22 @@ the higher values of b2 only make sense with lower values of b3.  they
 are correlated.  I wonder if I could include that information in the prior?
 
 
-#+begin_src R :exports results :results graphics :file ../figs/weibull_tighter.png
+#+begin_src R :exports results :results graphics :file ../figs/weibull_tighter.png :width 800
     data <- readRDS("../data/tidy_age_dbh.rds") %>%
         select(DBH, AGE) %>%
         rename(x = AGE, y = DBH)
 
     x <- 1:200
     a <- seq(50,250,50)
-    b <- 10^(-1*1:3)
-#    b <- 1:3
-    c <- seq(.75, 1.75, .5)
+#    b <- 10^(-1*1:3)
+    b <- 1:3
+    c <- seq(.75, 1.75, .25)
 
     d <- expand.grid(x = x,a = a, b = b, c = c)
 
-    w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
+#    w <- function(a,b,c,x) a * (1 - exp(-b * x^c))
 
-    #w <- function(a,b,c,x) a * (1 - exp(10^(-b) * x^c))
+    w <- function(a,b,c,x) a * (1 - exp(-1 * 10^(-b) * x^c))
 
     d <- d %>%
         mutate(y = w(a,b,c,x))
@@ -1985,7 +1985,7 @@ are correlated.  I wonder if I could include that information in the prior?
     ggplot(d, aes( x = x, y = y)) +
         geom_point(data = data, alpha = .005) +
         geom_line(aes(color =  a, group = interaction(a,b,c))) + facet_grid(b~c) +
-        xlim(c(0,150))
+        xlim(c(0,200))
 #+end_src
 
 #+RESULTS:
@@ -4724,6 +4724,190 @@ precip.gdd
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
 
+*** TODO genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
+:END:
+**** model R code
+#+begin_src R
+    library(dplyr)
+    library(brms)
+    source("allo_functions.R")
+
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "no"
+  family <- "Gamma"
+
+
+    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-1 * 10^(-b2) * AGE^(b3))))
+    b0_form <- formula(b0 ~ 1)
+    b1_form <- formula(b1 ~ 1)
+    b2_form <- formula(b2 ~ 1)
+    b3_form <- formula(b3 ~ 1)
+
+    form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+  nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
+               prior(gamma(5, 3), nlpar = "b1",lb = 0),
+               prior(gamma(12, 6), nlpar = "b2", lb = 0),
+               prior(gamma(6, 6), nlpar = "b3",lb = 0),
+               prior(gamma(20, 1), class = "shape"))
+
+
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+
+
+  prior_mod <-  brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+             sample_prior = "only",
+               chains = 8, cores = 8, init_r = .3, iter = 2000)
+
+    mod <- brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+               chains = 8, cores = 8, init_r = .3, iter = 2000)
+
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+#+end_src
+
+**** fit model to real data
+#+begin_src R
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  if(family == "Gamma") fam <- Gamma("identity")
+  if(family == "gaussian") fam <- gaussian()
+
+  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
+#+end_src
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+:
+: sent 148 bytes  received 20 bytes  37.33 bytes/sec
+: total size is 1521  speedup is 9.05
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+:
+: sent 10226 bytes  received 12216499 bytes  627011.54 bytes/sec
+: total size is 12312658  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+
+#+begin_src R
+mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma <- readRDS("../models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds")
+mod <- mod_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         b3 ~ 1
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 6000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     2.77      0.08     2.61     2.93       3416 1.00
+b1_Intercept     1.12      0.05     1.03     1.24       2694 1.00
+b2_Intercept     1.08      0.04     1.00     1.17       3530 1.00
+b3_Intercept     1.11      0.02     1.08     1.14       2806 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape     7.69      0.14     7.42     7.96       3579 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  pp_check(mod) +xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 *** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma
 :PROPERTIES:
@@ -4745,9 +4929,9 @@ precip.gdd
 
     data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
     b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
-    b1_form <- formula(b3 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
+    b1_form <- formula(b1 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
     b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
-    b3_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
+    b3_form <- formula(b3 ~ (1 | City) + (1 | Genus/Species))
 
 
     form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
