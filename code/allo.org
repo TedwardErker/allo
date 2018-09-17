@@ -4761,21 +4761,41 @@ precip.gdd
 
 
 
-  prior_mod <-  brm(form,
-               data = d,
-               prior = nlprior,
-               family = Gamma("identity"),
-             sample_prior = "only",
-               chains = 8, cores = 8, init_r = .3, iter = 2000)
+  ## prior_mod <-  brm(form,
+  ##              data = d,
+  ##              prior = nlprior,
+  ##              family = Gamma("identity"),
+  ##            sample_prior = "only",
+  ##              chains = 2, cores = 2, init_r = .3, iter = 2000)
 
-    mod <- brm(form,
+
+  ## pred <- predict(prior_mod, newdata = d)
+
+
+     mod <- brm(form,
                data = d,
                prior = nlprior,
                family = Gamma("identity"),
                chains = 8, cores = 8, init_r = .3, iter = 2000)
 
     saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+
 #+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png
+marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
+pp <- posterior_predict(prior_mod, nsamples=10)
+ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_.png]]
 
 **** fit model to real data
 #+begin_src R
