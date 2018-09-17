@@ -1755,6 +1755,7 @@ for each j. City random effect:
 
 
 
+
 think about adding subscripts to precip and gdd, maybe k for each city.?
 
 How does the model know precip and gdd are measured at the city level?
