@@ -1720,16 +1720,23 @@ slow or fast growth at young ages (small x).
 All \beta's must be positive and they are likely correlated with one
 another.
 
-
-for each beta, j, species, k, and each city, l.
+for each beta, j = 0,2,3, species, k, and each city, l.
 
 \[
-\beta_{jkl} \sim Gamma(\mu_j} + \gamma_{jk}+\delta_{jl}, \alpha_{j})
+\beta_{jkl} = \beta_j + \gamma_{jk}+\delta_{jl}
 \]
 
-where \mu_j is the mean for \beta coefficient \beta_j. \gamma_jk is the species
-effect for species k on \beta_j.  \delta_jl is the city effect for city l on \beta_j.
-\alpha_j is the shape parameter for \beta_j.
+for beta_1
+\[
+\beta_{1kl[i]} = \beta_1 + \tau_1 * Precip_i + \tau_2 * GDD_i + \tau_3 *
+(Precip_i * GDD_i) + \gamma_{1k[i]}+\delta_{1l[i]}
+\]
+
+where \beta_j is the mean for \beta coefficient \beta_j. \gamma_jk is
+the contribution of genetic (species) effect for species k on \beta_j.
+\delta_jl is the city effect for city l on \beta_j.
+
+\beta_1
 
 
 for each i.  Species random effect:
@@ -1746,14 +1753,6 @@ for each j. City random effect:
 \]
 
 
-for j = 1
-\[
-\mu_1 = \tau_0 + \tau_1 * precip + \tau_2 * gdd
-\]
-
-
-I think that I should make the priors on the betas normal?  would that
-allow for better correlation modelling?
 
 
 think about adding subscripts to precip and gdd, maybe k for each city.?
