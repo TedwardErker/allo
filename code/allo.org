@@ -1698,7 +1698,13 @@ y_i \sim Gamma(\mu_i, \alpha_y)
 \]
 
 \[
-\mu_i = \beta_0 + \beta_1 (1 - \exp(\beta_2 x_i^{\beta_3}))
+\mu_i = \beta_0 + \beta_1 (1 - \exp(-\beta_2 x_i^{\beta_3}))
+\]
+
+(but when fit in stan, reparameterized so beta's are closer to one
+another 1-4 range)
+\[
+\mu_i = \beta_0 + 100 * \beta_1 (1 - \exp(-1 * 10^{-\beta_2} x_i^{\beta_3}))
 \]
 
 \beta_0 is intercept.  x is transplant age so when x = 0, y can be
@@ -4782,31 +4788,20 @@ precip.gdd
 
 #+end_src
 
-#+begin_src R :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png
 marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
 #+end_src
 
 #+RESULTS:
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
 pp <- posterior_predict(prior_mod, nsamples=10)
 ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_.png]]
-
-**** fit model to real data
-#+begin_src R
-  d <- readRDS("../data/age_dbh_testing.rds")
-
-  if(family == "Gamma") fam <- Gamma("identity")
-  if(family == "gaussian") fam <- gaussian()
-
-  mod <- brm(form, chains = 6, cores = 6, data = d, init_r = .3, prior = nlprior, iter = 2000, family = fam)
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_",family,".rds"))
-#+end_src
 
 **** tangle
 C-c C-v t
@@ -4819,9 +4814,10 @@ C-c C-v t
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :
-: sent 148 bytes  received 20 bytes  37.33 bytes/sec
-: total size is 1521  speedup is 9.05
+: sent 537 bytes  received 60 bytes  27.77 bytes/sec
+: total size is 2993  speedup is 5.01
 
 **** run on krusty
 
@@ -4835,7 +4831,7 @@ run from krusty terminal
 #+END_SRC
 
 #+BEGIN_SRC sh
-
+cat genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.Rout
 #+END_SRC
 
 **** pull back from krusty
