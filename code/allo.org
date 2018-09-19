@@ -1732,10 +1732,9 @@ for beta_1
 (Precip_i * GDD_i) + \gamma_{1s[i]}+\delta_{1c[i]}
 \]
 
-where \beta_j is the mean for \beta coefficient \beta_j. \gamma_jk is
-the contribution of genetic (species) effect for species k on \beta_j.
-\delta_jl is the city effect for city l on \beta_j.
-
+where \beta_j is the mean for \beta coefficient \beta_j. \gamma_js is
+the contribution of genetic (species) effect for species s on \beta_j.
+\delta_jc is the city effect for city c on \beta_j.
 
 for each i.  Species random effect:
 \[
