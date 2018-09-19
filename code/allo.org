@@ -1698,7 +1698,7 @@ y_i \sim Gamma(\mu_i, \alpha_y)
 \]
 
 \[
-\mu_i = \beta_0 + \beta_1 (1 - \exp(-\beta_2 x_i^{\beta_3}))
+\mu_i = \beta_{0sc[i]} + \beta_{1sc[i]} (1 - \exp(-\beta_{2sc[i]} x_i^{\beta_{3sc[i]}}))
 \]
 
 (but when fit in stan, reparameterized so beta's are closer to one
@@ -1720,31 +1720,32 @@ slow or fast growth at young ages (small x).
 All \beta's must be positive and they are likely correlated with one
 another.
 
-for each beta, j = 0,2,3, species, k, and each city, l.
+for each beta, j = 0,2,3, species, s, and each city, c.
 
 \[
-\beta_{jkl} = \beta_j + \gamma_{jk}+\delta_{jl}
+\beta_{jsc[i]} = \beta_j + \gamma_{js[i]}+\delta_{jc[i]}
 \]
 
 for beta_1
 \[
-\beta_{1kl[i]} = \beta_1 + \tau_1 * Precip_i + \tau_2 * GDD_i + \tau_3 *
-(Precip_i * GDD_i) + \gamma_{1k[i]}+\delta_{1l[i]}
+\beta_{1sc[i]} = \beta_1 + \tau_1 * Precip_i + \tau_2 * GDD_i + \tau_3 *
+(Precip_i * GDD_i) + \gamma_{1s[i]}+\delta_{1c[i]}
 \]
 
 where \beta_j is the mean for \beta coefficient \beta_j. \gamma_jk is
 the contribution of genetic (species) effect for species k on \beta_j.
 \delta_jl is the city effect for city l on \beta_j.
 
-\beta_1
-
 
 for each i.  Species random effect:
 \[
-\gamma_{ij} \sim N(0, \sigma_{\gamma i})
+\gamma_{j\ species[i]} \sim N(\gamma_{j\ genus[i]}, \sigma_{j\ species })
 \]
 
 species nested within Genus.  Genus nested within functional group.
+\[
+\gamma_{j\ genus[i]} \sim N(\gamma_{j\ func.group[i]}, \sigma_{j\ species })
+\]
 
 
 for each j. City random effect:
