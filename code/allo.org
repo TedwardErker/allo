@@ -1738,13 +1738,18 @@ the contribution of genetic (species) effect for species s on \beta_j.
 
 for each i.  Species random effect:
 \[
-\gamma_{j\ species[i]} \sim N(\gamma_{j\ genus[i]}, \sigma_{j\ species })
+\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{js})
 \]
+
+for genus, g.
 
 species nested within Genus.  Genus nested within functional group.
 \[
-\gamma_{j\ genus[i]} \sim N(\gamma_{j\ func.group[i]}, \sigma_{j\ species })
+\gamma_{jg[i]} \sim N(\gamma_{jf[i]}, \sigma_{jg})
 \]
+
+for functional group, f.
+
 
 
 for each j. City random effect:
@@ -6257,6 +6262,8 @@ make better
   space.
 - better climate predictors
 - interactions between climate and species.
+- use phylogenetic distance, gaussian process, instead of multiple
+  levels of taxonomy.
 
 * Exploring age and dbh
 ** load libraries
