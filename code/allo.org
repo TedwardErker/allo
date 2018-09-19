@@ -407,7 +407,6 @@ application outside their region of origin (fig. 5).
 
 #+END_QUOTE
 
-
 ** urban trees equations
 
 "Growth equa- tions for forest trees may not be directly transferable
@@ -416,7 +415,6 @@ branch, twig, and leaf biomass differently (Anderegg et al. 2015,
 Nowak 1994a, Peper and McPherson 1998) (fig. 4). For example, in
 forests, tree crowns compete for limited space and may not reach their
 maximum expansion potential (Martin et al. 2012)." from the
-
 
 ** past modelling
 #+BEGIN_QUOTE
@@ -1693,18 +1691,12 @@ Use brm(..., sample_prior = "only")
 y = diameter at breast height (cm)
 x = age since transplant (years)
 
+*** Model
 \[
 y_i \sim Gamma(\mu_i, \alpha_y)
 \]
-
 \[
 \mu_i = \beta_{0sc[i]} + \beta_{1sc[i]} (1 - \exp(-\beta_{2sc[i]} x_i^{\beta_{3sc[i]}}))
-\]
-
-(but when fit in stan, reparameterized so beta's are closer to one
-another 1-4 range)
-\[
-\mu_i = \beta_0 + 100 * \beta_1 (1 - \exp(-1 * 10^{-\beta_2} x_i^{\beta_3}))
 \]
 
 \beta_0 is intercept.  x is transplant age so when x = 0, y can be
@@ -1738,18 +1730,15 @@ the contribution of genetic (species) effect for species s on \beta_j.
 
 for each i.  Species random effect:
 \[
-\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{js})
+\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{js[i]})
 \]
 
 for genus, g.
 
-species nested within Genus.  Genus nested within functional group.
+species nested within Genus.
 \[
-\gamma_{jg[i]} \sim N(\gamma_{jf[i]}, \sigma_{jg})
+\gamma_{jg[i]} \sim N(0, \sigma_{jg})
 \]
-
-for functional group, f.
-
 
 
 for each j. City random effect:
@@ -1758,18 +1747,13 @@ for each j. City random effect:
 \]
 
 
-
-
-
-think about adding subscripts to precip and gdd, maybe k for each city.?
-
-How does the model know precip and gdd are measured at the city level?
-Does it matter?  If I tried to include them in the \delta term they
-could be separated out algebraically.  I think having the intercept
-vary by city covers things, but I'm not 100% sure.  I can't think of
-another way to handle it (right now).
-
-
+*** fitting model
+**** COMMENT adjust for fit in stan, can mention
+(but when fit in stan, reparameterized so beta's are closer to one
+another 1-4 range)
+p\[
+\mu_i = \beta_0 + 100 * \beta_1 (1 - \exp(-1 * 10^{-\beta_2} x_i^{\beta_3}))
+\]
 
 
 
