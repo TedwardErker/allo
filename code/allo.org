@@ -229,7 +229,7 @@ information across groups.  This paper has two main contributions.
 First, we demonstrate the use of Stan via the "brms" package in R to
 fit bayesian nonlinear multilevel models.  Second, we apply the method
 to the Urban Tree Database cite:utd_2016.  This dataset is the result
-an enormous effort to collect age and size data on thousands of trees
+an large effort to collect age and size data on thousands of trees
 in 17? cities across the US.  Multilevel modelling has the potential
 to extract more information from the data and improve predictions
 compared to the existing modelling approach for the data.  Improving
@@ -4729,7 +4729,6 @@ precip.gdd
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
-
 *** TODO genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
@@ -5190,7 +5189,6 @@ precip.gdd
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
-
 *** TODO genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma  Would need to fix priors!
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R
@@ -5449,7 +5447,6 @@ precip.gdd
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
 
 
 *** genus: many;  species: many; cities: many; climate: b1; hetero: smooth
@@ -6185,7 +6182,6 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_smooth_fulldata.png]]
 
 
-
 *** Meeting with Jun [2018-08-27 Mon]
 
 What should the structure of the paper be?
@@ -6204,7 +6200,6 @@ What should the structure of the paper be?
 - Model selection
 
 - posterior predicitive checks
-
 
 *** Full model
 
