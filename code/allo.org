@@ -1743,9 +1743,29 @@ species nested within Genus.
 
 for each j. City random effect:
 \[
-\delta_{jk} \sim N(0, \sigma_{\delta j})
+\delta_{jc} \sim N(0, \sigma_{\delta j})
 \]
 
+
+Should the beta's be normal or gamma?  I think I could do normal with
+pretty tight sd?
+
+| parameter |  mu | sd    |
+|-----------+-----+-------|
+| \beta_0   |  3? | 1? 2? |
+| \beta_1   | 1.5 | .3?   |
+| \beta_2   |   2 | .3    |
+| \beta_3   |   1 | .3    |
+
+
+\[
+\beta_1 ~ Gamma(
+\]
+
+
+\[
+\sigma_dc
+\]
 
 *** fitting model
 **** COMMENT adjust for fit in stan, can mention
@@ -1754,7 +1774,6 @@ another 1-4 range)
 p\[
 \mu_i = \beta_0 + 100 * \beta_1 (1 - \exp(-1 * 10^{-\beta_2} x_i^{\beta_3}))
 \]
-
 
 
 *** notes on how to do modeling in brms
