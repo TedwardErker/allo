@@ -1756,11 +1756,11 @@ for gamma
 
 | parameter |   mu |  sd | alpha (of gamma) | beta (of gamma) |
 |-----------+------+-----+------------------+-----------------|
-| \beta_0   |    3 | 1.5 |                4 |   3/2.25 = 1.33 |
-| \beta_1   |  1.5 |  .3 |               25 |           16.66 |
-| \beta_2   | 1.25 |  .1 |           156.25 |             125 |
-| \beta_3   | 1.05 |  .1 |           110.25 |             105 |
-
+| \beta_0   |    3 | 1.5 |               4. |       1.3333333 |
+| \beta_1   |  1.5 |  .3 |              25. |       16.666667 |
+| \beta_2   | 1.25 | .15 |        69.444444 |       55.555556 |
+| \beta_3   | 1.05 | .15 |              49. |       46.666667 |
+#+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
 \beta_1 ~ Gamma(
@@ -4819,8 +4819,8 @@ precip.gdd
 
     nlprior <- c(prior(gamma(4,  1.33), nlpar = "b0",lb = 0),
                prior(gamma(25, 16.66), nlpar = "b1",lb = 0),
-               prior(gamma(156.25, 125), nlpar = "b2", lb = 0),
-               prior(gamma(110.25, 105), nlpar = "b3",lb = 0),
+               prior(gamma(69.44,55.556), nlpar = "b2", lb = 0),
+               prior(gamma(49, 46.667), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"))
 
 
