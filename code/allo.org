@@ -1759,7 +1759,7 @@ for gamma
 | \beta_0   |    3 | 1.5 |               4. |       1.3333333 |
 | \beta_1   |  1.5 |  .3 |              25. |       16.666667 |
 | \beta_2   | 1.25 | .15 |        69.444444 |       55.555556 |
-| \beta_3   | 1.05 | .15 |              49. |       46.666667 |
+| \beta_3   |    1 | .15 |        44.444444 |       44.444444 |
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
@@ -1770,6 +1770,9 @@ for gamma
 \[
 \sigma_dc
 \]
+
+*** priors
+Picking Priors....
 
 *** fitting model
 **** COMMENT adjust for fit in stan, can mention
@@ -2309,300 +2312,6 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 #+RESULTS:
 [[file:../figs/test_gamma.png]]
 
-*** all the models  model_table
-
-smaller models to build:
-#+name: model_table
-| genus | species | cities | climate  | hetero  | data                                           | b1                                                                 | b2                                              | b3                                              | sigma                 |
-|-------+---------+--------+----------+---------+------------------------------------------------+--------------------------------------------------------------------+-------------------------------------------------+-------------------------------------------------+-----------------------|
-| none  | single  | single | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          |                       |
-| none  | single  | single | none     | linear  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ AGE - 1       |
-| none  | single  | single | none     | smooth2 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 2) |
-| none  | single  | single | none     | smooth3 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 3) |
-| none  | single  | single | none     | smooth5 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 5) |
-| none  | single  | single | none     | smooth7 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 7) |
-| none  | single  | single | none     | smooth8 | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE, k = 8) |
-| none  | single  | single | none     | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ 1                                                             | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ s(AGE)        |
-| none  | many    | single | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert Species)                                             | b2 ~ (1 \vert Species)                          | b3 ~ (1 \vert Species)                          |                       |
-| many  | many    | single | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert Genus / Species)                                     | b2 ~ (1 \vert Genus / Species)                  | b3 ~ (1 \vert Genus / Species)                  |                       |
-| many  | many    | single | none     | yes     | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert Genus / Species)                                     | b2 ~ (1 \vert Genus / Species)                  | b3 ~ (1 \vert Genus / Species)                  | sigma ~ AGE -1        |
-| none  | single  | many   | none     | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City)                                                | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             |                       |
-| none  | single  | many   | b1       | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City)                             | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             |                       |
-| none  | single  | many   | b1       | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD, k = ) +  (1 \vert City)                       | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             |                       |
-| none  | single  | many   | none     | yes     | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City)                                                | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             | sigma ~ AGE -1        |
-| none  | single  | many   | b1       | yes     | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City)                             | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             | sigma ~ AGE -1        |
-| many  | many    | many   | none     | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
-| many  | many    | many   | none     | linear  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ (1 \vert City) + (1 \vert Genus / Species)                    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
-| many  | many    | many   | b1       | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
-| many  | many    | many   | b1linint | no      | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) |                       |
-| many  | many    | many   | b1       | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
-| many  | many    | many   | b1linint | smooth  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ s(AGE)        |
-| many  | many    | many   | b1linint | linear  | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ Precip * GDD +  (1 \vert City) + (1 \vert Genus / Species)    | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE - 1       |
-
-export the table to ../data/model_table.csv
-
-#+begin_src sh :session a
-rsync -avz ../data/model_table.csv erker@krusty:~/allo/data/
-#+end_src
-
-#+RESULTS:
-| erker@krusty's  | password: |       |          |         |       |       |           |
-| building        | file      | list  | ...      | done    |       |       |           |
-| model_table.csv |           |       |          |         |       |       |           |
-|                 |           |       |          |         |       |       |           |
-| sent            | 206       | bytes | received | 78      | bytes | 43.69 | bytes/sec |
-| total           | size      | is    | 3943     | speedup | is    | 13.88 |           |
-
-build up to the full model, then test relaxing some of the effects on
-the different betas.  Thinking about it, the full model makes the most sense...
-
-| genus | species | cities | climate predictors | heteroskedasticity | data                                           | b1                                                                 | b2                                              | b3                                              | sigma          | formula |
-|-------+---------+--------+--------------------+--------------------+------------------------------------------------+--------------------------------------------------------------------+-------------------------------------------------+-------------------------------------------------+----------------+---------|
-| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City) + (1 \vert Genus / Species) | b3 ~ (1 \vert City) + (1 \vert Genus / Species) | sigma ~ AGE -1 |         |
-|       |         |        |                    |                    | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert City)                             | b3 ~ (1 \vert City)                             | sigma ~ AGE -1 |         |
-| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ (1 \vert Genus / Species)                  | b3 ~ (1 \vert Genus / Species)                  | sigma ~ AGE -1 |         |
-| many  | many    | many   | on \beta_0         | yes                | DBH ~ 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)) | b1 ~ t2(Precip, GDD) +  (1 \vert City) + (1 \vert Genus / Species) | b2 ~ 1                                          | b3 ~ 1                                          | sigma ~ AGE -1 |         |
-*** Libraries and functions
-
-There are many models.  Some will be quite big and take a long time.
-I need to run them remotely, say on krusty.
-
-I can generate a single script that fits all models.
-
-I can generate a script for each model.
-
-each script specifies genus, species, cities, climate, and hetero.
-then functions subset data, generate formula and prior, and fit model.
-**** libraries
-#+begin_src R
-  library(dplyr)
-  library(brms)
-  library(ggplot2)
-  library(gridExtra)
-
-#  model_table <- read.csv("../data/model_table.csv", stringsAsFactors = F)
-
-#+end_src
-
-#+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.3.1). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-
-Attaching package: ‘gridExtra’
-
-The following object is masked from ‘package:dplyr’:
-
-    combine
-#+end_example
-
-**** functions
-#+begin_src R :tangle allo_functions.R
-
-    ## generate_formula <- function(model_table, gen, sp, cit, clim, het) {
-    ##     f <- filter(model_table, genus == gen, species == sp, cities == cit, climate == clim, hetero == het)
-
-    ##     f[] <- gsub("\\vert", "|", f, fixed = T)
-
-
-    ##     if(f$sigma == "") {
-    ##         bf(formula(f$data), formula(f$b1), formula(f$b2), formula(f$b3), nl = T)
-    ##     } else {
-    ##         bf(f$data, f$b1, f$b2, f$b3, f$sigma, nl = T)
-    ##     }
-    ## }
-
-    generate_formula <- function(gen, sp, cit, clim, het, family) {
-        if(family == "gaussian") {
-            data_form <- formula(DBH ~ b0 + 100*b1 * (1 - exp(-(b2/100) * AGE ^ b3)))
-            if(het == "linear") {
-                v_form <- formula(sigma ~ AGE - 1)
-            }
-            if(het == "sqrt") {
-                v_form <- formula(sigma ~ sqrt(AGE))
-            }
-            if (het == "smooth") {
-                v_form <- formula(sigma ~  s(AGE))
-            }
-            if (het == "no") {
-                v_form <- formula(sigma ~ 1)
-            }
-        }
-        if (family == "Gamma") {
-            data_form <- formula(DBH ~ b0 + 100*b1 * (1 - exp(-(b2/100) * AGE ^ (b3))))
-            if (het == "no") {
-                v_form <- formula(shape ~ 1)
-            }
-        }
-        if(sp == "single") {
-            if(cit == "single") {
-                b0_form <- formula(b0 ~ 1)
-                b1_form <- formula(b1 ~ 1)
-                b2_form <- formula(b2 ~ 1)
-                b3_form <- formula(b3 ~ 1)
-            }
-            if (cit == "many") {
-                b0_form <- formula(b0 ~ (1 | City))
-                b1_form <- formula(b1 ~ (1 | City))
-                b2_form <- formula(b2 ~ (1 | City))
-                b3_form <- formula(b3 ~ (1 | City))
-            }
-        }
-        if (sp == "many") {
-            if (gen == "none") {
-                if(cit == "single") {
-                    b0_form <- formula(b0 ~ (1 | Species))
-                    b1_form <- formula(b1 ~ (1 | ID | Species))
-                    b2_form <- formula(b2 ~ (1 | Species))
-                    b3_form <- formula(b3 ~ (1 | ID | Species))
-                }
-                if (cit == "many") {
-                    b0_form <- formula(b0 ~ (1 | City) + (1 | Species))
-                    b1_form <- formula(b1 ~ (1 | City) + (1 | Species))
-                    b2_form <- formula(b2 ~ (1 | City) + (1 | Species))
-                    b3_form <- formula(b3 ~ (1 | City) + (1 | Species))
-                }
-            }
-            if (gen == "many") {
-                if(cit == "single") {
-                    b0_form <- formula(b0 ~ (1 | Genus/Species))
-                    b1_form <- formula(b1 ~ (1 | Genus/Species))
-                    b2_form <- formula(b2 ~ (1 | Genus/Species))
-                    b3_form <- formula(b3 ~ (1 | Genus/Species))
-                }
-                if (cit == "many") {
-                    b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
-                    b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
-                    b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
-                    b3_form <- formula(b3 ~ (1 | City) + (1 | Genus/Species))
-                    if (clim == "b1linint") {
-                        b1_form <- formula(b1 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
-                    }
-                }
-            }
-        }
-
-        if (het == "no") {
-            f <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
-        } else {
-            f <- bf(data_form, b0_form, b1_form, b2_form, b3_form, v_form, nl = T)
-        }
-        return(f)
-
-
-    }
-
-    generate_prior <- function (gen, sp, cit, clim, fam) {
-        if(fam == "gaussian") {
-            nlprior <- c(prior(gamma(7.5, 3), nlpar = "b0",lb = 0),
-                         prior(gamma(8, 8), nlpar = "b1",lb = 0),       #mean = 4/3 = 1.3; variance = 4/9 = .4
-                         prior(gamma(8, 8), nlpar = "b2", lb = 0),      #mean = 5/1 = 5; variance = 5/1 = 5
-                         prior(gamma(8, 8), nlpar = "b3",lb = 0))
-
-            if("many" %in% c(gen, sp, cit)) {
-
-                nlprior <- c(nlprior,
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b1"),
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
-
-            }
-
-            if(clim == "b1") {
-                nlprior <- c(nlprior,
-                             prior(normal(0,.25), class = "sds", nlpar = "b1"))
-            }
-
-            if(hetero == "linear") {
-                nlprior <- c(nlprior,
-                             prior(gamma(1,10), class = "b", dpar = "sigma"))
-            }
-
-            if(hetero == "smooth") {
-                nlprior <- c(nlprior,
-                             prior(normal(1,.3), class = "b", dpar = "sigma"),
-                             prior(normal(1,.3), class = "sds", dpar = "sigma"),
-                             prior(normal(0,1), class = "Intercept", dpar = "sigma"))
-            }
-        }
-
-        if(fam == "Gamma") {
-            nlprior <- c(prior(gamma(7.5, 3), nlpar = "b0",lb = 0),
-                         prior(gamma(8, 6), nlpar = "b1",lb = 0),
-                         prior(gamma(8, 8), nlpar = "b2", lb = 0),
-                         prior(gamma(8, 6), nlpar = "b3",lb = 0),
-                         prior(gamma(5, .3), class = "shape"))
-
-            if("many" %in% c(gen, sp, cit)) {
-
-                nlprior <- c(nlprior,
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b0"),
-                             prior(gamma(10,10), class = "sd", nlpar = "b1"),
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b2"),
-                             prior(gamma(1.3,1.3), class = "sd", nlpar = "b3"))
-
-            }
-
-            if(clim == "b1") {
-                nlprior <- c(nlprior,
-                             prior(normal(0,.25), class = "sds", nlpar = "b1"))
-            }
-
-            if(hetero == "linear") {
-                nlprior <- c(nlprior,
-                             prior(gamma(1,10), class = "b", dpar = "sigma"))
-            }
-
-            if(hetero == "smooth") {
-                nlprior <- c(nlprior,
-                             prior(normal(1,.3), class = "b", dpar = "sigma"),
-                             prior(normal(1,.3), class = "sds", dpar = "sigma"),
-                             prior(normal(0,1), class = "Intercept", dpar = "sigma"))
-            }
-        }
-
-        nlprior
-    }
-
-#+end_src
-
-#+RESULTS:
-
-Tangle (C-c C-v t) then send functions to krusty
-#+BEGIN_SRC sh :session a :results verbatim
-rsync -avz allo_functions.R erker@krusty:~/allo/code/
-#+END_SRC
-
-#+RESULTS:
-: erker@krusty's password:
-: building file list ... done
-: allo_functions.R
-:
-: sent 129 bytes  received 96 bytes  26.47 bytes/sec
-: total size is 6194  speedup is 27.53
-: You have new mail in /var/mail/erker
-
-
-What is the prior on sigma in hetero models?  Can I adjust that prior?
-would that help?  maybe esp when the climate predictors are in the model.
 *** priors
 
 Priors
@@ -4820,12 +4529,11 @@ precip.gdd
     nlprior <- c(prior(gamma(4,  1.33), nlpar = "b0",lb = 0),
                prior(gamma(25, 16.66), nlpar = "b1",lb = 0),
                prior(gamma(69.44,55.556), nlpar = "b2", lb = 0),
-               prior(gamma(49, 46.667), nlpar = "b3",lb = 0),
+               prior(gamma(44.444, 44.444), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"))
 
 
   d <- readRDS("../data/age_dbh_testing.rds")
-
 
 
   prior_mod <-  brm(form,
@@ -4833,7 +4541,7 @@ precip.gdd
                prior = nlprior,
                family = Gamma("identity"),
              sample_prior = "only",
-               chains = 2, cores = 2, init_r = .3, iter = 2000)
+               chains = 2, cores = 2, init_r = .3, iter = 500)
 
 
   pred <- predict(prior_mod, newdata = d)
@@ -4849,15 +4557,20 @@ precip.gdd
 
 #+end_src
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
 #+end_src
 
 #+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png]]
+
+
+
+
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png]]
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png
- marginal_effects(prior_mod, theme = theme_gray())
+ marginal_effects(prior_mod, theme = theme_gray(), probs = c(.025, .975))
 #+end_src
 
 #+RESULTS:
@@ -4871,6 +4584,15 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 
 #+RESULTS:
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png
+pp <- posterior_predict(prior_mod, nsamples=30)
+ppc_dens_overlay(y = d$DBH, yrep=pp)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png]]
+
 
 **** tangle
 C-c C-v t
