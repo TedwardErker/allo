@@ -1791,13 +1791,18 @@ for gamma
 these priors selected because they create a wide range of possible
 mean curves, but they are physically possible.
 
-variability by cities
+variability by cities and species, something wide
+
 \[
-\sigma_d0 ~
+\sigma_{\delta0} \sim half-Cauchy( )
 \]
 
-*** priors
-Picking Priors....
+
+variability by species for intercept, \beta_0
+\[
+\sigma_{\delta0} \sim
+\]
+
 
 *** fitting model
 **** COMMENT adjust for fit in stan, can mention
