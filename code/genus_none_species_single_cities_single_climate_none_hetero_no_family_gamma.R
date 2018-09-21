@@ -48,7 +48,7 @@ hetero <- "no"
 family <- "Gamma"
 
 
-  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-1 * 10^(-b2) * AGE^(b3))))
+  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
   b0_form <- formula(b0 ~ 1)
   b1_form <- formula(b1 ~ 1)
   b2_form <- formula(b2 ~ 1)
@@ -56,10 +56,15 @@ family <- "Gamma"
 
   form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
-nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
-             prior(gamma(5, 3), nlpar = "b1",lb = 0),
-             prior(gamma(12, 6), nlpar = "b2", lb = 0),
-             prior(gamma(6, 6), nlpar = "b3",lb = 0),
+  a <- seq(50,250,50)
+ b <- c(.01, .0125, .015)
+  c <- c(.9, 1, 1.2)
+
+
+nlprior <- c(prior(gamma(1.33, 2), nlpar = "b0",lb = 0),
+             prior(gamma(16.66, 5), nlpar = "b1",lb = 0),
+             prior(gamma(125, 12.5), nlpar = "b2", lb = 0),
+             prior(gamma(105, 10.5), nlpar = "b3",lb = 0),
              prior(gamma(20, 1), class = "shape"))
 
 

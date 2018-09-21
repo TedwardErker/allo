@@ -1750,12 +1750,16 @@ for each j. City random effect:
 Should the beta's be normal or gamma?  I think I could do normal with
 pretty tight sd?
 
-| parameter |  mu | sd    |
-|-----------+-----+-------|
-| \beta_0   |  3? | 1? 2? |
-| \beta_1   | 1.5 | .3?   |
-| \beta_2   |   2 | .3    |
-| \beta_3   |   1 | .3    |
+for gamma
+\alpha = \mu/\sigma
+\beta = \mu/\sigma^2
+
+| parameter |   mu |  sd | beta (of gamma) | alpha (of gamma) |
+|-----------+------+-----+-----------------+------------------|
+| \beta_0   |    3 | 1.5 |   3/2.25 = 1.33 |                2 |
+| \beta_1   |  1.5 |  .3 |           16.66 |                5 |
+| \beta_2   | 1.25 |  .1 |             125 |             12.5 |
+| \beta_3   | 1.05 |  .1 |             105 |             10.5 |
 
 
 \[
@@ -4780,7 +4784,7 @@ precip.gdd
   family <- "Gamma"
 
 
-    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-b2 * AGE^(b3))))
+    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
     b0_form <- formula(b0 ~ 1)
     b1_form <- formula(b1 ~ 1)
     b2_form <- formula(b2 ~ 1)
@@ -4793,10 +4797,10 @@ precip.gdd
     c <- c(.9, 1, 1.2)
 
 
-  nlprior <- c(prior(gamma(7, 3.5), nlpar = "b0",lb = 0),
-               prior(gamma(5, 3), nlpar = "b1",lb = 0),
-               prior(gamma(12, 6), nlpar = "b2", lb = 0),
-               prior(gamma(6, 6), nlpar = "b3",lb = 0),
+  nlprior <- c(prior(gamma(1.33, 2), nlpar = "b0",lb = 0),
+               prior(gamma(16.66, 5), nlpar = "b1",lb = 0),
+               prior(gamma(125, 12.5), nlpar = "b2", lb = 0),
+               prior(gamma(105, 10.5), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"))
 
 
