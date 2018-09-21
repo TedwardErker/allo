@@ -316,6 +316,14 @@ species and the climate of the city.
 
 DBH for illustrative purposes.
 
+on selecting a model form
+cite:Weiskittel_ForestGrowthAndYieldModeling:
+"This reality should lead to model forms that are complex enough to
+accurately and adequately characterize the expected major behaviors of
+the population, but simple enough to avoid being overly influenced by
+the sample’s peculiarities."
+
+
 ** past work
 
 cite:nothdurft_e_2006
@@ -430,6 +438,9 @@ equations have been integrated with numerical models of tree benefits
 in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 #+END_QUOTE
+
+
+
 
 * Methods
 ** Data
@@ -1698,6 +1709,10 @@ y_i \sim Gamma(\mu_i, \alpha_y)
 \mu_i = \beta_{0sc[i]} + \beta_{1sc[i]} (1 - \exp(-\beta_{2sc[i]} x_i^{\beta_{3sc[i]}}))
 \]
 
+the mean, \mu_i, is modelled using the weibull curve, a function that
+has been used for decades in forestry to successfully model tree growth
+cite:Weiskittel_ForestGrowthAndYieldModeling (pg 116).
+
 \beta_0 is intercept.  x is transplant age so when x = 0, y can be
 well above 0.
 
@@ -1746,13 +1761,9 @@ for each j. City random effect:
 \]
 
 
-Should the beta's be normal or gamma?  I think I could do normal with
-pretty tight sd?
-
 for gamma
 \alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
-
 | parameter |   mu |  sd | alpha (of gamma) | beta (of gamma) |
 |-----------+------+-----+------------------+-----------------|
 | \beta_0   |    3 | 1.5 |               4. |       1.3333333 |
@@ -1762,7 +1773,16 @@ for gamma
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
-\beta_1 ~ Gamma(
+\beta_0 ~ Gamma(4, 1.33)
+\]
+\[
+\beta_1 ~ Gamma(25, 16.66)
+\]
+\[
+\beta_2 ~ Gamma(69.444, 55.55)
+\]
+\[
+\beta_3 ~ Gamma(44.444, 44.444)
 \]
 
 
@@ -1782,7 +1802,7 @@ p\[
 \]
 
 
-*** notes on how to do modeling in brms
+*** COMMENT notes on how to do modeling in brms
 IN STAN:
 vignette("brms_nonlinear")
 http://discourse.mc-stan.org/t/hierarchical-nonlinear-regression/4382/6
@@ -1834,6 +1854,8 @@ flexible, able to assume a variety of shapes, and extrapolated well.
 #+END_QUOTE
 
 It should also be good for dbh.  height and dbh are different though:
+
+
 
 #+BEGIN_QUOTE
 A diameter growth curve would show much the same trend, except there
