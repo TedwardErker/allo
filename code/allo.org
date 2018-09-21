@@ -1773,16 +1773,19 @@ for gamma
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
-\beta_0 ~ Gamma(4, 1.33)
+\beta_0 \sim Gamma(4, 1.33)
 \]
+
 \[
-\beta_1 ~ Gamma(25, 16.66)
+\beta_1 \sim Gamma(25, 16.7)
 \]
+
 \[
-\beta_2 ~ Gamma(69.444, 55.55)
+\beta_2 \sim Gamma(69.4, 55.6)
 \]
+
 \[
-\beta_3 ~ Gamma(44.444, 44.444)
+\beta_3 \sim Gamma(44.4, 44.4)
 \]
 
 
