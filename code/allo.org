@@ -1751,15 +1751,15 @@ Should the beta's be normal or gamma?  I think I could do normal with
 pretty tight sd?
 
 for gamma
-\alpha = \mu/\sigma
+\alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
 
-| parameter |   mu |  sd | beta (of gamma) | alpha (of gamma) |
-|-----------+------+-----+-----------------+------------------|
-| \beta_0   |    3 | 1.5 |   3/2.25 = 1.33 |                2 |
-| \beta_1   |  1.5 |  .3 |           16.66 |                5 |
-| \beta_2   | 1.25 |  .1 |             125 |             12.5 |
-| \beta_3   | 1.05 |  .1 |             105 |             10.5 |
+| parameter |   mu |  sd | alpha (of gamma) | beta (of gamma) |
+|-----------+------+-----+------------------+-----------------|
+| \beta_0   |    3 | 1.5 |                4 |   3/2.25 = 1.33 |
+| \beta_1   |  1.5 |  .3 |               25 |           16.66 |
+| \beta_2   | 1.25 |  .1 |           156.25 |             125 |
+| \beta_3   | 1.05 |  .1 |           110.25 |             105 |
 
 
 \[
@@ -4792,15 +4792,10 @@ precip.gdd
 
     form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
-    a <- seq(50,250,50)
-   b <- c(.01, .0125, .015)
-    c <- c(.9, 1, 1.2)
-
-
-  nlprior <- c(prior(gamma(1.33, 2), nlpar = "b0",lb = 0),
-               prior(gamma(16.66, 5), nlpar = "b1",lb = 0),
-               prior(gamma(125, 12.5), nlpar = "b2", lb = 0),
-               prior(gamma(105, 10.5), nlpar = "b3",lb = 0),
+    nlprior <- c(prior(gamma(4,  1.33), nlpar = "b0",lb = 0),
+               prior(gamma(25, 16.66), nlpar = "b1",lb = 0),
+               prior(gamma(156.25, 125), nlpar = "b2", lb = 0),
+               prior(gamma(110.25, 105), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"))
 
 
@@ -4808,15 +4803,15 @@ precip.gdd
 
 
 
-  ## prior_mod <-  brm(form,
-  ##              data = d,
-  ##              prior = nlprior,
-  ##              family = Gamma("identity"),
-  ##            sample_prior = "only",
-  ##              chains = 2, cores = 2, init_r = .3, iter = 2000)
+  prior_mod <-  brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+             sample_prior = "only",
+               chains = 2, cores = 2, init_r = .3, iter = 2000)
 
 
-  ## pred <- predict(prior_mod, newdata = d)
+  pred <- predict(prior_mod, newdata = d)
 
 
      mod <- brm(form,
@@ -4829,11 +4824,15 @@ precip.gdd
 
 #+end_src
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png
-a <- marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png
+ marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
 #+end_src
 
 #+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png]]
+
+
+
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png]]
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
