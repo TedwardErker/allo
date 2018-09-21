@@ -1781,16 +1781,19 @@ for gamma
 \]
 
 \[
-\beta_2 \sim Gamma(69.4, 55.6)
+\beta_2 \sim Gamma(69.4, 55.5)
 \]
 
 \[
 \beta_3 \sim Gamma(44.4, 44.4)
 \]
 
+these priors selected because they create a wide range of possible
+mean curves, but they are physically possible.
 
+variability by cities
 \[
-\sigma_dc
+\sigma_d0 ~
 \]
 
 *** priors
