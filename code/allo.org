@@ -1967,6 +1967,31 @@ dbh values, impossible
 #+RESULTS:
 [[file:../figs/weibull_reasonable.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/weibull_reasonable_check.png
+
+  x <- 1:200
+  z <- 3
+  a <- 1.5
+  b <- 1.25
+  c <- 1.05
+
+   d <- expand.grid(x = x,a = a, b = b, c = c)
+
+   w <- function(z, a,b,c,x) z + 100 * a * (1 - exp(-(b/100) * x^c))
+
+   d <- d %>%
+       mutate(y = w(z, a,b,c,x))
+
+   ggplot(d, aes( x = x, y = y)) +
+       geom_point(data = data, alpha = .1) +
+       geom_line(aes(color =  a, group = interaction(a,b,c))) +
+       facet_grid(b~c) +
+       xlim(c(0,150))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_reasonable_check.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/weibull.png
   data <- readRDS("../data/tidy_age_dbh.rds") %>%
@@ -4831,17 +4856,21 @@ precip.gdd
 #+RESULTS:
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png]]
 
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png
+ marginal_effects(prior_mod, theme = theme_gray())
+#+end_src
 
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png]]
 
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects.png]]
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
-pp <- posterior_predict(prior_mod, nsamples=10)
+pp <- posterior_predict(prior_mod, nsamples=300)
 ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_.png]]
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png]]
 
 **** tangle
 C-c C-v t
