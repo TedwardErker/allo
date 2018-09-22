@@ -1797,6 +1797,36 @@ variability by cities and species, something wide
 \sigma_{\delta0} \sim half-Cauchy( )
 \]
 
+\[
+\sigma_{\delta1} \sim half-Cauchy( )
+\]
+
+\[
+\sigma_{\delta2} \sim half-Cauchy( )
+\]
+
+\[
+\sigma_{\delta3} \sim half-Cauchy( )
+\]
+
+\[
+\sigma_{\delta0} \sim half-Cauchy( )
+\]
+
+\[
+\sigma_{\delta1} \sim half-Cauchy( )
+\]
+
+\[
+\sigma_{\delta2} \sim half-Cauchy( )
+\]
+
+\[
+\sigma_{\delta3} \sim half-Cauchy( )
+\]
+
+
+
 
 variability by species for intercept, \beta_0
 \[
@@ -3180,8 +3210,7 @@ beta called rate
 
 #+begin_src R :exports results :results graphics :file ../figs/cauchtest.png
   x <- seq(0,5,.1)
-  y <- dt(x,.2)
-  y <- dcauchy(x,0,2)
+  y <- dcauchy(x,0,.3)
   plot(x, y, type = "l")
 #+end_src
 
