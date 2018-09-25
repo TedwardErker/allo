@@ -3249,7 +3249,11 @@ make better
   levels of taxonomy.
 - extend species with species level predictors (leaf morphology, wood
   characteristics, shade tolerance, etc).
-- smarter priors (e.g. max dbh based on champion trees?)  is this possible?
+- smarter priors (e.g. max dbh based on champion trees?)  is this
+  possible?  I think it would be a very neat extension, but need to
+  think about how these champions are not urban trees most the time.
+  They provide the upper limit on the asymptote, but for urban trees
+  the asymptote could be quite lower.
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
