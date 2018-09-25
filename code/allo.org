@@ -1674,9 +1674,8 @@ Use brm(..., sample_prior = "only")
   - single species, single location, heteroskedasticity
   - multiple species, single location, heteroskedasticity
   - multiple species, vary by climate, heteroskedasticity
-- other possible extensions, but ones I maybe won't do because time constraints:
-  - smarter priors (e.g. max dbh based on champion trees)
-  - include possible nonlinear effects of climate on growth parameters?
+
+
 - for each of these approaches follow the workflow:
   - problem
   - model
@@ -3243,14 +3242,14 @@ and the map could show that.  That would be neat.
 make better
 - more data, duh, perhaps used results to identify where to sample
 - more cities, this is important for interpolation across climate
-  space.
+  space. Could allow for nonlinear relationships and for more variables.
 - better climate predictors
 - interactions between climate and species.
 - use phylogenetic distance, gaussian process, instead of multiple
   levels of taxonomy.
 - extend species with species level predictors (leaf morphology, wood
   characteristics, shade tolerance, etc).
-
+- smarter priors (e.g. max dbh based on champion trees?)  is this possible?
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
