@@ -1810,19 +1810,19 @@ variability by cities and species, something wide
 \]
 
 \[
-\sigma_{\delta0} \sim half-Cauchy( )
+\sigma_{\gamma0} \sim half-Cauchy( )
 \]
 
 \[
-\sigma_{\delta1} \sim half-Cauchy( )
+\sigma_{\gamma1} \sim half-Cauchy( )
 \]
 
 \[
-\sigma_{\delta2} \sim half-Cauchy( )
+\sigma_{\gamma2} \sim half-Cauchy( )
 \]
 
 \[
-\sigma_{\delta3} \sim half-Cauchy( )
+\sigma_{\gamma3} \sim half-Cauchy( )
 \]
 
 
