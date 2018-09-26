@@ -446,11 +446,16 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 * Methods
 ** Data
-The urban tree database consists of measurements on XXX trees of XX
-species in XX cities.  However, because of the difficulty is measuring
-tree age, there are only XX trees with complete age and diameter
-data (XX species, XX cities, 309 species x city combinations).
 
+The urban tree database consists of measurements on 14487 trees of 170
+species in 17 cities.  However, largely because of the difficulty is measuring
+tree age, there are only 12687 trees with complete age and diameter
+data (161 species, 17 cities, 309 species x city combinations).  Some
+species were measured in multiple cities, but not most.
+
+[[file:../figs/CitySpeciesData_SciNameCentric.png]]
+
+[[file:../figs/CityScientificNameData_CityCentric.png]]
 
 
 repeat measures on the same individuals would help much.
@@ -826,24 +831,13 @@ There may be other common names I need to fix.
 
 **** tidy a few names and select variables of interest here
 #+begin_src R
-  d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, Species = SpCode) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age, ScientificName)
+    d <- d %>%
+        rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, Species = SpCode) %>% select(Region, City, TreeID, Species, DBH, Leaf, DBH, Age, ScientificName)
 #+end_src
 
 #+RESULTS:
-: Error in FUN(X[[i]], ...) : object 'SpCode' not found
 
-#+begin_src R
-  summary(d$Leaf)
-  sum(d$Leaf == -1) / length(d$Leaf)
-  sum(d$DBH == -1) / length(d$DBH)
-#+end_src
-
-#+RESULTS:
-:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-:    -1.0    12.9   116.1   302.5   389.2  9516.0
-: [1] 0.1143094
-: [1] 0
-
+**** Remove missing data (either DBH or Age)
 #+begin_src R
   d <- filter(d, DBH != -1, Age != -1) %>%
       rename(AGE = Age)
@@ -856,6 +850,118 @@ There may be other common names I need to fix.
 #+end_src
 
 #+RESULTS:
+**** str of data now
+#+begin_src R
+d <- readRDS("../data/tidy_age_dbh.rds")
+str(d)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
+ $ Region        : chr  "InlVal" "InlVal" "InlVal" "InlVal" ...
+ $ City          : chr  "Modesto, CA" "Modesto, CA" "Modesto, CA" "Modesto, CA" ...
+ $ TreeID        : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ Species       : chr  "ACSA1" "BEPE" "CESI4" "CICA" ...
+ $ DBH           : num  2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 ...
+ $ Leaf          : num  2.5 1.9 2.2 2 2.2 2.2 2.2 2.2 2.1 1.3 ...
+ $ AGE           : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ ScientificName: chr  "Acer saccharinum" "Betula pendula" "Celtis sinensis" "Cinnamomum camphora" ...
+ - attr(*, "problems")=Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	24255 obs. of  5 variables:
+  ..$ row     : int  1262 1263 1264 1265 1266 1267 1268 1269 1270 1271 ...
+  ..$ col     : chr  "side" "side" "side" "side" ...
+  ..$ expected: chr  "an integer" "an integer" "an integer" "an integer" ...
+  ..$ actual  : chr  "C" "C" "C" "C" ...
+  ..$ file    : chr  "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" ...
+ - attr(*, "spec")=List of 2
+  ..$ cols   :List of 41
+  .. ..$ DbaseID       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Region        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ City          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ Source        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ TreeID        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Zone          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ Park/Street   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ SpCode        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ ScientificName: list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ CommonName    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ TreeType      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ address       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ street        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ side          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ cell          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ OnStreet      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ FromStreet    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ ToStreet      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Age           : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ DBH (cm)      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ TreeHt (m)    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CrnBase       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CrnHt (m)     : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CdiaPar (m)   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CDiaPerp (m)  : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ AvgCdia (m)   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ Leaf (m2)     : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ Setback       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ TreeOr        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ CarShade      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ LandUse       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Shape         : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ WireConf      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh1          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ dbh2          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh3          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh4          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh5          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh6          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh7          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh8          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  ..$ default: list()
+  .. ..- attr(*, "class")= chr  "collector_guess" "collector"
+  ..- attr(*, "class")= chr "col_spec"
+#+end_example
+
 **** save subset of data for testing
 #+begin_src R
   d <- readRDS("../data/tidy_age_dbh.rds")
@@ -866,7 +972,6 @@ There may be other common names I need to fix.
 
       d2 <- d %>%
           mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
-          rename(Species = SpCode) %>%
           select(-Leaf,-TreeID) %>%
           left_join(.,clim) %>%
           mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
@@ -908,213 +1013,187 @@ total size is 37842  speedup is 1.03
 
 *** The Species for which we have age and dbh:
 #+begin_src R
-  d <- readRDS("../data/tidy_age_dbh.rds")
+    sampled_species <- readRDS("../data/tidy_age_dbh.rds") %>%
+      pull(ScientificName) %>%
+      unique %>%
+      as.character() %>%
+      sort %>%
+      data.frame()
+nrow(sampled_species)
+sampled_species %>% ascii.nowarn.print
 #+end_src
 
 #+RESULTS:
+#+begin_example
+[1] 161
+|     | .                                      |
+|-----+----------------------------------------|
+| 1   | Acacia farnesiana                      |
+| 2   | Acacia melanoxylon                     |
+| 3   | Acacia salicina                        |
+| 4   | Acer macrophyllum                      |
+| 5   | Acer negundo                           |
+| 6   | Acer palmatum                          |
+| 7   | Acer platanoides                       |
+| 8   | Acer rubrum                            |
+| 9   | Acer saccharinum                       |
+| 10  | Acer saccharum                         |
+| 11  | Bauhinia x blakeana                    |
+| 12  | Betula nigra                           |
+| 13  | Betula pendula                         |
+| 14  | Brachychiton populneum                 |
+| 15  | Butia capitata                         |
+| 16  | Callistemon citrinus                   |
+| 17  | Calocedrus decurrens                   |
+| 18  | Calophyllum inophyllum                 |
+| 19  | Carpinus betulus 'Fastigiata'          |
+| 20  | Carya illinoinensis                    |
+| 21  | Cassia x nealiae                       |
+| 22  | Casuarina equisetifolia                |
+| 23  | Catalpa speciosa                       |
+| 24  | Cedrus deodara                         |
+| 25  | Celtis laevigata                       |
+| 26  | Celtis occidentalis                    |
+| 27  | Celtis sinensis                        |
+| 28  | Ceratonia siliqua                      |
+| 29  | Chilopsis linearis                     |
+| 30  | Cinnamomum camphora                    |
+| 31  | Citharexylum spinosum                  |
+| 32  | Cocos nucifera                         |
+| 33  | Conocarpus erectus var. argenteus      |
+| 34  | Cordia subcordata                      |
+| 35  | Cornus florida                         |
+| 36  | Crataegus sp.                          |
+| 37  | Crataegus x lavallei                   |
+| 38  | Cupaniopsis anacardioides              |
+| 39  | Delonix regia                          |
+| 40  | Elaeagnus angustifolia                 |
+| 41  | Elaeodendron orientale                 |
+| 42  | Eriobotrya japonica                    |
+| 43  | Eucalyptus ficifolia                   |
+| 44  | Eucalyptus globulus                    |
+| 45  | Eucalyptus microtheca                  |
+| 46  | Eucalyptus sideroxylon                 |
+| 47  | Fagus sylvatica                        |
+| 48  | Ficus benjamina                        |
+| 49  | Ficus thonningii                       |
+| 50  | Filicium decipiens                     |
+| 51  | Fraxinus americana                     |
+| 52  | Fraxinus angustifolia                  |
+| 53  | Fraxinus angustifolia 'Raywood'        |
+| 54  | Fraxinus excelsior 'Hessei'            |
+| 55  | Fraxinus holotricha                    |
+| 56  | Fraxinus latifolia                     |
+| 57  | Fraxinus pennsylvanica                 |
+| 58  | Fraxinus pennsylvanica 'Marshall'      |
+| 59  | Fraxinus uhdei                         |
+| 60  | Fraxinus velutina                      |
+| 61  | Fraxinus velutina 'Modesto'            |
+| 62  | Ginkgo biloba                          |
+| 63  | Gleditsia triacanthos                  |
+| 64  | Gymnocladus dioicus                    |
+| 65  | Ilex opaca                             |
+| 66  | Ilex paraguariensis                    |
+| 67  | Jacaranda mimosifolia                  |
+| 68  | Juglans nigra                          |
+| 69  | Juniperus virginiana                   |
+| 70  | Juniperus virginiana var. silicicola   |
+| 71  | Koelreuteria elegans                   |
+| 72  | Koelreuteria paniculata                |
+| 73  | Lagerstroemia indica                   |
+| 74  | Lagerstroemia sp.                      |
+| 75  | Lagerstroemia speciosa                 |
+| 76  | Liquidambar styraciflua                |
+| 77  | Liriodendron tulipifera                |
+| 78  | Magnolia grandiflora                   |
+| 79  | Malus angustifolia                     |
+| 80  | Malus sp.                              |
+| 81  | Melaleuca quinquenervia                |
+| 82  | Metrosideros excelsa                   |
+| 83  | Morus alba                             |
+| 84  | Olea europaea                          |
+| 85  | Parkinsonia aculeata                   |
+| 86  | Parkinsonia florida                    |
+| 87  | Phoenix canariensis                    |
+| 88  | Phoenix dactylifera                    |
+| 89  | Picea pungens                          |
+| 90  | Pinus brutia                           |
+| 91  | Pinus canariensis                      |
+| 92  | Pinus contorta                         |
+| 93  | Pinus echinata                         |
+| 94  | Pinus edulis                           |
+| 95  | Pinus eldarica                         |
+| 96  | Pinus elliottii                        |
+| 97  | Pinus halepensis                       |
+| 98  | Pinus nigra                            |
+| 99  | Pinus ponderosa                        |
+| 100 | Pinus radiata                          |
+| 101 | Pinus sylvestris                       |
+| 102 | Pinus taeda                            |
+| 103 | Pinus thunbergiana                     |
+| 104 | Pistacia chinensis                     |
+| 105 | Pittosporum undulatum                  |
+| 106 | Platanus occidentalis                  |
+| 107 | Platanus racemosa                      |
+| 108 | Platanus x acerifolia                  |
+| 109 | Platycladus orientalis                 |
+| 110 | Podocarpus macrophyllus                |
+| 111 | Populus angustifolia                   |
+| 112 | Populus balsamifera subsp. trichocarpa |
+| 113 | Populus fremontii                      |
+| 114 | Populus sargentii                      |
+| 115 | Prosopis chilensis                     |
+| 116 | Prunus caroliniana                     |
+| 117 | Prunus cerasifera                      |
+| 118 | Prunus serrulata                       |
+| 119 | Prunus sp.                             |
+| 120 | Prunus yedoensis                       |
+| 121 | Pseudotsuga menziesii                  |
+| 122 | Pyrus calleryana                       |
+| 123 | Pyrus calleryana 'Bradford'            |
+| 124 | Pyrus kawakamii                        |
+| 125 | Pyrus sp.                              |
+| 126 | Quercus agrifolia                      |
+| 127 | Quercus alba                           |
+| 128 | Quercus ilex                           |
+| 129 | Quercus laurifolia                     |
+| 130 | Quercus lobata                         |
+| 131 | Quercus macrocarpa                     |
+| 132 | Quercus nigra                          |
+| 133 | Quercus palustris                      |
+| 134 | Quercus phellos                        |
+| 135 | Quercus rubra                          |
+| 136 | Quercus shumardii                      |
+| 137 | Quercus virginiana                     |
+| 138 | Rhus lancea                            |
+| 139 | Robinia pseudoacacia                   |
+| 140 | Sabal palmetto                         |
+| 141 | Samanea saman                          |
+| 142 | Schinus molle                          |
+| 143 | Schinus terebinthifolius               |
+| 144 | Sequoia sempervirens                   |
+| 145 | Swietenia mahagoni                     |
+| 146 | Syagrus romanzoffiana                  |
+| 147 | Tabebuia aurea                         |
+| 148 | Tabebuia heterophylla                  |
+| 149 | Tabebuia ochracea subsp. neochrysantha |
+| 150 | Tilia americana                        |
+| 151 | Tilia cordata                          |
+| 152 | Triadica sebifera                      |
+| 153 | Tristaniopsis conferta                 |
+| 154 | Ulmus alata                            |
+| 155 | Ulmus americana                        |
+| 156 | Ulmus parvifolia                       |
+| 157 | Ulmus pumila                           |
+| 158 | Veitchia merrillii                     |
+| 159 | Washingtonia filifera                  |
+| 160 | Washingtonia robusta                   |
+| 161 | Zelkova serrata                        |
+#+end_example
 
-*** Species
-**** taxonomy
-Nesting of taxonomy.
-
-Cultivar < Species < Genus < Functional Type
-
-Functional types:
-1) Broad leaf
-2) Conifer
-3) Palm
-4) ...
-5) ...
-| FunctionalType      |
-|---------------------|
-| broadleaf deciduous |
-| broadleaf evergreen |
-| conifer evergreen   |
-| palm evergreen      |
-
-
-
-|     | SpCode | ScientificName                         | FunctionalType      |                     |
-|-----+--------+----------------------------------------+---------------------+---------------------|
-|   1 | ACFA   | Acacia farnesiana                      | broadleaf deciduous |                     |
-|   2 | ACME   | Acacia melanoxylon                     | broadleaf evergreen |                     |
-|   3 | ACSA3  | Acacia salicina                        | broadleaf evergreen |                     |
-|   4 | ACMA   | Acer macrophyllum                      | broadleaf deciduous |                     |
-|   5 | ACNE   | Acer negundo                           | broadleaf deciduous |                     |
-|   6 | ACPA   | Acer palmatum                          | broadleaf deciduous |                     |
-|   7 | ACPL   | Acer platanoides                       | broadleaf deciduous |                     |
-|   8 | ACRU   | Acer rubrum                            | broadleaf deciduous |                     |
-|   9 | ACSA1  | Acer saccharinum                       | broadleaf deciduous |                     |
-|  10 | ACSA2  | Acer saccharum                         | broadleaf deciduous |                     |
-|  11 | AEHI   | Aesculus hippocastanum                 | broadleaf deciduous |                     |
-|  12 | BABL   | Bauhinia x blakeana                    | broadleaf evergreen |                     |
-|  13 | BENI   | Betula nigra                           | broadleaf deciduous |                     |
-|  14 | BEPE   | Betula pendula                         | broadleaf deciduous |                     |
-|  15 | BRPO   | Brachychiton populneum                 | broadleaf evergreen |                     |
-|  16 | BUCA   | Butia capitata                         | palm evergreen      |                     |
-|  17 | CACI   | Callistemon citrinus                   | broadleaf evergreen |                     |
-|  18 | CADE2  | Calocedrus decurrens                   | conifer evergreen   |                     |
-|  19 | CAIN4  | Calophyllum inophyllum                 | broadleaf evergreen |                     |
-|  20 | CABEF  | Carpinus betulus 'Fastigiata'          | broadleaf deciduous |                     |
-|  21 | CAIL   | Carya illinoinensis                    | broadleaf deciduous |                     |
-|  22 | CANE33 | Cassia x nealiae                       | broadleaf deciduous |                     |
-|  23 | CAEQ   | Casuarina equisetifolia                | broadleaf evergreen |                     |
-|  24 | CASP   | Catalpa speciosa                       | broadleaf deciduous |                     |
-|  25 | CEDE   | Cedrus deodara                         | conifer evergreen   |                     |
-|  26 | CELA   | Celtis laevigata                       | conifer evergreen   | This can't be right |
-|  27 | CEOC   | Celtis occidentalis                    | broadleaf deciduous |                     |
-|  28 | CESI4  | Celtis sinensis                        | broadleaf deciduous |                     |
-|  29 | CESI3  | Ceratonia siliqua                      | broadleaf evergreen |                     |
-|  30 | CECA   | Cercis canadensis                      | broadleaf deciduous |                     |
-|  31 | CHLI   | Chilopsis linearis                     | broadleaf deciduous |                     |
-|  32 | CICA   | Cinnamomum camphora                    | broadleaf evergreen |                     |
-|  33 | CISP2  | Citharexylum spinosum                  | broadleaf evergreen |                     |
-|  34 | CONU   | Cocos nucifera                         | palm evergreen      |                     |
-|  35 | COERA2 | Conocarpus erectus var. argenteus      | broadleaf evergreen |                     |
-|  36 | COSU2  | Cordia subcordata                      | broadleaf evergreen |                     |
-|  37 | COFL   | Cornus florida                         | broadleaf deciduous |                     |
-|  38 | CR     | Crataegus sp.                          | broadleaf deciduous |                     |
-|  39 | CRLA   | Crataegus x lavallei                   | broadleaf deciduous |                     |
-|  40 | CUAN   | Cupaniopsis anacardioides              | broadleaf evergreen |                     |
-|  41 | DERE   | Delonix regia                          | broadleaf deciduous |                     |
-|  42 | ELAN   | Elaeagnus angustifolia                 | broadleaf deciduous |                     |
-|  43 | ELOR2  | Elaeodendron orientale                 | broadleaf evergreen |                     |
-|  44 | ERJA   | Eriobotrya japonica                    | broadleaf evergreen |                     |
-|  45 | EUFI81 | Eucalyptus ficifolia                   | broadleaf evergreen |                     |
-|  46 | EUGL   | Eucalyptus globulus                    | broadleaf evergreen |                     |
-|  47 | EUMI2  | Eucalyptus microtheca                  | broadleaf evergreen |                     |
-|  48 | EUSI   | Eucalyptus sideroxylon                 | broadleaf evergreen |                     |
-|  49 | FASY   | Fagus sylvatica                        | broadleaf deciduous |                     |
-|  50 | FIBE   | Ficus benjamina                        | broadleaf evergreen |                     |
-|  51 | FIMI   | Ficus thonningii                       | broadleaf evergreen |                     |
-|  52 | FIDE6  | Filicium decipiens                     | broadleaf evergreen |                     |
-|  53 | FRAM   | Fraxinus americana                     | broadleaf deciduous |                     |
-|  54 | FRAN2  | Fraxinus angustifolia                  | broadleaf deciduous |                     |
-|  55 | FRAN_R | Fraxinus angustifolia 'Raywood'        | broadleaf deciduous |                     |
-|  56 | FREX_H | Fraxinus excelsior 'Hessei'            | broadleaf deciduous |                     |
-|  57 | FRHO   | Fraxinus holotricha                    | broadleaf deciduous |                     |
-|  58 | FRLA   | Fraxinus latifolia                     | broadleaf deciduous |                     |
-|  59 | FRPE   | Fraxinus pennsylvanica                 | broadleaf deciduous |                     |
-|  60 | FRPE_M | Fraxinus pennsylvanica 'Marshall'      | broadleaf deciduous |                     |
-|  61 | FRUH   | Fraxinus uhdei                         | broadleaf deciduous |                     |
-|  62 | FRVE   | Fraxinus velutina                      | broadleaf deciduous |                     |
-|  63 | FRVE_G | Fraxinus velutina 'Modesto'            | broadleaf deciduous |                     |
-|  64 | GIBI   | Ginkgo biloba                          | broadleaf deciduous |                     |
-|  65 | GLTR   | Gleditsia triacanthos                  | broadleaf deciduous |                     |
-|  66 | GYDI   | Gymnocladus dioicus                    | broadleaf deciduous |                     |
-|  67 | ILOP   | Ilex opaca                             | broadleaf evergreen |                     |
-|  68 | ILPA2  | Ilex paraguariensis                    | broadleaf evergreen |                     |
-|  69 | JAMI   | Jacaranda mimosifolia                  | broadleaf deciduous |                     |
-|  70 | JUNI   | Juglans nigra                          | broadleaf deciduous |                     |
-|  71 | JUVI   | Juniperus virginiana                   | conifer evergreen   |                     |
-|  72 | JUSI   | Juniperus virginiana var. silicicola   | conifer evergreen   |                     |
-|  73 | KOELFO | Koelreuteria elegans                   | broadleaf deciduous |                     |
-|  74 | KOPA   | Koelreuteria paniculata                | broadleaf deciduous |                     |
-|  75 | LAIN   | Lagerstroemia indica                   | broadleaf deciduous |                     |
-|  76 | LA6    | Lagerstroemia sp.                      | broadleaf deciduous |                     |
-|  77 | LASP   | Lagerstroemia speciosa                 | broadleaf deciduous |                     |
-|  78 | LIST   | Liquidambar styraciflua                | broadleaf deciduous |                     |
-|  79 | LITU   | Liriodendron tulipifera                | broadleaf deciduous |                     |
-|  80 | MAGR   | Magnolia grandiflora                   | broadleaf evergreen |                     |
-|  81 | PYAN   | Malus angustifolia                     | broadleaf deciduous |                     |
-|  82 | MA2    | Malus sp.                              | broadleaf deciduous |                     |
-|  83 | MEQU   | Melaleuca quinquenervia                | broadleaf evergreen |                     |
-|  84 | MEEX   | Metrosideros excelsa                   | broadleaf evergreen |                     |
-|  85 | MOAL   | Morus alba                             | broadleaf deciduous |                     |
-|  86 | MO     | Morus sp.                              | broadleaf deciduous |                     |
-|  87 | OLEU   | Olea europaea                          | broadleaf evergreen |                     |
-|  88 | PAAC   | Parkinsonia aculeata                   | broadleaf deciduous |                     |
-|  89 | CEFL   | Parkinsonia florida                    | broadleaf deciduous |                     |
-|  90 | PHCA   | Phoenix canariensis                    | palm evergreen      |                     |
-|  91 | PHDA4  | Phoenix dactylifera                    | palm evergreen      |                     |
-|  92 | PIPU   | Picea pungens                          | conifer evergreen   |                     |
-|  93 | PIBR2  | Pinus brutia                           | conifer evergreen   |                     |
-|  94 | PICA   | Pinus canariensis                      | conifer evergreen   |                     |
-|  95 | PICO   | Pinus contorta                         | conifer evergreen   |                     |
-|  96 | PIEC   | Pinus echinata                         | conifer evergreen   |                     |
-|  97 | PIED   | Pinus edulis                           | conifer evergreen   |                     |
-|  98 | PIEL2  | Pinus eldarica                         | conifer evergreen   |                     |
-|  99 | PIEL   | Pinus elliottii                        | conifer evergreen   |                     |
-| 100 | PIHA   | Pinus halepensis                       | conifer evergreen   |                     |
-| 101 | PINI   | Pinus nigra                            | conifer evergreen   |                     |
-| 102 | PIPO   | Pinus ponderosa                        | conifer evergreen   |                     |
-| 103 | PIRA   | Pinus radiata                          | conifer evergreen   |                     |
-| 104 | PIST   | Pinus strobus                          | conifer evergreen   |                     |
-| 105 | PISY   | Pinus sylvestris                       | conifer evergreen   |                     |
-| 106 | PITA   | Pinus taeda                            | conifer evergreen   |                     |
-| 107 | PITH   | Pinus thunbergiana                     | conifer evergreen   |                     |
-| 108 | PICH   | Pistacia chinensis                     | broadleaf deciduous |                     |
-| 109 | PIUN   | Pittosporum undulatum                  | broadleaf evergreen |                     |
-| 110 | PLOC   | Platanus occidentalis                  | broadleaf deciduous |                     |
-| 111 | PLRA   | Platanus racemosa                      | broadleaf deciduous |                     |
-| 112 | PLAC   | Platanus x acerifolia                  | broadleaf deciduous |                     |
-| 113 | THOR   | Platycladus orientalis                 | conifer evergreen   |                     |
-| 114 | POMA   | Podocarpus macrophyllus                | conifer evergreen   |                     |
-| 115 | POAN   | Populus angustifolia                   | broadleaf deciduous |                     |
-| 116 | POTR2  | Populus balsamifera subsp. trichocarpa | broadleaf deciduous |                     |
-| 117 | PODE   | Populus deltoides                      | broadleaf deciduous |                     |
-| 118 | POFR   | Populus fremontii                      | broadleaf deciduous |                     |
-| 119 | POSA   | Populus sargentii                      | broadleaf deciduous |                     |
-| 120 | PRCH   | Prosopis chilensis                     | broadleaf deciduous |                     |
-| 121 | PRCA   | Prunus caroliniana                     | broadleaf evergreen |                     |
-| 122 | PRCE   | Prunus cerasifera                      | broadleaf deciduous |                     |
-| 123 | PRCE   | Prunus cerasifera cvs.                 | broadleaf deciduous |                     |
-| 124 | PRSE2  | Prunus serrulata                       | broadleaf deciduous |                     |
-| 125 | PR     | Prunus sp.                             | broadleaf deciduous |                     |
-| 126 | PRYE   | Prunus yedoensis                       | broadleaf deciduous |                     |
-| 127 | PSME   | Pseudotsuga menziesii                  | conifer evergreen   |                     |
-| 128 | PYCA   | Pyrus calleryana                       | broadleaf deciduous |                     |
-| 129 | PYCA_B | Pyrus calleryana 'Bradford'            | broadleaf deciduous |                     |
-| 130 | PYCA   | Pyrus calleryana cvs.                  | broadleaf deciduous |                     |
-| 131 | PYKA   | Pyrus kawakamii                        | broadleaf evergreen |                     |
-| 132 | PY     | Pyrus sp.                              | broadleaf deciduous |                     |
-| 133 | QUAG   | Quercus agrifolia                      | broadleaf evergreen |                     |
-| 134 | QUAL   | Quercus alba                           | broadleaf deciduous |                     |
-| 135 | QUIL2  | Quercus ilex                           | broadleaf evergreen |                     |
-| 136 | QULA2  | Quercus laurifolia                     | broadleaf deciduous |                     |
-| 137 | QULO   | Quercus lobata                         | broadleaf deciduous |                     |
-| 138 | QUMA1  | Quercus macrocarpa                     | broadleaf deciduous |                     |
-| 139 | QUNI   | Quercus nigra                          | broadleaf deciduous |                     |
-| 140 | QUPA   | Quercus palustris                      | broadleaf deciduous |                     |
-| 141 | QUPH   | Quercus phellos                        | broadleaf deciduous |                     |
-| 142 | QURU   | Quercus rubra                          | broadleaf deciduous |                     |
-| 143 | QUSH   | Quercus shumardii                      | broadleaf deciduous |                     |
-| 144 | QUVI   | Quercus virginiana                     | broadleaf evergreen |                     |
-| 145 | RHLA   | Rhus lancea                            | broadleaf evergreen |                     |
-| 146 | ROPS   | Robinia pseudoacacia                   | broadleaf deciduous |                     |
-| 147 | SAPA   | Sabal palmetto                         | palm evergreen      |                     |
-| 148 | PISA2  | Samanea saman                          | broadleaf deciduous |                     |
-| 149 | SCMO   | Schinus molle                          | broadleaf evergreen |                     |
-| 150 | SCTE   | Schinus terebinthifolius               | broadleaf evergreen |                     |
-| 151 | SESE   | Sequoia sempervirens                   | conifer evergreen   |                     |
-| 152 | SWMA   | Swietenia mahagoni                     | broadleaf evergreen |                     |
-| 153 | SYRO   | Syagrus romanzoffiana                  | palm evergreen      |                     |
-| 154 | TAAR   | Tabebuia aurea                         | broadleaf evergreen |                     |
-| 155 | TAPA   | Tabebuia heterophylla                  | broadleaf evergreen |                     |
-| 156 | TAOC   | Tabebuia ochracea subsp. neochrysantha | broadleaf evergreen |                     |
-| 157 | TIAM   | Tilia americana                        | broadleaf deciduous |                     |
-| 158 | TICO   | Tilia cordata                          | broadleaf deciduous |                     |
-| 159 | TITO   | Tilia tomentosa                        | broadleaf deciduous |                     |
-| 160 | TRSE6  | Triadica sebifera                      | broadleaf deciduous |                     |
-| 161 | TRCO   | Tristaniopsis conferta                 | broadleaf evergreen |                     |
-| 162 | ULAL   | Ulmus alata                            | broadleaf deciduous |                     |
-| 163 | ULAM   | Ulmus americana                        | broadleaf deciduous |                     |
-| 164 | ULPA   | Ulmus parvifolia                       | broadleaf deciduous |                     |
-| 165 | ULPU   | Ulmus pumila                           | broadleaf deciduous |                     |
-| 166 | VEME   | Veitchia merrillii                     | palm evergreen      |                     |
-| 167 | WAFI   | Washingtonia filifera                  | palm evergreen      |                     |
-| 168 | WARO   | Washingtonia robusta                   | palm evergreen      |                     |
-| 169 | ZESE   | Zelkova serrata                        | broadleaf deciduous |                     |
-**** species traits
-think about species level traits - shade tolerance, water use,
-morphology (wood, leaf, etc).
-
-where would these come from, what would they be?  What are the traits
-that are important for urban environments?
+161 Species
 
 *** Cities and Climate
-
-
 
 #+name: city_climate
 | Region | City             |  CDD |  HDD | Precip |  Longitude | Latitude |
@@ -1547,40 +1626,7 @@ The dots should instead be a contour plot of the US population.
 [[file:../figs/gdd_precip_cont.png]]
 
 
-
-*** champion trees?
-could one use the champion trees to set a maximum asymptote for a
-species in the model?  The prior would have no mass above the maximum
-dbh of the champion tree, but would have mass below it because the
-asymptote in the urban context may be much lower.
-
-maybe i would have to give up the species random effect for this term
-and model them separately?
-
-*** Tree Dimensions
-| Tree Dimension            | abbr |
-|---------------------------+------|
-| leaf area                 | la   |
-| crown diameter            | cd   |
-| crown height              | ch   |
-| age                       | age  |
-| diameter at breast height | dbh  |
-| tree height               | th   |
-
-Equations:
-
-| Independent Variable (IV) | Dependent Variable (DV) |
-|---------------------------+-------------------------|
-| dbh                       | age                     |
-| cd                        | dbh                     |
-| dbh                       | cd                      |
-| dbh                       | ch                      |
-| age                       | dbh                     |
-| dbh                       | la                      |
-| dbh                       | th                      |
-
-
-*** a couple plots
+*** Making figures for this data section
 **** species by city raster, black if the combination exists
 #+begin_src R
   library(dplyr)
@@ -1588,54 +1634,67 @@ Equations:
 
   d <- readRDS("../data/tidy_age_dbh.rds")
 
-  cs <- expand.grid(City = unique(d$City), SpCode = unique(d$SpCode)) %>%
-      mutate(join = paste0(City, SpCode))
+  cs <- expand.grid(City = unique(d$City), Species = unique(d$Species)) %>%
+      mutate(join = paste0(City, Species))
 
-  dj <- d %>% mutate(join = paste0(City, SpCode)) %>% pull(join)
+  dj <- d %>% mutate(join = paste0(City, Species)) %>% pull(join)
 
-  cs <- cs %>% mutate(InData = join %in% dj)
+  cs <- cs %>% mutate(Observed = join %in% dj)
 
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CityCentric.png :height 400 :width 1400
-  ggplot(cs, aes(x = SpCode, y = City, fill = InData)) +
+#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CityCentric.png :height 200 :width 1400
+  ggplot(cs, aes(x = Species, y = City, fill = Observed)) +
       geom_raster() +
       coord_equal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
       scale_fill_manual(values = c("white","black"))
+#+
+ #     theme(legend.position = c(.95,.3))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CityCentric.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SpeciesCentric.png :height 400 :width 1400
-  cs_sp <- left_join(cs, unique(select(d, SpCode, ScientificName)))
+#+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric.png :height 300 :width 1400
+  d <- readRDS("../data/tidy_age_dbh.rds")
 
-  ggplot(cs_sp, aes(x = SpCode, y = City, fill = InData)) +
+  cs2 <- expand.grid(City = unique(d$City), ScientificName = unique(d$ScientificName)) %>%
+      mutate(join = paste0(City, ScientificName))
+
+  dj <- d %>% mutate(join = paste0(City, ScientificName)) %>% pull(join)
+
+  cs2 <- cs2 %>% mutate(Observed = join %in% dj)
+
+
+  ggplot(cs2, aes(x = ScientificName, y = City, fill = Observed)) +
       geom_raster() +
       coord_equal() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
       scale_fill_manual(values = c("white","black"))
+# +
+ #     theme(legend.position = c(.95,.3))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/CitySpeciesData_SpeciesCentric.png]]
+[[file:../figs/CityScientificNameData_CityCentric.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CommonSpeciesCentric.png :height 400 :width 1400
   cs_sp_cmn <- cs_sp %>%
-      group_by(SpCode, ScientificName) %>%
-      summarize(n = sum(InData)) %>%
+      group_by(Species, ScientificName) %>%
+      summarize(n = sum(Observed)) %>%
       ungroup() %>%
       arrange(-n) %>%
-      mutate(SpCode = as.factor(SpCode))
+      mutate(Species = as.factor(Species))
 
   cs_sp_cmn <- cs_sp %>%
-      mutate(SpCode = as.character(SpCode),
-             SpCode = factor(SpCode, levels(cs_sp_cmn$SpCode)[as.numeric(cs_sp_cmn$SpCode)]))
+      mutate(Species = as.character(Species),
+             Species = factor(Species, levels(cs_sp_cmn$Species)[as.numeric(cs_sp_cmn$Species)]))
 
-  ggplot(cs_sp_cmn, aes(x = SpCode, y = City, fill = InData)) +
+  ggplot(cs_sp_cmn, aes(x = Species, y = City, fill = Observed)) +
       geom_raster() +
       coord_equal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
@@ -1645,10 +1704,10 @@ Equations:
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 400 :width 1400
+#+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 300 :width 1400
   cs_sci_cmn <- cs_sp %>%
       group_by(ScientificName) %>%
-      summarize(n = sum(InData)) %>%
+      summarize(n = sum(Observed)) %>%
       ungroup() %>%
       arrange(-n) %>%
       mutate(ScientificName = as.factor(ScientificName))
@@ -1658,7 +1717,7 @@ Equations:
              ScientificName = factor(ScientificName, levels(cs_sci_cmn$ScientificName)[as.numeric(cs_sci_cmn$ScientificName)]))
 
 
-  ggplot(cs_sci_cmn, aes(x = ScientificName, y = City, fill = InData)) +
+  ggplot(cs_sci_cmn, aes(x = ScientificName, y = City, fill = Observed)) +
       geom_raster() +
       coord_equal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
