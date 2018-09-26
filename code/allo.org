@@ -492,29 +492,6 @@ Think about Apps Min and Apps Max
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:plyr’:
-
-    arrange, count, desc, failwith, id, mutate, rename, summarise,
-    summarize
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Attaching package: ‘tidyr’
-
-The following object is masked from ‘package:ascii’:
-
-    expand
-#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -814,7 +791,7 @@ dbh8 = Dbh (cm) for eight stem of multi-stemmed trees.
 #+RESULTS:
 ***** fix common names
 
-Not all are fixed!
+There may be other common names I need to fix.
 
 #+begin_src R
   d$CommonName[d$CommonName == "Kurrajong"] <- "Kurrajong/Bottle tree"
@@ -838,7 +815,7 @@ Not all are fixed!
 #+end_src
 
 #+RESULTS:
-***** fix scientific names
+***** change scientific names (remove cultivated variety)
 #+begin_src R
   d$ScientificName[d$ScientificName == "Prunus cerasifera cvs."] <- "Prunus cerasifera"
   d$ScientificName[d$ScientificName == "Pyrus calleryana cvs."] <- "Pyrus calleryana"
@@ -847,213 +824,13 @@ Not all are fixed!
 
 #+RESULTS:
 
-**** species are
-#+name: tree_types
-| TreeType | FunctionalType      |
-|----------+---------------------|
-| BDL      | broadleaf deciduous |
-| BDM      | broadleaf deciduous |
-| BDS      | broadleaf deciduous |
-| BEL      | broadleaf evergreen |
-| BEM      | broadleaf evergreen |
-| BES      | broadleaf evergreen |
-| CEL      | conifer evergreen   |
-| CEM      | conifer evergreen   |
-| CES      | conifer evergreen   |
-| PEL      | palm evergreen      |
-| PEM      | palm evergreen      |
-| PES      | palm evergreen      |
-I got rid of the small medium and large distinctions for
-simplification here.
-
-#+begin_src R :var tt=tree_types
-  sp <- d %>% select(SpCode, ScientificName, TreeType) %>%
-      left_join(tt) %>%
-      select(-TreeType) %>%
-      unique() %>%
-      arrange(ScientificName) %>%
-      ascii.nowarn.print()
-#+end_src
-
-#+RESULTS:
-#+begin_example
-Joining, by = "TreeType"
-|     | SpCode | ScientificName                         | FunctionalType      |
-|-----+--------+----------------------------------------+---------------------|
-| 1   | ACFA   | Acacia farnesiana                      | broadleaf deciduous |
-| 2   | ACME   | Acacia melanoxylon                     | broadleaf evergreen |
-| 3   | ACSA3  | Acacia salicina                        | broadleaf evergreen |
-| 4   | ACMA   | Acer macrophyllum                      | broadleaf deciduous |
-| 5   | ACNE   | Acer negundo                           | broadleaf deciduous |
-| 6   | ACPA   | Acer palmatum                          | broadleaf deciduous |
-| 7   | ACPL   | Acer platanoides                       | broadleaf deciduous |
-| 8   | ACRU   | Acer rubrum                            | broadleaf deciduous |
-| 9   | ACSA1  | Acer saccharinum                       | broadleaf deciduous |
-| 10  | ACSA2  | Acer saccharum                         | broadleaf deciduous |
-| 11  | AEHI   | Aesculus hippocastanum                 | broadleaf deciduous |
-| 12  | BABL   | Bauhinia x blakeana                    | broadleaf evergreen |
-| 13  | BENI   | Betula nigra                           | broadleaf deciduous |
-| 14  | BEPE   | Betula pendula                         | broadleaf deciduous |
-| 15  | BRPO   | Brachychiton populneum                 | broadleaf evergreen |
-| 16  | BUCA   | Butia capitata                         | palm evergreen      |
-| 17  | CACI   | Callistemon citrinus                   | broadleaf evergreen |
-| 18  | CADE2  | Calocedrus decurrens                   | conifer evergreen   |
-| 19  | CAIN4  | Calophyllum inophyllum                 | broadleaf evergreen |
-| 20  | CABEF  | Carpinus betulus 'Fastigiata'          | broadleaf deciduous |
-| 21  | CAIL   | Carya illinoinensis                    | broadleaf deciduous |
-| 22  | CANE33 | Cassia x nealiae                       | broadleaf deciduous |
-| 23  | CAEQ   | Casuarina equisetifolia                | broadleaf evergreen |
-| 24  | CASP   | Catalpa speciosa                       | broadleaf deciduous |
-| 25  | CEDE   | Cedrus deodara                         | conifer evergreen   |
-| 26  | CELA   | Celtis laevigata                       | conifer evergreen   |
-| 27  | CEOC   | Celtis occidentalis                    | broadleaf deciduous |
-| 28  | CESI4  | Celtis sinensis                        | broadleaf deciduous |
-| 29  | CESI3  | Ceratonia siliqua                      | broadleaf evergreen |
-| 30  | CECA   | Cercis canadensis                      | broadleaf deciduous |
-| 31  | CHLI   | Chilopsis linearis                     | broadleaf deciduous |
-| 32  | CICA   | Cinnamomum camphora                    | broadleaf evergreen |
-| 33  | CISP2  | Citharexylum spinosum                  | broadleaf evergreen |
-| 34  | CONU   | Cocos nucifera                         | palm evergreen      |
-| 35  | COERA2 | Conocarpus erectus var. argenteus      | broadleaf evergreen |
-| 36  | COSU2  | Cordia subcordata                      | broadleaf evergreen |
-| 37  | COFL   | Cornus florida                         | broadleaf deciduous |
-| 38  | CR     | Crataegus sp.                          | broadleaf deciduous |
-| 39  | CRLA   | Crataegus x lavallei                   | broadleaf deciduous |
-| 40  | CUAN   | Cupaniopsis anacardioides              | broadleaf evergreen |
-| 41  | DERE   | Delonix regia                          | broadleaf deciduous |
-| 42  | ELAN   | Elaeagnus angustifolia                 | broadleaf deciduous |
-| 43  | ELOR2  | Elaeodendron orientale                 | broadleaf evergreen |
-| 44  | ERJA   | Eriobotrya japonica                    | broadleaf evergreen |
-| 45  | EUFI81 | Eucalyptus ficifolia                   | broadleaf evergreen |
-| 46  | EUGL   | Eucalyptus globulus                    | broadleaf evergreen |
-| 47  | EUMI2  | Eucalyptus microtheca                  | broadleaf evergreen |
-| 48  | EUSI   | Eucalyptus sideroxylon                 | broadleaf evergreen |
-| 49  | FASY   | Fagus sylvatica                        | broadleaf deciduous |
-| 50  | FIBE   | Ficus benjamina                        | broadleaf evergreen |
-| 51  | FIMI   | Ficus thonningii                       | broadleaf evergreen |
-| 52  | FIDE6  | Filicium decipiens                     | broadleaf evergreen |
-| 53  | FRAM   | Fraxinus americana                     | broadleaf deciduous |
-| 54  | FRAN2  | Fraxinus angustifolia                  | broadleaf deciduous |
-| 55  | FRAN_R | Fraxinus angustifolia 'Raywood'        | broadleaf deciduous |
-| 56  | FREX_H | Fraxinus excelsior 'Hessei'            | broadleaf deciduous |
-| 57  | FRHO   | Fraxinus holotricha                    | broadleaf deciduous |
-| 58  | FRLA   | Fraxinus latifolia                     | broadleaf deciduous |
-| 59  | FRPE   | Fraxinus pennsylvanica                 | broadleaf deciduous |
-| 60  | FRPE_M | Fraxinus pennsylvanica 'Marshall'      | broadleaf deciduous |
-| 61  | FRUH   | Fraxinus uhdei                         | broadleaf deciduous |
-| 62  | FRVE   | Fraxinus velutina                      | broadleaf deciduous |
-| 63  | FRVE_G | Fraxinus velutina 'Modesto'            | broadleaf deciduous |
-| 64  | GIBI   | Ginkgo biloba                          | broadleaf deciduous |
-| 65  | GLTR   | Gleditsia triacanthos                  | broadleaf deciduous |
-| 66  | GYDI   | Gymnocladus dioicus                    | broadleaf deciduous |
-| 67  | ILOP   | Ilex opaca                             | broadleaf evergreen |
-| 68  | ILPA2  | Ilex paraguariensis                    | broadleaf evergreen |
-| 69  | JAMI   | Jacaranda mimosifolia                  | broadleaf deciduous |
-| 70  | JUNI   | Juglans nigra                          | broadleaf deciduous |
-| 71  | JUVI   | Juniperus virginiana                   | conifer evergreen   |
-| 72  | JUSI   | Juniperus virginiana var. silicicola   | conifer evergreen   |
-| 73  | KOELFO | Koelreuteria elegans                   | broadleaf deciduous |
-| 74  | KOPA   | Koelreuteria paniculata                | broadleaf deciduous |
-| 75  | LAIN   | Lagerstroemia indica                   | broadleaf deciduous |
-| 76  | LA6    | Lagerstroemia sp.                      | broadleaf deciduous |
-| 77  | LASP   | Lagerstroemia speciosa                 | broadleaf deciduous |
-| 78  | LIST   | Liquidambar styraciflua                | broadleaf deciduous |
-| 79  | LITU   | Liriodendron tulipifera                | broadleaf deciduous |
-| 80  | MAGR   | Magnolia grandiflora                   | broadleaf evergreen |
-| 81  | PYAN   | Malus angustifolia                     | broadleaf deciduous |
-| 82  | MA2    | Malus sp.                              | broadleaf deciduous |
-| 83  | MEQU   | Melaleuca quinquenervia                | broadleaf evergreen |
-| 84  | MEEX   | Metrosideros excelsa                   | broadleaf evergreen |
-| 85  | MOAL   | Morus alba                             | broadleaf deciduous |
-| 86  | MO     | Morus sp.                              | broadleaf deciduous |
-| 87  | OLEU   | Olea europaea                          | broadleaf evergreen |
-| 88  | PAAC   | Parkinsonia aculeata                   | broadleaf deciduous |
-| 89  | CEFL   | Parkinsonia florida                    | broadleaf deciduous |
-| 90  | PHCA   | Phoenix canariensis                    | palm evergreen      |
-| 91  | PHDA4  | Phoenix dactylifera                    | palm evergreen      |
-| 92  | PIPU   | Picea pungens                          | conifer evergreen   |
-| 93  | PIBR2  | Pinus brutia                           | conifer evergreen   |
-| 94  | PICA   | Pinus canariensis                      | conifer evergreen   |
-| 95  | PICO   | Pinus contorta                         | conifer evergreen   |
-| 96  | PIEC   | Pinus echinata                         | conifer evergreen   |
-| 97  | PIED   | Pinus edulis                           | conifer evergreen   |
-| 98  | PIEL2  | Pinus eldarica                         | conifer evergreen   |
-| 99  | PIEL   | Pinus elliottii                        | conifer evergreen   |
-| 100 | PIHA   | Pinus halepensis                       | conifer evergreen   |
-| 101 | PINI   | Pinus nigra                            | conifer evergreen   |
-| 102 | PIPO   | Pinus ponderosa                        | conifer evergreen   |
-| 103 | PIRA   | Pinus radiata                          | conifer evergreen   |
-| 104 | PIST   | Pinus strobus                          | conifer evergreen   |
-| 105 | PISY   | Pinus sylvestris                       | conifer evergreen   |
-| 106 | PITA   | Pinus taeda                            | conifer evergreen   |
-| 107 | PITH   | Pinus thunbergiana                     | conifer evergreen   |
-| 108 | PICH   | Pistacia chinensis                     | broadleaf deciduous |
-| 109 | PIUN   | Pittosporum undulatum                  | broadleaf evergreen |
-| 110 | PLOC   | Platanus occidentalis                  | broadleaf deciduous |
-| 111 | PLRA   | Platanus racemosa                      | broadleaf deciduous |
-| 112 | PLAC   | Platanus x acerifolia                  | broadleaf deciduous |
-| 113 | THOR   | Platycladus orientalis                 | conifer evergreen   |
-| 114 | POMA   | Podocarpus macrophyllus                | conifer evergreen   |
-| 115 | POAN   | Populus angustifolia                   | broadleaf deciduous |
-| 116 | POTR2  | Populus balsamifera subsp. trichocarpa | broadleaf deciduous |
-| 117 | PODE   | Populus deltoides                      | broadleaf deciduous |
-| 118 | POFR   | Populus fremontii                      | broadleaf deciduous |
-| 119 | POSA   | Populus sargentii                      | broadleaf deciduous |
-| 120 | PRCH   | Prosopis chilensis                     | broadleaf deciduous |
-| 121 | PRCA   | Prunus caroliniana                     | broadleaf evergreen |
-| 122 | PRCE   | Prunus cerasifera                      | broadleaf deciduous |
-| 123 | PRSE2  | Prunus serrulata                       | broadleaf deciduous |
-| 124 | PR     | Prunus sp.                             | broadleaf deciduous |
-| 125 | PRYE   | Prunus yedoensis                       | broadleaf deciduous |
-| 126 | PSME   | Pseudotsuga menziesii                  | conifer evergreen   |
-| 127 | PYCA   | Pyrus calleryana                       | broadleaf deciduous |
-| 128 | PYCA_B | Pyrus calleryana 'Bradford'            | broadleaf deciduous |
-| 129 | PYKA   | Pyrus kawakamii                        | broadleaf evergreen |
-| 130 | PY     | Pyrus sp.                              | broadleaf deciduous |
-| 131 | QUAG   | Quercus agrifolia                      | broadleaf evergreen |
-| 132 | QUAL   | Quercus alba                           | broadleaf deciduous |
-| 133 | QUIL2  | Quercus ilex                           | broadleaf evergreen |
-| 134 | QULA2  | Quercus laurifolia                     | broadleaf deciduous |
-| 135 | QULO   | Quercus lobata                         | broadleaf deciduous |
-| 136 | QUMA1  | Quercus macrocarpa                     | broadleaf deciduous |
-| 137 | QUNI   | Quercus nigra                          | broadleaf deciduous |
-| 138 | QUPA   | Quercus palustris                      | broadleaf deciduous |
-| 139 | QUPH   | Quercus phellos                        | broadleaf deciduous |
-| 140 | QURU   | Quercus rubra                          | broadleaf deciduous |
-| 141 | QUSH   | Quercus shumardii                      | broadleaf deciduous |
-| 142 | QUVI   | Quercus virginiana                     | broadleaf evergreen |
-| 143 | RHLA   | Rhus lancea                            | broadleaf evergreen |
-| 144 | ROPS   | Robinia pseudoacacia                   | broadleaf deciduous |
-| 145 | SAPA   | Sabal palmetto                         | palm evergreen      |
-| 146 | PISA2  | Samanea saman                          | broadleaf deciduous |
-| 147 | SCMO   | Schinus molle                          | broadleaf evergreen |
-| 148 | SCTE   | Schinus terebinthifolius               | broadleaf evergreen |
-| 149 | SESE   | Sequoia sempervirens                   | conifer evergreen   |
-| 150 | SWMA   | Swietenia mahagoni                     | broadleaf evergreen |
-| 151 | SYRO   | Syagrus romanzoffiana                  | palm evergreen      |
-| 152 | TAAR   | Tabebuia aurea                         | broadleaf evergreen |
-| 153 | TAPA   | Tabebuia heterophylla                  | broadleaf evergreen |
-| 154 | TAOC   | Tabebuia ochracea subsp. neochrysantha | broadleaf evergreen |
-| 155 | TIAM   | Tilia americana                        | broadleaf deciduous |
-| 156 | TICO   | Tilia cordata                          | broadleaf deciduous |
-| 157 | TITO   | Tilia tomentosa                        | broadleaf deciduous |
-| 158 | TRSE6  | Triadica sebifera                      | broadleaf deciduous |
-| 159 | TRCO   | Tristaniopsis conferta                 | broadleaf evergreen |
-| 160 | ULAL   | Ulmus alata                            | broadleaf deciduous |
-| 161 | ULAM   | Ulmus americana                        | broadleaf deciduous |
-| 162 | ULPA   | Ulmus parvifolia                       | broadleaf deciduous |
-| 163 | ULPU   | Ulmus pumila                           | broadleaf deciduous |
-| 164 | VEME   | Veitchia merrillii                     | palm evergreen      |
-| 165 | WAFI   | Washingtonia filifera                  | palm evergreen      |
-| 166 | WARO   | Washingtonia robusta                   | palm evergreen      |
-| 167 | ZESE   | Zelkova serrata                        | broadleaf deciduous |
-#+end_example
 **** tidy a few names and select variables of interest here
 #+begin_src R
-  d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age, ScientificName)
+  d <- d %>% rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, Species = SpCode) %>% select(Region, City, TreeID, SpCode, DBH, Leaf, DBH, Age, ScientificName)
 #+end_src
 
 #+RESULTS:
+: Error in FUN(X[[i]], ...) : object 'SpCode' not found
 
 #+begin_src R
   summary(d$Leaf)
@@ -1128,6 +905,13 @@ age_dbh_testing.rds
 sent 36460 bytes  received 372 bytes  4910.93 bytes/sec
 total size is 37842  speedup is 1.03
 #+end_example
+
+*** The Species for which we have age and dbh:
+#+begin_src R
+  d <- readRDS("../data/tidy_age_dbh.rds")
+#+end_src
+
+#+RESULTS:
 
 *** Species
 **** taxonomy
