@@ -1675,7 +1675,6 @@ Use brm(..., sample_prior = "only")
   - multiple species, single location, heteroskedasticity
   - multiple species, vary by climate, heteroskedasticity
 
-
 - for each of these approaches follow the workflow:
   - problem
   - model
@@ -3254,6 +3253,7 @@ make better
   think about how these champions are not urban trees most the time.
   They provide the upper limit on the asymptote, but for urban trees
   the asymptote could be quite lower.
+- incorporate uncertainty in AGE
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
