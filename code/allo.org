@@ -715,15 +715,98 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	14487 obs. of  41 variables:
   ..- attr(*, "class")= chr "col_spec"
 #+end_example
 
+**** explanation of variables from [[https://www.fs.usda.gov/rds/archive/products/RDS-2016-0005/_metadata_RDS-2016-0005.html][metadata]]
+
+DbaseID = Unique id number for each tree.
+
+Region = 16 U.S. climate regions, abbreviations are used (see \Data\TS1_Regional_information.csv).
+
+City = City/state names where data collected.
+
+Source = Original *.xls filename (not available in this data publication).
+
+TreeID = Number assigned to each tree in inventory by city.
+
+Zone = Number/ID/name of the management area or zone that the tree is located in within a city; or nursery if young tree data collected there.
+
+Park/Street = Data listed as Park, Street, Regional Big Tree, or Nursery (for young tree measurements).
+
+SpCode = 4 to 6 letter code consisting of the first two letters of the genus name and the first two letters of the species name followed by two optional letters to distinguish two species with the same four-letter code (See \Data\TS2_Regional_species_and_counts.csv for a list of the SpCodes and corresponding scientific names.)
+
+ScientificName = Botanical name of species.
+
+CommonName = Common name of species.
+
+Tree Type = 3 letter code where first two letters refer to life form (BD=broadleaf deciduous, BE=broadleaf evergreen, CE=coniferous evergreen, PE=palm evergreen) and the third letter is mature height (S=small which is < 8 meters, M=medium which is 8-15 meters, and L=large which is > 15 meters).
+
+Address = From inventory, street number of building where tree is located.
+
+Street = From inventory, the name of the street the tree is located on. (NOTE: zero values denote data were not recorded in that city. These values were left unchanged because they originated from city inventories.)
+
+Side = From inventory, side of building or lot tree is located on (F=front, M=median, S=side, P=park). (NOTE: zero values denote data were not recorded in that city. These values were left unchanged because they originated from city inventories.)
+
+Cell = From inventory, the cell number (i.e., 1, 2, 3, …), where protocol determines the order trees at same address are numbered (e.g., driving direction or as street number increases).
+
+OnStreet = From inventory (omitted if not a field in city’s inventory), for trees at corner addresses when tree is on cross street rather than addressed street.
+
+FromStreet = From inventory, the name of the first cross street that forms a boundary for trees lining un-addressed boulevards. Trees are typically numbered in order (1, 2, 3 …) on boulevards that have no development adjacent to them, no obvious parcel addresses.
+
+ToStreet = From inventory, the name of the last cross street that forms a boundary for trees lining un-addressed boulevards.
+
+Age = Number of years since planted. (NOTE: zero values represent newly planted trees, < 1 year old.)
+
+DBH (cm) = Diameter at breast height (1.37 meters [m]) measured to nearest 0.1 centimeters (tape). For multi-stemmed trees forking below 1.37 m measured above the butt flare and below the point where the stem begins forking, as per protocol.
+
+TreeHt (m) = From ground level to tree top to nearest 0.5 m (omitting erratic leader).
+
+CrnBase (m) = Average distance between ground and lowest foliage layer to nearest 0.5 m (omitting erratic branch).
+
+CrnHt (m) = Calculated as TreeHT minus Crnbase to nearest 0.5 m. (NOTE: zero values indicate no live crown was present, hence no other tree dimension data were available.)
+
+CdiaPar (m) = Crown diameter measurement taken to the nearest 0.5 m parallel to the street (omitting erratic branch).
+
+CDiaPerp (m) = Crown diameter measurement taken to the nearest 0.5 m perpendicular to the street (omitting erratic branch).
+
+AvgCdia (m) = The average of crown diameter measured parallel and perpendicular to the street.
+
+Leaf (m2) = Estimated using digital imaging method to nearest 0.1 squared meter (m2).
+
+Setback = Distance from tree to nearest air-conditioned/heated space (may not be same address as tree location): 1=0-8 m, 2=8.1-12 m, 3=12.1-18 m, 4=> 18 m.
+
+TreeOr = Taken with compass, the coordinate of tree taken from imaginary lines extending from walls of the nearest conditioned space (may not be same address as tree location).
+
+CarShade = Number of parked automotive vehicles with some part under the tree's drip line. Car must be present (0=no autos, 1=1 auto, etc.).
+
+LandUse = Predominant land use type where tree is growing (1=single family residential, 2=multi-family residential [duplex, apartments, condos], 3=industrial/institutional/large commercial [schools, gov't, hospitals], 4=park/vacant/other [agric., unmanaged riparian areas of greenbelts], 5=small commercial [minimart, retail boutiques, etc.], 6=transportation corridor).
+
+Shape = Visual estimate of crown shape verified from each side with actual measured dimensions of crown height and average crown diameter (1=cylinder [maintains same crown diameter in top and bottom thirds of tree], 2=ellipsoid, the tree's center [whether vertical or horizontal is the widest, includes spherical], 3=paraboloid [widest in bottom third of crown], 4=upside down paraboloid [widest in top third of crown]).
+
+WireConf = Utility lines that interfere with or appear above tree (0=no lines, 1=present and no potential conflict, 2=present and conflicting, 3=present and potential for conflicting). (NOTE: -1 denotes data were not collected.)
+
+dbh1 = Dbh (centimeters [cm]) for multi-stemmed trees; for non-multi-stemmed trees, dbh1 is same as Dbh (cm).
+
+dbh2 = Dbh (cm) for second stem of multi-stemmed trees.
+
+dbh3 = Dbh (cm) for third stem of multi-stemmed trees.
+
+dbh4 = Dbh (cm) for fourth stem of multi-stemmed trees.
+
+dbh5 = Dbh (cm) for fifth stem of multi-stemmed trees.
+
+dbh6 = Dbh (cm) for sixth stem of multi-stemmed trees.
+
+dbh7 = Dbh (cm) for seventh stem of multi-stemmed trees.
+
+dbh8 = Dbh (cm) for eight stem of multi-stemmed trees.
 
 **** fix some species things
-***** fix lower case species codes
+***** change lower case species codes
 #+begin_src R
   d$SpCode <- toupper(d$SpCode)
 #+end_src
 
 #+RESULTS:
-***** fix QUAG1 to be QUAG
+***** change QUAG1 to be QUAG
 #+begin_src R
   d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
 #+end_src
