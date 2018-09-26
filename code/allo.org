@@ -227,15 +227,15 @@ used to demonstrate the fitting of nonlinear mixed effects models
 for the many levels of observation or of groupings in data and to pool
 information across groups.  This paper has two main contributions.
 First, we demonstrate the use of Stan via the "brms" package in R to
-fit bayesian nonlinear multilevel models.  Second, we apply the method
-to the Urban Tree Database cite:utd_2016.  This dataset is the result
-an large effort to collect age and size data on thousands of trees
-in 17? cities across the US.  Multilevel modelling has the potential
-to extract more information from the data and improve predictions
-compared to the existing modelling approach for the data.  Improving
-predictions of tree size from tree age will improve our ability to
-predict the important ecosystem services these trees provide urban
-dwellers.
+fit bayesian nonlinear multilevel models to predict tree diameter
+growth from age.  Second, we apply the method to the Urban Tree Database
+cite:utd_2016.  This dataset is the result an large effort to collect
+age and size data on thousands of trees in 17? cities across the US.
+Multilevel modelling has the potential to extract more information
+from the data and improve predictions compared to the existing
+modelling approach for the data.  Improving predictions of tree size
+from tree age will improve our ability to predict the important
+ecosystem services these trees provide urban dwellers.
 
 
 
@@ -369,6 +369,8 @@ Wang, Y., LeMay, V.M., Baker, T.G., 2007b. Modelling and prediction of dominant 
 index of Eucalyptus globulus plantations using a nonlinear mixed-effects model approach.
 Canadian Journal of Forest Research 37, 1390–1403.
 
+Urban Tree Growth Modeling
+https://www.fs.fed.us/psw/publications/mcpherson/psw_2012_mcpherson001.pdf
 
 
 Urban Tree Database and Allometric Equations
