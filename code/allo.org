@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -1711,33 +1711,28 @@ Also along the top I could have a N cities row, and along the right I
 could have a N species column.  But that's a lot of work for what is
 readily apparent when looking.
 
+I should order left to right by n cities that a species is observed in
+and then by city (alphabetic)
+
 #+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n.png :height 300 :width 1400
-      d <- readRDS("../data/tidy_age_dbh.rds")
+  d <- readRDS("../data/tidy_age_dbh.rds")
 
   d2 <- d %>%
-      group_by(ScientificName, City) %>%
-      summarize(n = n()) %>%
-      mutate(join = paste0(City, ScientificName))
+        group_by(ScientificName, City) %>%
+        summarize(n = n()) %>%
+        mutate(join = paste0(City, ScientificName))
 
-%>% pull(join)
-
-
-      cs2 <- expand.grid(City = unique(d$City), ScientificName = unique(d$ScientificName)) %>%
-          mutate(join = paste0(City, ScientificName))
-
-      dj <- d %>% mutate(join = paste0(City, ScientificName)) %>% pull(join)
-
-      cs2 <- cs2 %>% mutate(Observed = join %in% dj)
-
-
-      ggplot(cs2, aes(x = ScientificName, y = City, fill = Observed)) +
-          geom_raster() +
-          coord_equal() +
-          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-          scale_fill_manual(values = c("white","black"))
-    # +
-     #     theme(legend.position = c(.95,.3))
+  ggplot(d2, aes(x = ScientificName, y = City, fill = n)) +
+            geom_raster() +
+            coord_equal() +
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+#            scale_fill_manual(values = c("white","black"))
+      # +
+       #     theme(legend.position = c(.95,.3))
 #+end_src
+
+#+RESULTS:
+[[file:../figs/CityScientificNameData_CityCentric_n.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 300 :width 1400
 
