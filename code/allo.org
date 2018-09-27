@@ -1660,23 +1660,23 @@ The dots should instead be a contour plot of the US population.
 [[file:../figs/CitySpeciesData_CityCentric.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric.png :height 300 :width 1400
-  d <- readRDS("../data/tidy_age_dbh.rds")
+    d <- readRDS("../data/tidy_age_dbh.rds")
 
-  cs2 <- expand.grid(City = unique(d$City), ScientificName = unique(d$ScientificName)) %>%
-      mutate(join = paste0(City, ScientificName))
+    cs2 <- expand.grid(City = unique(d$City), ScientificName = unique(d$ScientificName)) %>%
+        mutate(join = paste0(City, ScientificName))
 
-  dj <- d %>% mutate(join = paste0(City, ScientificName)) %>% pull(join)
+    dj <- d %>% mutate(join = paste0(City, ScientificName)) %>% pull(join)
 
-  cs2 <- cs2 %>% mutate(Observed = join %in% dj)
+    cs2 <- cs2 %>% mutate(Observed = join %in% dj)
 
 
-  ggplot(cs2, aes(x = ScientificName, y = City, fill = Observed)) +
-      geom_raster() +
-      coord_equal() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-      scale_fill_manual(values = c("white","black"))
-# +
- #     theme(legend.position = c(.95,.3))
+    ggplot(cs2, aes(x = ScientificName, y = City, fill = Observed)) +
+        geom_raster() +
+        coord_equal() +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+        scale_fill_manual(values = c("white","black"))
+  # +
+   #     theme(legend.position = c(.95,.3))
 #+end_src
 
 #+RESULTS:
@@ -1704,6 +1704,37 @@ The dots should instead be a contour plot of the US population.
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n.png :height 300 :width 1400
+      d <- readRDS("../data/tidy_age_dbh.rds")
+
+  d2 <- d %>%
+      group_by(ScientificName, City) %>%
+      summarize(n = n()) %>%
+      mutate(join = paste0(City, ScientificName))
+
+%>% pull(join)
+
+
+      cs2 <- expand.grid(City = unique(d$City), ScientificName = unique(d$ScientificName)) %>%
+          mutate(join = paste0(City, ScientificName))
+
+      dj <- d %>% mutate(join = paste0(City, ScientificName)) %>% pull(join)
+
+      cs2 <- cs2 %>% mutate(Observed = join %in% dj)
+
+
+      ggplot(cs2, aes(x = ScientificName, y = City, fill = Observed)) +
+          geom_raster() +
+          coord_equal() +
+          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+          scale_fill_manual(values = c("white","black"))
+    # +
+     #     theme(legend.position = c(.95,.3))
+#+end_src
+
+
+
 **** Revision to make.  Rather than observed or not, do n trees as fill.  That is richer information.
 
 Also along the top I could have a N cities row, and along the right I
