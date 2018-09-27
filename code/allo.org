@@ -1,7 +1,8 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -1703,8 +1704,14 @@ The dots should instead be a contour plot of the US population.
 
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
+**** Revision to make.  Rather than observed or not, do n trees as fill.  That is richer information.
+
+Also along the top I could have a N cities row, and along the right I
+could have a N species column.  But that's a lot of work for what is
+readily apparent when looking.
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 300 :width 1400
+
   cs_sci_cmn <- cs_sp %>%
       group_by(ScientificName) %>%
       summarize(n = sum(Observed)) %>%
@@ -2468,7 +2475,7 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 
 *** TODO genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :END:
 **** model R code
 #+begin_src R
@@ -2608,7 +2615,7 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 
 **** diagnostics
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 
 #+begin_src R
@@ -2683,7 +2690,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 *** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
 :END:
 **** model R code
 #+begin_src R
@@ -2785,7 +2792,7 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 
 **** assess model
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 #+begin_src R
 mod_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.rds")
@@ -2949,7 +2956,7 @@ precip.gdd
 
 *** TODO genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma  Would need to fix priors!
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R
 :END:
 **** model R code
 #+begin_src R
@@ -3042,7 +3049,7 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 
 **** assess model
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 #+begin_src R
 mod_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds")
