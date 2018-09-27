@@ -1705,6 +1705,12 @@ The dots should instead be a contour plot of the US population.
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
 
+**** Revision to make.  Rather than observed or not, do n trees as fill.  That is richer information.
+
+Also along the top I could have a N cities row, and along the right I
+could have a N species column.  But that's a lot of work for what is
+readily apparent when looking.
+
 #+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n.png :height 300 :width 1400
       d <- readRDS("../data/tidy_age_dbh.rds")
 
@@ -1732,14 +1738,6 @@ The dots should instead be a contour plot of the US population.
     # +
      #     theme(legend.position = c(.95,.3))
 #+end_src
-
-
-
-**** Revision to make.  Rather than observed or not, do n trees as fill.  That is richer information.
-
-Also along the top I could have a N cities row, and along the right I
-could have a N species column.  But that's a lot of work for what is
-readily apparent when looking.
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 300 :width 1400
 
