@@ -1715,26 +1715,28 @@ I should order left to right by n cities that a species is observed in
 and then by city (alphabetic)
 
 #+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n.png :height 300 :width 1400
-    d <- readRDS("../data/tidy_age_dbh.rds")
+        d <- readRDS("../data/tidy_age_dbh.rds")
 
-    d2 <- d %>%
-          group_by(ScientificName, City) %>%
-          summarize(n = n()) %>%
-          ungroup()
+        d2 <- d %>%
+              group_by(ScientificName, City) %>%
+              summarize(n = n()) %>%
+              ungroup()
 
-d2 <- d2 %>%
-          mutate(join = paste0(City, ScientificName),
-                 ScientificName = as.character(ScientificName),
-                 ScientificName = factor(ScientificName, levels(d2$ScientificName)[as.numeric(d2$ScientificName)]))
+    d3 <- d2 %>%
+      group_by(ScientificName) %>%
+      summarize(n_cities = n()) %>%
+      arrange(-n_cities)
 
+#  d2 <- d2 %>%
+ #   mutate(ScientificName = factor(ScientificName, levels(d3$ScientificName)[as.numeric(d3$ScientificName)]))
 
-    ggplot(d2, aes(x = ScientificName, y = City, fill = n)) +
-              geom_raster() +
-              coord_equal() +
-              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  #            scale_fill_manual(values = c("white","black"))
-        # +
-         #     theme(legend.position = c(.95,.3))
+        ggplot(d2, aes(x = ScientificName, y = City, fill = n)) +
+                  geom_raster() +
+                  coord_equal() +
+                  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+      #            scale_fill_manual(values = c("white","black"))
+            # +
+             #     theme(legend.position = c(.95,.3))
 #+end_src
 
 #+RESULTS:
