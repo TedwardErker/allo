@@ -1489,29 +1489,60 @@ rm census_centroid_pop.zip
 
 
 #+begin_src R
-  d <- bind_cols(dsp.trks@data, trks@data) %>%
-     dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
+      d <- bind_cols(dsp.trks@data, trks@data) %>%
+         dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
 
-  f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
+      f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
 
-green <- c(gdd = 9000, precip = 7000)
-blue <- c(gdd = 2000, precip = 7000)
-orange <-  c(gdd = 2000, precip = 100)
-violet <-  c(gdd = 9000, precip = 100)
+    green <- c(gdd = 9000, precip = 7000)
+    blue <- c(gdd = 2000, precip = 7000)
+    orange <-  c(gdd = 2000, precip = 100)
+    violet <-  c(gdd = 9000, precip = 100)
 
-    d <- d %>%
-      rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
-        filter(complete.cases(.)) %>%
-        filter( lat < 50, lat > 25, long < 0) %>%
-        mutate(gdd_col = ifelse(gdd > 10000, NA, gdd),
-               gdd_col = ifelse(gdd < 2000, NA, gdd_col),
-               precip_col = ifelse(precip > 7000, NA, precip),
-               precip_col = ifelse(precip < 100, NA, precip_col),
-               red = f(gdd_col, m = 80) + 50,
-               green = f(precip_col,100) + f(gdd_col,150),
-               blue = f(precip_col, m = 180) + 30) %>%
-        rowwise() %>%
-        mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), "gray"))
+    colspace <- expand.grid(precip = seq(100,7000, length.out = 100), gdd = seq(2000,9000, length.out = 100))
+
+    x1 <- colorRampPalette(c("brown","red","violet"), space = "rgb", interpolate = "spline")(100)
+    x2 <- colorRampPalette(c("blue","green","yellow"), space = "rgb", interpolate = "spline")(100)
+    x3 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "rgb", interpolate = "spline")(100)
+
+    cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i]), space = "rgb",interpolate = "spline")(100) })
+
+    library(reshape2)
+
+    m <- melt(cols) %>%
+        mutate(value = as.character(value))
+
+    cols <- cbind(colspace, m)
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
+  ggplot(data = cols, aes( x = gdd, y = precip, fill = value)) +
+    geom_raster() +
+    scale_fill_identity()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/hue_pal.png]]
+
+#+begin_src R
+
+
+      d <- d %>%
+        rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
+          filter(complete.cases(.)) %>%
+          filter( lat < 50, lat > 25, long < 0) %>%
+          mutate(gdd_col = ifelse(gdd > 10000, NA, gdd),
+                 gdd_col = ifelse(gdd < 2000, NA, gdd_col),
+                 precip_col = ifelse(precip > 7000, NA, precip),
+                 precip_col = ifelse(precip < 100, NA, precip_col),
+                 red = f(gdd_col, m = 80) + 50,
+                 green = f(precip_col,100) + f(gdd_col,150),
+                 blue = f(precip_col, m = 180) + 30) %>%
+          rowwise() %>%
+          mutate(col = ifelse(!is.na(red) & !is.na(blue) & !is.na(green), rgb(red, green, blue, maxColorValue = 255), "gray"))
 
 #+end_src
 
