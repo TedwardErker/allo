@@ -1494,6 +1494,11 @@ rm census_centroid_pop.zip
 
   f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
 
+green <- c(gdd = 9000, precip = 7000)
+blue <- c(gdd = 2000, precip = 7000)
+orange <-  c(gdd = 2000, precip = 100)
+violet <-  c(gdd = 9000, precip = 100)
+
     d <- d %>%
       rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
         filter(complete.cases(.)) %>%
