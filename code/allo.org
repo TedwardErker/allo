@@ -1502,10 +1502,12 @@ rm census_centroid_pop.zip
     colspace <- expand.grid(precip = seq(100,7000, length.out = 100), gdd = seq(2000,9000, length.out = 100))
 
     x1 <- colorRampPalette(c("brown","red","violet"), space = "rgb", interpolate = "spline")(100)
-    x2 <- colorRampPalette(c("blue","green","yellow"), space = "rgb", interpolate = "spline")(100)
-    x3 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "rgb", interpolate = "spline")(100)
+    x2 <- colorRampPalette(c("brown","red","violet"), space = "rgb", interpolate = "spline")(100)
+    x3 <- colorRampPalette(c("blue","#96db00","yellow"), space = "rgb", interpolate = "spline")(100)
+    x4 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "rgb", interpolate = "spline")(100)
+    x5 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "rgb", interpolate = "spline")(100)
 
-    cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i]), space = "rgb",interpolate = "spline")(100) })
+    cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i], x4[i],x5[i]), space = "rgb",interpolate = "spline")(100) })
 
     library(reshape2)
 
@@ -1519,9 +1521,10 @@ rm census_centroid_pop.zip
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
-  ggplot(data = cols, aes( x = gdd, y = precip, fill = value)) +
-    geom_raster() +
-    scale_fill_identity()
+  ggplot(data = cols, aes( x = gdd, y = precip)) +
+    geom_raster(aes(fill = value)) +
+    scale_fill_identity() +
+    geom_point(data = d, shape = 21, stroke = .3, alpha = .3)
 #+end_src
 
 #+RESULTS:
