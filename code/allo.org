@@ -1250,6 +1250,7 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 
 #+begin_src R
     library(ggplot2)
+    library(plyr)
     library(dplyr)
     library(tidyr)
     library(stringr)
@@ -1304,16 +1305,7 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 #+RESULTS:
 #+begin_example
 
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-      station   grdd   gdd qual
+     station   grdd   gdd qual
 1 AQW00061705 12073C 12073    C
 2 CAW00064757  2636Q  2636    Q
 3 CQC00914080 11168P 11168    P
@@ -1342,7 +1334,6 @@ Column `station` joining factor and character vector, coercing into character ve
 #+end_example
 
 #+begin_src R :var city_climate=city_climate
-
       library(sp)
         library(jsonlite)
       library(dplyr)
@@ -1369,6 +1360,20 @@ Column `station` joining factor and character vector, coercing into character ve
 #+end_src
 
 #+RESULTS:
+#+begin_example
+Error in na.fail.default(list(long = c(NA, -170.7136, 145.2428, NA, NA,  :
+  missing values in object
+Error in (function (classes, fdef, mtable)  :
+  unable to find an inherited method for function ‘proj4string<-’ for signature ‘"data.frame", "CRS"’
+Error in (function (classes, fdef, mtable)  :
+  unable to find an inherited method for function ‘proj4string’ for signature ‘"data.frame"’
+Error in apply(gdd.dists, 1, function(x) which(x == min(x))[1]) :
+  object 'gdd.dists' not found
+Error in `[.data.frame`(gdd, cdd.dists.min, ) :
+  object 'cdd.dists.min' not found
+Error in dots_values(...) :
+  trying to get slot "data" from an object (class "data.frame") that is not an S4 object
+#+end_example
 
 
 #+begin_src R :exports results :results graphics :file ../figs/GDD_Precip_Cities.png
@@ -1508,6 +1513,40 @@ rm census_centroid_pop.zip
 #+RESULTS:
 
 
+#+begin_src R :exports results :results graphics :file ../figs/space_unweight_nocontour.png
+  ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
+#        geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+#      geom_point(alpha = 1, size = 2, aes(fill = col), shape = 21, color = "white", stroke = .2) +
+     geom_point(alpha = 1, size = 2, aes(color = col)) +
+        scale_fill_identity() +
+        scale_color_identity() +
+          theme_bw() +
+    annotate("text", x = 2500, y = 11000, label = "Pacific Northwest Coast") +
+    annotate("text", x = 10800, y = 5500, label = "South\nFlorida") +
+    annotate("text", x = 1250, y = 2000, label = "Rocky\nMountains")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/space_unweight_nocontour.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/space_unweight_nocontour_anotherway.png
+  ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
+        geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+      geom_point(alpha = 1, size = 2, aes(fill = col), shape = 21, color = "white", stroke = .2) +
+        scale_fill_identity() +
+        scale_color_identity() +
+          theme_bw() +
+    annotate("text", x = 2500, y = 11000, label = "Pacific Northwest Coast") +
+    annotate("text", x = 10800, y = 5500, label = "South\nFlorida") +
+    annotate("text", x = 1250, y = 2000, label = "Rocky\nMountains")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/space_unweight_nocontour_anotherway.png]]
+
+
 The dots should instead be a contour plot of the US population.
 #+begin_src R
     library(hdrcde)
@@ -1532,6 +1571,15 @@ The dots should instead be a contour plot of the US population.
 #+end_src
 
 #+RESULTS:
+: This is hdrcde 3.2
+:
+: Attaching package: ‘hdrcde’
+:
+: The following object is masked from ‘package:raster’:
+:
+:     hdr
+: Error in expand.grid(gdd = con2$den$x, precip = con2$den$y) :
+:   object 'con2' not found
 
 #+begin_src R :exports results :results graphics :file ../figs/space_unweight.png :width 300 :height 300
   ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
@@ -1545,6 +1593,20 @@ The dots should instead be a contour plot of the US population.
 
 #+RESULTS:
 [[file:../figs/space_unweight.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/space_unweight.png :width 300 :height 300
+  ggplot2::ggplot(d, aes(x = gdd, y = precip)) +
+        geom_raster(data = pal, aes(x = gdd, y = precip, fill = col)) +
+      geom_point(alpha = .01, size = .5) +
+      geom_contour(data = con3, aes(z = z), color = "light gray") + #, breaks = con2$falpha) +
+        scale_fill_identity() +
+          theme_bw() +
+  ylim(c(0,7500))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/space_unweight.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont.png :width 600 :height 400
     ggplot(dplyr::filter(d, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = col)) +
