@@ -1492,42 +1492,33 @@ rm census_centroid_pop.zip
 #+begin_src R
     d <- bind_cols(dsp.trks@data, trks@data) %>%
        dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
-
-    f <- function(x,m = 255) {round(m * (x - min(x, na.rm = T)) / max(x, na.rm = T), 0) }
-
-  green <- c(gdd = 9000, precip = 7000)
-  blue <- c(gdd = 2000, precip = 7000)
-  orange <-  c(gdd = 2000, precip = 100)
-  violet <-  c(gdd = 9000, precip = 100)
-
-  colspace <- expand.grid(precip = seq(100,7000, length.out = 100), gdd = seq(2000,9000, length.out = 100))
-
-  x1 <- colorRampPalette(c("#d55201","red","violet"), space = "rgb", interpolate = "spline")(100)
-  x2 <- colorRampPalette(c("#d55201","red","violet"), space = "rgb", interpolate = "spline")(100)
-  x3 <- colorRampPalette(c("blue","#96db00","yellow"), space = "rgb", interpolate = "spline")(100)
-  x4 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "rgb", interpolate = "spline")(100)
-  x5 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "rgb", interpolate = "spline")(100)
-
-  x1 <- colorRampPalette(c("violet","red","orange"), space = "Lab", interpolate = "spline")(100)
-  x2 <- colorRampPalette(c("violet","red","orange"), space = "Lab", interpolate = "spline")(100)
-  x3 <- colorRampPalette(c("blue","#96db00","yellow"), space = "Lab", interpolate = "spline")(100)
-  x4 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "Lab", interpolate = "spline")(100)
-  x5 <- colorRampPalette(c("#5502ed","#41afab","#25db00"), space = "Lab", interpolate = "spline")(100)
-
-
-
-
-  cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i], x4[i],x5[i]), space = "Lab",interpolate = "spline")(100) })
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
-  x1 <- colorRampPalette(c("#aa00ff","#ff0000"), space = "Lab", interpolate = "spline")(100)
-  x2 <- colorRampPalette(c("#aa00ff","#ffff00"), space = "Lab", interpolate = "spline")(100)
-  x3 <- colorRampPalette(c("#1500ff","#1500ff","#00ffff","#00ff00","#00ff00"), space = "Lab", interpolate = "spline")(100)
+teal <- "#00ffff"
+blue <- "#1500ff"
+purple <- "#aa00ff"
+red <- "#ff0000"
+yellow <- "#ffff00"
+orange <- "#ff8000"
+bluepurple <- "#5500ff"
+bluepurplepurple <- "#7f00ff"
+blueteal <- "#007fff"
+green <- "#00ff00"
+greenteal <- "#00ff80"
+darkergreen <- "#04e600"
 
-  cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i],x3[i]), space = "Lab",interpolate = "spline")(100) })
+  x1 <- colorRampPalette(c(purple,purple,red,red), space = "rgb", interpolate = "spline")(100)
+  x2 <- colorRampPalette(c(bluepurplepurple,orange), space = "rgb", interpolate = "spline")(100)
+  x3 <- colorRampPalette(c(bluepurple,yellow), space = "rgb", interpolate = "spline")(100)
+  x4 <- colorRampPalette(c(blue,blueteal,teal,greenteal,green),space = "rgb", interpolate = "spline")(100)
+  x5 <- colorRampPalette(c(blue,blueteal,teal,greenteal,green,green),space = "rgb", interpolate = "spline")(100)
+
+  cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i],x3[i],x4[i],x5[i]), space = "rgb",interpolate = "spline")(100) })
+
+  colspace <- expand.grid(precip_col = seq(100,7000, length.out = 100), gdd_col = seq(2000,9000, length.out = 100))
 
 
   library(reshape2)
@@ -1546,9 +1537,43 @@ rm census_centroid_pop.zip
 #+RESULTS:
 [[file:../figs/hue_pal.png]]
 
+
 #+begin_src R
+            dn <- d %>%
+              rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
+                filter(complete.cases(.)) %>%
+                filter( lat < 50, lat > 25, long < 0)
 
+    col_gdd <- sapply(dn$gdd, function(x) cols$gdd_col[which.min(abs(x - cols$gdd_col))])
+    col_precip <- sapply(dn$precip, function(x) cols$precip_col[which.min(abs(x - cols$precip_col))])
 
+    dn <- dn %>%
+        mutate(gdd_col = col_gdd,
+               precip_col = col_precip)
+
+    ddn <- left_join(dn, cols)
+
+  ddn <- ddn %>%
+    mutate(value = ife
+
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_new.png :width 600 :height 400
+  ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
+      geom_point() +
+    coord_map(projection = "albers", parameters = c(29,45)) +
+    scale_color_identity() +
+    theme_bw() +
+    theme(legend.position = c(.9,.23),
+          text = element_text(size = 18),
+          legend.direction = "vertical") +
+    labs(x = "longitude", y = "latitude")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_precip_cont_new.png]]
+
+#+begin_src R
       d <- d %>%
         rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
           filter(complete.cases(.)) %>%
@@ -1626,13 +1651,6 @@ The dots should instead be a contour plot of the US population.
 #+end_src
 
 #+RESULTS:
-: This is hdrcde 3.2
-:
-: Attaching package: ‘hdrcde’
-:
-: The following object is masked from ‘package:raster’:
-:
-:     hdr
 : Error in expand.grid(gdd = con2$den$x, precip = con2$den$y) :
 :   object 'con2' not found
 
