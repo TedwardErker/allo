@@ -1502,6 +1502,97 @@ rm census_centroid_pop.zip
 
 #+RESULTS:
 
+#+begin_src R :exports results :results graphics :file ../figs/hue_pal_simpler.png
+
+r <- "#dc322f"
+y <- "#b58900"
+blue <- "#268bd2"
+green <- "#859900"
+cyan <- "#2aa198"
+orange <- "#cb4b16"
+
+       x1 <- colorRampPalette(c(orange,orange, r, r, r), space = "rgb", interpolate = "spline")(50)
+       x2 <- colorRampPalette(c(blue, cyan), space = "rgb", interpolate = "spline")(50)
+
+       cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i]), space = "rgb",interpolate = "spline")(50) })
+
+       colspace <- expand.grid(precip_col = seq(300,6700, length.out = 50), gdd_col = seq(2000,9000, length.out = 50))
+
+       m <- melt(cols) %>%
+           mutate(value = as.character(value))
+
+       cols <- cbind(colspace, m)
+
+     cols_p <- rename(cols, gdd = gdd_col, precip = precip_col)
+
+       ggplot(data = cols_p, aes(x = gdd, y = precip)) +
+         geom_raster(aes(fill = value)) +
+         scale_fill_identity() +
+         geom_point(data = d, shape = 21, stroke = .3, alpha = .3) +
+           theme_solarized(light = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/hue_pal_simpler.png]]
+#+begin_src R
+            dn <- d %>%
+              rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
+                filter(complete.cases(.)) %>%
+                filter( lat < 50, lat > 25, long < 0)
+
+    col_gdd <- sapply(dn$gdd, function(x) cols$gdd_col[which.min(abs(x - cols$gdd_col))])
+    col_precip <- sapply(dn$precip, function(x) cols$precip_col[which.min(abs(x - cols$precip_col))])
+
+    dn <- dn %>%
+        mutate(gdd_col = col_gdd,
+               precip_col = col_precip)
+
+    ddn <- left_join(dn, cols)
+
+#+end_src
+
+#+RESULTS:
+: Joining, by = c("gdd_col", "precip_col")
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png
+        ggplot(data = ddn, aes(x = gdd, y = precip, color = value)) +
+          scale_color_identity() +
+          geom_point()+
+            theme_solarized(light = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_precip_points_colored.png]]
+
+#+begin_src R
+  ddn <- ddn %>%
+    mutate(value = ifelse(gdd > 9000, "gray", value),
+           value = ifelse(gdd < 2000, "gray", value),
+           value = ifelse(precip > 6700, "gray", value),
+           value = ifelse(precip < 300, "gray", value))
+
+#+end_src
+
+#+RESULTS:
+: Joining, by = c("gdd_col", "precip_col")
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400
+  ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
+      geom_point(alpha = .8) +
+    coord_map(projection = "albers", parameters = c(29,45)) +
+    scale_color_identity() +
+    theme_bw() +
+    theme(legend.position = c(.9,.23),
+          text = element_text(size = 18),
+          legend.direction = "vertical") +
+    labs(x = "longitude", y = "latitude") +
+    theme_solarized(light = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_precip_cont_simple.png]]
+
+
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
     teal <- "#00ffff"
     blue <- "#1500ff"
