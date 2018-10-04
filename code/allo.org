@@ -1537,37 +1537,35 @@ rm census_centroid_pop.zip
 [[file:../figs/hue_pal_simpler.png]]
 
 
-They way I calculate distances is messed up!!!
-
 #+begin_src R
-          dn <- d %>%
-            rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
-              filter(complete.cases(.)) %>%
-              filter( lat < 50, lat > 25, long < 0)
+  dn <- d %>%
+      rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
+      filter(complete.cases(.)) %>%
+      filter( lat < 50, lat > 25, long < 0)
 
   m <- as.matrix(dplyr::select(dn, gdd, precip))
-
   cm <- as.matrix(dplyr::select(cols, gdd_col, precip_col))
 
-  o <- sapply(1:nrow(m), function(i) {
+  #m <- m[1:3,]
+  #cm <- cm[90*(1:6),]
+
+  whichmin <- apply(m, 1, function(mm) {
+      cm[which.min(rowSums((cm - mm)^2)),]
+  })
+
+  precip_gdd_closest <- t(whichmin) %>%
+      data.frame()
+
+  precip_gdd_closest <- left_join(precip_gdd_closest, cols) %>%
+      rename(gdd = gdd_col, precip = precip_col) %>%
+      dplyr::select(value)
+
+  dim(dn)
+  dim(precip_gdd_closest)
+
+  ddn <- cbind(dn, precip_gdd_closest)
 
 
-      dists <- apply(cm, 1, function(cmm) {
-          colSums((m - cmm)^2)
-      })
-
-
-      cm[which.min(dists),]
-      })
-
-  col_gdd <- sapply(dn$gdd, function(x) cols$gdd_col[which.min(abs(x - cols$gdd_col))])
-  col_precip <- sapply(dn$precip, function(x) cols$precip_col[which.min(abs(x - cols$precip_col))])
-
-  dn <- dn %>%
-      mutate(gdd_col = col_gdd,
-             precip_col = col_precip)
-
-  ddn <- left_join(dn, cols)
 
 #+end_src
 
