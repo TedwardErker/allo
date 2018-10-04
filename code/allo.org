@@ -1556,14 +1556,14 @@ rm census_centroid_pop.zip
   precip_gdd_closest <- t(whichmin) %>%
       data.frame()
 
-  precip_gdd_closest <- left_join(precip_gdd_closest, cols) %>%
+  precip_gdd_closest_value <- left_join(precip_gdd_closest, cols) %>%
       rename(gdd = gdd_col, precip = precip_col) %>%
       dplyr::select(value)
 
   dim(dn)
   dim(precip_gdd_closest)
 
-  ddn <- cbind(dn, precip_gdd_closest)
+  ddn <- cbind(dn, precip_gdd_closest_value)
 
 
 
@@ -1572,7 +1572,17 @@ rm census_centroid_pop.zip
 #+RESULTS:
 : Joining, by = c("gdd_col", "precip_col")
 : [1] 38487     6
-: [1] 38487     1
+: [1] 38487     2
+
+
+This is the problem....what is causing it!!!???!!?!?  it must be how
+i'm calcuatling distance.....
+#+begin_src R :exports results :results graphics :file ../figs/tests.png
+ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/tests.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png
         ggplot(data = ddn, aes(x = gdd, y = precip, color = value)) +
