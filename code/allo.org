@@ -1571,6 +1571,8 @@ rm census_centroid_pop.zip
 
 #+RESULTS:
 : Joining, by = c("gdd_col", "precip_col")
+: [1] 38487     6
+: [1] 38487     1
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png
         ggplot(data = ddn, aes(x = gdd, y = precip, color = value)) +
