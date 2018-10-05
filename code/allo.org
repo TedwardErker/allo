@@ -1245,6 +1245,8 @@ continental with the color scheme.
 
 overlay the reference cities on this plot
 
+units of precip are 100ths of inches
+
 #+BEGIN_SRC sh
 wget -O ../data/gdd.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/supplemental/products/agricultural/ann-grdd-tb4886.txt
 wget -O ../data/precip.txt https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/products/precipitation/ann-prcp-normal.txt
@@ -1591,10 +1593,13 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 [[file:../figs/tests.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png
-        ggplot(data = ddn, aes(x = gdd, y = precip, color = value)) +
-          scale_color_identity() +
-          geom_point()+
-            theme_solarized(light = F)
+  ggplot(data = ddn, aes(x = gdd, y = precip / 100, color = value)) +
+    scale_color_identity() +
+    geom_point(alpha = .9, size = .8)+
+      theme_solarized(light = F, base_size = 18) +
+scale_y_continuous(name = "Precipitation (in)") +
+scale_x_continuous(name = "Growing Degree Days") +
+theme(axis.text = element_text(size = 18, color = "white"))
 #+end_src
 
 #+RESULTS:
@@ -1613,7 +1618,7 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400
   ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
-      geom_point(alpha = .8) +
+      geom_point(alpha = .9, size = .8) +
     coord_map(projection = "albers", parameters = c(29,45)) +
     scale_color_identity() +
     theme_bw() +
