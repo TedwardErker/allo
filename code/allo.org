@@ -1523,8 +1523,8 @@ rm census_centroid_pop.zip
          x1 <- colorRampPalette(c(orange,orange, r, magenta, magenta), space = "rgb", interpolate = "spline")(50)
          x2 <- colorRampPalette(c(orange,  magenta), space = "rgb", interpolate = "spline")(50)
          x3 <- colorRampPalette(c(blue,  yellow), space = "rgb", interpolate = "spline")(50)
-         x4 <- colorRampPalette(c(blue, cyan,green), space = "rgb", interpolate = "spline")(50)
-         x5 <- colorRampPalette(c(violet, cyan,green), space = "rgb", interpolate = "spline")(50)
+         x4 <- colorRampPalette(c(blue, green), space = "rgb", interpolate = "spline")(50)
+         x5 <- colorRampPalette(c(violet, violet, cyan, green, green), space = "rgb", interpolate = "spline")(50)
 
          cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i], x4[i], x5[i]), space = "rgb",interpolate = "spline")(50) })
 
@@ -1540,7 +1540,7 @@ rm census_centroid_pop.zip
          ggplot(data = cols_p, aes(x = gdd, y = precip)) +
            geom_raster(aes(fill = value)) +
            scale_fill_identity() +
-           geom_point(data = d, shape = 21, stroke = .3, alpha = .3) +
+#           geom_point(data = d, shape = 21, stroke = .3, alpha = .3) +
              theme_solarized(light = F)
 #+end_src
 
@@ -1602,15 +1602,17 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 [[file:../figs/tests.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png :bg transparent
-  ggplot(data = ddn, aes(x = gdd, y = precip / 100, color = value)) +
-    scale_color_identity() +
-    geom_point(alpha = .9, size = .8)+
+  p <-       ggplot(data = ddn, aes(x = gdd, y = precip / 100, color = value)) +
+          scale_color_identity() +
+          geom_point(alpha = .9, size = .8)+
+            theme_solarized(light = F, base_size = 18) +
       scale_y_continuous(name = "Precipitation (in)") +
       scale_x_continuous(name = "Growing Degree Days") +
-      theme_minimal() +
       theme(axis.text = element_text(size = 18, color = "#839496"),
             rect = element_rect(fill = "transparent"),
-            text = element_text(size = 18))
+            panel.background = element_rect(fill = "transparent"),
+            panel.grid = element_blank())
+p
 #+end_src
 
 #+RESULTS:
@@ -1628,22 +1630,40 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400 :bg transparent
-  ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
-      geom_point(alpha = .9, size = .8) +
-    coord_map(projection = "albers", parameters = c(29,45)) +
-    scale_color_identity() +
-    theme_bw() +
-    theme(legend.position = c(.9,.23),
-          text = element_text(size = 18),
-          legend.direction = "vertical") +
-    labs(x = "longitude", y = "latitude") +
-    theme_map() +
-theme(rect = element_rect(fill = "transparent"))
-#    theme_solarized(light = F)
+mp <-     ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
+        geom_point(alpha = .9, size = .8) +
+      coord_map(projection = "albers", parameters = c(29,45)) +
+      scale_color_identity() +
+      theme_bw() +
+      theme(legend.position = c(.9,.23),
+            text = element_text(size = 18),
+            legend.direction = "vertical") +
+      labs(x = "longitude", y = "latitude") +
+      theme_map() +
+  theme(rect = element_rect(fill = "transparent"),
+        panel.background = element_rect(color = "#839496", size = 2))
+mp
 #+end_src
 
 #+RESULTS:
 [[file:../figs/gdd_precip_cont_simple.png]]
+#+begin_src R
+  library(grid)
+  vp1 <- viewport(width = 0.5, height = 0.35, x = 0.74, y = 0.855)
+
+  #Just draw the plot twice
+  pdf("../figs/climate_space_wMap.png")
+  print(p)
+  print(mp, vp = vp1)
+  dev.off()
+
+#+end_src
+
+#+RESULTS:
+: quartz
+:      2
+
+[[../figs/climate_space_wMap.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
