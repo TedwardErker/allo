@@ -453,8 +453,11 @@ species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
 data (161 species, 17 cities, 309 species x city combinations).  Some
 species were measured in multiple cities, but not most.  The number of
-trees of each city - species combination sampled ranged from ... to
+trees of each city - species combination sampled ranged from 1
+(both Liquidambar styraciflu and Prunus serrulata in Queens, NY) to 79
+(Quercus laurifolia in Charleston, SC)
 ...
+
 
 #+name: fig_City_Species_Ntrees
 #+caption: Number of trees sampled of each species and city combination in the urban tree database.
@@ -467,6 +470,8 @@ trees of each city - species combination sampled ranged from ... to
 [[file:../figs/CitySpeciesData_SciNameCentric.png]]
 
 [[file:../figs/CityScientificNameData_CityCentric.png]]
+
+There were only 4 trees in Queens NY sampled.
 
 
 repeat measures on the same individuals would help much.
@@ -1968,6 +1973,18 @@ The dots should instead be a contour plot of the US population.
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+#+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_CityCentric.png :height 200 :width 1400
   ggplot(cs, aes(x = Species, y = City, fill = Observed)) +
@@ -2057,7 +2074,7 @@ and then by city (alphabetic)
       summarize(meann = sum(n_cities)) %>%
       arrange(meann)
 
-    d2 <- d6 %>%
+    d2 <- d4 %>%
         mutate(City = factor(City, levels = unique(d5$City), ordered = T),
                ScientificName = factor(ScientificName, levels = unique(d3$ScientificName), ordered = T))
 
