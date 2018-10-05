@@ -1225,7 +1225,10 @@ The ironic thing about this figure is that Fort Collins is the
 WY, which according to figure 5 (McPherson and Peper 2012) in the same
 document have greeen ash trees that have 55% of the leaf area of Fort
 Collins green ash at age 60.  This incredible variability within
-regions, hence the need for more continuous approach.  Notice how
+regions, hence the need for more continuous approach.  Fort Collins
+equations are meant to apply to the northern parts of
+maine...definitley space for improvement here (though very few live
+there so maybe doesn't matter so much).  Notice how
 often the reference city is on the border of the climate zone.
 
 Get a figure showing the climate of census tracts.  Basically remake
@@ -1237,6 +1240,8 @@ future cities to sample.
 
 When I make the marginal effects plot of GDD versus Precip, I should
 make the plot cover the values seen in the US.
+
+We also have unequal observations across cities.  NY has very few.
 
 *** TODO Get new climate data.  Growing degree days and Precip. Make plots
 
@@ -1514,10 +1519,12 @@ rm census_centroid_pop.zip
   orange <- "#cb4b16"
 
          x1 <- colorRampPalette(c(orange,orange, r, r, r), space = "rgb", interpolate = "spline")(50)
-         x2 <- colorRampPalette(c(blue,  yellow), space = "rgb", interpolate = "spline")(50)
-         x3 <- colorRampPalette(c(blue, cyan,green), space = "rgb", interpolate = "spline")(50)
+         x2 <- colorRampPalette(c(orange,  r), space = "rgb", interpolate = "spline")(50)
+         x3 <- colorRampPalette(c(blue,  yellow), space = "rgb", interpolate = "spline")(50)
+         x4 <- colorRampPalette(c(blue, cyan,green), space = "rgb", interpolate = "spline")(50)
+         x5 <- colorRampPalette(c(blue, cyan,green), space = "rgb", interpolate = "spline")(50)
 
-         cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i]), space = "rgb",interpolate = "spline")(50) })
+         cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i], x4[i], x5[i]), space = "rgb",interpolate = "spline")(50) })
 
          colspace <- expand.grid(precip_col = seq(300,6700, length.out = 50), gdd_col = seq(2000,9000, length.out = 50))
 
