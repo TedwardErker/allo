@@ -1545,12 +1545,15 @@ rm census_centroid_pop.zip
 
   m <- as.matrix(dplyr::select(dn, gdd, precip))
   cm <- as.matrix(dplyr::select(cols, gdd_col, precip_col))
+  #m <- m[900*1:3,]
+  #cm <- cm[220*(1:9),]
 
-  #m <- m[1:3,]
-  #cm <- cm[90*(1:6),]
+#  apply(m, 1, function(mm) {
+ #     (t(cm) - mm)
+  #})
 
   whichmin <- apply(m, 1, function(mm) {
-      cm[which.min(rowSums((cm - mm)^2)),]
+      cm[which.min(colSums((t(cm) - mm)^2)),]
   })
 
   precip_gdd_closest <- t(whichmin) %>%
@@ -1579,6 +1582,9 @@ This is the problem....what is causing it!!!???!!?!?  it must be how
 i'm calcuatling distance.....
 #+begin_src R :exports results :results graphics :file ../figs/tests.png
 ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
+#ggplot(cols, aes(x = gdd_col, y = precip_col)) + geom_point()
+#ggplot(dn, aes(x = gdd, y = precip)) + geom_point()
+
 #+end_src
 
 #+RESULTS:
@@ -1595,16 +1601,15 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 [[file:../figs/gdd_precip_points_colored.png]]
 
 #+begin_src R
-  ddn <- ddn %>%
-    mutate(value = ifelse(gdd > 9000, "gray", value),
-           value = ifelse(gdd < 2000, "gray", value),
-           value = ifelse(precip > 6700, "gray", value),
-           value = ifelse(precip < 300, "gray", value))
+  ## ddn <- ddn %>%
+  ##   mutate(value = ifelse(gdd > 9000, "gray", value),
+  ##          value = ifelse(gdd < 2000, "gray", value),
+  ##          value = ifelse(precip > 6700, "gray", value),
+  ##          value = ifelse(precip < 300, "gray", value))
 
 #+end_src
 
 #+RESULTS:
-: Joining, by = c("gdd_col", "precip_col")
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400
   ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
