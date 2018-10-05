@@ -1517,12 +1517,14 @@ rm census_centroid_pop.zip
   green <- "#859900"
   cyan <- "#2aa198"
   orange <- "#cb4b16"
+ violet <- "#6c71c4"
+ magenta <- "#d33682"
 
-         x1 <- colorRampPalette(c(orange,orange, r, r, r), space = "rgb", interpolate = "spline")(50)
-         x2 <- colorRampPalette(c(orange,  r), space = "rgb", interpolate = "spline")(50)
+         x1 <- colorRampPalette(c(orange,orange, r, magenta, magenta), space = "rgb", interpolate = "spline")(50)
+         x2 <- colorRampPalette(c(orange,  magenta), space = "rgb", interpolate = "spline")(50)
          x3 <- colorRampPalette(c(blue,  yellow), space = "rgb", interpolate = "spline")(50)
          x4 <- colorRampPalette(c(blue, cyan,green), space = "rgb", interpolate = "spline")(50)
-         x5 <- colorRampPalette(c(blue, cyan,green), space = "rgb", interpolate = "spline")(50)
+         x5 <- colorRampPalette(c(violet, cyan,green), space = "rgb", interpolate = "spline")(50)
 
          cols <- sapply(1:length(x1), function(i) {colorRampPalette(c(x1[i], x2[i], x3[i], x4[i], x5[i]), space = "rgb",interpolate = "spline")(50) })
 
@@ -1599,14 +1601,16 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 #+RESULTS:
 [[file:../figs/tests.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png :bg transparent
   ggplot(data = ddn, aes(x = gdd, y = precip / 100, color = value)) +
     scale_color_identity() +
     geom_point(alpha = .9, size = .8)+
-      theme_solarized(light = F, base_size = 18) +
-scale_y_continuous(name = "Precipitation (in)") +
-scale_x_continuous(name = "Growing Degree Days") +
-theme(axis.text = element_text(size = 18, color = "white"))
+      scale_y_continuous(name = "Precipitation (in)") +
+      scale_x_continuous(name = "Growing Degree Days") +
+      theme_minimal() +
+      theme(axis.text = element_text(size = 18, color = "#839496"),
+            rect = element_rect(fill = "transparent"),
+            text = element_text(size = 18))
 #+end_src
 
 #+RESULTS:
@@ -1623,7 +1627,7 @@ theme(axis.text = element_text(size = 18, color = "white"))
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400 :bg transparent
   ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
       geom_point(alpha = .9, size = .8) +
     coord_map(projection = "albers", parameters = c(29,45)) +
@@ -1633,7 +1637,9 @@ theme(axis.text = element_text(size = 18, color = "white"))
           text = element_text(size = 18),
           legend.direction = "vertical") +
     labs(x = "longitude", y = "latitude") +
-    theme_solarized(light = F)
+    theme_map() +
+theme(rect = element_rect(fill = "transparent"))
+#    theme_solarized(light = F)
 #+end_src
 
 #+RESULTS:
