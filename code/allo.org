@@ -452,7 +452,17 @@ The urban tree database consists of measurements on 14487 trees of 170
 species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
 data (161 species, 17 cities, 309 species x city combinations).  Some
-species were measured in multiple cities, but not most.
+species were measured in multiple cities, but not most.  The number of
+trees of each city - species combination sampled ranged from ... to
+...
+
+#+name: fig_City_Species_Ntrees
+#+caption: Number of trees sampled of each species and city combination in the urban tree database.
+[[file:../figs/CityScientificNameData_CityCentric_n.png]]
+
+
+
+
 
 [[file:../figs/CitySpeciesData_SciNameCentric.png]]
 
@@ -2018,7 +2028,7 @@ The dots should instead be a contour plot of the US population.
 #+RESULTS:
 [[file:../figs/CitySpeciesData_CommonSpeciesCentric.png]]
 
-**** Revision to make.  Rather than observed or not, do n trees as fill.  That is richer information.
+****  trees as fill.  That is richer information.
 
 Also along the top I could have a N cities row, and along the right I
 could have a N species column.  But that's a lot of work for what is
