@@ -1652,7 +1652,7 @@ mp
   vp1 <- viewport(width = 0.5, height = 0.35, x = 0.74, y = 0.855)
 
   #Just draw the plot twice
-  pdf("../figs/climate_space_wMap.png")
+  png("../figs/climate_space_wMap.png")
   print(p)
   print(mp, vp = vp1)
   dev.off()
