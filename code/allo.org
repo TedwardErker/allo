@@ -1360,7 +1360,7 @@ Joining, by = "station"
   city_climate <- read.csv("../data/city_climate.csv")
 
     cities <- city_climate %>%
-            select(City, Latitude, Longitude, Precip)
+            dplyr::select(City, Latitude, Longitude, Precip)
 
         coordinates(cities) <- ~ Longitude + Latitude
         proj4string(cities) <- CRS("+init=epsg:4326")
@@ -1382,11 +1382,13 @@ Joining, by = "station"
         precip <- precip[precip.dists.min,]
 
       d <- bind_cols(precip@data, gdd@data,cities@data, data.frame(coordinates(cities))) %>%
-          select(gdd, Precip, City, Longitude, Latitude) %>%
-        rename(GDD = gdd)
+          dplyr::select(gdd, Precip, City, Longitude, Latitude) %>%
+        rename(precip = Precip)
 
       write.csv(d, "../data/cities_gdd_precip.csv")
 #+end_src
+
+#+RESULTS:
 
 
 #+begin_src R :exports results :results graphics :file ../figs/GDD_Precip_Cities.png
@@ -1467,7 +1469,6 @@ rm census_centroid_pop.zip
 | inflating: | ../data/census_centroid_pop/popctr_tracts2010.prj     |
 
 #+begin_src R
-
     library(sp)
     library(raster)
     library(dplyr)
@@ -1501,19 +1502,24 @@ rm census_centroid_pop.zip
 
 #+end_src
 
+#+RESULTS:
+: Joining, by = c("station", "qual", "lat", "long")
+
 
 
 #+begin_src R
     d <- bind_cols(dsp.trks@data, trks@data) %>%
        dplyr::select(LATITUDE, LONGITUDE, POPULATION, gdd, precip, TRACT)
+
+write.csv(d, "../data/censustractcentroids_gdd_precip_lat_long.csv")
 #+end_src
 
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal_simpler.png
-
+library(ggthemes)
   r <- "#dc322f"
-  y <- "#b58900"
+  yellow <- "#b58900"
   blue <- "#268bd2"
   green <- "#859900"
   cyan <- "#2aa198"
@@ -1550,6 +1556,7 @@ rm census_centroid_pop.zip
 
 
 #+begin_src R
+d <- read.csv("../data/censustractcentroids_gdd_precip_lat_long.csv")
   dn <- d %>%
       rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
       filter(complete.cases(.)) %>%
@@ -1586,21 +1593,9 @@ rm census_centroid_pop.zip
 
 #+RESULTS:
 : Joining, by = c("gdd_col", "precip_col")
-: [1] 38487     6
+: [1] 38487     7
 : [1] 38487     2
 
-
-This is the problem....what is causing it!!!???!!?!?  it must be how
-i'm calcuatling distance.....
-#+begin_src R :exports results :results graphics :file ../figs/tests.png
-ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
-#ggplot(cols, aes(x = gdd_col, y = precip_col)) + geom_point()
-#ggplot(dn, aes(x = gdd, y = precip)) + geom_point()
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/tests.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png :bg transparent
 city <-      read.csv("../data/cities_gdd_precip.csv")
