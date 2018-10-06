@@ -1273,7 +1273,8 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
     library(dplyr)
     library(tidyr)
     library(stringr)
-    d <- read.table("../data/gdd.txt")
+
+  d <- read.table("../data/gdd.txt", stringsAsFactors = F)
 
     colnames(d) <- c("station", "grdd")
 
@@ -1294,14 +1295,15 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 
     ll <-  ll %>%
         mutate(station = as.character(station),
-               lat = as.numeric(lat))
+               lat = as.numeric(lat)) %>%
+        filter(complete.cases(.))
 
     dl <- left_join(d, ll)
 
     write.csv(dl, "../data/gdd_qt_ll.csv")
 
 
-  p <- read.table("../data/precip.txt")
+  p <- read.table("../data/precip.txt", stringsAsFactors = F)
   colnames(p) <- c("station", "precip_qual")
 
     p <- p %>%
@@ -1315,10 +1317,10 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
                precip >= 0)
     dim(p)
 
+  pl <- left_join(p, ll) %>%
+      filter(complete.cases(.))
 
-    pl <- left_join(p, ll)
-
-    write.csv(pl, "../data/gdd_qt_ll.csv")
+    write.csv(pl, "../data/precip_qt_ll.csv")
 #+end_src
 
 #+RESULTS:
@@ -1336,8 +1338,6 @@ wget -O ../data/temp-station-info.txt https://www1.ncdc.noaa.gov/pub/data/normal
 Warning message:
 In evalq(as.numeric(lat), <environment>) : NAs introduced by coercion
 Joining, by = "station"
-Warning message:
-Column `station` joining factor and character vector, coercing into character vector
       station precip_qual precip qual
 1 AQC00914000      21392R  21392    R
 2 AQW00061705      12263C  12263    C
@@ -1348,51 +1348,45 @@ Column `station` joining factor and character vector, coercing into character ve
 [1] 9307    4
 [1] 7440    4
 Joining, by = "station"
-Warning message:
-Column `station` joining factor and character vector, coercing into character vector
 #+end_example
 
-#+begin_src R :var city_climate=city_climate
-      library(sp)
-        library(jsonlite)
-      library(dplyr)
+:var city_climate=city_climate
+#+begin_src R
 
-  cities <- city_climate %>%
-          select(City, Latitude, Longitude, Precip)
+        library(sp)
+          library(jsonlite)
+        library(dplyr)
 
-      coordinates(cities) <- ~ Longitude + Latitude
-      proj4string(cities) <- CRS("+init=epsg:4326")
+  city_climate <- read.csv("../data/city_climate.csv")
 
-      gdd <- read.csv("../data/gdd_qt_ll.csv", stringsAsFactors =F)
-      coordinates(gdd) <- ~long + lat
-      proj4string(gdd) <- CRS("+init=epsg:4326")
+    cities <- city_climate %>%
+            select(City, Latitude, Longitude, Precip)
 
-      gdd.dists <- spDists(cities, gdd, longlat = T)
-      gdd.dists.min <- apply(gdd.dists, 1, function(x) which(x == min(x))[1])
-      gdd <- gdd[cdd.dists.min,]
+        coordinates(cities) <- ~ Longitude + Latitude
+        proj4string(cities) <- CRS("+init=epsg:4326")
 
-    d <- bind_cols(gdd@data,cities@data, data.frame(coordinates(cities))) %>%
-        select(gdd, Precip, City, Longitude, Latitude) %>%
-      rename(GDD = gdd)
+        gdd <- read.csv("../data/gdd_qt_ll.csv", stringsAsFactors =F)
+        coordinates(gdd) <- ~long + lat
+        proj4string(gdd) <- CRS("+init=epsg:4326")
 
-    write.csv(d, "../data/cities_gdd.csv")
+        gdd.dists <- spDists(cities, gdd, longlat = T)
+        gdd.dists.min <- apply(gdd.dists, 1, function(x) which(x == min(x))[1])
+        gdd <- gdd[gdd.dists.min,]
+
+        precip <- read.csv("../data/precip_qt_ll.csv", stringsAsFactors =F)
+        coordinates(precip) <- ~long + lat
+        proj4string(precip) <- CRS("+init=epsg:4326")
+
+        precip.dists <- spDists(cities, precip, longlat = T)
+        precip.dists.min <- apply(precip.dists, 1, function(x) which(x == min(x))[1])
+        precip <- precip[precip.dists.min,]
+
+      d <- bind_cols(precip@data, gdd@data,cities@data, data.frame(coordinates(cities))) %>%
+          select(gdd, Precip, City, Longitude, Latitude) %>%
+        rename(GDD = gdd)
+
+      write.csv(d, "../data/cities_gdd_precip.csv")
 #+end_src
-
-#+RESULTS:
-#+begin_example
-Error in na.fail.default(list(long = c(NA, -170.7136, 145.2428, NA, NA,  :
-  missing values in object
-Error in (function (classes, fdef, mtable)  :
-  unable to find an inherited method for function ‘proj4string<-’ for signature ‘"data.frame", "CRS"’
-Error in (function (classes, fdef, mtable)  :
-  unable to find an inherited method for function ‘proj4string’ for signature ‘"data.frame"’
-Error in apply(gdd.dists, 1, function(x) which(x == min(x))[1]) :
-  object 'gdd.dists' not found
-Error in `[.data.frame`(gdd, cdd.dists.min, ) :
-  object 'cdd.dists.min' not found
-Error in dots_values(...) :
-  trying to get slot "data" from an object (class "data.frame") that is not an S4 object
-#+end_example
 
 
 #+begin_src R :exports results :results graphics :file ../figs/GDD_Precip_Cities.png
@@ -1609,9 +1603,12 @@ ggplot(precip_gdd_closest, aes(x = gdd_col, y = precip_col)) + geom_point()
 [[file:../figs/tests.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png :bg transparent
-  p <-       ggplot(data = ddn, aes(x = gdd, y = precip / 100, color = value)) +
+city <-      read.csv("../data/cities_gdd_precip.csv")
+
+  p <-       ggplot(data = ddn, aes(x = gdd, y = precip / 100)) +
           scale_color_identity() +
-          geom_point(alpha = .9, size = .8)+
+          geom_point(alpha = .9, size = .8, aes(color = value))+
+          geom_text(data = city, aes(label = City)) +
             theme_solarized(light = F, base_size = 18) +
       scale_y_continuous(name = "Precipitation (in)") +
       scale_x_continuous(name = "Growing Degree Days") +
