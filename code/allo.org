@@ -1611,8 +1611,12 @@ p
 [[file:../figs/gdd_precip_points_colored.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored_cities.png :bg transparent :height 600 :width 600
-p <- p + geom_label(data = city, aes(label = City, x = gdd, y = precip / 100))
-p
+city.filtered <- city %>% filter(!City %in% c("Santa Monica, CA", "Queens, NY", "Modesto, CA"))
+city.filtered$precip[city.filtered$City == "Albuquerque, NM"] <- 800 # slightly shift albuquerque down for plotting
+city.filtered$gdd[city.filtered$City == "Indianapolis, IN"] <- 3870 # slightly shift indianapolis over for plotting
+
+pc <- p + geom_label(data = city.filtered, aes(label = City, x = gdd, y = precip / 100))
+pc
 #+end_src
 
 #+RESULTS:
