@@ -1217,7 +1217,7 @@ sampled_species %>% ascii.nowarn.print
 | NMtnPr | Fort Collins, CO |  349 | 3332 |    452 | -105.08442 | 40.58526 |
 | NoCalC | Berkeley, CA     |   39 | 1786 |    564 | -122.27275 | 37.87159 |
 | NoEast | Queens, NY       |  560 | 2819 |   1041 |   -73.7949 |  40.7282 |
-| PacfNW | Longview, WA     |  157 | 2468 |   1059 |  -94.74049 | 32.50070 |
+| PacfNW | Longview, WA     |  157 | 2468 |   1059 |  -122.9382 |  46.1382 |
 | Piedmt | Charlotte, NC    |  847 | 1891 |   1426 |  -80.84313 | 35.22709 |
 | SoCalC | Santa Monica, CA |  266 |  710 |    570 | -118.49119 | 34.01945 |
 | SWDsrt | Glendale, AZ     | 2128 |  637 |    174 |  -112.1860 |  33.5387 |
@@ -1634,8 +1634,8 @@ pc
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/gdd_precip_cont_simple.png :width 600 :height 400 :bg transparent
-mp <-     ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat, color = value)) +
-        geom_point(alpha = .9, size = .8) +
+mp <-     ggplot(dplyr::filter(ddn, lat < 50, lat > 25, long < 0), aes(x = long, y = lat)) +
+        geom_point(alpha = .9, size = .8, aes(color = value)) +
       coord_map(projection = "albers", parameters = c(29,45)) +
       scale_color_identity() +
       theme_bw() +
@@ -1652,9 +1652,17 @@ mp
 #+RESULTS:
 [[file:../figs/gdd_precip_cont_simple.png]]
 #+begin_src R :exports results :results graphics :file ../figs/mp_label.png
-city <-      read.csv("../data/cities_gdd_precip.csv")
-mp +
+  city.filtered.mp  <-      read.csv("../data/cities_gdd_precip.csv") %>%
+      filter(!City %in% c("Santa Monica, CA", "Modesto, CA", "Honolulu, HI")) %>%
+      rename(lat = Latitude, long = Longitude)
+
+
+    mpc <- mp + geom_label(data = city.filtered.mp, aes(label = City, x = long, y = lat))
+    mpc
 #+end_src
+
+#+RESULTS:
+[[file:../figs/mp_label.png]]
 
 #+begin_src R
   library(grid)
