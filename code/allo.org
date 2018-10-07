@@ -1360,7 +1360,7 @@ Joining, by = "station"
   city_climate <- read.csv("../data/city_climate.csv")
 
     cities <- city_climate %>%
-            dplyr::select(City, Latitude, Longitude, Precip)
+            dplyr::select(City, Latitude, Longitude)
 
         coordinates(cities) <- ~ Longitude + Latitude
         proj4string(cities) <- CRS("+init=epsg:4326")
@@ -1382,8 +1382,8 @@ Joining, by = "station"
         precip <- precip[precip.dists.min,]
 
       d <- bind_cols(precip@data, gdd@data,cities@data, data.frame(coordinates(cities))) %>%
-          dplyr::select(gdd, Precip, City, Longitude, Latitude) %>%
-        rename(precip = Precip)
+          dplyr::select(gdd, precip, City, Longitude, Latitude)
+
 
       write.csv(d, "../data/cities_gdd_precip.csv")
 #+end_src
@@ -1392,7 +1392,7 @@ Joining, by = "station"
 
 
 #+begin_src R :exports results :results graphics :file ../figs/GDD_Precip_Cities.png
-  ggplot(d, aes(x = GDD, y = Precip, label = City)) + geom_text()
+  ggplot(d, aes(x = gdd, y = precip, label = City)) + geom_text()
 #+end_src
 
 #+RESULTS:
@@ -1490,7 +1490,7 @@ rm census_centroid_pop.zip
     coordinates(dsp) <- ~long + lat
     proj4string(dsp) <- CRS("+init=epsg:4326")
 
-    # find closest gdd
+    # find closest gdd and precip
 
       out <- lapply(1:length(trks), function(i) {
           dists <- spDists(trks[i,], dsp, longlat = T)
@@ -1564,12 +1564,6 @@ d <- read.csv("../data/censustractcentroids_gdd_precip_lat_long.csv")
 
   m <- as.matrix(dplyr::select(dn, gdd, precip))
   cm <- as.matrix(dplyr::select(cols, gdd_col, precip_col))
-  #m <- m[900*1:3,]
-  #cm <- cm[220*(1:9),]
-
-#  apply(m, 1, function(mm) {
- #     (t(cm) - mm)
-  #})
 
   whichmin <- apply(m, 1, function(mm) {
       cm[which.min(colSums((t(cm) - mm)^2)),]
@@ -1597,13 +1591,12 @@ d <- read.csv("../data/censustractcentroids_gdd_precip_lat_long.csv")
 : [1] 38487     2
 
 
-#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored.png :bg transparent :height 600 :width 600
 city <-      read.csv("../data/cities_gdd_precip.csv")
 
-  p <-       ggplot(data = ddn, aes(x = gdd, y = precip / 100)) +
+  p <-       ggplot(data = ddn) +
           scale_color_identity() +
-          geom_point(alpha = .9, size = .8, aes(color = value))+
-          geom_text(data = city, aes(label = City)) +
+          geom_point(alpha = .9, size = .8, aes(color = value, x = gdd, y = precip / 100))+
             theme_solarized(light = F, base_size = 18) +
       scale_y_continuous(name = "Precipitation (in)") +
       scale_x_continuous(name = "Growing Degree Days") +
@@ -1616,6 +1609,14 @@ p
 
 #+RESULTS:
 [[file:../figs/gdd_precip_points_colored.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored_cities.png :bg transparent :height 600 :width 600
+p <- p + geom_label(data = city, aes(label = City, x = gdd, y = precip / 100))
+p
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_precip_points_colored_cities.png]]
 
 #+begin_src R
   ## ddn <- ddn %>%
@@ -1646,6 +1647,11 @@ mp
 
 #+RESULTS:
 [[file:../figs/gdd_precip_cont_simple.png]]
+#+begin_src R :exports results :results graphics :file ../figs/mp_label.png
+city <-      read.csv("../data/cities_gdd_precip.csv")
+mp +
+#+end_src
+
 #+begin_src R
   library(grid)
   vp1 <- viewport(width = 0.5, height = 0.35, x = 0.74, y = 0.855)
