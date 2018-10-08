@@ -1651,7 +1651,7 @@ mp
 
 #+RESULTS:
 [[file:../figs/gdd_precip_cont_simple.png]]
-#+begin_src R :exports results :results graphics :file ../figs/mp_label.png
+#+begin_src R :exports results :results graphics :file ../figs/mp_label.png :width 800 :bg transparent
   city.filtered.mp  <-      read.csv("../data/cities_gdd_precip.csv") %>%
       filter(!City %in% c("Santa Monica, CA", "Modesto, CA", "Honolulu, HI")) %>%
       rename(lat = Latitude, long = Longitude)
@@ -1683,6 +1683,23 @@ mp
 [[../figs/climate_space_wMap.png]]
 
 
+#+begin_src R
+  library(grid)
+  vp1 <- viewport(width = 0.5, height = 0.35, x = 0.74, y = 0.855)
+
+  #Just draw the plot twice
+  png("../figs/climate_space_wMap_labels.png", bg = "transparent")
+  print(pc)
+  print(mp, vp = vp1)
+  dev.off()
+
+#+end_src
+
+#+RESULTS:
+: quartz_off_screen
+:                 3
+
+[[file:../figs/climate_space_wMap_labels.png]]
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
     teal <- "#00ffff"
     blue <- "#1500ff"
