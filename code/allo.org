@@ -3748,7 +3748,10 @@ An early version of the UTD equations didn't have as much data, but
 their approach modified parameters based on the number of frost free
 days cite:frelich_1992
 
-
+cite:peper_2001a - tested modified weibull following
+cite:frelich_1992, but went with logarithm regression model because it
+had the best in-sample fit.  We think weibull would have
+the best out of sample fit.
 
 make better
 - more data, duh, perhaps used results to identify where to sample
