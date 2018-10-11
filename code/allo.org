@@ -3749,6 +3749,7 @@ their approach modified parameters based on the number of frost free
 days cite:frelich_1992
 
 
+
 make better
 - more data, duh, perhaps used results to identify where to sample
 - more cities, this is important for interpolation across climate
