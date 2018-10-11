@@ -444,23 +444,25 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 
 
-
 * Methods
 ** Data
 
 The urban tree database consists of measurements on 14487 trees of 170
 species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
-data (161 species, 17 cities, 309 species x city combinations).  Some
-species were measured in multiple cities, but not most.  The number of
-trees of each city - species combination sampled ranged from 1
-(both Liquidambar styraciflu and Prunus serrulata in Queens, NY) to 79
-(Quercus laurifolia in Charleston, SC).  The median number of trees in
-each species-city combination was 37.
+data (161 species, 17 cities, 309 species by city combinations).
 
 #+name: fig_City_Species_Ntrees
 #+caption: Number of trees sampled of each species and city combination in the urban tree database.
 [[file:../figs/CityScientificNameData_CityCentric_n.png]]
+
+
+Some species were measured in multiple cities, but not most.  The number of
+trees of each city by species combination sampled ranged from 1
+(both Liquidambar styraciflu and Prunus serrulata in Queens, NY) to 79
+(Quercus laurifolia in Charleston, SC).  The median number of trees in
+each species-city combination was 37.
+
 
 
 There were only 4 trees in Queens NY sampled.
