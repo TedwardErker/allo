@@ -447,7 +447,7 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 * Methods
 ** Data
 
-The urban tree database consists of measurements on 14487 trees of 170
+The urban tree database (UTD) consists of measurements on 14487 trees of 170
 species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
 data (161 species, 17 cities, 309 species by city combinations).
@@ -456,19 +456,24 @@ data (161 species, 17 cities, 309 species by city combinations).
 #+caption: Number of trees sampled of each species and city combination in the urban tree database.
 [[file:../figs/CityScientificNameData_CityCentric_n.png]]
 
-
 Some species were measured in multiple cities, but not most.  The number of
 trees of each city by species combination sampled ranged from 1
 (both Liquidambar styraciflu and Prunus serrulata in Queens, NY) to 79
 (Quercus laurifolia in Charleston, SC).  The median number of trees in
 each species-city combination was 37.
 
+Age is defined in this dataset as time since planting, since this is
+the record kept by cities.  Actual age of the trees may be several
+years more.  Diameter (cm) of the trees is measured at breast height (1.37m
+above ground).
+
+In the UTD, trees are classified taxonomically down to cultivar for some
+individuals, but here we aggregate cultivars up to the species level.
+Species are then nested within Genera.
+
+The 17 cities in the UTD cover much of the US.
 
 
-There were only 4 trees in Queens NY sampled.
-
-
-repeat measures on the same individuals would help much.
 
 I wonder if the UFIA would have this eventually and if I could write
 the code to incorporate the data.
@@ -3738,6 +3743,12 @@ and the map could show that.  That would be neat.
 
 * Discussoins
 
+
+An early version of the UTD equations didn't have as much data, but
+their approach modified parameters based on the number of frost free
+days cite:frelich_1992
+
+
 make better
 - more data, duh, perhaps used results to identify where to sample
 - more cities, this is important for interpolation across climate
@@ -3754,6 +3765,9 @@ make better
   They provide the upper limit on the asymptote, but for urban trees
   the asymptote could be quite lower.
 - incorporate uncertainty in AGE
+- There were only 4 trees in Queens NY sampled.
+- repeat measures on the same individuals would help much.
+
 * Exploring age and dbh
 ** load libraries
 #+begin_src R :exports none
