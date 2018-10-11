@@ -3753,6 +3753,17 @@ cite:frelich_1992, but went with logarithm regression model because it
 had the best in-sample fit.  We think weibull would have
 the best out of sample fit.
 
+
+
+cite:peper_2001a noted that differences in the dimensions of sweetgum
+and camphor in Modesto and in Santa Monica were due to different
+pruning regimes, cultural practices.  This shows the challenges in
+modelling.  There are some difficult to capture human cultural
+elements.
+
+
+
+
 make better
 - more data, duh, perhaps used results to identify where to sample
 - more cities, this is important for interpolation across climate
