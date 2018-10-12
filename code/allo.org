@@ -473,7 +473,7 @@ Species are then nested within Genera.
 
 The 17 cities in the UTD cover much of the US.
 
-
+[[file:../figs/ClimateRegions_UTD.png]]
 
 I wonder if the UFIA would have this eventually and if I could write
 the code to incorporate the data.
