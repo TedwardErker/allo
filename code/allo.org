@@ -471,9 +471,12 @@ In the UTD, trees are classified taxonomically down to cultivar for some
 individuals, but here we aggregate cultivars up to the species level.
 Species are then nested within Genera.
 
-The 17 cities in the UTD cover much of the US.
+The 17 cities in the UTD cover much of the US, .
 
+#+name: fig:utd_climate
+#+caption: 16 climate regions and 17 representative cities in the UTD. cite:mcpherson_e_2016
 [[file:../figs/ClimateRegions_UTD.png]]
+
 
 I wonder if the UFIA would have this eventually and if I could write
 the code to incorporate the data.
