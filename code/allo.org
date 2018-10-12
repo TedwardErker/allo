@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -2150,6 +2150,43 @@ and then by city (alphabetic)
 
 #+RESULTS:
 [[file:../figs/CityScientificNameData_CityCentric_n.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n_split_1.png :height 800
+  d2_s1 <- d2 %>% filter(as.numeric(ScientificName) > 80)
+
+  p_s1 <-              ggplot(d2_s1, aes(y = ScientificName, x = City, fill = n)) +
+                         geom_raster() +
+                         coord_equal() +
+                         scale_fill_continuous(breaks = seq(min(d2$n), max(d2$n), length.out = 3), type = "viridis") +
+                         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                               legend.position = "none") +
+                   scale_x_discrete(position = "top")
+
+  p_s1
+#+end_src
+
+#+RESULTS:
+[[file:../figs/CityScientificNameData_CityCentric_n_split_1.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n_split_2.png :height 800
+  d2_s2 <- d2 %>% filter(as.numeric(ScientificName) <= 80)
+
+  p_s2 <-              ggplot(d2_s1, aes(y = ScientificName, x = City, fill = n)) +
+                         geom_raster() +
+                         coord_equal() +
+                         scale_fill_continuous(breaks = seq(min(d2$n), max(d2$n), length.out = 3), type = "viridis") +
+                         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                               legend.position = "none") +
+                   scale_x_discrete(position = "top")
+
+  p_s2
+#+end_src
+
+#+RESULTS:
+[[file:../figs/CityScientificNameData_CityCentric_n_split_2.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 300 :width 1400
 
