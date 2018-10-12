@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -460,6 +460,7 @@ data (161 species, 17 cities, 309 species by city combinations).
 
 #+name: fig_City_Species_Ntrees
 #+caption: Number of trees sampled of each species and city combination in the urban tree database.
+#+ATTR_LATEX: :width 800
 [[file:../figs/CityScientificNameData_CityCentric_n.png]]
 
 Some species were measured in multiple cities, but not most.  The number of
