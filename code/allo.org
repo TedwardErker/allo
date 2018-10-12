@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -477,11 +477,16 @@ In the UTD, trees are classified taxonomically down to cultivar for some
 individuals, but here we aggregate cultivars up to the species level.
 Species are then nested within Genera.
 
-The 17 cities in the UTD cover much of the US, .
-
+The 17 cities in the UTD cover much of the US geographically, [[fig:utd_climate]], and
+much of the variation in climate, [[fig:utd_gdd_precip_space_map]].
 #+name: fig:utd_climate
 #+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
 [[file:../figs/ClimateRegions_UTD.png]]
+
+
+#+name: fig:utd_gdd_precip_space_map
+#+caption: US census tract centroids with UTD reference cities overlaid in growing degree day (GDD) and precipitation climate space and matching color gradient in geographic space.  The reference cities cover climate space well, and variation in precipitation and growing degree days is continuous.
+[[file:../figs/climate_space_wMap_labels.png]]
 
 
 
@@ -1573,6 +1578,13 @@ library(ggthemes)
 
 
 #+begin_src R
+    library(sp)
+      library(reshape2)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+
+
 d <- read.csv("../data/censustractcentroids_gdd_precip_lat_long.csv")
   dn <- d %>%
       rename(lat = LATITUDE, long = LONGITUDE, pop = POPULATION) %>%
@@ -1631,6 +1643,7 @@ p
 city.filtered <- city %>% filter(!City %in% c("Santa Monica, CA", "Queens, NY", "Modesto, CA"))
 city.filtered$precip[city.filtered$City == "Albuquerque, NM"] <- 800 # slightly shift albuquerque down for plotting
 city.filtered$gdd[city.filtered$City == "Indianapolis, IN"] <- 3870 # slightly shift indianapolis over for plotting
+city.filtered$gdd[city.filtered$City == "Honolulu, HI"] <- 10310 # slightly shift honolulu over for plotting
 
 pc <- p + geom_label(data = city.filtered, aes(label = City, x = gdd, y = precip / 100))
 pc
@@ -1702,10 +1715,10 @@ mp
 
 #+begin_src R
   library(grid)
-  vp1 <- viewport(width = 0.5, height = 0.35, x = 0.74, y = 0.855)
+  vp1 <- viewport(width = 0.5, height = 0.35, x = 0.743, y = 0.824)
 
   #Just draw the plot twice
-  png("../figs/climate_space_wMap_labels.png", bg = "transparent")
+  png("../figs/climate_space_wMap_labels.png", bg = "transparent", width = 600)
   print(pc)
   print(mp, vp = vp1)
   dev.off()
@@ -1713,8 +1726,8 @@ mp
 #+end_src
 
 #+RESULTS:
-: quartz_off_screen
-:                 3
+: null device
+:           1
 
 [[file:../figs/climate_space_wMap_labels.png]]
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal.png
