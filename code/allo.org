@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: Tedward Erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -237,10 +237,6 @@ from the data and improve predictions compared to the existing
 modelling approach for the data.  Improving predictions of tree size
 from tree age will improve our ability to predict the important
 ecosystem services these trees provide urban dwellers.
-
-
-
-
 
 
 
@@ -4884,3 +4880,6 @@ What should the structure of the paper be?
 - posterior predicitive checks
 
 
+* bibliography                                                       :ignore:
+bibliography:~/git/notes/references.bib
+bibliographystyle:apa
