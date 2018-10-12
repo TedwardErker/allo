@@ -142,12 +142,12 @@ GulfCo,Butia capitata,BUCA,dbh,crown ht,meters,1/ht,cub,0.05266,0.60196,0.26754,
 GulfCo,Butia capitata,BUCA,dbh,leaf area,sq. meters,1/ht^2,cub,1.61891,-9.39589,14.75274,-2.5439,,1.42,40.39,,,,,,
 GulfCo,Butia capitata,BUCA,dbh,tree ht,meters,1/sqrt(dbh),cub,0.06875,0.21904,-0.00266,0.00001,,0.07,6.19,,,,1.5,8.5,
 GulfCo,Carya illinoinensis,CAIL,dbh,age,years,1/dbh^2,quad,-2.3867,1.00638,-0.0041,,,1,70,0.02354,36,0.948,0,60,33
-GulfCo,Carya illinoinensis,CAIL,cdia,dbh,meters,1,lin,3.62607,,,,,3.79,1295.7,121.38538,36,0.705,2.5,90.9,34
-GulfCo,Carya illinoinensis,CAIL,dbh,crown dia,meters,1/sqrt(dbh),lin,0.20232,,,,,3.05,20.87,1.07559,36,0.746,0.7,25.9,34
-GulfCo,Carya illinoinensis,CAIL,dbh,crown ht,meters,1/sqrt(dbh),loglogw2,2.28579,0.01293,,,,1.03,19.99,0.11373,36,0.895,1,22.5,34
-GulfCo,Carya illinoinensis,CAIL,age,dbh,centimeters,1/age^2,lin,1.25824,,,,,2.53,90.6,0.09093,36,0.943,2.5,90.9,34
-GulfCo,Carya illinoinensis,CAIL,dbh,leaf area,sq. meters,1/sqrt(dbh),loglogw2,9.46524,0.03456,,,,0.22,1501.18,0.03456,27,0.846,21.1,1512.8,25
-GulfCo,Carya illinoinensis,CAIL,dbh,tree ht,meters,1,loglogw1,1.92206,0.0509,,,,1.94,21.91,0.22561,36,0.798,1.8,26,34
+GulfCo,Carya illinoinensis,CAIL,cdia,dbh,meters,1,lin,1.10501,3.62607,,,,3.79,1295.7,121.38538,36,0.705,2.5,90.9,34
+GulfCo,Carya illinoinensis,CAIL,dbh,crown dia,meters,1/sqrt(dbh),lin,2.537300911,0.202324078,,,,3.05,20.87,1.07559,36,0.746,0.7,25.9,34
+GulfCo,Carya illinoinensis,CAIL,dbh,crown ht,meters,1/sqrt(dbh),loglogw2,-0.51305,2.28579,0.01293,,,1.03,19.99,0.11373,36,0.895,1,22.5,34
+GulfCo,Carya illinoinensis,CAIL,age,dbh,centimeters,1/age^2,lin,2.527410532,1.258242634,,,,2.53,90.6,0.09093,36,0.943,2.5,90.9,34
+GulfCo,Carya illinoinensis,CAIL,dbh,leaf area,sq. meters,1/sqrt(dbh),loglogw2,-7.12362,9.46524,0.03456,,,0.22,1501.18,0.03456,27,0.846,21.1,1512.8,25
+GulfCo,Carya illinoinensis,CAIL,dbh,tree ht,meters,1,loglogw1,0.17767,1.92206,0.0509,,,1.94,21.91,0.22561,36,0.798,1.8,26,34
 GulfCo,Celtis laevigata,CELA,dbh,age,years,1/dbh,quad,-1.52508,0.81167,-0.00312,,,0,41,1.23315,37,0.85,0,50,34
 GulfCo,Celtis laevigata,CELA,cdia,dbh,meters,1/cdia^2,lin,0.15848,4.28057,,,,3.04,64.74,1.70434,37,0.869,3,103.6,35
 GulfCo,Celtis laevigata,CELA,dbh,crown dia,meters,1/dbh^2,cub,-0.8392,0.50231,-0.007,0.00004,,0.62,12.5,0.00601,37,0.856,0.8,19,33
@@ -1704,141 +1704,141 @@ Piedmt,Ulmus alata,ULAL,dbh,crown ht,meters,1/dbh,cub,-3.0114,1.04576,-0.02023,0
 Piedmt,Ulmus alata,ULAL,age,dbh,centimeters,1,lin,-5.25658,2.39512,,,,1.93,90.55,3.1008,32,0.992,6.6,81.5,30
 Piedmt,Ulmus alata,ULAL,dbh,leaf area,sq. meters,1/dbh^2,loglogw4,-3.38495,6.48283,0.00104,,,0.96,1077.16,0.03228,21,0.826,2.9,1070.4,19
 Piedmt,Ulmus alata,ULAL,dbh,tree ht,meters,1,cub,-4.04343,1.37259,-0.02725,0.00018,,1.4,33.64,4.85699,31,0.847,3,23,27
-SacVal,Cedrus deodara,CEDE,dbh,age,years,1,loglogw1,-1.60213,3.82378,0.09235,,,1,88,0.55126,60,0.865,4,92,58
+SacVal,Cedrus deodara,CEDE,dbh,age,years,1,loglogw1,-1.60213,3.82378,0.30389,0.09235,,1,88,0.55126,60,0.865,4,92,58
 SacVal,Cedrus deodara,CEDE,cdia,dbh,meters,1/cdia,lin,-6.32322,5.5559,,,,4.48,101.69,9.85318,61,0.92,6.2,135.6,59
-SacVal,Cedrus deodara,CEDE,dbh,crown dia,meters,1/dbh,cub,0.5258,0.28597,0.00001,,,0.75,18.15,0.04818,61,0.94,1.5,30,57
-SacVal,Cedrus deodara,CEDE,dbh,crown ht,meters,1/sqrt(dbh),cub,-2.38474,0.62219,0.00002,,,0.37,22.47,0.94763,59,0.883,1.4,27.2,55
-SacVal,Cedrus deodara,CEDE,age,dbh,centimeters,1,loglogw1,0.60029,2.65795,,,,0.77,100.42,0.2473,60,0.882,6.2,135.6,58
-SacVal,Cedrus deodara,CEDE,dbh,leaf area,sq. meters,1,loglogw1,-2.33574,5.74921,,,,0.01,750.89,0.50953,53,0.842,3,1132.7,51
-SacVal,Cedrus deodara,CEDE,dbh,tree ht,meters,1/sqrt(dbh),quad,-1.01371,0.53995,,,,0.33,26.45,1.0949,59,0.896,1.8,30.2,56
+SacVal,Cedrus deodara,CEDE,dbh,crown dia,meters,1/dbh,cub,0.5258,0.28597,-0.00220,0.00001,,0.75,18.15,0.04818,61,0.94,1.5,30,57
+SacVal,Cedrus deodara,CEDE,dbh,crown ht,meters,1/sqrt(dbh),cub,-2.38474,0.62219,-0.00525,0.00002,,0.37,22.47,0.94763,59,0.883,1.4,27.2,55
+SacVal,Cedrus deodara,CEDE,age,dbh,centimeters,1,loglogw1,0.60029,2.65795,0.061156179,,,0.77,100.42,0.2473,60,0.882,6.2,135.6,58
+SacVal,Cedrus deodara,CEDE,dbh,leaf area,sq. meters,1,loglogw1,-2.33574,5.74921,0.25962,,,0.01,750.89,0.50953,53,0.842,3,1132.7,51
+SacVal,Cedrus deodara,CEDE,dbh,tree ht,meters,1/sqrt(dbh),quad,-1.01371,0.53995,-0.00265,,,0.33,26.45,1.0949,59,0.896,1.8,30.2,56
 SacVal,Celtis occidentalis,CEOC,dbh,age,years,1/dbh^2,lin,-0.84351,0.7832,,,,1,77,0.04246,37,0.912,1,66,35
-SacVal,Celtis occidentalis,CEOC,cdia,dbh,meters,1,loglogw1,1.41616,2.42584,,,,2.36,69.02,0.31474,37,0.859,2,94.6,35
-SacVal,Celtis occidentalis,CEOC,dbh,crown dia,meters,1,loglogw1,-0.40489,2.1918,,,,1.06,16.08,0.21539,37,0.898,0.8,24.2,35
+SacVal,Celtis occidentalis,CEOC,cdia,dbh,meters,1,loglogw1,1.41616,2.42584,0.09906,,,2.36,69.02,0.31474,37,0.859,2,94.6,35
+SacVal,Celtis occidentalis,CEOC,dbh,crown dia,meters,1,loglogw1,-0.40489,2.1918,0.04639,,,1.06,16.08,0.21539,37,0.898,0.8,24.2,35
 SacVal,Celtis occidentalis,CEOC,dbh,crown ht,meters,1/dbh^2,lin,1.50507,0.18403,,,,1.94,14.21,0.00375,36,0.865,1.9,17.2,34
-SacVal,Celtis occidentalis,CEOC,age,dbh,centimeters,1/age^2,quad,0.59486,1.77385,,,,2.36,69.02,0.09459,37,0.94,2,94.6,34
-SacVal,Celtis occidentalis,CEOC,dbh,leaf area,sq. meters,1,loglogw1,-1.99866,5.66181,,,,0.86,615.24,0.59364,35,0.89,0.2,1118.3,33
-SacVal,Celtis occidentalis,CEOC,dbh,tree ht,meters,1/dbh,quad,2.59923,0.27032,,,,3.23,15.33,0.11297,36,0.865,2.8,21.8,33
+SacVal,Celtis occidentalis,CEOC,age,dbh,centimeters,1/age^2,quad,0.59486,1.77385,-0.0115,,,2.36,69.02,0.09459,37,0.94,2,94.6,34
+SacVal,Celtis occidentalis,CEOC,dbh,leaf area,sq. meters,1,loglogw1,-1.99866,5.66181,0.35240,,,0.86,615.24,0.59364,35,0.89,0.2,1118.3,33
+SacVal,Celtis occidentalis,CEOC,dbh,tree ht,meters,1/dbh,quad,2.59923,0.27032,-0.00124,,,3.23,15.33,0.11297,36,0.865,2.8,21.8,33
 SacVal,Celtis sinensis,CESI4,dbh,age,years,1/dbh^2,lin,-1.02931,0.7272,,,,1,82,0.04494,59,0.891,1,89,57
-SacVal,Celtis sinensis,CESI4,cdia,dbh,meters,1/cdia^2,quad,-2.07328,2.4363,,,,3.2,114.37,0.63201,59,0.918,2.2,142,56
-SacVal,Celtis sinensis,CESI4,dbh,crown dia,meters,1/dbh,cub,1.11854,0.37584,0.00001,,,2.29,21.72,0.07333,59,0.934,1.8,26,55
+SacVal,Celtis sinensis,CESI4,cdia,dbh,meters,1/cdia^2,quad,-2.07328,2.4363,0.10223,,,3.2,114.37,0.63201,59,0.918,2.2,142,56
+SacVal,Celtis sinensis,CESI4,dbh,crown dia,meters,1/dbh,cub,1.11854,0.37584,-0.00285,0.00001,,2.29,21.72,0.07333,59,0.934,1.8,26,55
 SacVal,Celtis sinensis,CESI4,dbh,crown ht,meters,1/sqrt(dbh),lin,2.79745,0.13252,,,,3.22,17.95,0.90626,59,0.733,0.8,21.4,57
-SacVal,Celtis sinensis,CESI4,age,dbh,centimeters,1/age,cub,0.83516,2.40233,0.00036,,,3.2,114.37,3.25426,59,0.916,2.2,142,55
-SacVal,Celtis sinensis,CESI4,dbh,leaf area,sq. meters,1,loglogw1,-2.1349,5.80867,,,,1.45,1142.2,0.45842,57,0.866,2.9,1485,55
+SacVal,Celtis sinensis,CESI4,age,dbh,centimeters,1/age,cub,0.83516,2.40233,-0.04183,0.00036,,3.2,114.37,3.25426,59,0.916,2.2,142,55
+SacVal,Celtis sinensis,CESI4,dbh,leaf area,sq. meters,1,loglogw1,-2.1349,5.80867,0.21015,,,1.45,1142.2,0.45842,57,0.866,2.9,1485,55
 SacVal,Celtis sinensis,CESI4,dbh,tree ht,meters,1/sqrt(dbh),lin,4.2474,0.15487,,,,4.74,21.96,1.12048,59,0.752,2.8,29.2,57
 SacVal,Cinnamomum camphora,CICA,dbh,age,years,1/dbh^2,lin,-1.99343,0.65859,,,,0,113,0.02582,61,0.922,0.1,102,59
-SacVal,Cinnamomum camphora,CICA,cdia,dbh,meters,1,loglogw1,1.30469,2.89706,,,,2.96,133.79,0.21021,61,0.943,3.1,135.8,59
-SacVal,Cinnamomum camphora,CICA,dbh,crown dia,meters,1/dbh^2,cub,0.40772,0.30821,0.00001,,,1.3,24.96,0.00115,61,0.964,1.2,28.3,57
-SacVal,Cinnamomum camphora,CICA,dbh,crown ht,meters,1/dbh,quad,1.30265,0.22261,,,,1.96,18.3,0.13862,61,0.848,1.2,27,58
-SacVal,Cinnamomum camphora,CICA,age,dbh,centimeters,1/age^2,quad,2.9586,1.90342,,,,2.96,133.79,0.16782,61,0.937,3.1,135.8,58
-SacVal,Cinnamomum camphora,CICA,dbh,leaf area,sq. meters,1,loglogw1,-2.43827,5.96978,,,,0.79,1260.72,0.37677,53,0.914,7.9,1844.7,51
-SacVal,Cinnamomum camphora,CICA,dbh,tree ht,meters,1/dbh,quad,2.0156,0.28138,,,,2.84,20.68,0.16536,61,0.864,3,30,58
-SacVal,Fraxinus velutina,FRVE_G,dbh,age,years,1,loglogw1,-2.61466,4.43216,0.09511,,,0,77,0.55534,39,0.891,1,72,37
+SacVal,Cinnamomum camphora,CICA,cdia,dbh,meters,1,loglogw1,1.30469,2.89706,0.04419,,,2.96,133.79,0.21021,61,0.943,3.1,135.8,59
+SacVal,Cinnamomum camphora,CICA,dbh,crown dia,meters,1/dbh^2,cub,0.40772,0.30821,-0.00202,0.00001,,1.3,24.96,0.00115,61,0.964,1.2,28.3,57
+SacVal,Cinnamomum camphora,CICA,dbh,crown ht,meters,1/dbh,quad,1.30265,0.22261,-0.00071,,,1.96,18.3,0.13862,61,0.848,1.2,27,58
+SacVal,Cinnamomum camphora,CICA,age,dbh,centimeters,1/age^2,quad,2.9586,1.90342,-0.00660,,,2.96,133.79,0.16782,61,0.937,3.1,135.8,58
+SacVal,Cinnamomum camphora,CICA,dbh,leaf area,sq. meters,1,loglogw1,-2.43827,5.96978,0.14195,,,0.79,1260.72,0.37677,53,0.914,7.9,1844.7,51
+SacVal,Cinnamomum camphora,CICA,dbh,tree ht,meters,1/dbh,quad,2.0156,0.28138,-0.00106,,,2.84,20.68,0.16536,61,0.864,3,30,58
+SacVal,Fraxinus velutina,FRVE_G,dbh,age,years,1,loglogw1,-2.61466,4.43216,0.30840,0.09511,,0,77,0.55534,39,0.891,1,72,37
 SacVal,Fraxinus velutina,FRVE_G,cdia,dbh,meters,1,lin,1.09207,4.93654,,,,1.22,116.04,237.19061,40,0.729,4.4,145.5,38
 SacVal,Fraxinus velutina,FRVE_G,dbh,crown dia,meters,1/dbh,lin,2.70647,0.15246,,,,2.89,20.4,0.11928,40,0.816,2.7,25,38
 SacVal,Fraxinus velutina,FRVE_G,dbh,crown ht,meters,1/dbh,lin,2.88187,0.11198,,,,3.02,15.88,0.08311,40,0.775,3,18.5,38
-SacVal,Fraxinus velutina,FRVE_G,age,dbh,centimeters,1/age^2,cub,1.22216,3.08089,0.00055,,,1.22,116.04,0.10097,39,0.953,4.4,145.5,35
-SacVal,Fraxinus velutina,FRVE_G,dbh,leaf area,sq. meters,1/dbh^2,quad,-0.74319,2.93741,,,,2.91,904.97,5.11589,37,0.796,10,1007,34
-SacVal,Fraxinus velutina 'Modesto',FRVE_G,dbh,tree ht,meters,1/dbh^2,quad,2.97386,0.2269,,,,3.25,17.62,0.002,40,0.892,4,23,37
-SacVal,Ginkgo biloba,GIBI,dbh,age,years,1/dbh^2,cub,-0.30338,0.63908,-0.00008,,,1,117,0.05547,60,0.936,0.1,112,56
-SacVal,Ginkgo biloba,GIBI,cdia,dbh,meters,1/cdia,quad,-1.39794,3.51608,,,,2.17,120.81,6.97642,57,0.908,0.6,117.1,54
-SacVal,Ginkgo biloba,GIBI,dbh,crown dia,meters,1/sqrt(dbh),cub,0.74902,0.3336,0.00001,,,1.46,23.61,0.45037,57,0.914,1.3,24.2,53
-SacVal,Ginkgo biloba,GIBI,dbh,crown ht,meters,1/dbh,quad,1.93745,0.26338,,,,2.51,23.92,0.14977,56,0.904,2.2,26.4,53
-SacVal,Ginkgo biloba,GIBI,age,dbh,centimeters,1/age,cub,0.45133,1.73857,0.00013,,,2.17,120.81,2.07298,60,0.95,0.6,117.1,56
-SacVal,Ginkgo biloba,GIBI,dbh,leaf area,sq. meters,1/dbh^2,cub,0.5349,0.45713,-0.00092,,,2.3,852.53,3.83356,57,0.894,0.9,983.6,53
-SacVal,Ginkgo biloba,GIBI,dbh,tree ht,meters,1/dbh^2,quad,1.96732,0.37958,,,,2.78,24.77,0.00461,56,0.947,2.2,30.2,53
-SacVal,Lagerstroemia indica,LAIN,dbh,age,years,1,loglogw1,-2.7049,5.28435,0.06906,,,0,63,0.51264,26,0.973,0.1,64,24
+SacVal,Fraxinus velutina,FRVE_G,age,dbh,centimeters,1/age^2,cub,1.22216,3.08089,-0.06277,0.00055,,1.22,116.04,0.10097,39,0.953,4.4,145.5,35
+SacVal,Fraxinus velutina,FRVE_G,dbh,leaf area,sq. meters,1/dbh^2,quad,-0.74319,2.93741,0.04194,,,2.91,904.97,5.11589,37,0.796,10,1007,34
+SacVal,Fraxinus velutina 'Modesto',FRVE_G,dbh,tree ht,meters,1/dbh^2,quad,2.97386,0.2269,-0.00087,,,3.25,17.62,0.002,40,0.892,4,23,37
+SacVal,Ginkgo biloba,GIBI,dbh,age,years,1/dbh^2,cub,-0.30338,0.63908,0.01137,-0.00008,,1,117,0.05547,60,0.936,0.1,112,56
+SacVal,Ginkgo biloba,GIBI,cdia,dbh,meters,1/cdia,quad,-1.39794,3.51608,0.05285,,,2.17,120.81,6.97642,57,0.908,0.6,117.1,54
+SacVal,Ginkgo biloba,GIBI,dbh,crown dia,meters,1/sqrt(dbh),cub,0.74902,0.3336,-0.00273,0.00001,,1.46,23.61,0.45037,57,0.914,1.3,24.2,53
+SacVal,Ginkgo biloba,GIBI,dbh,crown ht,meters,1/dbh,quad,1.93745,0.26338,-0.00063,,,2.51,23.92,0.14977,56,0.904,2.2,26.4,53
+SacVal,Ginkgo biloba,GIBI,age,dbh,centimeters,1/age,cub,0.45133,1.73857,-0.02112,0.00013,,2.17,120.81,2.07298,60,0.95,0.6,117.1,56
+SacVal,Ginkgo biloba,GIBI,dbh,leaf area,sq. meters,1/dbh^2,cub,0.5349,0.45713,0.16613,-0.00092,,2.3,852.53,3.83356,57,0.894,0.9,983.6,53
+SacVal,Ginkgo biloba,GIBI,dbh,tree ht,meters,1/dbh^2,quad,1.96732,0.37958,-0.00158,,,2.78,24.77,0.00461,56,0.947,2.2,30.2,53
+SacVal,Lagerstroemia indica,LAIN,dbh,age,years,1,loglogw1,-2.7049,5.28435,0.2628,0.06906,,0,63,0.51264,26,0.973,0.1,64,24
 SacVal,Lagerstroemia indica,LAIN,cdia,dbh,meters,1/cdia^2,lin,-1.18032,3.76366,,,,3.22,40.37,1.12954,28,0.84,2.1,42,26
-SacVal,Lagerstroemia indica,LAIN,dbh,crown dia,meters,1,loglogw1,-0.30397,1.86299,,,,0.94,8.68,0.25881,28,0.811,0.9,10.4,26
+SacVal,Lagerstroemia indica,LAIN,dbh,crown dia,meters,1,loglogw1,-0.30397,1.86299,0.06698,,,0.94,8.68,0.25881,28,0.811,0.9,10.4,26
 SacVal,Lagerstroemia indica,LAIN,dbh,crown ht,meters,1,lin,2.54076,0.10439,,,,2.75,6.75,0.82099,28,0.614,1.7,7.5,26
-SacVal,Lagerstroemia indica,LAIN,age,dbh,centimeters,1/age,cub,2.02636,1.21727,0.00019,,,2.03,40.37,0.28049,26,0.974,2.1,42,22
-SacVal,Lagerstroemia indica,LAIN,dbh,leaf area,sq. meters,1,loglogw1,-0.91994,4.46094,,,,1.07,165.45,0.52983,27,0.858,0.7,221,25
+SacVal,Lagerstroemia indica,LAIN,age,dbh,centimeters,1/age,cub,2.02636,1.21727,-0.02189,0.00019,,2.03,40.37,0.28049,26,0.974,2.1,42,22
+SacVal,Lagerstroemia indica,LAIN,dbh,leaf area,sq. meters,1,loglogw1,-0.91994,4.46094,0.28072,,,1.07,165.45,0.52983,27,0.858,0.7,221,25
 SacVal,Lagerstroemia indica,LAIN,dbh,tree ht,meters,1,lin,3.60759,0.12892,,,,3.87,8.81,1.01437,28,0.663,2.7,10,26
 SacVal,Liquidambar styraciflua,LIST,dbh,age,years,1/dbh^2,lin,-2.82685,0.73094,,,,0,96,0.03238,42,0.912,0.1,66,40
-SacVal,Liquidambar styraciflua,LIST,cdia,dbh,meters,1,loglogw1,1.53712,2.67556,,,,3.71,88.39,0.26879,43,0.881,3.4,120.5,41
-SacVal,Liquidambar styraciflua,LIST,dbh,crown dia,meters,1,loglogw1,-0.74549,2.24329,,,,1.3,13.93,0.18705,43,0.898,1.3,19.5,41
-SacVal,Liquidambar styraciflua,LIST,dbh,crown ht,meters,1/dbh,quad,1.98065,0.34302,,,,3.24,25.14,0.22812,44,0.875,3.5,28.5,41
-SacVal,Liquidambar styraciflua,LIST,age,dbh,centimeters,1/age,quad,3.71462,1.76501,,,,3.71,88.39,3.0285,42,0.944,3.4,120.5,39
-SacVal,Liquidambar styraciflua,LIST,dbh,leaf area,sq. meters,1,loglogw1,-1.29846,5.43689,,,,3.97,1067.97,0.41445,38,0.888,6.4,1737.8,36
-SacVal,Liquidambar styraciflua,LIST,dbh,tree ht,meters,1/dbh,quad,1.92152,0.42496,,,,3.48,28.38,0.19712,44,0.916,3.5,34,41
-SacVal,Liriodendron tulipifera,LITU,dbh,age,years,1,loglogw1,-2.38634,4.313,0.1005,,,0,77,0.56305,56,0.936,0.1,89,54
-SacVal,Liriodendron tulipifera,LITU,cdia,dbh,meters,1/cdia^2,quad,-1.91865,3.61531,,,,4.08,104.81,0.64693,63,0.947,2.1,140.8,60
-SacVal,Liriodendron tulipifera,LITU,dbh,crown dia,meters,1,loglogw1,-0.82122,2.42335,,,,0.48,18.5,0.18326,63,0.927,1,24.6,61
-SacVal,Liriodendron tulipifera,LITU,dbh,crown ht,meters,1/sqrt(dbh),quad,0.07385,0.4792,,,,0.92,25.15,1.0645,62,0.909,2,30.8,59
-SacVal,Liriodendron tulipifera,LITU,age,dbh,centimeters,1/age,cub,1.77312,2.34134,0.00026,,,1.77,104.81,3.67372,56,0.945,2.1,140.8,52
-SacVal,Liriodendron tulipifera,LITU,dbh,leaf area,sq. meters,1/dbh^2,quad,-26.75612,5.37789,,,,9.48,1147.12,8.01561,61,0.857,5.3,1991.8,58
-SacVal,Liriodendron tulipifera,LITU,dbh,tree ht,meters,1/dbh,quad,1.37343,0.51365,,,,2.28,28.47,0.22439,63,0.917,3.1,35.2,60
-SacVal,Magnolia grandiflora,MAGR,dbh,age,years,1,loglogw1,-1.42808,3.80783,0.08428,,,1,115,0.53881,54,0.898,2,99,52
-SacVal,Magnolia grandiflora,MAGR,cdia,dbh,meters,1,loglogw1,1.23128,3.01826,,,,3.14,91.01,0.23518,67,0.886,4.5,130.4,65
-SacVal,Magnolia grandiflora,MAGR,dbh,crown dia,meters,1,loglogw1,-0.74812,2.27117,,,,0.28,14.5,0.14044,67,0.918,1.7,18.9,65
-SacVal,Magnolia grandiflora,MAGR,dbh,crown ht,meters,1,loglogw1,-0.88799,2.34944,,,,0.25,14.31,0.22908,66,0.817,0.8,18.8,64
-SacVal,Magnolia grandiflora,MAGR,age,dbh,centimeters,1,loglogw1,0.8897,2.29879,,,,1.18,89.25,0.27449,54,0.867,4.5,130.4,52
-SacVal,Magnolia grandiflora,MAGR,dbh,leaf area,sq. meters,1/sqrt(dbh),loglogw2,-1.98269,5.33091,,,,0.04,511.07,0.20476,67,0.886,1.7,862.7,65
-SacVal,Magnolia grandiflora,MAGR,dbh,tree ht,meters,1,loglogw1,0.03554,1.86114,,,,0.68,17.16,0.17853,66,0.822,2.6,22.6,64
-SacVal,Pistacia chinensis,PICH,dbh,age,years,1,loglogw1,-1.35195,3.66958,0.09558,,,1,100,0.55602,38,0.893,2,64,36
-SacVal,Pistacia chinensis,PICH,cdia,dbh,meters,1/cdia^2,cub,4.04044,-0.88374,-0.01629,,,1.4,77,0.21707,37,0.961,4,82,33
-SacVal,Pistacia chinensis,PICH,dbh,crown dia,meters,1,loglogw1,-0.4355,2.26233,,,,0.52,18.03,0.1311,37,0.948,1.6,21.5,35
-SacVal,Pistacia chinensis,PICH,dbh,crown ht,meters,1,loglogw1,-0.29023,1.92451,,,,0.64,12.75,0.20119,37,0.847,1.8,16,35
-SacVal,Pistacia chinensis,PICH,age,dbh,centimeters,1,loglogw1,1.08846,2.11365,,,,1.47,76.05,0.21389,38,0.919,4,82,36
-SacVal,Pistacia chinensis,PICH,dbh,leaf area,sq. meters,1,loglogw1,-1.53901,5.68848,,,,0.23,1056.67,0.47542,33,0.902,1.5,1056.3,31
-SacVal,Pistacia chinensis,PICH,dbh,tree ht,meters,1/sqrt(dbh),quad,2.62862,0.32163,,,,3.1,16.87,0.36621,37,0.901,3.5,19,34
-SacVal,Platanus x acerifolia,PLAC,dbh,age,years,1/dbh,cub,-0.86822,0.41592,-0.00009,,,0,120,1.45871,50,0.939,0.1,100,46
+SacVal,Liquidambar styraciflua,LIST,cdia,dbh,meters,1,loglogw1,1.53712,2.67556,0.07225,,,3.71,88.39,0.26879,43,0.881,3.4,120.5,41
+SacVal,Liquidambar styraciflua,LIST,dbh,crown dia,meters,1,loglogw1,-0.74549,2.24329,0.03499,,,1.3,13.93,0.18705,43,0.898,1.3,19.5,41
+SacVal,Liquidambar styraciflua,LIST,dbh,crown ht,meters,1/dbh,quad,1.98065,0.34302,-0.00092,,,3.24,25.14,0.22812,44,0.875,3.5,28.5,41
+SacVal,Liquidambar styraciflua,LIST,age,dbh,centimeters,1/age,quad,3.71462,1.76501,-0.00920,,,3.71,88.39,3.0285,42,0.944,3.4,120.5,39
+SacVal,Liquidambar styraciflua,LIST,dbh,leaf area,sq. meters,1,loglogw1,-1.29846,5.43689,0.17177,,,3.97,1067.97,0.41445,38,0.888,6.4,1737.8,36
+SacVal,Liquidambar styraciflua,LIST,dbh,tree ht,meters,1/dbh,quad,1.92152,0.42496,-0.00142,,,3.48,28.38,0.19712,44,0.916,3.5,34,41
+SacVal,Liriodendron tulipifera,LITU,dbh,age,years,1,loglogw1,-2.38634,4.313,0.31702,0.10050,,0,77,0.56305,56,0.936,0.1,89,54
+SacVal,Liriodendron tulipifera,LITU,cdia,dbh,meters,1/cdia^2,quad,-1.91865,3.61531,0.07061,,,4.08,104.81,0.64693,63,0.947,2.1,140.8,60
+SacVal,Liriodendron tulipifera,LITU,dbh,crown dia,meters,1,loglogw1,-0.82122,2.42335,0.03359,,,0.48,18.5,0.18326,63,0.927,1,24.6,61
+SacVal,Liriodendron tulipifera,LITU,dbh,crown ht,meters,1/sqrt(dbh),quad,0.07385,0.4792,-0.00229,,,0.92,25.15,1.0645,62,0.909,2,30.8,59
+SacVal,Liriodendron tulipifera,LITU,age,dbh,centimeters,1/age,cub,1.77312,2.34134,-0.03313,0.00026,,1.77,104.81,3.67372,56,0.945,2.1,140.8,52
+SacVal,Liriodendron tulipifera,LITU,dbh,leaf area,sq. meters,1/dbh^2,quad,-26.75612,5.37789,0.05555,,,9.48,1147.12,8.01561,61,0.857,5.3,1991.8,58
+SacVal,Liriodendron tulipifera,LITU,dbh,tree ht,meters,1/dbh,quad,1.37343,0.51365,-0.00243,,,2.28,28.47,0.22439,63,0.917,3.1,35.2,60
+SacVal,Magnolia grandiflora,MAGR,dbh,age,years,1,loglogw1,-1.42808,3.80783,0.29032,0.08428,,1,115,0.53881,54,0.898,2,99,52
+SacVal,Magnolia grandiflora,MAGR,cdia,dbh,meters,1,loglogw1,1.23128,3.01826,0.05531,,,3.14,91.01,0.23518,67,0.886,4.5,130.4,65
+SacVal,Magnolia grandiflora,MAGR,dbh,crown dia,meters,1,loglogw1,-0.74812,2.27117,0.01972,,,0.28,14.5,0.14044,67,0.918,1.7,18.9,65
+SacVal,Magnolia grandiflora,MAGR,dbh,crown ht,meters,1,loglogw1,-0.88799,2.34944,0.05248,,,0.25,14.31,0.22908,66,0.817,0.8,18.8,64
+SacVal,Magnolia grandiflora,MAGR,age,dbh,centimeters,1,loglogw1,0.8897,2.29879,0.07535,,,1.18,89.25,0.27449,54,0.867,4.5,130.4,52
+SacVal,Magnolia grandiflora,MAGR,dbh,leaf area,sq. meters,1/sqrt(dbh),loglogw2,-1.98269,5.33091,0.04192,,,0.04,511.07,0.20476,67,0.886,1.7,862.7,65
+SacVal,Magnolia grandiflora,MAGR,dbh,tree ht,meters,1,loglogw1,0.03554,1.86114,0.03187,,,0.68,17.16,0.17853,66,0.822,2.6,22.6,64
+SacVal,Pistacia chinensis,PICH,dbh,age,years,1,loglogw1,-1.35195,3.66958,0.30916,0.09558,,1,100,0.55602,38,0.893,2,64,36
+SacVal,Pistacia chinensis,PICH,cdia,dbh,meters,1/cdia^2,cub,4.04044,-0.88374,0.52717,-0.01629,,1.4,77,0.21707,37,0.961,4,82,33
+SacVal,Pistacia chinensis,PICH,dbh,crown dia,meters,1,loglogw1,-0.4355,2.26233,0.01719,,,0.52,18.03,0.1311,37,0.948,1.6,21.5,35
+SacVal,Pistacia chinensis,PICH,dbh,crown ht,meters,1,loglogw1,-0.29023,1.92451,0.04048,,,0.64,12.75,0.20119,37,0.847,1.8,16,35
+SacVal,Pistacia chinensis,PICH,age,dbh,centimeters,1,loglogw1,1.08846,2.11365,0.04575,,,1.47,76.05,0.21389,38,0.919,4,82,36
+SacVal,Pistacia chinensis,PICH,dbh,leaf area,sq. meters,1,loglogw1,-1.53901,5.68848,0.22602,,,0.23,1056.67,0.47542,33,0.902,1.5,1056.3,31
+SacVal,Pistacia chinensis,PICH,dbh,tree ht,meters,1/sqrt(dbh),quad,2.62862,0.32163,-0.00177,,,3.1,16.87,0.36621,37,0.901,3.5,19,34
+SacVal,Platanus x acerifolia,PLAC,dbh,age,years,1/dbh,cub,-0.86822,0.41592,0.01295,-0.00009,,0,120,1.45871,50,0.939,0.1,100,46
 SacVal,Platanus x acerifolia,PLAC,cdia,dbh,meters,1/cdia,lin,-5.89056,4.49545,,,,3.53,126.7,10.92663,52,0.907,3.5,133.9,50
 SacVal,Platanus x acerifolia,PLAC,dbh,crown dia,meters,1/dbh,lin,2.04178,0.20974,,,,2.78,28.62,0.12162,52,0.92,1.7,30.4,50
 SacVal,Platanus x acerifolia,PLAC,dbh,crown ht,meters,1/dbh,lin,2.75104,0.19594,,,,3.44,27.58,0.19733,52,0.861,2.2,30,50
-SacVal,Platanus x acerifolia,PLAC,age,dbh,centimeters,1/age,quad,3.52669,1.43849,,,,3.53,126.7,4.00422,50,0.937,3.5,133.9,47
-SacVal,Platanus x acerifolia,PLAC,dbh,leaf area,sq. meters,1,loglogw1,-1.47888,5.53503,,,,3.77,1684.93,0.54843,44,0.872,3.1,2949.2,42
-SacVal,Platanus x acerifolia,PLAC,dbh,tree ht,meters,1/dbh^2,cub,2.52631,0.43966,0.00002,,,4.02,35.56,0.00467,52,0.901,4.1,36.5,48
-SacVal,Prunus cerasifera cvs.,PRCE,dbh,age,years,1,loglogw1,-1.28919,3.7347,0.13006,,,0,60,0.60053,31,0.856,1,55,29
-SacVal,Prunus cerasifera cvs.,PRCE,cdia,dbh,meters,1,loglogw1,1.99465,1.83708,,,,2.33,42.25,0.38612,34,0.645,2.9,64,32
-SacVal,Prunus cerasifera cvs.,PRCE,dbh,crown dia,meters,1/dbh,cub,-0.7032,0.59161,0.00012,,,0.65,7.31,0.06024,34,0.846,0.7,10.7,30
+SacVal,Platanus x acerifolia,PLAC,age,dbh,centimeters,1/age,quad,3.52669,1.43849,-0.00343,,,3.53,126.7,4.00422,50,0.937,3.5,133.9,47
+SacVal,Platanus x acerifolia,PLAC,dbh,leaf area,sq. meters,1,loglogw1,-1.47888,5.53503,0.30078,,,3.77,1684.93,0.54843,44,0.872,3.1,2949.2,42
+SacVal,Platanus x acerifolia,PLAC,dbh,tree ht,meters,1/dbh^2,cub,2.52631,0.43966,-0.00444,0.00002,,4.02,35.56,0.00467,52,0.901,4.1,36.5,48
+SacVal,Prunus cerasifera cvs.,PRCE,dbh,age,years,1,loglogw1,-1.28919,3.7347,0.36063,0.13006,,0,60,0.60053,31,0.856,1,55,29
+SacVal,Prunus cerasifera cvs.,PRCE,cdia,dbh,meters,1,loglogw1,1.99465,1.83708,0.14909,,,2.33,42.25,0.38612,34,0.645,2.9,64,32
+SacVal,Prunus cerasifera cvs.,PRCE,dbh,crown dia,meters,1/dbh,cub,-0.7032,0.59161,-0.01452,0.00012,,0.65,7.31,0.06024,34,0.846,0.7,10.7,30
 SacVal,Prunus cerasifera cvs.,PRCE,dbh,crown ht,meters,1/dbh^2,lin,1.71524,0.11446,,,,1.72,6.47,0.00239,34,0.745,2,11.4,32
-SacVal,Prunus cerasifera cvs.,PRCE,age,dbh,centimeters,1,loglogw1,1.41379,1.62752,,,,0.01,41.51,0.2409,31,0.868,2.9,64,29
-SacVal,Prunus cerasifera cvs.,PRCE,dbh,leaf area,sq. meters,1,loglogw1,-1.67724,4.71336,,,,1.05,122.82,0.65002,33,0.734,0.6,174.1,31
+SacVal,Prunus cerasifera cvs.,PRCE,age,dbh,centimeters,1,loglogw1,1.41379,1.62752,0.05803,,,0.01,41.51,0.2409,31,0.868,2.9,64,29
+SacVal,Prunus cerasifera cvs.,PRCE,dbh,leaf area,sq. meters,1,loglogw1,-1.67724,4.71336,0.42252,,,1.05,122.82,0.65002,33,0.734,0.6,174.1,31
 SacVal,Prunus cerasifera cvs.,PRCE,dbh,tree ht,meters,1/dbh,lin,2.66095,0.14391,,,,2.66,8.63,0.08462,34,0.701,2.6,13.4,32
-SacVal,Pyrus calleryana cvs.,PYCA,dbh,age,years,1,loglogw1,-1.86365,3.6845,0.13742,,,1,40,0.60885,31,0.85,1,37,29
+SacVal,Pyrus calleryana cvs.,PYCA,dbh,age,years,1,loglogw1,-1.86365,3.6845,0.37070,0.13742,,1,40,0.60885,31,0.85,1,37,29
 SacVal,Pyrus calleryana cvs.,PYCA,cdia,dbh,meters,1/sqrt(cdia),lin,0.83165,3.45073,,,,3.59,51.96,5.3644,30,0.933,2.7,56.6,28
 SacVal,Pyrus calleryana cvs.,PYCA,dbh,crown dia,meters,1/dbh,lin,0.344,0.26912,,,,0.55,16.73,0.044,30,0.947,1.3,13.9,28
 SacVal,Pyrus calleryana cvs.,PYCA,dbh,crown ht,meters,1/dbh^2,lin,1.94791,0.23194,,,,2.13,16.07,0.00604,30,0.83,2.5,15,28
-SacVal,Pyrus calleryana cvs.,PYCA,age,dbh,centimeters,1,loglogw1,1.84201,1.59266,,,,0.77,60.9,0.19409,31,0.921,2.7,56.6,29
-SacVal,Pyrus calleryana cvs.,PYCA,dbh,leaf area,sq. meters,1,loglogw1,-2.27761,5.83906,,,,0.03,543.39,0.65986,30,0.822,1,421.8,28
-SacVal,Pyrus calleryana cvs.,PYCA,dbh,tree ht,meters,1/dbh^2,quad,1.96046,0.39902,,,,2.27,16.8,0.00576,30,0.896,3,18.5,27
-SacVal,Quercus agrifolia,QUAG,dbh,age,years,1/dbh^2,quad,-1.75357,0.79787,,,,0,76,0.03147,60,0.917,0.1,74,57
-SacVal,Quercus agrifolia,QUAG,cdia,dbh,meters,1/cdia^2,cub,-0.26433,1.90626,-0.0068,,,3.7,96.89,0.34343,65,0.966,2.4,134.5,61
-SacVal,Quercus agrifolia,QUAG,dbh,crown dia,meters,1/dbh,quad,1.07657,0.26335,,,,1.67,21.77,0.05096,65,0.96,1.1,27,62
+SacVal,Pyrus calleryana cvs.,PYCA,age,dbh,centimeters,1,loglogw1,1.84201,1.59266,0.03767,,,0.77,60.9,0.19409,31,0.921,2.7,56.6,29
+SacVal,Pyrus calleryana cvs.,PYCA,dbh,leaf area,sq. meters,1,loglogw1,-2.27761,5.83906,0.43541,,,0.03,543.39,0.65986,30,0.822,1,421.8,28
+SacVal,Pyrus calleryana cvs.,PYCA,dbh,tree ht,meters,1/dbh^2,quad,1.96046,0.39902,-0.00255,,,2.27,16.8,0.00576,30,0.896,3,18.5,27
+SacVal,Quercus agrifolia,QUAG,dbh,age,years,1/dbh^2,quad,-1.75357,0.79787,-0.00149,,,0,76,0.03147,60,0.917,0.1,74,57
+SacVal,Quercus agrifolia,QUAG,cdia,dbh,meters,1/cdia^2,cub,-0.26433,1.90626,0.25909,-0.00680,,3.7,96.89,0.34343,65,0.966,2.4,134.5,61
+SacVal,Quercus agrifolia,QUAG,dbh,crown dia,meters,1/dbh,quad,1.07657,0.26335,-0.00051,,,1.67,21.77,0.05096,65,0.96,1.1,27,62
 SacVal,Quercus agrifolia,QUAG,dbh,crown ht,meters,1/dbh,lin,1.01394,0.18263,,,,1.43,18.71,0.10063,65,0.898,1.5,23.6,63
-SacVal,Quercus agrifolia,QUAG,age,dbh,centimeters,1/age^2,cub,2.25596,1.43382,-0.00018,,,2.26,96.89,0.14166,60,0.938,2.4,134.5,56
-SacVal,Quercus agrifolia,QUAG,dbh,leaf area,sq. meters,1,loglogw1,-2.81885,6.20463,,,,0.35,925.53,0.55132,58,0.877,0.5,1799.6,56
-SacVal,Quercus agrifolia,QUAG,dbh,tree ht,meters,1/dbh,quad,1.58199,0.26378,,,,2.17,20.52,0.09528,65,0.916,2.5,25.2,62
-SacVal,Quercus lobata,QULO,dbh,age,years,1/dbh^2,cub,-3.3546,1.0439,0.00008,,,0,220,0.07302,48,0.908,1,220,44
-SacVal,Quercus lobata,QULO,cdia,dbh,meters,1/cdia^2,quad,-1.16798,2.72447,,,,3.94,135.26,0.79134,52,0.924,3.7,139.4,49
-SacVal,Quercus lobata,QULO,dbh,crown dia,meters,1/dbh,quad,1.09621,0.30138,,,,1.78,23.43,0.07651,52,0.939,1.6,28.7,49
-SacVal,Quercus lobata,QULO,dbh,crown ht,meters,1,loglogw1,-0.05648,1.88419,,,,1.37,19.19,0.23982,52,0.792,2.5,28.5,50
-SacVal,Quercus lobata,QULO,age,dbh,centimeters,1/age,cub,2.28211,1.66463,0.00002,,,2.28,135.26,3.15861,48,0.921,3.7,139.4,44
-SacVal,Quercus lobata,QULO,dbh,leaf area,sq. meters,1,loglogw1,-1.57301,5.5834,,,,0.8,1658.8,0.41489,50,0.919,4.1,2761.7,48
-SacVal,Quercus lobata,QULO,dbh,tree ht,meters,1,loglogw1,0.18007,1.86782,,,,1.71,23.62,0.20516,52,0.837,2.5,31.5,50
-SacVal,Quercus rubra,QURU,dbh,age,years,1/dbh^2,quad,-0.48253,0.48559,,,,0,97,0.05141,41,0.87,1,110,38
-SacVal,Quercus rubra,QURU,cdia,dbh,meters,1/cdia^2,quad,1.08594,1.96862,,,,3.22,89.67,0.48872,41,0.931,3.5,125.8,38
-SacVal,Quercus rubra,QURU,dbh,crown dia,meters,1/dbh,quad,0.43051,0.383,,,,1.65,21.64,0.07676,41,0.947,1.4,25.6,38
-SacVal,Quercus rubra,QURU,dbh,crown ht,meters,1/dbh,quad,1.89117,0.32525,,,,2.93,20.4,0.16831,40,0.86,3.5,26,37
-SacVal,Quercus rubra,QURU,age,dbh,centimeters,1/age,quad,3.22204,1.76438,,,,3.22,89.67,3.15973,41,0.91,3.5,125.8,38
-SacVal,Quercus rubra,QURU,dbh,leaf area,sq. meters,1,loglogw1,-1.78897,6.00207,,,,2.72,1714.19,0.55044,38,0.886,5.1,2673.1,36
-SacVal,Quercus rubra,QURU,dbh,tree ht,meters,1/dbh,quad,2.44368,0.39304,,,,3.69,24.39,0.1856,40,0.888,4,32,37
-SacVal,Sequoia sempervirens,SESE,dbh,age,years,1/dbh,quad,0.3571,0.42835,,,,1,65,0.31742,48,0.936,1,59,45
-SacVal,Sequoia sempervirens,SESE,cdia,dbh,meters,1/cdia^2,quad,-7.13054,6.73749,,,,1.73,173.48,2.64817,52,0.928,2.2,173.1,49
-SacVal,Sequoia sempervirens,SESE,dbh,crown dia,meters,1/dbh,quad,1.18331,0.13022,,,,1.41,14.34,0.02268,52,0.937,1.4,16.3,49
-SacVal,Sequoia sempervirens,SESE,dbh,crown ht,meters,1/dbh,quad,1.05676,0.34661,,,,1.65,31.84,0.17425,51,0.923,1.6,37,48
+SacVal,Quercus agrifolia,QUAG,age,dbh,centimeters,1/age^2,cub,2.25596,1.43382,0.01147,-0.00018,,2.26,96.89,0.14166,60,0.938,2.4,134.5,56
+SacVal,Quercus agrifolia,QUAG,dbh,leaf area,sq. meters,1,loglogw1,-2.81885,6.20463,0.30395,,,0.35,925.53,0.55132,58,0.877,0.5,1799.6,56
+SacVal,Quercus agrifolia,QUAG,dbh,tree ht,meters,1/dbh,quad,1.58199,0.26378,-0.00071,,,2.17,20.52,0.09528,65,0.916,2.5,25.2,62
+SacVal,Quercus lobata,QULO,dbh,age,years,1/dbh^2,cub,-3.3546,1.0439,-0.00773,0.00008,,0,220,0.07302,48,0.908,1,220,44
+SacVal,Quercus lobata,QULO,cdia,dbh,meters,1/cdia^2,quad,-1.16798,2.72447,0.09557,,,3.94,135.26,0.79134,52,0.924,3.7,139.4,49
+SacVal,Quercus lobata,QULO,dbh,crown dia,meters,1/dbh,quad,1.09621,0.30138,-0.00101,,,1.78,23.43,0.07651,52,0.939,1.6,28.7,49
+SacVal,Quercus lobata,QULO,dbh,crown ht,meters,1,loglogw1,-0.05648,1.88419,0.05751,,,1.37,19.19,0.23982,52,0.792,2.5,28.5,50
+SacVal,Quercus lobata,QULO,age,dbh,centimeters,1/age,cub,2.28211,1.66463,-0.01025,0.00002,,2.28,135.26,3.15861,48,0.921,3.7,139.4,44
+SacVal,Quercus lobata,QULO,dbh,leaf area,sq. meters,1,loglogw1,-1.57301,5.5834,0.17214,,,0.8,1658.8,0.41489,50,0.919,4.1,2761.7,48
+SacVal,Quercus lobata,QULO,dbh,tree ht,meters,1,loglogw1,0.18007,1.86782,0.04209,,,1.71,23.62,0.20516,52,0.837,2.5,31.5,50
+SacVal,Quercus rubra,QURU,dbh,age,years,1/dbh^2,quad,-0.48253,0.48559,0.00471,,,0,97,0.05141,41,0.87,1,110,38
+SacVal,Quercus rubra,QURU,cdia,dbh,meters,1/cdia^2,quad,1.08594,1.96862,0.08911,,,3.22,89.67,0.48872,41,0.931,3.5,125.8,38
+SacVal,Quercus rubra,QURU,dbh,crown dia,meters,1/dbh,quad,0.43051,0.383,-0.00163,,,1.65,21.64,0.07676,41,0.947,1.4,25.6,38
+SacVal,Quercus rubra,QURU,dbh,crown ht,meters,1/dbh,quad,1.89117,0.32525,-0.00133,,,2.93,20.4,0.16831,40,0.86,3.5,26,37
+SacVal,Quercus rubra,QURU,age,dbh,centimeters,1/age,quad,3.22204,1.76438,-0.00900,,,3.22,89.67,3.15973,41,0.91,3.5,125.8,38
+SacVal,Quercus rubra,QURU,dbh,leaf area,sq. meters,1,loglogw1,-1.78897,6.00207,0.30299,,,2.72,1714.19,0.55044,38,0.886,5.1,2673.1,36
+SacVal,Quercus rubra,QURU,dbh,tree ht,meters,1/dbh,quad,2.44368,0.39304,-0.00165,,,3.69,24.39,0.1856,40,0.888,4,32,37
+SacVal,Sequoia sempervirens,SESE,dbh,age,years,1/dbh,quad,0.3571,0.42835,-0.00055,,,1,65,0.31742,48,0.936,1,59,45
+SacVal,Sequoia sempervirens,SESE,cdia,dbh,meters,1/cdia^2,quad,-7.13054,6.73749,0.28138,,,1.73,173.48,2.64817,52,0.928,2.2,173.1,49
+SacVal,Sequoia sempervirens,SESE,dbh,crown dia,meters,1/dbh,quad,1.18331,0.13022,-0.00031,,,1.41,14.34,0.02268,52,0.937,1.4,16.3,49
+SacVal,Sequoia sempervirens,SESE,dbh,crown ht,meters,1/dbh,quad,1.05676,0.34661,-0.00098,,,1.65,31.84,0.17425,51,0.923,1.6,37,48
 SacVal,Sequoia sempervirens,SESE,age,dbh,centimeters,1/age,lin,-0.95197,2.68361,,,,1.73,173.48,6.1487,48,0.938,2.2,173.1,46
-SacVal,Sequoia sempervirens,SESE,dbh,leaf area,sq. meters,1/dbh^2,cub,-3.21552,1.87303,-0.00026,,,0.26,1290.61,3.50984,49,0.871,0.9,1404.6,45
-SacVal,Sequoia sempervirens,SESE,dbh,tree ht,meters,1/dbh,quad,1.04443,0.38756,,,,1.71,34.59,0.17733,51,0.935,1.6,38,48
-SacVal,Ulmus parvifolia,ULPA,dbh,age,years,1,loglogw1,-3.18841,4.96481,0.0504,,,0,81,0.47381,60,0.972,0.1,66,58
-SacVal,Ulmus parvifolia,ULPA,cdia,dbh,meters,1/cdia^2,cub,1.22722,0.48602,-0.00715,,,4.39,104.3,0.51681,62,0.927,2.3,98.2,58
-SacVal,Ulmus parvifolia,ULPA,dbh,crown dia,meters,1,loglogw1,-0.17418,2.1571,,,,1.28,23.34,0.16012,62,0.927,1.4,27.1,60
-SacVal,Ulmus parvifolia,ULPA,dbh,crown ht,meters,1,loglogw1,-0.37862,2.10006,,,,1.07,17.58,0.25585,61,0.825,1.2,21.6,59
-SacVal,Ulmus parvifolia,ULPA,age,dbh,centimeters,1/age,cub,2.3358,2.08455,0.00023,,,2.34,104.3,2.06613,60,0.962,2.3,98.2,56
-SacVal,Ulmus parvifolia,ULPA,dbh,leaf area,sq. meters,1/sqrt(dbh),loglogw2,-1.2326,5.51229,,,,0.84,1679.71,0.18735,59,0.96,0.8,1838.6,57
-SacVal,Ulmus parvifolia,ULPA,dbh,tree ht,meters,1/dbh,quad,2.21114,0.34937,,,,3.02,20.32,0.2072,61,0.86,2.7,24.8,58
-SacVal,Zelkova serrata,ZESE,dbh,age,years,1,loglogw1,-1.64786,3.64024,0.06397,,,0,80,0.50292,46,0.937,1,64,44
-SacVal,Zelkova serrata,ZESE,cdia,dbh,meters,1/cdia^2,cub,1.25743,0.9739,0.28534,-0.0063,,3.45,121.72,0.65942,47,0.918,3.5,139.8,43
+SacVal,Sequoia sempervirens,SESE,dbh,leaf area,sq. meters,1/dbh^2,cub,-3.21552,1.87303,0.07726,-0.00026,,0.26,1290.61,3.50984,49,0.871,0.9,1404.6,45
+SacVal,Sequoia sempervirens,SESE,dbh,tree ht,meters,1/dbh,quad,1.04443,0.38756,-0.00112,,,1.71,34.59,0.17733,51,0.935,1.6,38,48
+SacVal,Ulmus parvifolia,ULPA,dbh,age,years,1,loglogw1,-3.18841,4.96481,0.22449,0.05040,,0,81,0.47381,60,0.972,0.1,66,58
+SacVal,Ulmus parvifolia,ULPA,cdia,dbh,meters,1/cdia^2,cub,1.22722,0.48602,0.28817,-0.00715,,4.39,104.3,0.51681,62,0.927,2.3,98.2,58
+SacVal,Ulmus parvifolia,ULPA,dbh,crown dia,meters,1,loglogw1,-0.17418,2.1571,0.02564,,,1.28,23.34,0.16012,62,0.927,1.4,27.1,60
+SacVal,Ulmus parvifolia,ULPA,dbh,crown ht,meters,1,loglogw1,-0.37862,2.10006,0.06546,,,1.07,17.58,0.25585,61,0.825,1.2,21.6,59
+SacVal,Ulmus parvifolia,ULPA,age,dbh,centimeters,1/age,cub,2.3358,2.08455,-0.02888,0.00023,,2.34,104.3,2.06613,60,0.962,2.3,98.2,56
+SacVal,Ulmus parvifolia,ULPA,dbh,leaf area,sq. meters,1/sqrt(dbh),loglogw2,-1.2326,5.51229,0.03510,,,0.84,1679.71,0.18735,59,0.96,0.8,1838.6,57
+SacVal,Ulmus parvifolia,ULPA,dbh,tree ht,meters,1/dbh,quad,2.21114,0.34937,-0.00169,,,3.02,20.32,0.2072,61,0.86,2.7,24.8,58
+SacVal,Zelkova serrata,ZESE,dbh,age,years,1,loglogw1,-1.64786,3.64024,0.25293,0.06397,,0,80,0.50292,46,0.937,1,64,44
+SacVal,Zelkova serrata,ZESE,cdia,dbh,meters,1/cdia^2,cub,1.25743,0.9739,0.28534,-0.00630,,3.45,121.72,0.65942,47,0.918,3.5,139.8,43
 SacVal,Zelkova serrata,ZESE,dbh,crown dia,meters,1/dbh,quad,1.57578,0.28948,-0.00073,,,1.96,25.99,0.11066,47,0.926,1.9,31.7,44
 SacVal,Zelkova serrata,ZESE,dbh,crown ht,meters,1/dbh,lin,2.20794,0.15519,,,,2.41,21.1,0.09062,47,0.888,2.1,25,45
 SacVal,Zelkova serrata,ZESE,age,dbh,centimeters,1/age^2,quad,1.32502,2.13762,-0.00791,,,1.33,121.72,0.177,46,0.934,3.5,139.8,43
