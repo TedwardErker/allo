@@ -1,11 +1,20 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
-#+AUTHOR: Tedward Erker
+#+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
+#+OPTIONS: toc:nil num:nil date:t
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{natbib}
+#+LATEX_HEADER: \usepackage{chemformula}
+#+LaTeX_HEADER: \RequirePackage{lineno} \def\linenumberfont{\normalfont\small\tt}
+#+latex_header: \hypersetup{colorlinks=true,linkcolor=black, citecolor=black, urlcolor=black}
+#+latex_header: \usepackage{setspace} \doublespacing
+#+LATEX_CLASS_OPTIONS: [12pt]
+---------------------
 * Objective
 Concept: Application of bayesian multilevel modelling approach using
 Stan via the R package brms.
@@ -222,21 +231,22 @@ also
 * Introduction
 
 Multilevel models have been used for decades in tree growth equations
-(Lappi and Bailey 1988).  Indeed the test dataset, "orange", in R is
-used to demonstrate the fitting of nonlinear mixed effects models
-[[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][cite]].  Multilevel modeling provides a coherent framework to account
-for the many levels of observation or of groupings in data and to pool
-information across groups.  This paper has two main contributions.
-First, we demonstrate the use of Stan via the "brms" package in R to
-fit bayesian nonlinear multilevel models to predict tree diameter
-growth from age.  Second, we apply the method to the Urban Tree Database
-cite:utd_2016.  This dataset is the result an large effort to collect
-age and size data on thousands of trees in 17? cities across the US.
-Multilevel modelling has the potential to extract more information
-from the data and improve predictions compared to the existing
-modelling approach for the data.  Improving predictions of tree size
-from tree age will improve our ability to predict the important
-ecosystem services these trees provide urban dwellers.
+(Lappi and Bailey 1988).  Indeed the test dataset, "orange", in the
+statistical programming language, R, is used to demonstrate the
+fitting of nonlinear mixed effects models [[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][cite]].  Multilevel modeling
+provides a coherent framework to account for the many levels of
+observation or of groupings in data and to pool information across
+groups.  This paper has two main contributions.  First, we demonstrate
+the use of Stan via the "brms" package in R to fit bayesian nonlinear
+multilevel models to predict tree diameter growth from age.  Second,
+we apply the method to the Urban Tree Database cite:utd_2016.  This
+dataset is the result an large effort to collect age and size data on
+thousands of trees in 17 cities across the US.  Multilevel modelling
+has the potential to extract more information from the data and
+improve predictions compared to the existing modelling approach for
+the data.  Improving predictions of tree size from tree age will
+improve our ability to predict the important ecosystem services these
+trees provide urban dwellers.
 
 
 
@@ -470,8 +480,9 @@ Species are then nested within Genera.
 The 17 cities in the UTD cover much of the US, .
 
 #+name: fig:utd_climate
-#+caption: 16 climate regions and 17 representative cities in the UTD. cite:mcpherson_e_2016
+#+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
 [[file:../figs/ClimateRegions_UTD.png]]
+
 
 
 I wonder if the UFIA would have this eventually and if I could write
