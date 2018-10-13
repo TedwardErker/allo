@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -456,11 +456,11 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 The urban tree database (UTD) consists of measurements on 14487 trees of 170
 species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
-data (161 species, 17 cities, 309 species by city combinations).
+data (161 species, 17 cities, 309 species by city combinations [[fig:City_Species_Ntrees]]).
 
-#+name: fig_City_Species_Ntrees
+#+name: fig:City_Species_Ntrees
 #+caption: Number of trees sampled of each species and city combination in the urban tree database.
-[[file:../figs/CityScientificNameData_CityCentric_n.png]]
+[[../figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 Some species were measured in multiple cities, but not most.  The number of
 trees of each city by species combination sampled ranged from 1
@@ -1040,7 +1040,13 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
 #+end_src
 
 #+RESULTS:
-: Joining, by = "City"
+: Joining, by = c("Region", "City", "Species", "DBH", "AGE", "ScientificName")
+: Error in mutate_impl(.data, dots) :
+:   Evaluation error: object 'Precip' not found.
+: Error in saveRDS(d2, "../data/age_dbh_full.rds") : object 'd2' not found
+: Error in eval(lhs, parent, parent) : object 'd2' not found
+: Error in saveRDS(d3, "../data/age_dbh_testing.rds") :
+:   object 'd3' not found
 
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
@@ -1295,7 +1301,7 @@ make the plot cover the values seen in the US.
 
 We also have unequal observations across cities.  NY has very few.
 
-*** TODO Get new climate data.  Growing degree days and Precip. Make plots
+*** Get new climate data.  Growing degree days and Precip. Make plots
 
 Plot, census tracts in GDD and Precip Space.  An inset of the US
 continental with the color scheme.
@@ -2173,12 +2179,12 @@ and then by city (alphabetic)
 #+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n_split_2.png :height 800
   d2_s2 <- d2 %>% filter(as.numeric(ScientificName) <= 80)
 
-  p_s2 <-              ggplot(d2_s1, aes(y = ScientificName, x = City, fill = n)) +
+  p_s2 <-              ggplot(d2_s2, aes(y = ScientificName, x = City, fill = n)) +
                          geom_raster() +
                          coord_equal() +
-                         scale_fill_continuous(breaks = seq(min(d2$n), max(d2$n), length.out = 3), type = "viridis") +
+                         scale_fill_continuous(breaks = seq(min(d2$n), max(d2$n),  length.out = 3), limits = c(min(d2$n), max(d2$n)), type = "viridis") +
                          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-                               legend.position = "none") +
+                               legend.position = c(-2,.75)) +
                    scale_x_discrete(position = "top")
 
   p_s2
@@ -2186,6 +2192,16 @@ and then by city (alphabetic)
 
 #+RESULTS:
 [[file:../figs/CityScientificNameData_CityCentric_n_split_2.png]]
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n_splits.png :width 900 :height 700
+library(gridExtra)
+grid.arrange(p_s1, p_s2, ncol = 2)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/CitySpeciesData_SciNameCentric.png :height 300 :width 1400
