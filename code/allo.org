@@ -2246,6 +2246,19 @@ Is minneapolis an influential point?
 
 ** Modelling
 
+We sought a model of tree growth that would adequately represent the
+known biological dynamics of tree growth, namely that diameter growth
+rate starts slow, increases
+
+slow then increase then asympote.  Had to add intercept since 0 age is
+actually when the trees were transplanted from the nursery to the
+urban setting.  A modified weibull curve has worked well in forestry
+and is the one we use here.  However, there are many other curves that
+meet these criteria and could be used.
+
+cite:Weiskittel_ForestGrowthAndYieldModeling:
+
+
 WRITE OUT THE MODEL.....
 then convert to latex.
 
@@ -2409,8 +2422,6 @@ variability by cities and species, something wide
 \[
 \sigma_{\gamma3} \sim half-Cauchy( )
 \]
-
-
 
 
 variability by species for intercept, \beta_0
