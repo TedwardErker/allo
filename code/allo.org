@@ -234,19 +234,21 @@ Multilevel models have been used for decades in tree growth equations
 (Lappi and Bailey 1988).  Indeed the test dataset, "orange", in the
 statistical programming language, R, is used to demonstrate the
 fitting of nonlinear mixed effects models [[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][cite]].  Multilevel modeling
-provides a coherent framework to account for the many levels of
-observation or of groupings in data and to pool information across
-groups.  This paper has two main contributions.  First, we demonstrate
-the use of Stan via the "brms" package in R to fit bayesian nonlinear
-multilevel models to predict tree diameter growth from age.  Second,
-we apply the method to the Urban Tree Database cite:utd_2016.  This
-dataset is the result an large effort to collect age and size data on
-thousands of trees in 17 cities across the US.  Multilevel modelling
-has the potential to extract more information from the data and
-improve predictions compared to the existing modelling approach for
-the data.  Improving predictions of tree size from tree age will
-improve our ability to predict the important ecosystem services these
-trees provide urban dwellers.
+is an attractive approach because it provides a coherent framework to
+account for the many levels of observation or of groupings in data and
+to pool information across groups.  This paper has two main
+contributions.  First, we demonstrate the use of Stan via the "brms"
+package in R to fit bayesian nonlinear multilevel models to predict
+tree diameter growth from age.  Second, we apply the method to the
+Urban Tree Database cite:utd_2016.  This dataset is the result an over
+a decade long effort to collect age and size data on thousands of
+trees in 17 cities across the US.  Multilevel modeling has the
+potential to extract more information from the data and improve
+predictions compared to the existing modeling approach for the data.
+Improving predictions of tree size from tree age will improve our
+ability to predict the important ecosystem services these trees
+provide urban dwellers.
+
 
 
 
@@ -263,6 +265,14 @@ trees provide urban dwellers.
 
 maybe the framewaork should be broader, just growth equations for all
 trees with urban tree as a case study/example of application.
+
+
+There are two story lines.
+1) use of newerish statistical package to fit a pretty complex model
+2) that growth equations for urban trees are newish, can be improved,
+   and are important because they are fundamental to predicting
+   ecosystem services.
+
 
 Big problem   - urban ecosystem services depends on trees. predicting
 depends on growth
@@ -498,31 +508,6 @@ This allows us to vary our model continouously across geographic space
 in a way that better captures the natural gradients of climate.
 
 
-I wonder if the UFIA would have this eventually and if I could write
-the code to incorporate the data.
-
-In their dataset, AGE refers to years after planting.  Not true age.
-This adds some noise and is the reason why in the dataset trees can
-have significant dbh at "age" 0.
-
-"AGE" it not actually known.  A modelling extension could incorporate
-that uncertainty.  How would it be down?  multivariate?
-
-uncertainty about age:
-#+BEGIN_QUOTE
-Records of planting dates seldom extend beyond 30 to 40
-years. Similarly, detecting the presence and size of individual trees
-using high-resolution aerial imagery becomes difficult prior
-to 1990. As a result, predictions of urban tree dimensions reflect the
-increasing uncertainty about true tree age compounded by naturally
-increasing variability associated with aging (fig. 8).
-#+END_QUOTE
-
-dbh is cm
-
-utd equations sometimes predict negative values. see top of page 25.
-
-Think about Apps Min and Apps Max
 *** Tidy data for this analysis
 **** load libraries
 #+begin_src R :exports none
@@ -3879,7 +3864,7 @@ make better
 - incorporate uncertainty in AGE
 - There were only 4 trees in Queens NY sampled.
 - repeat measures on the same individuals would help much.
-- Get more trees in the database
+- Get more trees in the database, UFIA effort?
 
 * Exploring age and dbh
 ** load libraries
