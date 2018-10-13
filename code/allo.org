@@ -488,6 +488,14 @@ much of the variation in climate, [[fig:utd_gdd_precip_space_map]].
 #+caption: US census tract centroids with UTD reference cities overlaid in growing degree day (GDD) and precipitation climate space and matching color gradient in geographic space.  The reference cities cover climate space well, and variation in precipitation and growing degree days is continuous.
 [[file:../figs/climate_space_wMap_labels.png]]
 
+Rather than using the aggregated sunset zones as done in UTD, we used
+growing degree days (GDD) and precipitation data from climate NOAA's
+climate normals.  Figure [[fig:utd_gdd_precip_space_map]] shows each
+census tract centroid in the conterminous US plotted in GDD and precipitation
+space.  We appoximated the GDD and precipitation for each tract by
+assigning the values of the weather station closest to the centroid.
+This allows us to vary our model continouously across geographic space
+in a way that better captures the natural gradients of climate.
 
 
 I wonder if the UFIA would have this eventually and if I could write
@@ -3871,6 +3879,7 @@ make better
 - incorporate uncertainty in AGE
 - There were only 4 trees in Queens NY sampled.
 - repeat measures on the same individuals would help much.
+- Get more trees in the database
 
 * Exploring age and dbh
 ** load libraries
