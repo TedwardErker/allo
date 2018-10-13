@@ -2248,15 +2248,23 @@ Is minneapolis an influential point?
 
 We sought a model of tree growth that would adequately represent the
 known biological dynamics of tree growth, namely that diameter growth
-rate starts slow, increases
+rate starts slow, reaches a maximum at a relatively young age, and
+then gradually declines to nearly zero.  Diameter for trees much always
+increase however slightly because the growth of new wood is essential
+for proper function.  This is different than tree height which often
+reaches its asympotote.  Instead the asympote in our curve could be
+considered a pragmatic way to constrain diameter growth, or a
+practical asympote.  While trees could theoretically continue to
+increase in diameter indefinitely, they don't in reality.  The
+asympote represents this practical maximum diameter.  Furthermore,
+because age in this dataset is time since transplanting, trees can
+have substantial diameter at age 0.
 
-slow then increase then asympote.  Had to add intercept since 0 age is
-actually when the trees were transplanted from the nursery to the
-urban setting.  A modified weibull curve has worked well in forestry
-and is the one we use here.  However, there are many other curves that
-meet these criteria and could be used.
-
-cite:Weiskittel_ForestGrowthAndYieldModeling:
+The type of curve that meets these criteria would be an asymmetric
+sigmoidal curve with an intercept.  A modified weibull is such a curve
+that has worked well in forestry and is the one we use here cite:Weiskittel_ForestGrowthAndYieldModeling.  However,
+there are many other curves that meet these criteria and could be
+used.
 
 
 WRITE OUT THE MODEL.....
