@@ -2245,68 +2245,6 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 Is minneapolis an influential point?
 
 ** Modelling
-
-We sought a model of tree growth that would adequately represent the
-known biological dynamics of tree growth, namely that diameter growth
-rate starts slow, reaches a maximum at a relatively young age, and
-then gradually declines to nearly zero.  Diameter for trees much always
-increase however slightly because the growth of new wood is essential
-for proper function.  This is different than tree height which often
-reaches its asympotote.  Instead the asympote in our curve could be
-considered a pragmatic way to constrain diameter growth, or a
-practical asympote.  While trees could theoretically continue to
-increase in diameter indefinitely, they don't in reality.  The
-asympote represents this practical maximum diameter.  Furthermore,
-because age in this dataset is time since transplanting, trees can
-have substantial diameter at age 0.
-
-The type of curve that meets these criteria would be an asymmetric
-sigmoidal curve with an intercept.  A modified weibull is such a curve
-that has worked well in forestry and is the one we use here cite:Weiskittel_ForestGrowthAndYieldModeling.  However,
-there are many other curves that meet these criteria and could be
-used.
-
-
-WRITE OUT THE MODEL.....
-then convert to latex.
-
-Use brm(..., sample_prior = "only")
-
-- Goal is to model tree dimensions as a function of age (and other factors).
-  - I'm not doing allometric models (relating dimensions to one
-    another) because
-    - they are usually log-log, simpler and less interesting
-    - But doing them would be a natural extension
-- from simple to complex
-  - single species, single location, homoskedasticity
-  - single species, single location, heteroskedasticity
-  - multiple species, single location, heteroskedasticity
-  - multiple species, vary by climate, heteroskedasticity
-
-- for each of these approaches follow the workflow:
-  - problem
-  - model
-  - fake data
-  - fit
-  - diagnostics
-  - graph fit
-  - PPCs (Posterior Predictive Check)
-  - Compare models
-- criteria for model form
-  - Theoretically realistic
-    - follow what we know about biology
-    - increase confidence in extrapolation
-    - assymetrical sigmoidal for growth
-  - Interpretable and parsimonious
-    - few parameters that correspond as much as possible to an
-      interpretable part of growth
-  - Can fit in Stan
-- think hard about smart priors to help with convergence.
-  - I need to address the initial value errors.
-
-y = diameter at breast height (cm)
-x = age since transplant (years)
-
 *** Model
 \[
 y_i \sim Gamma(\mu_i, \alpha_y)
@@ -2436,6 +2374,75 @@ variability by species for intercept, \beta_0
 \[
 \sigma_{\delta0} \sim
 \]
+
+*** model explantion
+We sought a model of tree growth that would adequately represent the
+known biological dynamics of tree growth, namely that diameter growth
+rate starts slow, reaches a maximum at a relatively young age, and
+then gradually declines to nearly zero.  Diameter for trees much always
+increase however slightly because the growth of new wood is essential
+for proper function.  This is different than tree height which often
+reaches its asympotote.  Instead the asympote in our curve could be
+considered a pragmatic way to constrain diameter growth, or a
+practical asympote.  While trees could theoretically continue to
+increase in diameter indefinitely, they don't in reality.  The
+asympote represents this practical maximum diameter.  Furthermore,
+because age in this dataset is time since transplanting, trees can
+have substantial diameter at age 0.
+
+The type of curve that meets these criteria would be an asymmetric
+sigmoidal curve with an intercept.  A modified weibull is such a curve
+that has worked well in forestry and is the one we use here
+cite:Weiskittel_ForestGrowthAndYieldModeling.  However, there are many
+other curves that meet these criteria and could be used.
+
+Another characteristic of tree growth curves is heterosckedasticity,
+namely that as the age of a tree increases, so does the variability
+around the mean.  Often this is controlled using log - log
+transformations cite:troxel_e_2013, but we wanted to keep units in
+their original scale.  We tested
+
+
+WRITE OUT THE MODEL.....
+then convert to latex.
+
+Use brm(..., sample_prior = "only")
+
+- Goal is to model tree dimensions as a function of age (and other factors).
+  - I'm not doing allometric models (relating dimensions to one
+    another) because
+    - they are usually log-log, simpler and less interesting
+    - But doing them would be a natural extension
+- from simple to complex
+  - single species, single location, homoskedasticity
+  - single species, single location, heteroskedasticity
+  - multiple species, single location, heteroskedasticity
+  - multiple species, vary by climate, heteroskedasticity
+
+- for each of these approaches follow the workflow:
+  - problem
+  - model
+  - fake data
+  - fit
+  - diagnostics
+  - graph fit
+  - PPCs (Posterior Predictive Check)
+  - Compare models
+- criteria for model form
+  - Theoretically realistic
+    - follow what we know about biology
+    - increase confidence in extrapolation
+    - assymetrical sigmoidal for growth
+  - Interpretable and parsimonious
+    - few parameters that correspond as much as possible to an
+      interpretable part of growth
+  - Can fit in Stan
+- think hard about smart priors to help with convergence.
+  - I need to address the initial value errors.
+
+y = diameter at breast height (cm)
+x = age since transplant (years)
+
 
 
 *** fitting model
