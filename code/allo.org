@@ -2352,7 +2352,7 @@ the contribution of genetic (species) effect for species s on \beta_j.
 
 for each i.  Species random effect:
 \[
-\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{js[i]})
+\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{j \gamma s[i]})
 \]
 
 for genus, g.
@@ -2408,36 +2408,17 @@ mean curves, but they are physically possible.
 variability by cities and species, something wide
 
 \[
-\sigma_{\delta0} \sim half-Cauchy( )
+\sigma_j_{\delta} \sim half-Cauchy( )
 \]
 
 \[
-\sigma_{\delta1} \sim half-Cauchy( )
+\sigma_0_{\gamma} \sim half-Cauchy( )
 \]
 
 \[
-\sigma_{\delta2} \sim half-Cauchy( )
+\sigma_0_{\gamma} \sim half-Cauchy( )
 \]
 
-\[
-\sigma_{\delta3} \sim half-Cauchy( )
-\]
-
-\[
-\sigma_{\gamma0} \sim half-Cauchy( )
-\]
-
-\[
-\sigma_{\gamma1} \sim half-Cauchy( )
-\]
-
-\[
-\sigma_{\gamma2} \sim half-Cauchy( )
-\]
-
-\[
-\sigma_{\gamma3} \sim half-Cauchy( )
-\]
 
 
 variability by species for intercept, \beta_0
