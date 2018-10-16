@@ -1012,7 +1012,7 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
 **** save subset of data for testing
 #+begin_src R
   d <- readRDS("../data/tidy_age_dbh.rds")
-  clim <- read.csv("../data/cities_gdd.csv", stringsAsFactors = F) %>%
+  clim <- read.csv("../data/cities_gdd_precip.csv", stringsAsFactors = F) %>%
       select(-X)
 
     species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
@@ -1021,8 +1021,8 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
           mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
           select(-Leaf,-TreeID) %>%
           left_join(.,clim) %>%
-          mutate(Precip = round((Precip - mean(Precip))/ 1000, 4),
-                 GDD = round((GDD - mean(GDD))/ 1000, 4))
+          mutate(precip = round((precip - mean(precip))/ 1000, 4),
+                 gdd = round((gdd - mean(gdd))/ 1000, 4))
 
 
       saveRDS(d2, "../data/age_dbh_full.rds")
@@ -1034,13 +1034,7 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
 #+end_src
 
 #+RESULTS:
-: Joining, by = c("Region", "City", "Species", "DBH", "AGE", "ScientificName")
-: Error in mutate_impl(.data, dots) :
-:   Evaluation error: object 'Precip' not found.
-: Error in saveRDS(d2, "../data/age_dbh_full.rds") : object 'd2' not found
-: Error in eval(lhs, parent, parent) : object 'd2' not found
-: Error in saveRDS(d3, "../data/age_dbh_testing.rds") :
-:   object 'd3' not found
+: Joining, by = "City"
 
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
@@ -2411,48 +2405,6 @@ all sigmas:
 \sigma \sim half-Cauchy( )
 \]
 
-*** bits
-
-WRITE OUT THE MODEL.....
-then convert to latex.
-
-Use brm(..., sample_prior = "only")
-
-- Goal is to model tree dimensions as a function of age (and other factors).
-  - I'm not doing allometric models (relating dimensions to one
-    another) because
-    - they are usually log-log, simpler and less interesting
-    - But doing them would be a natural extension
-- from simple to complex
-  - single species, single location, homoskedasticity
-  - single species, single location, heteroskedasticity
-  - multiple species, single location, heteroskedasticity
-  - multiple species, vary by climate, heteroskedasticity
-
-- for each of these approaches follow the workflow:
-  - problem
-  - model
-  - fake data
-  - fit
-  - diagnostics
-  - graph fit
-  - PPCs (Posterior Predictive Check)
-  - Compare models
-- criteria for model form
-  - Theoretically realistic
-    - follow what we know about biology
-    - increase confidence in extrapolation
-    - assymetrical sigmoidal for growth
-  - Interpretable and parsimonious
-    - few parameters that correspond as much as possible to an
-      interpretable part of growth
-  - Can fit in Stan
-- think hard about smart priors to help with convergence.
-  - I need to address the initial value errors.
-
-y = diameter at breast height (cm)
-x = age since transplant (years)
-
 
 
 *** fitting model
@@ -2995,7 +2947,6 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 #+RESULTS:
 [[file:../figs/test_gamma.png]]
 
-
 *** TODO genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
@@ -3210,7 +3161,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
-
 *** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
@@ -3476,7 +3426,6 @@ precip.gdd
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
-
 *** TODO genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma  Would need to fix priors!
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R
@@ -3735,10 +3684,6 @@ precip.gdd
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
-
-
-
 *** Full model
 
 \[
@@ -3847,6 +3792,48 @@ beta called rate
 
 #+RESULTS:
 [[file:../figs/ttest.png]]
+
+*** bits
+
+WRITE OUT THE MODEL.....
+then convert to latex.
+
+Use brm(..., sample_prior = "only")
+
+- Goal is to model tree dimensions as a function of age (and other factors).
+  - I'm not doing allometric models (relating dimensions to one
+    another) because
+    - they are usually log-log, simpler and less interesting
+    - But doing them would be a natural extension
+- from simple to complex
+  - single species, single location, homoskedasticity
+  - single species, single location, heteroskedasticity
+  - multiple species, single location, heteroskedasticity
+  - multiple species, vary by climate, heteroskedasticity
+
+- for each of these approaches follow the workflow:
+  - problem
+  - model
+  - fake data
+  - fit
+  - diagnostics
+  - graph fit
+  - PPCs (Posterior Predictive Check)
+  - Compare models
+- criteria for model form
+  - Theoretically realistic
+    - follow what we know about biology
+    - increase confidence in extrapolation
+    - assymetrical sigmoidal for growth
+  - Interpretable and parsimonious
+    - few parameters that correspond as much as possible to an
+      interpretable part of growth
+  - Can fit in Stan
+- think hard about smart priors to help with convergence.
+  - I need to address the initial value errors.
+
+y = diameter at breast height (cm)
+x = age since transplant (years)
 
 * Results
 figure showing the age versus dbh for several species and city
