@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -1563,6 +1563,14 @@ write.csv(d, "../data/censustractcentroids_gdd_precip_lat_long.csv")
 
 #+begin_src R :exports results :results graphics :file ../figs/hue_pal_simpler.png
 library(ggthemes)
+    library(sp)
+    library(raster)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+      library(reshape2)
+
+
   r <- "#dc322f"
   yellow <- "#b58900"
   blue <- "#268bd2"
@@ -1675,6 +1683,20 @@ pc
 #+RESULTS:
 [[file:../figs/gdd_precip_points_colored_cities.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/gdd_precip_points_colored_cities_translabel.png :bg transparent :height 600 :width 600
+  city.filtered <- city %>% filter(!City %in% c("Santa Monica, CA", "Queens, NY", "Modesto, CA"))
+  city.filtered$precip[city.filtered$City == "Albuquerque, NM"] <- 800 # slightly shift albuquerque down for plotting
+  city.filtered$gdd[city.filtered$City == "Indianapolis, IN"] <- 3870 # slightly shift indianapolis over for plotting
+  city.filtered$gdd[city.filtered$City == "Honolulu, HI"] <- 10310 # slightly shift honolulu over for plotting
+
+  pc <- p + geom_label(data = city.filtered, aes(label = City, x = gdd, y = precip / 100),
+                       alpha = .7, fontface = "bold", size = 4)
+  pc
+#+end_src
+
+#+RESULTS:
+[[file:../figs/gdd_precip_points_colored_cities_translabel.png]]
+
 #+begin_src R
   ## ddn <- ddn %>%
   ##   mutate(value = ifelse(gdd > 9000, "gray", value),
@@ -1719,10 +1741,10 @@ mp
 
 #+begin_src R
   library(grid)
-  vp1 <- viewport(width = 0.5, height = 0.35, x = 0.74, y = 0.855)
+  vp1 <- viewport(width = 0.5, height = 0.35, x = 0.743, y = 0.824)
 
   #Just draw the plot twice
-  png("../figs/climate_space_wMap.png")
+  png("../figs/climate_space_wMap.png", bg = "transparent", width = 600)
   print(p)
   print(mp, vp = vp1)
   dev.off()
@@ -1730,8 +1752,8 @@ mp
 #+end_src
 
 #+RESULTS:
-: quartz
-:      2
+: null device
+:           1
 
 [[../figs/climate_space_wMap.png]]
 
