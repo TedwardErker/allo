@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -2370,15 +2370,21 @@ for each j. City random effect:
 \]
 
 
+Priors:
+
+Priors were selected to be slightly informative and make very
+biologically unreasonable parameters improbable.  The quanitity of
+data overwhelms the priors
+
 for gamma
 \alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
 | parameter |   mu |  sd | alpha (of gamma) | beta (of gamma) |
 |-----------+------+-----+------------------+-----------------|
-| \beta_0   |    3 | 1.5 |               4. |       1.3333333 |
-| \beta_1   |  1.5 |  .3 |              25. |       16.666667 |
-| \beta_2   | 1.25 | .15 |        69.444444 |       55.555556 |
-| \beta_3   |    1 | .15 |        44.444444 |       44.444444 |
+| \beta_0        |    3 | 1.5 |               4. |       1.3333333 |
+| \beta_1        |  1.5 |  .3 |              25. |       16.666667 |
+| \beta_2        | 1.25 | .15 |        69.444444 |       55.555556 |
+| \beta_3        |    1 | .15 |        44.444444 |       44.444444 |
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
