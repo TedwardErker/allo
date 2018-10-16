@@ -2270,7 +2270,6 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 Is minneapolis an influential point?
 
 ** Modelling
-
 *** Model requirements
 We sought a model of tree growth that would adequately represent the
 known biological dynamics of tree growth, namely that diameter growth
@@ -2317,14 +2316,14 @@ y_i \sim Gamma(\mu_i, \alpha_y)
 \mu_i = \beta_{0sc[i]} + \beta_{1sc[i]} (1 - \exp(-\beta_{2sc[i]} x_i^{\beta_{3sc[i]}}))
 \]
 
-the mean, \mu_i, is modelled using the weibull curve, a function that
-has been used for decades in forestry to successfully model tree growth
-cite:Weiskittel_ForestGrowthAndYieldModeling (pg 116).
+where:
 
-\beta_0 is intercept.  x is transplant age so when x = 0, y can be
-well above 0.
+y_i is the diameter at breast height of tree, i and has a gamma
+distribution with mean, \mu_i, and shape, \alpha_y.
 
-\beta_1 is asymptote of sigmoidal weibull curve.  For most species there
+\beta_0 is the intercept, or the diameter of a tree at time of transplanting.
+
+\beta_1 (plus \beta_0) is the asymptote of the sigmoidal weibull curve.  For most species there
 are no data near the true asymptote and so this parameter should be
 considered a highly uncertain estimate of the real maximum dbh of a
 tree.
