@@ -2270,7 +2270,46 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 Is minneapolis an influential point?
 
 ** Modelling
+
+*** Model requirements
+We sought a model of tree growth that would adequately represent the
+known biological dynamics of tree growth, namely that diameter growth
+rate starts slow, reaches a maximum at a young age, and then gradually
+declines to nearly zero.  Diameter for trees much always increase
+however slightly because the growth of new wood is essential for
+proper function.  This is different than tree height which often
+reaches its asympotote.  Instead the asympote in our curve could be
+considered a pragmatic way to constrain diameter growth, or a
+practical asympote.  While trees could theoretically continue to
+increase in diameter indefinitely, they don't in reality.  The
+asympote represents this practical maximum diameter.  An additional
+feature to the data is that age is time since transplanting.  This
+means trees can have substantial diameter at age 0.
+
+The type of curve that meets these criteria would be an asymmetric
+sigmoidal curve with an intercept.  A modified weibull is such a curve
+that has worked well in forestry and is the one we use here
+cite:Weiskittel_ForestGrowthAndYieldModeling.  However, there are many
+other curves that meet these criteria and could be used.
+
+Another characteristic of tree growth curves is heterosckedasticity,
+namely that as the age of a tree increases, so does the variability
+around the mean.  Often past modellers controlled this using log - log
+transformations cite:troxel_e_2013, but we wanted to keep units in
+their original scale.  We tested fitting models where the variance was
+a linear function or a smoothed spline function of age.  However, this
+still could yield negative predictions at low ages.  Instead we
+adopted the approach of modeling DBH from a gamma distribution, which yielded
+more realistic posterior predictions.
+
 *** Model
+
+(Notation below.  I don't use conventional subscript letters.  The
+nesting of species within genus isn't obvious either until lower
+levels.  I did this because genus could also end up being nested.
+There is a fair bit going on here, suggestions for how to improve are
+much appreciated.)
+
 \[
 y_i \sim Gamma(\mu_i, \alpha_y)
 \]
@@ -2285,8 +2324,9 @@ cite:Weiskittel_ForestGrowthAndYieldModeling (pg 116).
 \beta_0 is intercept.  x is transplant age so when x = 0, y can be
 well above 0.
 
-\beta_1 is asymptote of sigmoidal weibull curve.  For most species there are no data near the
-asymptote and this should not be considered the real maximum dbh of a
+\beta_1 is asymptote of sigmoidal weibull curve.  For most species there
+are no data near the true asymptote and so this parameter should be
+considered a highly uncertain estimate of the real maximum dbh of a
 tree.
 
 \beta_2 and \beta_3 affect the rate of growth.  \beta_2 provides flexibility to have
@@ -2400,33 +2440,9 @@ variability by species for intercept, \beta_0
 \sigma_{\delta0} \sim
 \]
 
-*** model explantion
-We sought a model of tree growth that would adequately represent the
-known biological dynamics of tree growth, namely that diameter growth
-rate starts slow, reaches a maximum at a relatively young age, and
-then gradually declines to nearly zero.  Diameter for trees much always
-increase however slightly because the growth of new wood is essential
-for proper function.  This is different than tree height which often
-reaches its asympotote.  Instead the asympote in our curve could be
-considered a pragmatic way to constrain diameter growth, or a
-practical asympote.  While trees could theoretically continue to
-increase in diameter indefinitely, they don't in reality.  The
-asympote represents this practical maximum diameter.  Furthermore,
-because age in this dataset is time since transplanting, trees can
-have substantial diameter at age 0.
 
-The type of curve that meets these criteria would be an asymmetric
-sigmoidal curve with an intercept.  A modified weibull is such a curve
-that has worked well in forestry and is the one we use here
-cite:Weiskittel_ForestGrowthAndYieldModeling.  However, there are many
-other curves that meet these criteria and could be used.
 
-Another characteristic of tree growth curves is heterosckedasticity,
-namely that as the age of a tree increases, so does the variability
-around the mean.  Often this is controlled using log - log
-transformations cite:troxel_e_2013, but we wanted to keep units in
-their original scale.  We tested
-
+*** bits
 
 WRITE OUT THE MODEL.....
 then convert to latex.
