@@ -2350,22 +2350,20 @@ where \beta_j is the mean for \beta coefficient \beta_j. \gamma_js is
 the contribution of genetic (species) effect for species s on \beta_j.
 \delta_jc is the city effect for city c on \beta_j.
 
-for each i.  Species random effect:
+Species effect:
 \[
-\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{j \gamma s[i]})
+\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{j \gamma g[i]})
 \]
 
-for genus, g.
-
-species nested within Genus.
+Genus effect:
 \[
-\gamma_{jg[i]} \sim N(0, \sigma_{jg})
+\gamma_{jg[i]} \sim N(0, \sigma_{j \gamma })
 \]
 
 
 for each j. City random effect:
 \[
-\delta_{jc} \sim N(0, \sigma_{\delta j})
+\delta_{jc} \sim N(0, \sigma_{j \delta c[i]})
 \]
 
 
@@ -2407,26 +2405,11 @@ mean curves, but they are physically possible.
 
 variability by cities and species, something wide
 
-\[
-\sigma_j_{\delta} \sim half-Cauchy( )
-\]
+all sigmas:
 
 \[
-\sigma_0_{\gamma} \sim half-Cauchy( )
+\sigma \sim half-Cauchy( )
 \]
-
-\[
-\sigma_0_{\gamma} \sim half-Cauchy( )
-\]
-
-
-
-variability by species for intercept, \beta_0
-\[
-\sigma_{\delta0} \sim
-\]
-
-
 
 *** bits
 
