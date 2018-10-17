@@ -521,29 +521,6 @@ in a way that better captures the natural gradients of climate.
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:plyr’:
-
-    arrange, count, desc, failwith, id, mutate, rename, summarise,
-    summarize
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Attaching package: ‘tidyr’
-
-The following object is masked from ‘package:ascii’:
-
-    expand
-#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -1021,8 +998,11 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
           mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
           select(-Leaf,-TreeID) %>%
           left_join(.,clim) %>%
-          mutate(precip = round((precip - mean(precip))/ 1000, 4),
-                 gdd = round((gdd - mean(gdd))/ 1000, 4))
+          mutate(precip = round(precip)/ 1000, 4),
+                 gdd = round(gdd / 1000, 4))
+
+          ## mutate(precip = round((precip - mean(precip))/ 1000, 4),
+          ##        gdd = round((gdd - mean(gdd))/ 1000, 4))
 
 
       saveRDS(d2, "../data/age_dbh_full.rds")
@@ -3211,8 +3191,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
     ##            family = Gamma("identity"),
     ##            chains = 1, cores = 1, init_r = .3, iter = 2000)
 
-    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+    ##    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
+
+#+RESULTS:
 
 **** tangle
 **** send to krusty
