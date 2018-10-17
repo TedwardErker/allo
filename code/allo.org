@@ -2929,7 +2929,7 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 
 *** TODO COMMENT genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :END:
 **** model R code
 #+begin_src R
@@ -2971,18 +2971,72 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
                chains = 2, cores = 2, init_r = .3, iter = 500)
 
 
-  pred <- predict(prior_mod, newdata = d)
+  ## pred <- predict(prior_mod, newdata = d)
 
+  ##    mod <- brm(form,
+  ##              data = d,
+  ##              prior = nlprior,
+  ##              family = Gamma("identity"),
+  ##              chains = 8, cores = 8, init_r = .3, iter = 2000)
 
-     mod <- brm(form,
-               data = d,
-               prior = nlprior,
-               family = Gamma("identity"),
-               chains = 8, cores = 8, init_r = .3, iter = 2000)
-
-    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+  ##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.021605 seconds
+1000 transitions using 10 leapfrog steps per transition would take 216.05 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.021764 seconds
+1000 transitions using 10 leapfrog steps per transition would take 217.64 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 45.8612 seconds (Warm-up)
+               31.7002 seconds (Sampling)
+               77.5614 seconds (Total)
+
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 48.4155 seconds (Warm-up)
+               33.85 seconds (Sampling)
+               82.2656 seconds (Total)
+#+end_example
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
@@ -3141,6 +3195,201 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+*** TODO COMMENT intermediate complexity
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle inter.R
+:END:
+**** model R code
+#+begin_src R
+    library(dplyr)
+    library(brms)
+    source("allo_functions.R")
+
+  genus <- "none"
+  species <- "single"
+  cities <- "single"
+  climate <- "none"
+  hetero <- "no"
+  family <- "Gamma"
+
+
+    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+    b0_form <- formula(b0 ~ 1)
+    b1_form <- formula(b1 ~ 1)
+    b2_form <- formula(b2 ~ 1)
+    b3_form <- formula(b3 ~ 1)
+
+    form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+    nlprior <- c(prior(gamma(4,  1.33), nlpar = "b0",lb = 0),
+               prior(gamma(25, 16.66), nlpar = "b1",lb = 0),
+               prior(gamma(69.44,55.556), nlpar = "b2", lb = 0),
+               prior(gamma(44.444, 44.444), nlpar = "b3",lb = 0),
+               prior(gamma(20, 1), class = "shape"))
+
+
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+
+  prior_mod <-  brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+             sample_prior = "only",
+               chains = 2, cores = 2, init_r = .3, iter = 500)
+
+
+  ## pred <- predict(prior_mod, newdata = d)
+
+  ##    mod <- brm(form,
+  ##              data = d,
+  ##              prior = nlprior,
+  ##              family = Gamma("identity"),
+  ##              chains = 8, cores = 8, init_r = .3, iter = 2000)
+
+  ##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.021605 seconds
+1000 transitions using 10 leapfrog steps per transition would take 216.05 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.021764 seconds
+1000 transitions using 10 leapfrog steps per transition would take 217.64 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 45.8612 seconds (Warm-up)
+               31.7002 seconds (Sampling)
+               77.5614 seconds (Total)
+
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 48.4155 seconds (Warm-up)
+               33.85 seconds (Sampling)
+               82.2656 seconds (Total)
+#+end_example
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png
+ marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png]]
+
+
+
+
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png
+ marginal_effects(prior_mod, theme = theme_gray(), probs = c(.025, .975))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png]]
+
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
+pp <- posterior_predict(prior_mod, nsamples=300)
+ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png
+pp <- posterior_predict(prior_mod, nsamples=30)
+ppc_dens_overlay(y = d$DBH, yrep=pp)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png]]
+
+
+**** tangle
+C-c C-v t
+
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+  rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
+:
+: sent 537 bytes  received 60 bytes  27.77 bytes/sec
+: total size is 2993  speedup is 5.01
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.Rout
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+:
+: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
+: total size is 12598354  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+
 *** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.R
