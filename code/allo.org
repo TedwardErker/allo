@@ -3240,10 +3240,10 @@ library(bayesplot)
                  prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                  prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                  prior(gamma(20, 1), class = "shape"),
-                 prior(gamma(10,5), class = "sd", nlpar = "b0"),
-                 prior(gamma(10,10), class = "sd", nlpar = "b1"),
-                 prior(gamma(5,10), class = "sd", nlpar = "b2"),
-                 prior(gamma(5,10), class = "sd", nlpar = "b3"))
+                 prior(gamma(5,10), class = "sd", nlpar = "b0"),
+                 prior(gamma(2,10), class = "sd", nlpar = "b1"),
+                 prior(gamma(2,10), class = "sd", nlpar = "b2"),
+                 prior(gamma(2,10), class = "sd", nlpar = "b3"))
 
 
 
@@ -3957,7 +3957,7 @@ beta called rate
 
 #+begin_src R :exports results :results graphics :file ../figs/ftesttt.png
   x <- seq(0,5,.1)
-  y <- dgamma(x, 10, 10)
+  y <- dgamma(x, 2, 10)
   plot(x, y, type = "l")
 #+end_src
 
