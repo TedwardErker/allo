@@ -2378,9 +2378,25 @@ mean curves, but they are physically possible.
 variability by cities and species, something realistic for each parameter
 
 all sigmas:
+for beta_0
+
+\[
+\sigma_0 \sim
+\]
+
+for beta_1
+\[
+\sigma_{1} \sim Normal( )
+\]
+
+for beta_2
+\[
+\sigma_{2} \sim Normal( )
+\]
+
 for beta_3
 \[
-\sigma_{3_ \sim half-Normal( )
+\sigma_{3} \sim Normal( )
 \]
 
 \[
