@@ -2323,18 +2323,19 @@ the contribution of genetic (species) effect for species s on \beta_j.
 
 Species effect:
 \[
-\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{j \gamma g[i]})
+\gamma_{js[i]} \sim N(\gamma_{jg[i]}, \sigma_{j s[i]})
 \]
 
 Genus effect:
 \[
-\gamma_{jg[i]} \sim N(0, \sigma_{j \gamma })
+\gamma_{jg[i]} \sim N(0, \sigma_{j g[i]})
 \]
 
 
 for each j. City random effect:
+
 \[
-\delta_{jc} \sim N(0, \sigma_{j \delta c[i]})
+\delta_{jc} \sim N(0, \sigma_{j c[i]})
 \]
 
 
