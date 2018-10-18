@@ -3203,6 +3203,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+begin_src R
     library(dplyr)
     library(brms)
+library(bayesplot)
     source("allo_functions.R")
 
   genus <- "none"
@@ -3226,6 +3227,24 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                prior(gamma(69.44,55.556), nlpar = "b2", lb = 0),
                prior(gamma(44.444, 44.444), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"))
+
+    b0_form <- formula(b0 ~ (1 | Genus/Species))
+    b1_form <- formula(b1 ~ (1 | Genus / Species))
+    b2_form <- formula(b2 ~ (1 | Genus/Species))
+    b3_form <- formula(b3 ~ (1 | Genus/Species))
+
+    form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+    nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+                 prior(gamma(25, 16.7), nlpar = "b1",lb = 0),
+                 prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+                 prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+                 prior(gamma(20, 1), class = "shape"),
+                 prior(gamma(10,5), class = "sd", nlpar = "b0"),
+                 prior(gamma(10,10), class = "sd", nlpar = "b1"),
+                 prior(gamma(5,10), class = "sd", nlpar = "b2"),
+                 prior(gamma(5,10), class = "sd", nlpar = "b3"))
+
 
 
   d <- readRDS("../data/age_dbh_testing.rds")
@@ -3251,96 +3270,28 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+end_src
 
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.021605 seconds
-1000 transitions using 10 leapfrog steps per transition would take 216.05 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:   1 / 500 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.021764 seconds
-1000 transitions using 10 leapfrog steps per transition would take 217.64 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:   1 / 500 [  0%]  (Warmup)
-Iteration:  50 / 500 [ 10%]  (Warmup)
-Iteration:  50 / 500 [ 10%]  (Warmup)
-Iteration: 100 / 500 [ 20%]  (Warmup)
-Iteration: 100 / 500 [ 20%]  (Warmup)
-Iteration: 150 / 500 [ 30%]  (Warmup)
-Iteration: 150 / 500 [ 30%]  (Warmup)
-Iteration: 200 / 500 [ 40%]  (Warmup)
-Iteration: 200 / 500 [ 40%]  (Warmup)
-Iteration: 250 / 500 [ 50%]  (Warmup)
-Iteration: 251 / 500 [ 50%]  (Sampling)
-Iteration: 250 / 500 [ 50%]  (Warmup)
-Iteration: 251 / 500 [ 50%]  (Sampling)
-Iteration: 300 / 500 [ 60%]  (Sampling)
-Iteration: 300 / 500 [ 60%]  (Sampling)
-Iteration: 350 / 500 [ 70%]  (Sampling)
-Iteration: 350 / 500 [ 70%]  (Sampling)
-Iteration: 400 / 500 [ 80%]  (Sampling)
-Iteration: 400 / 500 [ 80%]  (Sampling)
-Iteration: 450 / 500 [ 90%]  (Sampling)
-Iteration: 450 / 500 [ 90%]  (Sampling)
-Iteration: 500 / 500 [100%]  (Sampling)
-
- Elapsed Time: 45.8612 seconds (Warm-up)
-               31.7002 seconds (Sampling)
-               77.5614 seconds (Total)
-
-Iteration: 500 / 500 [100%]  (Sampling)
-
- Elapsed Time: 48.4155 seconds (Warm-up)
-               33.85 seconds (Sampling)
-               82.2656 seconds (Total)
-#+end_example
-
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
 #+end_src
 
 #+RESULTS:
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects11.png]]
+[[file:../figs/inter_marginaleffects.png]]
 
-
-
-
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects1.png]]
-
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png
- marginal_effects(prior_mod, theme = theme_gray(), probs = c(.025, .975))
-#+end_src
-
-#+RESULTS:
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_marginaleffects2.png]]
-
-
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_prior_pred.png
 pp <- posterior_predict(prior_mod, nsamples=300)
 ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred.png]]
+[[file:../figs/inter_prior_pred.png]]
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_prior_pred_higher.png
 pp <- posterior_predict(prior_mod, nsamples=30)
 ppc_dens_overlay(y = d$DBH, yrep=pp)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png]]
+[[file:../figs/inter_prior_pred_higher.png]]
 
 
 **** tangle
