@@ -3228,10 +3228,10 @@ library(bayesplot)
                prior(gamma(44.444, 44.444), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"))
 
-    b0_form <- formula(b0 ~ (1 | Genus/Species))
-    b1_form <- formula(b1 ~ (1 | Genus / Species))
-    b2_form <- formula(b2 ~ (1 | Genus/Species))
-    b3_form <- formula(b3 ~ (1 | Genus/Species))
+    b0_form <- formula(b0 ~ (1 | Species))
+    b1_form <- formula(b1 ~ (1 | Species))
+    b2_form <- formula(b2 ~ (1 | Species))
+    b3_form <- formula(b3 ~ (1 | Species))
 
     form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
@@ -3255,7 +3255,7 @@ library(bayesplot)
                prior = nlprior,
                family = Gamma("identity"),
              sample_prior = "only",
-               chains = 2, cores = 2, init_r = .3, iter = 500)
+               chains = 2, cores = 2, init_r = .3, iter = 500, control = list(adapt_delta = .9))
 
 
   ## pred <- predict(prior_mod, newdata = d)
@@ -3269,6 +3269,66 @@ library(bayesplot)
   ##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.038055 seconds
+1000 transitions using 10 leapfrog steps per transition would take 380.55 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.041861 seconds
+1000 transitions using 10 leapfrog steps per transition would take 418.61 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 279.112 seconds (Warm-up)
+               221.339 seconds (Sampling)
+               500.451 seconds (Total)
+
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 393.786 seconds (Warm-up)
+               167.5 seconds (Sampling)
+               561.286 seconds (Total)
+
+Warning messages:
+1: There were 271 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+2: Examine the pairs() plot to diagnose sampling problems
+#+end_example
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
