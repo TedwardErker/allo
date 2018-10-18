@@ -3195,7 +3195,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
-*** TODO COMMENT intermediate complexity
+*** TODO COMMENT intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle inter.R
 :END:
@@ -3268,6 +3268,66 @@ library(bayesplot)
   ##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
+
+#+RESULTS:
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.031906 seconds
+1000 transitions using 10 leapfrog steps per transition would take 319.06 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.039568 seconds
+1000 transitions using 10 leapfrog steps per transition would take 395.68 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 500 [  0%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration:  50 / 500 [ 10%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 100 / 500 [ 20%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 150 / 500 [ 30%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 200 / 500 [ 40%]  (Warmup)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 250 / 500 [ 50%]  (Warmup)
+Iteration: 251 / 500 [ 50%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 300 / 500 [ 60%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 350 / 500 [ 70%]  (Sampling)
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 400 / 500 [ 80%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 208.661 seconds (Warm-up)
+               118.326 seconds (Sampling)
+               326.988 seconds (Total)
+
+Iteration: 450 / 500 [ 90%]  (Sampling)
+Iteration: 500 / 500 [100%]  (Sampling)
+
+ Elapsed Time: 234.814 seconds (Warm-up)
+               116.706 seconds (Sampling)
+               351.52 seconds (Total)
+
+Warning messages:
+1: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+2: Examine the pairs() plot to diagnose sampling problems
+#+end_example
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
