@@ -3240,11 +3240,10 @@ library(bayesplot)
                  prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                  prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                  prior(gamma(20, 1), class = "shape"),
-                 prior(gamma(5,10), class = "sd", nlpar = "b0"),
-                 prior(gamma(2,10), class = "sd", nlpar = "b1"),
-                 prior(gamma(2,10), class = "sd", nlpar = "b2"),
-                 prior(gamma(2,10), class = "sd", nlpar = "b3"))
-
+                 prior(normal(0,.1), class = "sd", nlpar = "b0"),
+                 prior(normal(0,.1), class = "sd", nlpar = "b1"),
+                 prior(normal(0,.1), class = "sd", nlpar = "b2"),
+                 prior(normal(0,.1), class = "sd", nlpar = "b3"))
 
 
   d <- readRDS("../data/age_dbh_testing.rds")
