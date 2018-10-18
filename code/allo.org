@@ -494,7 +494,6 @@ much of the variation in climate, [[fig:utd_gdd_precip_space_map]].
 #+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
 [[file:../figs/ClimateRegions_UTD.png]]
 
-
 #+name: fig:utd_gdd_precip_space_map
 #+caption: US census tract centroids with UTD reference cities overlaid in growing degree day (GDD) and precipitation climate space and matching color gradient in geographic space.  The reference cities cover climate space well, and variation in precipitation and growing degree days is continuous.
 [[file:../figs/climate_space_wMap_labels.png]]
@@ -2378,8 +2377,9 @@ mean curves, but they are physically possible.
 variability by cities and species, something realistic for each parameter
 
 all sigmas:
+for beta_3
 \[
-\sigma \sim half-Normal( )
+\sigma_{3_ \sim half-Normal( )
 \]
 
 \[
