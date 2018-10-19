@@ -2380,9 +2380,12 @@ variability by cities and species, something realistic for each parameter
 all sigmas:
 for beta_0
 
+standard deviation for cities might be around 1cm?
 \[
-\sigma_0 \sim
+\sigma_{0_c[i]} \sim \text{Normal}(0, 1)
 \]
+
+
 
 for beta_1
 \[
