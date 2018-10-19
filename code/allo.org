@@ -3306,14 +3306,14 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                    prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                    prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                    prior(gamma(20, 1), class = "shape"),
-                   prior(normal(0, .5), class = "sd", nlpar = "b0", group = "Genus"),
-                   prior(normal(0, .25), class = "sd", nlpar = "b0", group = "Genus:Species"),
-                   prior(normal(0, .13), class = "sd", nlpar = "b1", group = "Genus"),
-                   prior(normal(0, .06), class = "sd", nlpar = "b1", group = "Genus:Species"),
-                   prior(normal(0, .06), class = "sd", nlpar = "b2", group = "Genus"),
-                   prior(normal(0, .03), class = "sd", nlpar = "b2", group = "Genus:Species"),
-                   prior(normal(0, .06), class = "sd", nlpar = "b3", group = "Genus"),
-                   prior(normal(0, .03), class = "sd", nlpar = "b3", group = "Genus:Species"))
+                   prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
+                   prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus:Species"),
+                   prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus"),
+                   prior(normal(0, .05), class = "sd", nlpar = "b1", group = "Genus:Species"),
+                   prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
+                   prior(normal(0, .025), class = "sd", nlpar = "b2", group = "Genus:Species"),
+                   prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus"),
+                   prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
 
 
     d <- readRDS("../data/age_dbh_testing.rds")
