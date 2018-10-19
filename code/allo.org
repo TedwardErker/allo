@@ -3005,7 +3005,10 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 
 #+RESULTS:
 [[file:../figs/test_gamma.png]]
-
+*** I need to simplify things again!!!!!!!!!!!!!!!!
+- subsets of data to make sure things are working.   I'm having issues
+  with identifying beta_1 and beta_3.  Extremely strong priors on
+  beta_1 informed by the champion trees might be a way out of this......
 *** TODO COMMENT genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
@@ -3293,10 +3296,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
   family <- "Gamma"
 
   data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
-  b0_form <- formula(b0 ~ (1 | Genus/Species))
-  b1_form <- formula(b1 ~ (1 | Genus/Species))
-  b2_form <- formula(b2 ~ (1 | Genus/Species))
-  b3_form <- formula(b3 ~ (1 | Genus/Species))
+  b0_form <- formula(b0 ~ (1 | id | Genus/Species))
+  b1_form <- formula(b1 ~ (1 | id | Genus/Species))
+  b2_form <- formula(b2 ~ (1 | id | Genus/Species))
+  b3_form <- formula(b3 ~ (1 | id | Genus/Species))
 
   form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
@@ -3395,7 +3398,7 @@ cat genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_inter_species_inter_cities_inter_climate_inter_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
@@ -3407,6 +3410,160 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 : total size is 12598354  speedup is 1.01
 : You have new mail in /var/mail/erker
 
+**** assess model
+***** mod with data/likelihood
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+#+begin_src R
+mod <- readRDS("~/git/allo/models/genus_inter_species_inter_cities_inter_climate_inter_hetero_no_family_Gamma.rds")
+
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ (1 | Genus/Species)
+         b1 ~ (1 | Genus/Species)
+         b2 ~ (1 | Genus/Species)
+         b3 ~ (1 | Genus/Species)
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 3000
+
+Group-Level Effects:
+~Genus (Number of levels: 18)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.15      0.10     0.01     0.38        993 1.00
+sd(b1_Intercept)     0.38      0.09     0.19     0.53          5 1.46
+sd(b2_Intercept)     0.22      0.03     0.15     0.29       1049 1.03
+sd(b3_Intercept)     0.17      0.03     0.12     0.22         12 1.15
+
+~Genus:Species (Number of levels: 25)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.04      0.03     0.00     0.11       3000 1.00
+sd(b1_Intercept)     0.06      0.03     0.01     0.13        526 1.01
+sd(b2_Intercept)     0.03      0.02     0.00     0.07       1497 1.00
+sd(b3_Intercept)     0.04      0.02     0.00     0.07        639 1.01
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     2.79      0.09     2.62     2.97       1103 1.02
+b1_Intercept     1.23      0.14     0.94     1.50          7 1.32
+b2_Intercept     1.14      0.07     1.01     1.28       1295 1.00
+b3_Intercept     1.09      0.05     1.00     1.22          7 1.34
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape     9.79      0.18     9.43    10.15       3000 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+#+end_example
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png :height 1300
+  plot(mod, ask = F, N = 40)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
+  marginal_effects(mod, effects = "AGE:gdd")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
+  marginal_effects(mod, effects = "AGE:Precip")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEPrecip_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+
+
+
+#+begin_src R
+precip.gdd <-   marginal_effects(mod, effects = "Precip:gdd", surface = T)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_Precipgdd_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
+precip.gdd
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_Precipgdd_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma_wCities.png
+  plot(precip.gdd)[[1]] +
+      geom_point(data = unique(select(mod$data, City, gdd, Precip)), aes(x = Precip, y = gdd)) +
+      geom_label(data = unique(select(mod$data, City, gdd, Precip)), aes(x = Precip, y = gdd, label = City), nudge_y = .15)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_PrecipCDD_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma_wCities.png]]
+
+
+#+begin_src R
+    cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
+    cond <- left_join(cond, unique(select(mod$data, City, Precip, gdd)))
+#    cond <- filter(cond, Species %in%  c("LIST"))
+
+     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png :width 1000 :height 100
+
+  #arrange the cities by precip * gdd
+  me2 <- me$AGE  %>% mutate(gddPrecip = gdd * Precip,
+                          City = factor(City, levels=unique(City[order(gddPrecip)]), ordered=TRUE))
+
+  dd <- mod$data %>%
+      mutate(gddPrecip = (gdd - min(gdd)) * (Precip - min(Precip)),
+             City = factor(City, levels=unique(City[order(gddPrecip)]), ordered=TRUE))
+
+      ggplot(me2) +
+          geom_line(aes(x = AGE, y = estimate__), size = 1) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = .3, size = .5) +
+          facet_grid(Species~City*gddPrecip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png
+   pp_check(mod) + xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b1linint_hetero_no_family_Gamma.png]]
 
 *** TODO genus: many;  species: many; cities: many; climate: b1linint; hetero: no; family: Gamma
 :PROPERTIES:

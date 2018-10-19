@@ -11,10 +11,10 @@ hetero <- "no"
 family <- "Gamma"
 
 data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
-b0_form <- formula(b0 ~ (1 | Genus/Species))
-b1_form <- formula(b1 ~ (1 | Genus/Species))
-b2_form <- formula(b2 ~ (1 | Genus/Species))
-b3_form <- formula(b3 ~ (1 | Genus/Species))
+b0_form <- formula(b0 ~ (1 | id | Genus/Species))
+b1_form <- formula(b1 ~ (1 | id | Genus/Species))
+b2_form <- formula(b2 ~ (1 | id | Genus/Species))
+b3_form <- formula(b3 ~ (1 | id | Genus/Species))
 
 form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
@@ -35,21 +35,21 @@ nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
 
 d <- readRDS("../data/age_dbh_testing.rds")
 
-## prior_mod <-  brm(form,
-##                   data = d,
-##                   prior = nlprior,
-##                   family = Gamma("identity"),
-##                   sample_prior = "only",
-##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+prior_mod <-  brm(form,
+                  data = d,
+                  prior = nlprior,
+                  family = Gamma("identity"),
+                  sample_prior = "only",
+                  chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
-## ## pred <- predict(prior_mod, newdata = d)
+## pred <- predict(prior_mod, newdata = d)
 
-mod <- brm(form,
-           data = d,
-           prior = nlprior,
-           family = Gamma("identity"),
-           chains = 6, cores = 6, init_r = .3, iter = 1000)
+## mod <- brm(form,
+##            data = d,
+##            prior = nlprior,
+##            family = Gamma("identity"),
+##            chains = 6, cores = 6, init_r = .3, iter = 1000)
 
-saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+## saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here
