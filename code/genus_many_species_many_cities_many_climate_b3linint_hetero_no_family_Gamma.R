@@ -15,7 +15,7 @@ data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
 b0_form <- formula(b0 ~ (1 | City) + (1 | Genus/Species))
 b1_form <- formula(b1 ~ (1 | City) + (1 | Genus/Species))
 b2_form <- formula(b2 ~ (1 | City) + (1 | Genus/Species))
-b3_form <- formula(b3 ~ Precip * GDD +  (1 | City) + (1 | Genus / Species))
+b3_form <- formula(b3 ~ precip * gdd +  (1 | City) + (1 | Genus / Species))
 
 
 form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
