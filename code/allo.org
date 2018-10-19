@@ -3294,7 +3294,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 
       data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
-      b0_form <- formula(b0 ~ 1 | Genus/Species))
+      b0_form <- formula(b0 ~ (1 | Genus/Species))
       b1_form <- formula(b1 ~ (1 | Genus/Species))
       b2_form <- formula(b2 ~ (1 | Genus/Species))
       b3_form <- formula(b3 ~ (1 | Genus/Species))
@@ -3324,7 +3324,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                  prior = nlprior,
                  family = Gamma("identity"),
                sample_prior = "only",
-                 chains = 3, cores = 3, init_r = .3, iter = 250, control = list(adapt_delta = .8))
+                 chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
     ## pred <- predict(prior_mod, newdata = d)
@@ -3338,6 +3338,13 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
     ##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
+
+#+RESULTS:
+: Error: unexpected ')' in "    b0_form <- formula(b0 ~ 1 | Genus/Species))"
+: Error: The following priors do not correspond to any model parameter:
+: sd_Genus__b0 ~ normal(0, 0.3)
+: sd_Genus:Species__b0 ~ normal(0, 0.15)
+: Function 'get_prior' might be helpful to you.
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 100, theme = theme_gray())
