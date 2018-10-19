@@ -2380,14 +2380,22 @@ variability by cities and species, something realistic for each parameter
 all sigmas:
 for beta_0, the intercept.  realistic values for this range from 1 to
 maybe 10 (that would be a very large average size to plant).
-Therefore, the sd for \delta, \sigma_
+Therefore, the sd for \delta, \sigma_{0 c[i]}, is at most 3, I think
+it's most likely less than 2.  I'll set the prior so that there's a
+95% chance it's less than 2.  Variation between genus/species is
+probably similar.
 
-standard deviation for cities might be around
-There's a 90% chance the sd for \beta_0 is less than 3 *
 \[
-\sigma_{0_c[i]} \sim \text{Normal}(0, 1)
+\sigma_{0_c[i]} \sim \text{Normal}(0, .67)
 \]
 
+\[
+\sigma_{0_s[i]} \sim \text{Normal}(0, .67)
+\]
+
+\[
+\sigma_{0_g[i]} \sim \text{Normal}(0, .67)
+\]
 
 
 for beta_1
