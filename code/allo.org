@@ -3294,7 +3294,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 
       data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
-      b0_form <- formula(b0 ~ (1 | Genus/Species))
+      b0_form <- formula(b0 ~ 1 | Genus/Species))
       b1_form <- formula(b1 ~ (1 | Genus/Species))
       b2_form <- formula(b2 ~ (1 | Genus/Species))
       b3_form <- formula(b3 ~ (1 | Genus/Species))
@@ -3306,8 +3306,8 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                    prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                    prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                    prior(gamma(20, 1), class = "shape"),
-                   prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
-                   prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus:Species"),
+                   prior(normal(0, .3), class = "sd", nlpar = "b0", group = "Genus"),
+                   prior(normal(0, .15), class = "sd", nlpar = "b0", group = "Genus:Species"),
                    prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus"),
                    prior(normal(0, .05), class = "sd", nlpar = "b1", group = "Genus:Species"),
                    prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
@@ -3324,7 +3324,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                  prior = nlprior,
                  family = Gamma("identity"),
                sample_prior = "only",
-                 chains = 2, cores = 2, init_r = .3, iter = 500, control = list(adapt_delta = .9))
+                 chains = 3, cores = 3, init_r = .3, iter = 250, control = list(adapt_delta = .8))
 
 
     ## pred <- predict(prior_mod, newdata = d)
@@ -3339,75 +3339,15 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+end_src
 
-#+RESULTS:
-#+begin_example
-Compiling the C++ model
-Start sampling
-
-SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
-
-Gradient evaluation took 0.031906 seconds
-1000 transitions using 10 leapfrog steps per transition would take 319.06 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:   1 / 500 [  0%]  (Warmup)
-
-SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
-
-Gradient evaluation took 0.039568 seconds
-1000 transitions using 10 leapfrog steps per transition would take 395.68 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:   1 / 500 [  0%]  (Warmup)
-Iteration:  50 / 500 [ 10%]  (Warmup)
-Iteration:  50 / 500 [ 10%]  (Warmup)
-Iteration: 100 / 500 [ 20%]  (Warmup)
-Iteration: 100 / 500 [ 20%]  (Warmup)
-Iteration: 150 / 500 [ 30%]  (Warmup)
-Iteration: 150 / 500 [ 30%]  (Warmup)
-Iteration: 200 / 500 [ 40%]  (Warmup)
-Iteration: 200 / 500 [ 40%]  (Warmup)
-Iteration: 250 / 500 [ 50%]  (Warmup)
-Iteration: 251 / 500 [ 50%]  (Sampling)
-Iteration: 300 / 500 [ 60%]  (Sampling)
-Iteration: 250 / 500 [ 50%]  (Warmup)
-Iteration: 251 / 500 [ 50%]  (Sampling)
-Iteration: 350 / 500 [ 70%]  (Sampling)
-Iteration: 300 / 500 [ 60%]  (Sampling)
-Iteration: 400 / 500 [ 80%]  (Sampling)
-Iteration: 350 / 500 [ 70%]  (Sampling)
-Iteration: 450 / 500 [ 90%]  (Sampling)
-Iteration: 400 / 500 [ 80%]  (Sampling)
-Iteration: 500 / 500 [100%]  (Sampling)
-
- Elapsed Time: 208.661 seconds (Warm-up)
-               118.326 seconds (Sampling)
-               326.988 seconds (Total)
-
-Iteration: 450 / 500 [ 90%]  (Sampling)
-Iteration: 500 / 500 [100%]  (Sampling)
-
- Elapsed Time: 234.814 seconds (Warm-up)
-               116.706 seconds (Sampling)
-               351.52 seconds (Total)
-
-Warning messages:
-1: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help. See
-http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-2: Examine the pairs() plot to diagnose sampling problems
-#+end_example
-
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
- marginal_effects(prior_mod, spaghetti = T, nsamples = 500, theme = theme_gray())
+ marginal_effects(prior_mod, spaghetti = T, nsamples = 100, theme = theme_gray())
 #+end_src
 
 #+RESULTS:
 [[file:../figs/inter_marginaleffects.png]]
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_prior_pred.png
-pp <- posterior_predict(prior_mod, nsamples=300)
+pp <- posterior_predict(prior_mod, nsamples=100)
 ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+end_src
 
