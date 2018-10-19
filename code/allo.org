@@ -2377,31 +2377,50 @@ mean curves, but they are physically possible.
 
 variability by cities and species, something realistic for each parameter
 
-all sigmas:
-for beta_0, the intercept.  realistic values for this range from 1 to
-maybe 10 (that would be a very large average size to plant).
-Therefore, the sd for \delta, \sigma_{0 c[i]}, is at most 3, I think
-it's most likely less than 2.  I'll set the prior so that there's a
-95% chance it's less than 2.  Variation between genus/species is
+all sigmas: for beta_0, the intercept.  realistic values for this
+range from 1 to maybe 10 (that would be a very large average size to
+plant).  Therefore, the sd for \delta, \sigma_{0 c[i]}, is likely less
+than 1.5.  I'll set the prior so that there's a 95% chance it's less
+than 1.5.  Variation between genus/species, the sd for \gamma, is
 probably similar.
 
+((10 - 1) / 2) / 3  (take the range of possible values, assume it is ~97.5%
+range of normal, find the sd by cutting in half and dividing by 3.
+
 \[
-\sigma_{0_c[i]} \sim \text{Normal}(0, .67)
+\sigma_{0_c[i]} \sim \text{Normal}(0, .5)
 \]
 
 \[
-\sigma_{0_s[i]} \sim \text{Normal}(0, .67)
+\sigma_{0_s[i]} \sim \text{Normal}(0, .5)
 \]
 
 \[
-\sigma_{0_g[i]} \sim \text{Normal}(0, .67)
+\sigma_{0_g[i]} \sim \text{Normal}(0, .5)
 \]
 
+When fit in stan, \beta_1 is multiplied by 100, so that it is on a
+similar order of magnitude as the other parameters (around 1) and the
+interpretation is the asymptotic diameter in meters (rather than centimeters).
+Possible values for \beta_1 might range from .5 to 3 between different
+genera.  Differences between species within genera will likely be less.
+I expect there to be less difference between cities in the
+average asymptote.
 
 for beta_1
 \[
-\sigma_{1} \sim Normal( )
+\sigma_{1_g[i]} \sim half-Normal(0, )
 \]
+
+\[
+\sigma_{1_s[i]} \sim half-Normal( )
+\]
+
+\[
+\sigma_{1_c[i]} \sim half-Normal(0, )
+\]
+
+
 
 for beta_2
 \[
