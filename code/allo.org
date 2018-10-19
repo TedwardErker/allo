@@ -3285,10 +3285,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
   library(bayesplot)
       source("allo_functions.R")
 
-    genus <- "none"
-    species <- "single"
-    cities <- "single"
-    climate <- "none"
+    genus <- "inter"
+    species <- "inter"
+    cities <- "inter"
+    climate <- "inter"
     hetero <- "no"
     family <- "Gamma"
 
@@ -3306,8 +3306,8 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                    prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                    prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                    prior(gamma(20, 1), class = "shape"),
-                   prior(normal(0, .3), class = "sd", nlpar = "b0", group = "Genus"),
-                   prior(normal(0, .15), class = "sd", nlpar = "b0", group = "Genus:Species"),
+                   prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus"),
+                   prior(normal(0, .05), class = "sd", nlpar = "b0", group = "Genus:Species"),
                    prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus"),
                    prior(normal(0, .05), class = "sd", nlpar = "b1", group = "Genus:Species"),
                    prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
@@ -3329,22 +3329,70 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
     ## pred <- predict(prior_mod, newdata = d)
 
-    ##    mod <- brm(form,
-    ##              data = d,
-    ##              prior = nlprior,
-    ##              family = Gamma("identity"),
-    ##              chains = 8, cores = 8, init_r = .3, iter = 2000)
+       mod <- brm(form,
+                 data = d,
+                 prior = nlprior,
+                 family = Gamma("identity"),
+                 chains = 2, cores = 2, init_r = .3, iter = 500)
 
-    ##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+       saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
 
 #+RESULTS:
-: Error: unexpected ')' in "    b0_form <- formula(b0 ~ 1 | Genus/Species))"
-: Error: The following priors do not correspond to any model parameter:
-: sd_Genus__b0 ~ normal(0, 0.3)
-: sd_Genus:Species__b0 ~ normal(0, 0.15)
-: Function 'get_prior' might be helpful to you.
+#+begin_example
+Compiling the C++ model
+Start sampling
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 1).
+
+Gradient evaluation took 0.048466 seconds
+1000 transitions using 10 leapfrog steps per transition would take 484.66 seconds.
+Adjust your expectations accordingly!
+
+
+
+SAMPLING FOR MODEL 'gamma brms-model' NOW (CHAIN 2).
+
+Gradient evaluation took 0.060313 seconds
+1000 transitions using 10 leapfrog steps per transition would take 603.13 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 300 [  0%]  (Warmup)
+Iteration:   1 / 300 [  0%]  (Warmup)
+Iteration:  30 / 300 [ 10%]  (Warmup)
+Iteration:  30 / 300 [ 10%]  (Warmup)
+Iteration:  60 / 300 [ 20%]  (Warmup)
+Iteration:  60 / 300 [ 20%]  (Warmup)
+Iteration:  90 / 300 [ 30%]  (Warmup)
+Iteration:  90 / 300 [ 30%]  (Warmup)
+Iteration: 120 / 300 [ 40%]  (Warmup)
+Iteration: 120 / 300 [ 40%]  (Warmup)
+Iteration: 150 / 300 [ 50%]  (Warmup)
+Iteration: 151 / 300 [ 50%]  (Sampling)
+Iteration: 150 / 300 [ 50%]  (Warmup)
+Iteration: 151 / 300 [ 50%]  (Sampling)
+Iteration: 180 / 300 [ 60%]  (Sampling)
+Iteration: 180 / 300 [ 60%]  (Sampling)
+Iteration: 210 / 300 [ 70%]  (Sampling)
+Iteration: 210 / 300 [ 70%]  (Sampling)
+Iteration: 240 / 300 [ 80%]  (Sampling)
+Iteration: 240 / 300 [ 80%]  (Sampling)
+Iteration: 270 / 300 [ 90%]  (Sampling)
+Iteration: 270 / 300 [ 90%]  (Sampling)
+Iteration: 300 / 300 [100%]  (Sampling)
+
+ Elapsed Time: 192.42 seconds (Warm-up)
+               75.1138 seconds (Sampling)
+               267.533 seconds (Total)
+
+Iteration: 300 / 300 [100%]  (Sampling)
+
+ Elapsed Time: 195.289 seconds (Warm-up)
+               76.1773 seconds (Sampling)
+               271.466 seconds (Total)
+#+end_example
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 100, theme = theme_gray())
