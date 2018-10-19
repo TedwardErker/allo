@@ -2378,9 +2378,12 @@ mean curves, but they are physically possible.
 variability by cities and species, something realistic for each parameter
 
 all sigmas:
-for beta_0
+for beta_0, the intercept.  realistic values for this range from 1 to
+maybe 10 (that would be a very large average size to plant).
+Therefore, the sd for \delta, \sigma_
 
-standard deviation for cities might be around 1cm?
+standard deviation for cities might be around
+There's a 90% chance the sd for \beta_0 is less than 3 *
 \[
 \sigma_{0_c[i]} \sim \text{Normal}(0, 1)
 \]
