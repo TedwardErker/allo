@@ -3008,7 +3008,12 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 *** I need to simplify things again!!!!!!!!!!!!!!!!
 - subsets of data to make sure things are working.   I'm having issues
   with identifying beta_1 and beta_3.  Extremely strong priors on
-  beta_1 informed by the champion trees might be a way out of this......
+  beta_1 informed by the champion trees might be a way out of
+  this......  I have to find a few measures and find a way to modify
+  the stan code
+- each round should have the full check of model making sense, at
+  least no problems in the convergence/estimation part.
+- I should also check to make sure the types of predictions make sense.
 *** TODO COMMENT genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
