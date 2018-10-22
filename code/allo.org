@@ -3368,7 +3368,6 @@ ppc_dens_overlay(y = d$DBH, yrep=pp)
 #+RESULTS:
 [[file:../figs/inter_prior_pred_higher.png]]
 
-
 **** tangle
 C-c C-v t
 
