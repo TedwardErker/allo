@@ -3161,7 +3161,6 @@ ppc_dens_overlay(y = d$DBH, yrep=pp)
 #+RESULTS:
 [[file:../figs/genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma_prior_pred_higher.png]]
 
-
 **** tangle
 C-c C-v t
 
@@ -3284,6 +3283,95 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 *** many cities
+**** model R code
+
+#+begin_src R
+  library(dplyr)
+  library(brms)
+                                          #  library(bayesplot)
+
+  genus <- "no"
+  species <- "no"
+  cities <- "yes"
+  climate <- "no"
+  hetero <- "no"
+  family <- "Gamma"
+
+  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+  b0_form <- formula(b0 ~ (1 | City))
+  b1_form <- formula(b1 ~ (1 | City))
+  b2_form <- formula(b2 ~ (1 | City))
+  b3_form <- formula(b3 ~ (1 | City))
+
+  form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+  nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+               prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
+               prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+               prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+               prior(gamma(20, 1), class = "shape"),
+               prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b0", group = "Genus:Species"),
+               prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b1", group = "Genus:Species"),
+               prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
+               prior(normal(0, .025), class = "sd", nlpar = "b2", group = "Genus:Species"),
+               prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus"),
+               prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
+
+
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  prior_mod <-  brm(form,
+                    data = d,
+                    prior = nlprior,
+                    family = Gamma("identity"),
+                    sample_prior = "only",
+                    chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+
+
+  ## pred <- predict(prior_mod, newdata = d)
+
+  ## mod <- brm(form,
+  ##            data = d,
+  ##            prior = nlprior,
+  ##            family = Gamma("identity"),
+  ##            chains = 6, cores = 6, init_r = .3, iter = 1000)
+
+  ## saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+
+#+end_src
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
+ marginal_effects(prior_mod, spaghetti = T, nsamples = 200, theme = theme_gray())
+#+end_src
+
+#+RESULTS:
+[[file:../figs/inter_marginaleffects.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/inter_stat_median.png
+     color_scheme_set("blue")
+     ppc_stat(d$DBH, pp, stat = "median") + grid_lines()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/inter_stat_median.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_prior_pred.png
+pp <- posterior_predict(prior_mod, nsamples=100)
+ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/inter_prior_pred.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_prior_pred_higher.png
+pp <- posterior_predict(prior_mod, nsamples=30)
+ppc_dens_overlay(y = d$DBH, yrep=pp)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/inter_prior_pred_higher.png]]
 
 *** genus/species
 *** b1 function of climate
@@ -3351,15 +3439,20 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+end_src
 
-#+RESULTS:
-: Error: Can only combine group-level terms of the same grouping factors.
-
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_marginaleffects.png
  marginal_effects(prior_mod, spaghetti = T, nsamples = 200, theme = theme_gray())
 #+end_src
 
 #+RESULTS:
 [[file:../figs/inter_marginaleffects.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/inter_stat_median.png
+     color_scheme_set("blue")
+     ppc_stat(d$DBH, pp, stat = "median") + grid_lines()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/inter_stat_median.png]]
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/inter_prior_pred.png
 pp <- posterior_predict(prior_mod, nsamples=100)
@@ -4165,7 +4258,7 @@ beta called rate
 
 #+begin_src R :exports results :results graphics :file ../figs/ftest2.png
   x <- seq(0,8,.1)
-  y <- dgamma(x, shape = 8, rate = 6)
+  y <- dgamma(x, shape = 34, rate = 19.4)
   plot(x, y, type = "l")
 #+end_src
 
