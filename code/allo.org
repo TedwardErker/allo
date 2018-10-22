@@ -2,7 +2,7 @@
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
-#+PROPERTY:  header-args:sh :eval no
+#+PROPERTY:  header-args:sh :eval yes
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -3282,6 +3282,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
+
 *** many cities
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
@@ -3371,6 +3372,101 @@ run from krusty terminal
 cat many_cities.Rout
 #+END_SRC
 
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+:
+: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
+: total size is 12598354  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+
+#+begin_src R
+mod_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma <- readRDS("../models/genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.rds")
+mod <- mod_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma
+#+end_src
+
+#+RESULTS:
+: Error in gzfile(file, "rb") : cannot open the connection
+: In addition: Warning message:
+: In gzfile(file, "rb") :
+:   cannot open compressed file '../models/genus_no_species_no_cities_many_climate_no_hetero_no_family_Gamma.rds', probable reason 'No such file or directory'
+: Error: object 'mod_genus_no_species_no_cities_many_climate_no_hetero_no_family_Gamma' not found
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ 1
+         b1 ~ 1
+         b2 ~ 1
+         b3 ~ 1
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 6000
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     2.77      0.08     2.61     2.93       3416 1.00
+b1_Intercept     1.12      0.05     1.03     1.24       2694 1.00
+b2_Intercept     1.08      0.04     1.00     1.17       3530 1.00
+b3_Intercept     1.11      0.02     1.08     1.14       2806 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape     7.69      0.14     7.42     7.96       3579 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  plot(mod, ask = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
+  pp_check(mod) +xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
 
 *** genus/species
