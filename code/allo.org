@@ -3480,11 +3480,14 @@ pred.df <- cbind(d, pred)
     ggplot(d, aes(x = AGE, y = DBH)) +
         geom_point() +
         facet_wrap(~City) +
-      geom_line(data = pred.df, aes(x = AGE, y = Estimate), inherit.aes = F, color = "blue")
+      geom_line(data = pred.df, aes(x = AGE, y = Estimate), inherit.aes = F, color = "blue") +
+      geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5), inherit.aes = F, fill = "blue", alpha = .2)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/cities_wpreds.png]]
+
+
 
 *** genus/species
 **** model R code
