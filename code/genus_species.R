@@ -1,12 +1,11 @@
 ## [[file:~/git/allo/code/allo.org::*model%20R%20code][model R code:1]]
 library(dplyr)
 library(brms)
-                                        #  library(bayesplot)
 
-genus <- "inter"
-species <- "inter"
-cities <- "inter"
-climate <- "inter"
+genus <- "yes"
+species <- "yes"
+cities <- "no"
+climate <- "no"
 hetero <- "no"
 family <- "Gamma"
 
@@ -35,26 +34,21 @@ nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
 
 d <- readRDS("../data/age_dbh_testing.rds")
 
-prior_mod <-  brm(form,
-                  data = d,
-                  prior = nlprior,
-                  family = Gamma("identity"),
-                  sample_prior = "only",
-                  chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+## prior_mod <-  brm(form,
+##                   data = d,
+##                   prior = nlprior,
+##                   family = Gamma("identity"),
+##                   sample_prior = "only",
+##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
-## pred <- predict(prior_mod, newdata = d)
+ ## pred <- predict(prior_mod, newdata = d)
 
-## mod <- brm(form,
-##            data = d,
-##     p       prior = nlprior,
-##            family = Gamma("identity"),
-##            chains = 6, cores = 6, init_r = .3, iter = 1000)
+mod <- brm(form,
+           data = d,
+           prior = nlprior,
+           family = Gamma("identity"),
+           chains = 6, cores = 6, init_r = .3, iter = 1000)
 
-## saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here
-
-## [[file:~/git/allo/code/allo.org::*model%20R%20code][model R code:3]]
-color_scheme_set("blue")
-ppc_stat(d$DBH, pp, stat = "median") + grid_lines()
-## model R code:3 ends here
