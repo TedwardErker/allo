@@ -3443,7 +3443,7 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH many_cities.R &
+  nohup R CMD BATCH genus_species.R &
   exit
 #+END_SRC
 
