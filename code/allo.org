@@ -3689,13 +3689,29 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png
-cdf <- data.frame(unique(mod$data$Genus))
-rownames(cdf) <- unique(mod$data$Genus)
-  marginal_effects(mod, re_formula = NULL, conditions = cdf)
+    cdf <- data.frame(unique(select(mod$data, Genus)))
+  colnames(cdf) <- "Genus"
+  rownames(cdf) <- unique(mod$data$Genus)
+  me <-   marginal_effects(mod, re_formula = NULL, conditions = cdf)
+  me
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_estimates.png
+
+  ggplot() +
+      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = Genus, group = cond__)) +
+      geom_point(data = d, aes(x = AGE, y = DBH, color = Genus), inherit.aes = F, alpha = .5) +
+      facet_wrap(~Genus)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/GenusSpecies_estimates.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 600 :bg transparent
   library(ggthemes)
