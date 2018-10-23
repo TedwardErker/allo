@@ -4723,6 +4723,19 @@ US population lives.
 The marginal effects and the uncertainty in them could also be mapped back into geographic space
 and the map could show that.  That would be neat.
 
+
+comparison to old method
+
+show predicitive intervals for
+- known genus/species in known city,
+- known genus, unknown species in known city
+- unknown genus, unknown species in unknown city
+-
+
+Show how the equations vary continuously across geographic space,
+show the equations for a variety of unsampled cities.
+
+
 * Discussoins
 
 
