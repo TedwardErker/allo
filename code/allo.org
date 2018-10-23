@@ -3926,10 +3926,10 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b1_h
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+: genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds
 :
-: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
-: total size is 12598354  speedup is 1.01
+: sent 38 bytes  received 12044590 bytes  2676584.00 bytes/sec
+: total size is 12136389  speedup is 1.01
 : You have new mail in /var/mail/erker
 
 **** diagnostics
@@ -3938,8 +3938,8 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b1_h
 :END:
 
 #+begin_src R
-mod_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma <- readRDS("../models/genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.rds")
-mod <- mod_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma
+mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma <- readRDS("../models/genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds")
+mod <- mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma
 #+end_src
 
 #+RESULTS:
@@ -3953,39 +3953,27 @@ mod
  Family: gamma
   Links: mu = identity; shape = identity
 Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
-         b0 ~ (1 | Genus/Species)
-         b1 ~ (1 | Genus/Species)
-         b2 ~ (1 | Genus/Species)
-         b3 ~ (1 | Genus/Species)
+         b0 ~ 1
+         b1 ~ gdd * precip
+         b2 ~ 1
+         b3 ~ 1
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
          total post-warmup samples = 3000
 
-Group-Level Effects:
-~Genus (Number of levels: 18)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.14      0.10     0.00     0.36       1061 1.00
-sd(b1_Intercept)     0.42      0.06     0.30     0.55       1584 1.00
-sd(b2_Intercept)     0.22      0.03     0.15     0.28       1704 1.00
-sd(b3_Intercept)     0.16      0.02     0.12     0.20       1458 1.00
-
-~Genus:Species (Number of levels: 25)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.04      0.03     0.00     0.12       3000 1.00
-sd(b1_Intercept)     0.06      0.03     0.01     0.13        696 1.00
-sd(b2_Intercept)     0.03      0.02     0.00     0.07       1575 1.00
-sd(b3_Intercept)     0.04      0.02     0.00     0.07        649 1.01
-
 Population-Level Effects:
-             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     2.78      0.09     2.61     2.96       1602 1.00
-b1_Intercept     1.31      0.11     1.10     1.54        462 1.01
-b2_Intercept     1.14      0.07     1.01     1.29       1207 1.01
-b3_Intercept     1.07      0.04     0.99     1.15        624 1.00
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      2.77      0.08     2.62     2.93       2104 1.00
+b1_Intercept      1.07      0.07     0.96     1.21       1197 1.01
+b1_gdd            0.00      0.00     0.00     0.01       1676 1.00
+b1_precip         0.07      0.01     0.05     0.10       1559 1.00
+b1_gdd:precip     0.01      0.00     0.00     0.01       1577 1.00
+b2_Intercept      0.92      0.04     0.83     0.99       1586 1.00
+b3_Intercept      1.08      0.02     1.05     1.11       1501 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     9.78      0.19     9.41    10.15       3000 1.00
+shape     8.41      0.16     8.11     8.73       2646 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -3996,6 +3984,9 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
   pairs(mod)
 #+end_src
 
+#+RESULTS:
+[[file:../figs/pairs_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
 #+begin_src R :exports results :results graphics :file ../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png :height 1200
   plot(mod, ask = F, N = 30)
 #+end_src
@@ -4004,11 +3995,26 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
-  marginal_effects(mod)
+  marginal_effects(mod, effects = "AGE")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_marginaleffects2.png
+ marginal_effects(mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b1_climate_marginaleffects2.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_marginaleffects2_surface.png
+ marginal_effects(mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b1_climate_marginaleffects2_surface.png]]
+
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
@@ -4019,60 +4025,41 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png
-    cdf <- data.frame(unique(select(mod$data, Genus)))
-  colnames(cdf) <- "Genus"
-  rownames(cdf) <- unique(mod$data$Genus)
-  me <-   marginal_effects(mod, re_formula = NULL, conditions = cdf)
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_gdd_precip_b1_conditions.png
+    cdf <- make_conditions(mod$data, c("gdd","precip"))
+
+  me <-   marginal_effects(mod, re_formula = NULL, conditions = cdf, effects = "AGE")
   me
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png]]
+[[file:../figs/marginal_effects_gdd_precip_b1_conditions.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_estimates.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/climate_b1.png :width 800
 
   ggplot() +
-      geom_point(data = d, aes(x = AGE, y = DBH, color = Genus), inherit.aes = F, alpha = .3) +
-      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, group = cond__)) +
-      geom_ribbon(data = me$AGE, aes(x = AGE, ymin = lower__, ymax = upper__, group = cond__, color = cond__), fill = NA, size = .3) +
-      facet_wrap(~Genus)
+      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = cond__))
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/GenusSpecies_estimates.png]]
+[[file:../figs/climate_b1.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 600 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 1000 :bg transparent
   library(ggthemes)
-      red <- "#dc322f"
-      yellow <- "#b58900"
-      blue <- "#268bd2"
-      green <- "#859900"
-      cyan <- "#2aa198"
-      orange <- "#cb4b16"
-     violet <- "#6c71c4"
-     magenta <- "#d33682"
 
-    cols <- c(c(red, blue, green, violet),
-              rep(blue, 2),
-              c(red, blue, green),
-              rep(blue, 12),
-              c(red, blue, green),
-              blue)
+#  pred <- predict(mod, newdata = d)
+ #    pred.df <- cbind(d, pred)
 
-    #    pred <- predict(mod, newdata = d)
-     # pred.df <- cbind(d, pred)
-
-      ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
+      ggplot(d, aes(x = AGE, y = DBH)) +
               geom_point(alpha = .5) +
-              scale_color_manual(values = cols) +
-              facet_wrap(~Genus) +
+#              scale_color_manual(values = cols) +
+              facet_grid(precip~gdd) +
               theme_solarized_2(light = F, base_size = 18) +
-            geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F, color = "#93a1a1", size = 1) +
-            geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
+            geom_line(data = pred.df, aes(x = AGE, y = Estimate), inherit.aes = F, color = "#93a1a1", size = 1) +
+            geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5), size = .3, inherit.aes = F, fill = NA)
 #+end_src
 
 #+RESULTS:
