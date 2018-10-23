@@ -520,6 +520,12 @@ in a way that better captures the natural gradients of climate.
 #+end_src
 
 #+RESULTS:
+:
+: Attaching package: ‘tidyr’
+:
+: The following object is masked from ‘package:ascii’:
+:
+:     expand
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -568,7 +574,6 @@ cols(
   dbh1 = col_double()
 )
 See spec(...) for full column specifications.
-|=====                                                                   |   7%|======                                                                  |   9%|========                                                                |  11%|=========                                                               |  12%|==========                                                              |  14%|===========                                                             |  16%|=============                                                           |  17%|==============                                                          |  19%|===============                                                         |  21%|================                                                        |  22%|=================                                                       |  24%|==================                                                      |  25%|====================                                                    |  27%|=====================                                                   |  29%|======================                                                  |  31%|=====================                                           |  32%    1 MB|======================                                          |  34%    1 MB|=======================                                         |  36%    1 MB|========================                                        |  37%    1 MB|=========================                                       |  39%    1 MB|==========================                                      |  40%    1 MB|===========================                                     |  42%    1 MB|============================                                    |  44%    1 MB|=============================                                   |  46%    1 MB|===============================                                 |  47%    1 MB|================================                                |  49%    1 MB|=================================                               |  50%    1 MB|==================================                              |  52%    1 MB|===================================                             |  54%    1 MB|====================================                            |  55%    1 MB|=====================================                           |  57%    1 MB|======================================                          |  58%    1 MB|=======================================                         |  60%    1 MB|========================================                        |  62%    2 MB|=========================================                       |  64%    2 MB|==========================================                      |  65%    2 MB|===========================================                     |  67%    2 MB|=============================================                   |  69%    2 MB|==============================================                  |  71%    2 MB|===============================================                 |  72%    2 MB|================================================                |  74%    2 MB|=================================================               |  76%    2 MB|==================================================              |  78%    2 MB|====================================================            |  80%    2 MB|=====================================================           |  81%    2 MB|======================================================          |  83%    2 MB|=======================================================         |  85%    2 MB|========================================================        |  86%    2 MB|=========================================================       |  88%    2 MB|==========================================================      |  89%    2 MB|===========================================================     |  91%    2 MB|============================================================    |  93%    3 MB|=============================================================   |  95%    3 MB|=============================================================== |  97%    3 MB|================================================================|  99%    3 MB|=================================================================| 100%    3 MB
 Warning: 24255 parsing failures.
 row [90m# A tibble: 5 x 5[39m col     row col   expected   actual file                                            expected   [3m[90m<int>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m      [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m                                           actual [90m1[39m  126[90m2[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… file [90m2[39m  126[90m3[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… row [90m3[39m  126[90m4[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… col [90m4[39m  126[90m5[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… expected [90m5[39m  126[90m6[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.…
 ... ........................... ... ............................................................................... ........ ............ [... truncated]
@@ -998,8 +1003,12 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
           mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
           select(-Leaf,-TreeID) %>%
           left_join(.,clim) %>%
-           mutate(precip = round((precip - mean(precip))/ 1000, 4),
-                  gdd = round((gdd - mean(gdd))/ 1000, 4))
+           mutate(precip = round(precip / 1000, 4),
+                  gdd = round(gdd / 1000, 4))
+
+
+#           mutate(precip = round((precip - mean(precip))/ 1000, 4),
+ #                 gdd = round((gdd - mean(gdd))/ 1000, 4))
 
 
       saveRDS(d2, "../data/age_dbh_full.rds")
@@ -2350,10 +2359,13 @@ for gamma
 \beta = \mu/\sigma^2
 | parameter |   mu |  sd | alpha (of gamma) | beta (of gamma) |
 |-----------+------+-----+------------------+-----------------|
-| \beta_0   |    3 | 1.5 |               4. |       1.3333333 |
-| \beta_1   | 1.75 |  .3 |        34.027778 |       19.444444 |
-| \beta_2   | 1.25 | .15 |        69.444444 |       55.555556 |
-| \beta_3   |    1 | .15 |        44.444444 |       44.444444 |
+| \beta_0        |    3 | 1.5 |               4. |       1.3333333 |
+| \beta_1        | 1.75 |  .3 |        34.027778 |       19.444444 |
+| \beta_2        | 1.25 | .15 |        69.444444 |       55.555556 |
+| \beta_3        |    1 | .15 |        44.444444 |       44.444444 |
+| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
+| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
+| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
@@ -2488,12 +2500,9 @@ be positive, but smaller.
 \tau_3 \sim Normal(.05, .03)
 \]
 
-
-
-                        b        gdd                    b1
-                        b gdd:precip                    b1
-                        b  Intercept                    b1
-                        b     precip                    b1
+| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
+| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
+| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
 
 
 *** fitting model
@@ -3830,52 +3839,56 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 *** b1 function of climate
 **** model R code
 #+begin_src R :tangle climate_b1.R
-  library(dplyr)
-  library(brms)
+    library(dplyr)
+    library(brms)
 
-  genus <- "no"
-  species <- "nos"
-  cities <- "no"
-  climate <- "b1"
-  hetero <- "no"
-  family <- "Gamma"
+    genus <- "no"
+    species <- "nos"
+    cities <- "no"
+    climate <- "b1"
+    hetero <- "no"
+    family <- "Gamma"
 
-  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
-  b0_form <- formula(b0 ~ 1)
-  b1_form <- formula(b1 ~ gdd * precip)
-  b2_form <- formula(b2 ~ 1)
-  b3_form <- formula(b3 ~ 1)
+    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+    b0_form <- formula(b0 ~ 1)
+    b1_form <- formula(b1 ~ gdd * precip)
+    b2_form <- formula(b2 ~ 1)
+    b3_form <- formula(b3 ~ 1)
 
-  form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+    form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
-  nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
-               prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
-               prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
-               prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
-               prior(gamma(20, 1), class = "shape"),
-               prior(normal(0.07, 0.04), nlpar = "b1", coef = "gdd"),
-               prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
-               prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
+    nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+                 prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
+                 prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+                 prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+                 prior(gamma(20, 1), class = "shape"))
+  #               prior(normal(0.07, 0.04), nlpar = "b1", coef = "gdd"),
+   #              prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
+    #             prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
+
+  #| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
+  #| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
+  #| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
 
   d <- readRDS("../data/age_dbh_testing.rds")
 
-  ## prior_mod <-  brm(form,
-  ##                   data = d,
-  ##                   prior = nlprior,
-  ##                   family = Gamma("identity"),
-  ##                   sample_prior = "only",
-  ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+    ## prior_mod <-  brm(form,
+    ##                   data = d,
+    ##                   prior = nlprior,
+    ##                   family = Gamma("identity"),
+    ##                   sample_prior = "only",
+    ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
-  ##  pred <- predict(prior_mod, newdata = d)
+    ##  pred <- predict(prior_mod, newdata = d)
 
-   mod <- brm(form,
-             data = d,
-             prior = nlprior,
-             family = Gamma("identity"),
-             chains = 1, cores = 1, init_r = .3, iter = 1000)
+     mod <- brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+               chains = 1, cores = 1, init_r = .3, iter = 500)
 
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
 
