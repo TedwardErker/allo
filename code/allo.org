@@ -2343,15 +2343,16 @@ data overwhelms the priors
 for gamma
 \alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
-| parameter |   mu |  sd | alpha (of gamma) | beta (of gamma) |
-|-----------+------+-----+------------------+-----------------|
-| \beta_0        |    3 | 1.5 |               4. |       1.3333333 |
-| \beta_1        | 1.75 |  .3 |        34.027778 |       19.444444 |
-| \beta_2        | 1.25 | .15 |        69.444444 |       55.555556 |
-| \beta_3        |    1 | .15 |        44.444444 |       44.444444 |
-| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
-| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
-| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
+| parameter     |   mu |  sd | alpha (of gamma) | beta (of gamma) |
+|---------------+------+-----+------------------+-----------------|
+| \beta_0            |    3 | 1.5 |               4. |       1.3333333 |
+| \beta_1            | 1.75 |  .3 |        34.027778 |       19.444444 |
+| \beta_2            | 1.25 | .15 |        69.444444 |       55.555556 |
+| \beta_3            |    1 | .15 |        44.444444 |       44.444444 |
+| \beta_3  intercept |   .6 | .15 |              16. |       26.666667 |
+| \tau_1            |  .07 | .04 |           3.0625 |           43.75 |
+| \tau_2            |  .07 | .04 |           3.0625 |           43.75 |
+| \tau_3            |  .05 | .03 |        2.7777778 |       55.555556 |
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
@@ -4085,18 +4086,18 @@ intercept (of \beta_1) isn't allowed to vary by city.
     b0_form <- formula(b0 ~ 1)
     b1_form <- formula(b1 ~ 1)
     b2_form <- formula(b2 ~ 1)
-    b3_form <- formula(b3 ~ gdd * precip)
+    b3_form <- formula(b3 ~ gdd* precip)
 
     form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
     nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
                  prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
                  prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
-                 prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+                 prior(gamma(16, 26), nlpar = "b3",lb = 0),  # I reduce this value because it becomes the intercept (then gdd and precip add to it)
                  prior(gamma(20, 1), class = "shape"),
-                 prior(normal(0.01, 0.005), nlpar = "b3", coef = "gdd"),
-                 prior(normal(0.01, 0.005), nlpar = "b3", coef = "precip"),
-                 prior(normal(0.005, 0.005), nlpar = "b3", coef = "gdd:precip"))
+                 prior(normal(0.01, 0.01), nlpar = "b3", coef = "gdd"),
+                 prior(normal(0.03, 0.01), nlpar = "b3", coef = "precip"),
+                 prior(normal(0.025, 0.01), nlpar = "b3", coef = "gdd:precip"))
 
   d <- readRDS("../data/age_dbh_testing.rds")
 
