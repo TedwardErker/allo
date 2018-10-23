@@ -3702,31 +3702,48 @@ MAKE CONDITIONS
 There is higher uncertainty in the mean function for cities with
 little data and
 
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 800
-#    pred <- predict(mod, newdata = d)
- # pred.df <- cbind(d, pred)
 
-  ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
-          geom_point(alpha = .5) +
-          facet_wrap(~Genus) +
-        geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F) +
-        geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .1,inherit.aes = F, fill = NA)
+
+
+      theme(axis.text = element_text(size = 18, color = "#839496"),
+            rect = element_rect(fill = "transparent"),
+            panel.background = element_rect(fill = "transparent"),
+            panel.grid = element_blank())
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 600 :bg transparent
+  library(ggthemes)
+      red <- "#dc322f"
+      yellow <- "#b58900"
+      blue <- "#268bd2"
+      green <- "#859900"
+      cyan <- "#2aa198"
+      orange <- "#cb4b16"
+     violet <- "#6c71c4"
+     magenta <- "#d33682"
+
+    cols <- c(c(red, blue, green, violet),
+              rep(blue, 2),
+              c(red, blue, green),
+              rep(blue, 12),
+              c(red, blue, green),
+              blue)
+
+    #    pred <- predict(mod, newdata = d)
+     # pred.df <- cbind(d, pred)
+
+      ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
+              geom_point(alpha = .5) +
+              scale_color_manual(values = cols) +
+              facet_wrap(~Genus) +
+              theme_solarized_2(light = F, base_size = 18) +
+            geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F) +
+            geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .1,inherit.aes = F, fill = NA)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/GenusSpecies_wpreds.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 800
-#    pred <- predict(mod, newdata = d)
- # pred.df <- cbind(d, pred)
-
-  ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
-          geom_point() +
-          facet_wrap(~Genus) +
-        geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F) +
-        geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, fill = Species), inherit.aes = F, alpha = .2)
-#+end_src
-
 
 *** b1 function of climate
 *** b3 function of climate
