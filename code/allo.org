@@ -2470,17 +2470,22 @@ I'll set the variation to about half of what I set it for \beta_1.
 
 The coefficients for climate variables on \beta_1
 gdd are in thosands.  range in data is about 6000 gdd, or 6 thousands
-gdd.
+gdd.  I expect the effects of gdd, precip, and their interaction to be
+positive.  I expect the increase in asympote across this range to be
+not too big, maybe as little as .1m and as much as 1m.  So the
+coeffcient might be 0.0167 to 0.167.  The interaction term will also
+be positive, but smaller.
+
 \[
-\tau_1 \sim
+\tau_1 \sim Normal(.07, .04)
 \]
 
 \[
-\tau_2 \sim
+\tau_2 \sim Normal(.07, .04)
 \]
 
 \[
-\tau_3 \sim
+\tau_3 \sim Normal(.05, .03)
 \]
 
 
@@ -3825,50 +3830,52 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 *** b1 function of climate
 **** model R code
 #+begin_src R :tangle genus_species.R
-  library(dplyr)
-  library(brms)
+    library(dplyr)
+    library(brms)
 
-  genus <- "no"
-  species <- "nos"
-  cities <- "no"
-  climate <- "b1"
-  hetero <- "no"
-  family <- "Gamma"
+    genus <- "no"
+    species <- "nos"
+    cities <- "no"
+    climate <- "b1"
+    hetero <- "no"
+    family <- "Gamma"
 
-  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
-  b0_form <- formula(b0 ~ 1)
-  b1_form <- formula(b1 ~ gdd * precip)
-  b2_form <- formula(b2 ~ 1)
-  b3_form <- formula(b3 ~ 1)
+    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+    b0_form <- formula(b0 ~ 1)
+    b1_form <- formula(b1 ~ gdd * precip)
+    b2_form <- formula(b2 ~ 1)
+    b3_form <- formula(b3 ~ 1)
 
-  form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+    form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
-  nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
-               prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
-               prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
-               prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
-               prior(gamma(20, 1), class = "shape"))
+    nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+                 prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
+                 prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+                 prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+                 prior(gamma(20, 1), class = "shape"))
+                 prior(normal(0.07, 0.04), nlpar = "b1", coef = "gdd"),
+                 prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
+                 prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
+
+    d <- readRDS("../data/age_dbh_testing.rds")
+
+    ## prior_mod <-  brm(form,
+    ##                   data = d,
+    ##                   prior = nlprior,
+    ##                   family = Gamma("identity"),
+    ##                   sample_prior = "only",
+    ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
-  d <- readRDS("../data/age_dbh_testing.rds")
+     ## pred <- predict(prior_mod, newdata = d)
 
-  ## prior_mod <-  brm(form,
-  ##                   data = d,
-  ##                   prior = nlprior,
-  ##                   family = Gamma("identity"),
-  ##                   sample_prior = "only",
-  ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+    mod <- brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+               chains = 6, cores = 6, init_r = .3, iter = 1000)
 
-
-   ## pred <- predict(prior_mod, newdata = d)
-
-  mod <- brm(form,
-             data = d,
-             prior = nlprior,
-             family = Gamma("identity"),
-             chains = 6, cores = 6, init_r = .3, iter = 1000)
-
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
 #+end_src
 
@@ -4746,6 +4753,15 @@ gamma
 alpha called shape
 beta called rate
  mean is alpha/beta; variance is alpha/beta^2
+
+#+begin_src R :exports results :results graphics :file ../figs/fnorm.png
+  x <- seq(-.1,.3,.01)
+  y <- dnorm(x, .07, .04)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fnorm.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/ftest.png
   x <- seq(0,40,.1)
