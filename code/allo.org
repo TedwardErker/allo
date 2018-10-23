@@ -2466,6 +2466,31 @@ I'll set the variation to about half of what I set it for \beta_1.
 \sigma_{3_c[i]} \sim half-Normal(0, .03)
 \]
 
+
+
+The coefficients for climate variables on \beta_1
+gdd are in thosands.  range in data is about 6000 gdd, or 6 thousands
+gdd.
+\[
+\tau_1 \sim
+\]
+
+\[
+\tau_2 \sim
+\]
+
+\[
+\tau_3 \sim
+\]
+
+
+
+                        b        gdd                    b1
+                        b gdd:precip                    b1
+                        b  Intercept                    b1
+                        b     precip                    b1
+
+
 *** fitting model
 **** COMMENT adjust for fit in stan, can mention
 (but when fit in stan, reparameterized so beta's are closer to one
