@@ -3474,6 +3474,24 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 [[file:../figs/pp_check_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.png]]
 
 
+  cond <- data.frame(City = c("a","b","c","d"))
+
+                         effects = c("AGE"), conditions = cond, re_formula = NULL)
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma_City.png
+  d <- readRDS("../data/age_dbh_testing.rds")
+cdf <- data.frame(City = unique(as.character(d$City)))
+rownames(cdf) <- unique(as.character(d$City))
+
+  marginal_effects(mod, re_formula = NULL, conditions = cdf)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma_City.png]]
+
+There is higher uncertainty in the mean function for cities with
+little data and
+
 #+begin_src R :exports results :results graphics :file ../figs/cities_wpreds.png
 #  pred <- predict(mod, newdata = d)
 pred.df <- cbind(d, pred)
@@ -3486,7 +3504,6 @@ pred.df <- cbind(d, pred)
 
 #+RESULTS:
 [[file:../figs/cities_wpreds.png]]
-
 
 
 *** genus/species
@@ -3567,6 +3584,148 @@ run from krusty terminal
 cat many_cities.Rout
 #+END_SRC
 
+
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+:
+: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
+: total size is 12598354  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+
+#+begin_src R
+mod_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma <- readRDS("../models/genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.rds")
+mod <- mod_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+mod
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ (1 | Genus/Species)
+         b1 ~ (1 | Genus/Species)
+         b2 ~ (1 | Genus/Species)
+         b3 ~ (1 | Genus/Species)
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 3000
+
+Group-Level Effects:
+~Genus (Number of levels: 18)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.14      0.10     0.00     0.36       1061 1.00
+sd(b1_Intercept)     0.42      0.06     0.30     0.55       1584 1.00
+sd(b2_Intercept)     0.22      0.03     0.15     0.28       1704 1.00
+sd(b3_Intercept)     0.16      0.02     0.12     0.20       1458 1.00
+
+~Genus:Species (Number of levels: 25)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.04      0.03     0.00     0.12       3000 1.00
+sd(b1_Intercept)     0.06      0.03     0.01     0.13        696 1.00
+sd(b2_Intercept)     0.03      0.02     0.00     0.07       1575 1.00
+sd(b3_Intercept)     0.04      0.02     0.00     0.07        649 1.01
+
+Population-Level Effects:
+             Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept     2.78      0.09     2.61     2.96       1602 1.00
+b1_Intercept     1.31      0.11     1.10     1.54        462 1.01
+b2_Intercept     1.14      0.07     1.01     1.29       1207 1.01
+b3_Intercept     1.07      0.04     0.99     1.15        624 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape     9.78      0.19     9.41    10.15       3000 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+  pairs(mod)
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png :height 1200
+  plot(mod, ask = F, N = 30)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+  marginal_effects(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+  pp_check(mod) +xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma_City.png
+
+MAKE CONDITIONS
+
+
+  marginal_effects(mod, re_formula = NULL, conditions = cdf)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma_City.png]]
+
+There is higher uncertainty in the mean function for cities with
+little data and
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 800
+#    pred <- predict(mod, newdata = d)
+ # pred.df <- cbind(d, pred)
+
+  ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
+          geom_point(alpha = .5) +
+          facet_wrap(~Genus) +
+        geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F) +
+        geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .1,inherit.aes = F, fill = NA)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/GenusSpecies_wpreds.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 800
+#    pred <- predict(mod, newdata = d)
+ # pred.df <- cbind(d, pred)
+
+  ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
+          geom_point() +
+          facet_wrap(~Genus) +
+        geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F) +
+        geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, fill = Species), inherit.aes = F, alpha = .2)
+#+end_src
 
 
 *** b1 function of climate
