@@ -4064,58 +4064,266 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/GenusSpecies_wpreds.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_preditions.png :width 800
-
-  ## higher.age.pred <-  select(mod$data, Genus, Species) %>% unique()
-  ## nr <- nrow(higher.age.pred)
-  ## higher.age.pred <- higher.age.pred[rep(1:nr, each = 120),]
-  ## higher.age.pred$AGE <- rep(1:120, times = nr)
-
-  ## pred <- predict(mod, newdata = higher.age.pred)
-
-  ## pred.df <- cbind(higher.age.pred, pred)
-
-    ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
-            geom_point(alpha = .5) +
-            scale_color_manual(values = cols) +
-            facet_wrap(~Genus) +
-            theme_solarized_2(light = F, base_size = 18) +
-          geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F, color = "#93a1a1", size = 1) +
-          geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/GenusSpecies_preditions.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_acer_preditions.png :width 800
-
-   higher.age.pred <-  select(mod$data, Genus, Species) %>% unique() %>% filter(Genus == "Acer")
-   nr <- nrow(higher.age.pred)
-   higher.age.pred <- higher.age.pred[rep(1:nr, each = 120),]
-   higher.age.pred$AGE <- rep(1:120, times = nr)
-
-   pred <- predict(mod, newdata = higher.age.pred)
-
-   pred.df <- cbind(higher.age.pred, pred)
-
-    ggplot(filter(d, Genus == "Acer"), aes(x = AGE, y = DBH, color = Species)) +
-            geom_point(alpha = .5) +
-            scale_color_manual(values = cols) +
-            facet_wrap(~Genus) +
-            theme_solarized_2(light = F, base_size = 18) +
-          geom_line(data = pred.df, aes(x = AGE, y = Estimate, color = Species), inherit.aes = F, size = 1) +
-          geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/GenusSpecies_acer_preditions.png]]
+I would expect some of these fits to not be so great, because the
+intercept (of \beta_1) isn't allowed to vary by city.
 
 
 *** b3 function of climate
+**** model R code
+#+begin_src R :tangle climate_b3.R
+    library(dplyr)
+    library(brms)
+
+    genus <- "no"
+    species <- "no"
+    cities <- "no"
+    climate <- "b3"
+    hetero <- "no"
+    family <- "Gamma"
+
+    data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+    b0_form <- formula(b0 ~ 1)
+    b1_form <- formula(b1 ~ 1)
+    b2_form <- formula(b2 ~ 1)
+    b3_form <- formula(b3 ~ gdd * precip)
+
+    form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+    nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+                 prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
+                 prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+                 prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+                 prior(gamma(20, 1), class = "shape"),
+                 prior(normal(0.01, 0.005), nlpar = "b3", coef = "gdd"),
+                 prior(normal(0.01, 0.005), nlpar = "b3", coef = "precip"),
+                 prior(normal(0.005, 0.005), nlpar = "b3", coef = "gdd:precip"))
+
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+     prior_mod <-  brm(form,
+                       data = d,
+                       prior = nlprior,
+                       family = Gamma("identity"),
+                       sample_prior = "only",
+                       chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+
+
+    ##  pred <- predict(prior_mod, newdata = d)
+
+     mod <- brm(form,
+               data = d,
+               prior = nlprior,
+               family = Gamma("identity"),
+               chains = 6, cores = 6, init_r = .3, iter = 1000)
+
+    saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+
+#+end_src
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/climate_b3_prior_marginaleffects11.png
+ marginal_effects(prior_mod, effects = "AGE", spaghetti = T, nsamples = 300, theme = theme_gray())
+#+end_src
+
+#+RESULTS:
+[[file:../figs/climate_b3_prior_marginaleffects11.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_prior_marginaleffects2.png
+ marginal_effects(prior_mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b1_climate_prior_marginaleffects2.png]]
+
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_prior_pred.png
+pp <- posterior_predict(prior_mod, nsamples=300)
+ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b1_climate_prior_pred.png]]
+
+**** tangle
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+  rsync -avz climate_b3.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: climate_b3.R
+:
+: sent 792 bytes  received 42 bytes  333.60 bytes/sec
+: total size is 1767  speedup is 2.12
+: You have new mail in /var/mail/erker
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH climate_b3.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat climate_b1.Rout
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds
+:
+: sent 38 bytes  received 12044590 bytes  2676584.00 bytes/sec
+: total size is 12136389  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+**** diagnostics
+:PROPERTIES:
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:END:
+
+#+begin_src R
+mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma <- readRDS("../models/genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds")
+mod <- mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+mod
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ 1
+         b1 ~ gdd * precip
+         b2 ~ 1
+         b3 ~ 1
+   Data: d (Number of observations: 5548)
+Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
+         total post-warmup samples = 3000
+
+Population-Level Effects:
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      2.77      0.08     2.62     2.93       2104 1.00
+b1_Intercept      1.07      0.07     0.96     1.21       1197 1.01
+b1_gdd            0.00      0.00     0.00     0.01       1676 1.00
+b1_precip         0.07      0.01     0.05     0.10       1559 1.00
+b1_gdd:precip     0.01      0.00     0.00     0.01       1577 1.00
+b2_Intercept      0.92      0.04     0.83     0.99       1586 1.00
+b3_Intercept      1.08      0.02     1.05     1.11       1501 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape     8.41      0.16     8.11     8.73       2646 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+#+end_example
+
+#+begin_src R :exports results :results graphics :file ../figs/pairs_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+  pairs(mod)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pairs_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png :height 1200
+  plot(mod, ask = F, N = 30)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+  marginal_effects(mod, effects = "AGE")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_marginaleffects2.png
+ marginal_effects(mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = F)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b1_climate_marginaleffects2.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_marginaleffects2_surface.png
+ marginal_effects(mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b1_climate_marginaleffects2_surface.png]]
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+  pp_check(mod) +xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_gdd_precip_b1_conditions.png
+    cdf <- make_conditions(mod$data, c("gdd","precip"))
+
+  me <-   marginal_effects(mod, re_formula = NULL, conditions = cdf, effects = "AGE")
+  me
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_gdd_precip_b1_conditions.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/climate_b1.png :width 800
+
+  ggplot() +
+      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = cond__))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/climate_b1.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 1000 :bg transparent
+  library(ggthemes)
+
+#  pred <- predict(mod, newdata = d)
+ #    pred.df <- cbind(d, pred)
+
+      ggplot(d, aes(x = AGE, y = DBH)) +
+              geom_point(alpha = .5) +
+#              scale_color_manual(values = cols) +
+              facet_grid(precip~gdd) +
+              theme_solarized_2(light = F, base_size = 18) +
+            geom_line(data = pred.df, aes(x = AGE, y = Estimate), inherit.aes = F, color = "#93a1a1", size = 1) +
+            geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5), size = .3, inherit.aes = F, fill = NA)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/GenusSpecies_wpreds.png]]
+I would expect some of these fits to not be so great, because the
+intercept (of \beta_1) isn't allowed to vary by city.
+
+
 *** TODO intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!  some need to be much smaller than others
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle inter.R
