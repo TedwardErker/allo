@@ -1006,7 +1006,9 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
            mutate(precip = round(precip / 1000, 4),
                   gdd = round(gdd / 1000, 4))
 
-
+# For some reason, not clear to me, the predictors cannot be centered.  I think something is happening in the backend of stan or brms
+# the chains won't be able to start initialization
+# error is about a negative inverse scale parameter which is constrained to be positive.
 #           mutate(precip = round((precip - mean(precip))/ 1000, 4),
  #                 gdd = round((gdd - mean(gdd))/ 1000, 4))
 
@@ -1027,22 +1029,6 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
 rsync -avz ../data/age_dbh_full.rds erker@krusty:~/allo/data/
 rsync -avz ../data/age_dbh_testing.rds erker@krusty:~/allo/data/
 #+END_SRC
-
-#+RESULTS:
-#+begin_example
-erker@krusty's password:
-building file list ... done
-age_dbh_full.rds
-
-sent 26672 bytes  received 804 bytes  2616.76 bytes/sec
-total size is 88550  speedup is 3.22
-erker@krusty's password:
-building file list ... done
-age_dbh_testing.rds
-
-sent 36460 bytes  received 372 bytes  4910.93 bytes/sec
-total size is 37842  speedup is 1.03
-#+end_example
 
 *** The Species for which we have age and dbh:
 #+begin_src R
@@ -3861,14 +3847,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                  prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
                  prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                  prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
-                 prior(gamma(20, 1), class = "shape"))
-  #               prior(normal(0.07, 0.04), nlpar = "b1", coef = "gdd"),
-   #              prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
-    #             prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
-
-  #| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
-  #| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
-  #| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
+                 prior(gamma(20, 1), class = "shape"),
+                 prior(normal(0.07, 0.04), nlpar = "b1", coef = "gdd"),
+                 prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
+                 prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
 
   d <- readRDS("../data/age_dbh_testing.rds")
 
