@@ -4101,12 +4101,12 @@ intercept (of \beta_1) isn't allowed to vary by city.
 
   d <- readRDS("../data/age_dbh_testing.rds")
 
-     prior_mod <-  brm(form,
-                       data = d,
-                       prior = nlprior,
-                       family = Gamma("identity"),
-                       sample_prior = "only",
-                       chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+     ## prior_mod <-  brm(form,
+     ##                   data = d,
+     ##                   prior = nlprior,
+     ##                   family = Gamma("identity"),
+     ##                   sample_prior = "only",
+     ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
     ##  pred <- predict(prior_mod, newdata = d)
@@ -4128,36 +4128,27 @@ intercept (of \beta_1) isn't allowed to vary by city.
 #+RESULTS:
 [[file:../figs/climate_b3_prior_marginaleffects11.png]]
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_prior_marginaleffects2.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b3_climate_prior_marginaleffects2.png
  marginal_effects(prior_mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/b1_climate_prior_marginaleffects2.png]]
+[[file:../figs/b3_climate_prior_marginaleffects2.png]]
 
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_prior_pred.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b3_climate_prior_pred.png
 pp <- posterior_predict(prior_mod, nsamples=300)
 ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/b1_climate_prior_pred.png]]
+[[file:../figs/b3_climate_prior_pred.png]]
 
 **** tangle
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
   rsync -avz climate_b3.R erker@krusty:~/allo/code/
 #+END_SRC
-
-#+RESULTS:
-: erker@krusty's password:
-: building file list ... done
-: climate_b3.R
-:
-: sent 792 bytes  received 42 bytes  333.60 bytes/sec
-: total size is 1767  speedup is 2.12
-: You have new mail in /var/mail/erker
 
 **** run on krusty
 
@@ -4183,11 +4174,10 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b3_h
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds
+: genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds
 :
-: sent 38 bytes  received 12044590 bytes  2676584.00 bytes/sec
-: total size is 12136389  speedup is 1.01
-: You have new mail in /var/mail/erker
+: sent 38 bytes  received 12038846 bytes  2675307.56 bytes/sec
+: total size is 12131606  speedup is 1.01
 
 **** diagnostics
 :PROPERTIES:
@@ -4211,26 +4201,26 @@ mod
   Links: mu = identity; shape = identity
 Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b0 ~ 1
-         b1 ~ gdd * precip
+         b1 ~ 1
          b2 ~ 1
-         b3 ~ 1
+         b3 ~ gdd * precip
    Data: d (Number of observations: 5548)
 Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
          total post-warmup samples = 3000
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.77      0.08     2.62     2.93       2104 1.00
-b1_Intercept      1.07      0.07     0.96     1.21       1197 1.01
-b1_gdd            0.00      0.00     0.00     0.01       1676 1.00
-b1_precip         0.07      0.01     0.05     0.10       1559 1.00
-b1_gdd:precip     0.01      0.00     0.00     0.01       1577 1.00
-b2_Intercept      0.92      0.04     0.83     0.99       1586 1.00
-b3_Intercept      1.08      0.02     1.05     1.11       1501 1.00
+b0_Intercept      2.76      0.08     2.61     2.91       1777 1.00
+b1_Intercept      1.31      0.07     1.18     1.47       1434 1.00
+b2_Intercept      0.94      0.04     0.86     1.02       1955 1.00
+b3_Intercept      1.00      0.01     0.97     1.03       1506 1.00
+b3_gdd            0.00      0.00     0.00     0.00       1550 1.00
+b3_precip         0.03      0.00     0.02     0.03       1580 1.00
+b3_gdd:precip     0.00      0.00     0.00     0.00       1443 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     8.41      0.16     8.11     8.73       2646 1.00
+shape     8.45      0.16     8.14     8.78       2604 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -4244,45 +4234,45 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pairs_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png :height 1200
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.png :height 1200
   plot(mod, ask = F, N = 30)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+[[file:../figs/plot_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.png]]
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_marginaleffects2.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b3_climate_marginaleffects2.png
  marginal_effects(mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = F)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/b1_climate_marginaleffects2.png]]
+[[file:../figs/b3_climate_marginaleffects2.png]]
 
-#+begin_src R :tangle no :exports results :results graphics :file ../figs/b1_climate_marginaleffects2_surface.png
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b3_climate_marginaleffects2_surface.png
  marginal_effects(mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = T)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/b1_climate_marginaleffects2_surface.png]]
+[[file:../figs/b3_climate_marginaleffects2_surface.png]]
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.png
   pp_check(mod) +xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
+[[file:../figs/pp_check_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_gdd_precip_b1_conditions.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_gdd_precip_b3_conditions.png
     cdf <- make_conditions(mod$data, c("gdd","precip"))
 
   me <-   marginal_effects(mod, re_formula = NULL, conditions = cdf, effects = "AGE")
@@ -4290,10 +4280,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_gdd_precip_b1_conditions.png]]
+[[file:../figs/marginal_effects_gdd_precip_b3_conditions.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/climate_b1.png :width 800
+#+begin_src R :exports results :results graphics :file ../figs/climate_b3.png :width 800
 
   ggplot() +
       geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = cond__))
@@ -4301,10 +4291,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-[[file:../figs/climate_b1.png]]
+[[file:../figs/climate_b3.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 1000 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/b3_wpreds.png :width 1000 :height 1000 :bg transparent
   library(ggthemes)
 
 #  pred <- predict(mod, newdata = d)
@@ -4320,10 +4310,20 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+RESULTS:
-[[file:../figs/GenusSpecies_wpreds.png]]
+[[file:../figs/b3_wpreds.png]]
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
+*** compare climate beta 1 to climate beta 3
+#+begin_src R
+mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma
+mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma
+#+end_src
+
+#+begin_src R
+comparison <- loo(mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma, mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma)
+comparison
+#+end_src
 
 *** TODO intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!  some need to be much smaller than others
 :PROPERTIES:

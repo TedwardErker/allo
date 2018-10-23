@@ -13,27 +13,27 @@ library(dplyr)
   b0_form <- formula(b0 ~ 1)
   b1_form <- formula(b1 ~ 1)
   b2_form <- formula(b2 ~ 1)
-  b3_form <- formula(b3 ~ gdd * precip)
+  b3_form <- formula(b3 ~ gdd* precip)
 
   form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
   nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
                prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
                prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
-               prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+               prior(gamma(16, 26), nlpar = "b3",lb = 0),  # I reduce this value because it becomes the intercept (then gdd and precip add to it)
                prior(gamma(20, 1), class = "shape"),
-               prior(normal(0.03, 0.02), nlpar = "b3", coef = "gdd"),
-               prior(normal(0.03, 0.02), nlpar = "b3", coef = "precip"),
-               prior(normal(0.025, 0.015), nlpar = "b3", coef = "gdd:precip"))
+               prior(normal(0.01, 0.01), nlpar = "b3", coef = "gdd"),
+               prior(normal(0.03, 0.01), nlpar = "b3", coef = "precip"),
+               prior(normal(0.025, 0.01), nlpar = "b3", coef = "gdd:precip"))
 
 d <- readRDS("../data/age_dbh_testing.rds")
 
-  ## prior_mod <-  brm(form,
-  ##                   data = d,
-  ##                   prior = nlprior,
-  ##                   family = Gamma("identity"),
-  ##                   sample_prior = "only",
-  ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+   ## prior_mod <-  brm(form,
+   ##                   data = d,
+   ##                   prior = nlprior,
+   ##                   family = Gamma("identity"),
+   ##                   sample_prior = "only",
+   ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
 
 
   ##  pred <- predict(prior_mod, newdata = d)
