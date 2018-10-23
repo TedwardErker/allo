@@ -3700,11 +3700,12 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_estimates.png
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_estimates.png :width 800
 
   ggplot() +
-      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, color = Genus, group = cond__)) +
-      geom_point(data = d, aes(x = AGE, y = DBH, color = Genus), inherit.aes = F, alpha = .5) +
+      geom_point(data = d, aes(x = AGE, y = DBH, color = Genus), inherit.aes = F, alpha = .3) +
+      geom_line(data = me$AGE, aes(x = AGE, y = estimate__, group = cond__)) +
+      geom_ribbon(data = me$AGE, aes(x = AGE, ymin = lower__, ymax = upper__, group = cond__, color = cond__), fill = NA, size = .3) +
       facet_wrap(~Genus)
 
 #+end_src
@@ -3746,7 +3747,106 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/GenusSpecies_wpreds.png]]
 
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_preditions.png :width 800
+
+  ## higher.age.pred <-  select(mod$data, Genus, Species) %>% unique()
+  ## nr <- nrow(higher.age.pred)
+  ## higher.age.pred <- higher.age.pred[rep(1:nr, each = 120),]
+  ## higher.age.pred$AGE <- rep(1:120, times = nr)
+
+  ## pred <- predict(mod, newdata = higher.age.pred)
+
+  ## pred.df <- cbind(higher.age.pred, pred)
+
+    ggplot(d, aes(x = AGE, y = DBH, color = Species)) +
+            geom_point(alpha = .5) +
+            scale_color_manual(values = cols) +
+            facet_wrap(~Genus) +
+            theme_solarized_2(light = F, base_size = 18) +
+          geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F, color = "#93a1a1", size = 1) +
+          geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/GenusSpecies_preditions.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_acer_preditions.png :width 800
+
+   higher.age.pred <-  select(mod$data, Genus, Species) %>% unique() %>% filter(Genus == "Acer")
+   nr <- nrow(higher.age.pred)
+   higher.age.pred <- higher.age.pred[rep(1:nr, each = 120),]
+   higher.age.pred$AGE <- rep(1:120, times = nr)
+
+   pred <- predict(mod, newdata = higher.age.pred)
+
+   pred.df <- cbind(higher.age.pred, pred)
+
+    ggplot(filter(d, Genus == "Acer"), aes(x = AGE, y = DBH, color = Species)) +
+            geom_point(alpha = .5) +
+            scale_color_manual(values = cols) +
+            facet_wrap(~Genus) +
+            theme_solarized_2(light = F, base_size = 18) +
+          geom_line(data = pred.df, aes(x = AGE, y = Estimate, color = Species), inherit.aes = F, size = 1) +
+          geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/GenusSpecies_acer_preditions.png]]
+
+
 *** b1 function of climate
+**** model R code
+#+begin_src R :tangle genus_species.R
+  library(dplyr)
+  library(brms)
+
+  genus <- "no"
+  species <- "nos"
+  cities <- "no"
+  climate <- "b1"
+  hetero <- "no"
+  family <- "Gamma"
+
+  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+  b0_form <- formula(b0 ~ 1)
+  b1_form <- formula(b1 ~ gdd * precip)
+  b2_form <- formula(b2 ~ 1)
+  b3_form <- formula(b3 ~ 1)
+
+  form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+  nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+               prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
+               prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+               prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+               prior(gamma(20, 1), class = "shape"))
+
+
+  d <- readRDS("../data/age_dbh_testing.rds")
+
+  ## prior_mod <-  brm(form,
+  ##                   data = d,
+  ##                   prior = nlprior,
+  ##                   family = Gamma("identity"),
+  ##                   sample_prior = "only",
+  ##                   chains = 2, cores = 2, init_r = .3, iter = 300, control = list(adapt_delta = .8))
+
+
+   ## pred <- predict(prior_mod, newdata = d)
+
+  mod <- brm(form,
+             data = d,
+             prior = nlprior,
+             family = Gamma("identity"),
+             chains = 6, cores = 6, init_r = .3, iter = 1000)
+
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+
+#+end_src
+
 
 *** b3 function of climate
 *** TODO intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!  some need to be much smaller than others
