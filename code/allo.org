@@ -3688,29 +3688,14 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/pp_check_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma_City.png
-
-MAKE CONDITIONS
-
-
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png
+cdf <- data.frame(unique(mod$data$Genus))
+rownames(cdf) <- unique(mod$data$Genus)
   marginal_effects(mod, re_formula = NULL, conditions = cdf)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma_City.png]]
-
-There is higher uncertainty in the mean function for cities with
-little data and
-
-
-
-
-      theme(axis.text = element_text(size = 18, color = "#839496"),
-            rect = element_rect(fill = "transparent"),
-            panel.background = element_rect(fill = "transparent"),
-            panel.grid = element_blank())
-
-
+[[file:../figs/marginal_effects_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma_City.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/GenusSpecies_wpreds.png :width 1000 :height 600 :bg transparent
   library(ggthemes)
@@ -3738,14 +3723,15 @@ little data and
               scale_color_manual(values = cols) +
               facet_wrap(~Genus) +
               theme_solarized_2(light = F, base_size = 18) +
-            geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F) +
-            geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .1,inherit.aes = F, fill = NA)
+            geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F, color = "#93a1a1", size = 1) +
+            geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/GenusSpecies_wpreds.png]]
 
 *** b1 function of climate
+
 *** b3 function of climate
 *** TODO intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!  some need to be much smaller than others
 :PROPERTIES:
@@ -5897,3 +5883,5 @@ What should the structure of the paper be?
 * bibliography                                                       :ignore:
 bibliography:~/git/notes/references.bib
 bibliographystyle:apa
+
+
