@@ -3829,7 +3829,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
     library(brms)
 
     genus <- "no"
-    species <- "nos"
+    species <- "no"
     cities <- "no"
     climate <- "b1"
     hetero <- "no"
@@ -3868,7 +3868,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                data = d,
                prior = nlprior,
                family = Gamma("identity"),
-               chains = 1, cores = 1, init_r = .3, iter = 500)
+               chains = 6, cores = 6, init_r = .3, iter = 1000)
 
     saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
@@ -3916,7 +3916,6 @@ run from krusty terminal
 #+BEGIN_SRC sh
 cat climate_b1.Rout
 #+END_SRC
-
 
 **** pull back from krusty
 

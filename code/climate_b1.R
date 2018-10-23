@@ -3,7 +3,7 @@ library(dplyr)
   library(brms)
 
   genus <- "no"
-  species <- "nos"
+  species <- "no"
   cities <- "no"
   climate <- "b1"
   hetero <- "no"
@@ -26,10 +26,6 @@ library(dplyr)
                prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
                prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
 
-#| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
-#| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
-#| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
-
 d <- readRDS("../data/age_dbh_testing.rds")
 
   ## prior_mod <-  brm(form,
@@ -46,7 +42,7 @@ d <- readRDS("../data/age_dbh_testing.rds")
              data = d,
              prior = nlprior,
              family = Gamma("identity"),
-             chains = 1, cores = 1, init_r = .3, iter = 500)
+             chains = 6, cores = 6, init_r = .3, iter = 1000)
 
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here
