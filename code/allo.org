@@ -993,32 +993,36 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
 
 **** save subset of data for testing
 #+begin_src R
-  d <- readRDS("../data/tidy_age_dbh.rds")
-  clim <- read.csv("../data/cities_gdd_precip.csv", stringsAsFactors = F) %>%
-      select(-X)
+    d <- readRDS("../data/tidy_age_dbh.rds")
+    clim <- read.csv("../data/cities_gdd_precip.csv", stringsAsFactors = F) %>%
+        select(-X)
 
-    species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
+      species.to.filter <- c("LIST", "MAGR", "PYCA", "CICA", "GLTR", "PICH", "PLAC", "ACPL", "ACRU", "ACSA1", "ACSA2", "GIBI", "LAIN", "MA2", "PRCE", "QURU", "FRAM", "FRPE", "TIAM", "ULAM", "ULPA", "ULPU", "WARO", "CEOC", "FRVE")
 
-      d2 <- d %>%
-          mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
-          select(-Leaf,-TreeID) %>%
-          left_join(.,clim) %>%
-           mutate(precip = round(precip / 1000, 4),
-                  gdd = round(gdd / 1000, 4))
+        d2 <- d %>%
+            mutate(Genus = stringr::str_extract(ScientificName, '\\w*')) %>%
+            select(-Leaf,-TreeID) %>%
+            left_join(.,clim) %>%
+             mutate(precip = round(precip / 1000, 4),
+                    gdd = round(gdd / 1000, 4))
 
-# For some reason, not clear to me, the predictors cannot be centered.  I think something is happening in the backend of stan or brms
-# the chains won't be able to start initialization
-# error is about a negative inverse scale parameter which is constrained to be positive.
-#           mutate(precip = round((precip - mean(precip))/ 1000, 4),
- #                 gdd = round((gdd - mean(gdd))/ 1000, 4))
+  # For some reason, not clear to me, the predictors cannot be centered.  I think something is happening in the backend of stan or brms
+  # the chains won't be able to start initialization
+  # error is about a negative inverse scale parameter which is constrained to be positive.
+  #           mutate(precip = round((precip - mean(precip))/ 1000, 4),
+   #                 gdd = round((gdd - mean(gdd))/ 1000, 4))
 
 
-      saveRDS(d2, "../data/age_dbh_full.rds")
+        saveRDS(d2, "../data/age_dbh_full.rds")
 
-    d3 <- d2 %>%
-          filter(Species %in% species.to.filter)
+  d2.noWARO <- filter(d2, Species != "WARO")
 
-      saveRDS(d3, "../data/age_dbh_testing.rds")
+  saveRDS(d2.noWARO, "../data/age_dbh_full_noWARO.rds")
+
+  d3 <- d2 %>%
+            filter(Species %in% species.to.filter)
+
+        saveRDS(d3, "../data/age_dbh_testing.rds")
 #+end_src
 
 #+RESULTS:
@@ -1028,6 +1032,7 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz ../data/age_dbh_full.rds erker@krusty:~/allo/data/
 rsync -avz ../data/age_dbh_testing.rds erker@krusty:~/allo/data/
+rsync -avz ../data/age_dbh_full_noWARO.rds erker@krusty:~/allo/data/
 #+END_SRC
 
 *** The Species for which we have age and dbh:
@@ -3861,7 +3866,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
 
 
-  d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
   ## prior_mod <-  brm(form,
   ##                   data = d,
@@ -3943,8 +3948,9 @@ rsync -avz erker@krusty:~/allo/models/genus_yes_species_yes_cities_yes_climate_n
 : receiving file list ... done
 : genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma.rds
 :
-: sent 29684 bytes  received 24190707 bytes  4403707.45 bytes/sec
-: total size is 24366840  speedup is 1.01
+: sent 29660 bytes  received 18506620 bytes  4119173.33 bytes/sec
+: total size is 18676129  speedup is 1.01
+: You have new mail in /var/mail/erker
 
 **** diagnostics
 :PROPERTIES:
@@ -3972,41 +3978,41 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b2 ~ (1 | City) + (1 | Genus/Species)
          b3 ~ (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5548)
-Samples: 6 chains, each with iter = 1000; warmup = 500; thin = 1;
-         total post-warmup samples = 3000
+Samples: 6 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 1500
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.48      0.06     0.37     0.60         13 1.12
-sd(b1_Intercept)     0.26      0.06     0.14     0.36          4 1.97
-sd(b2_Intercept)     0.16      0.02     0.12     0.19         11 1.15
-sd(b3_Intercept)     0.09      0.01     0.07     0.12         18 1.09
+sd(b0_Intercept)     0.73      0.11     0.55     0.96         17 1.09
+sd(b1_Intercept)     0.35      0.10     0.17     0.50          4 2.06
+sd(b2_Intercept)     0.28      0.05     0.20     0.39         22 1.07
+sd(b3_Intercept)     0.10      0.02     0.07     0.13         11 1.16
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.38      0.10     0.18     0.58         19 1.09
-sd(b1_Intercept)     0.50      0.06     0.39     0.63       1080 1.02
-sd(b2_Intercept)     0.21      0.04     0.13     0.29          5 1.46
-sd(b3_Intercept)     0.12      0.03     0.08     0.18         12 1.15
+sd(b0_Intercept)     0.42      0.11     0.23     0.66         15 1.11
+sd(b1_Intercept)     0.48      0.06     0.37     0.60       1500 1.00
+sd(b2_Intercept)     0.19      0.05     0.11     0.29          4 1.72
+sd(b3_Intercept)     0.12      0.02     0.07     0.17         11 1.16
 
 ~Genus:Species (Number of levels: 25)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.04      0.03     0.00     0.13       1968 1.00
-sd(b1_Intercept)     0.13      0.04     0.02     0.20          8 1.25
-sd(b2_Intercept)     0.05      0.02     0.01     0.09         11 1.16
-sd(b3_Intercept)     0.05      0.02     0.02     0.08         97 1.03
+sd(b0_Intercept)     0.04      0.04     0.00     0.13       1131 1.00
+sd(b1_Intercept)     0.13      0.04     0.03     0.20          8 1.24
+sd(b2_Intercept)     0.05      0.02     0.01     0.09         14 1.12
+sd(b3_Intercept)     0.05      0.02     0.01     0.08        205 1.03
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     2.52      0.18     2.16     2.87        466 1.02
-b1_Intercept     1.68      0.16     1.38     2.03         11 1.16
-b2_Intercept     0.98      0.07     0.85     1.11        795 1.02
-b3_Intercept     1.07      0.04     0.99     1.15        922 1.02
+b0_Intercept     2.48      0.23     2.01     2.93        140 1.03
+b1_Intercept     1.68      0.16     1.38     1.99        308 1.04
+b2_Intercept     1.03      0.08     0.88     1.20        737 1.01
+b3_Intercept     1.06      0.04     0.98     1.14        176 1.04
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    14.74      0.28    14.17    15.29       3000 1.00
+shape    14.83      0.29    14.28    15.40       1500 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
