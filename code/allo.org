@@ -4493,9 +4493,7 @@ more sense from a theoretical perspective, but the data support it.
 
 
 *** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma  Would need to fix priors!
-:PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R
-:END:
+
 **** model R code
 #+begin_src R
   library(dplyr)
@@ -4521,7 +4519,7 @@ more sense from a theoretical perspective, but the data support it.
   nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
                prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
                prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
-               prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
+               prior(gamma(16, 26), nlpar = "b3",lb = 0),
                prior(gamma(20, 1), class = "shape"),
                prior(normal(0, .25), class = "sd", nlpar = "b0", group = "City"),
                prior(normal(0, .06), class = "sd", nlpar = "b1", group = "City"),
@@ -4559,6 +4557,31 @@ more sense from a theoretical perspective, but the data support it.
 
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_species_cities_climate_b3_prior_marginaleffects11.png
+ marginal_effects(prior_mod, effects = "AGE", spaghetti = T, nsamples = 300, theme = theme_gray())
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_species_cities_climate_b3_prior_marginaleffects11.png]]
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_species_cities_b3_climate_prior_marginaleffects2.png
+ marginal_effects(prior_mod, effects = c("gdd:precip"), theme = theme_gray(), probs = c(.025, .975), surface = T)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b3_climate_prior_marginaleffects2.png]]
+
+
+#+begin_src R :tangle no :exports results :results graphics :file ../figs/b3_climate_prior_pred.png
+pp <- posterior_predict(prior_mod, nsamples=300)
+ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/b3_climate_prior_pred.png]]
+
+
 **** tangle
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
