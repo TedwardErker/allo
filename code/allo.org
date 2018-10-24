@@ -2292,13 +2292,15 @@ distribution with mean, \mu_i, and shape, \alpha_y.
 \beta_1 (plus \beta_0) is the asymptote of the sigmoidal weibull curve.  For most species there
 are no data near the true asymptote and so this parameter should be
 considered a highly uncertain estimate of the real maximum dbh of a
-tree.
+tree.  Pragmatically, it models/causes the slowing of the diameter growth of a tree
+as it ages.
 
 \beta_2 and \beta_3 affect the rate of growth.  \beta_2 provides flexibility to have
 slow or fast growth at young ages (small x).
 
 All \beta's must be positive and they are likely correlated with one
-another.
+another, especially \beta_1 and \beta_3.  Without very old trees that are close
+to their asympototic dbh, it is harder to separate these two parameters.
 
 for each beta, j = 0,1,2, species, s, and each city, c.
 
@@ -4704,7 +4706,7 @@ The difference is significant.  climate affects on \beta_3 not only make
 more sense from a theoretical perspective, but the data support it.
 
 
-*** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma  Would need to fix priors!
+*** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
 
 **** model R code
 #+begin_src R :tangle genus_species_cities_b3climate.R
@@ -4794,21 +4796,21 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+RESULTS:
 [[file:../figs/b3_climate_prior_pred.png]]
 
-
 **** tangle
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R erker@krusty:~/allo/code/
+  rsync -avz genus_species_cities_b3climate.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: genus_species_cities_b3climate.R
 :
-: sent 148 bytes  received 20 bytes  67.20 bytes/sec
-: total size is 2882  speedup is 17.15
+: sent 897 bytes  received 42 bytes  375.60 bytes/sec
+: total size is 2809  speedup is 2.99
 
 **** run on krusty
 
@@ -4817,12 +4819,12 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.R &
+  nohup R CMD BATCH genus_species_cities_b3climate.R &
   exit
 #+END_SRC
 
 #+BEGIN_SRC sh
-cat genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.Rout
+cat genus_species_cities_b3climate.Rout
 #+END_SRC
 
 **** pull back from krusty
