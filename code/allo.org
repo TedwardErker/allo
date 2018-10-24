@@ -2300,16 +2300,16 @@ slow or fast growth at young ages (small x).
 All \beta's must be positive and they are likely correlated with one
 another.
 
-for each beta, j = 0,2,3, species, s, and each city, c.
+for each beta, j = 0,1,2, species, s, and each city, c.
 
 \[
 \beta_{jsc[i]} = \beta_j + \gamma_{js[i]}+\delta_{jc[i]}
 \]
 
-for beta_1
+for beta_3
 \[
-\beta_{1sc[i]} = \beta_1 + \tau_1 * Precip_i + \tau_2 * GDD_i + \tau_3 *
-(Precip_i * GDD_i) + \gamma_{1s[i]}+\delta_{1c[i]}
+\beta_{3sc[i]} = \beta_3 + \tau_1 * Precip_i + \tau_2 * GDD_i + \tau_3 *
+(Precip_i * GDD_i) + \gamma_{3s[i]}+\delta_{3c[i]}
 \]
 
 where \beta_j is the mean for \beta coefficient \beta_j. \gamma_js is
@@ -2343,16 +2343,13 @@ data overwhelms the priors
 for gamma
 \alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
-| parameter     |   mu |  sd | alpha (of gamma) | beta (of gamma) |
-|---------------+------+-----+------------------+-----------------|
-| \beta_0            |    3 | 1.5 |               4. |       1.3333333 |
-| \beta_1            | 1.75 |  .3 |        34.027778 |       19.444444 |
-| \beta_2            | 1.25 | .15 |        69.444444 |       55.555556 |
-| \beta_3            |    1 | .15 |        44.444444 |       44.444444 |
-| \beta_3  intercept |   .6 | .15 |              16. |       26.666667 |
-| \tau_1            |  .07 | .04 |           3.0625 |           43.75 |
-| \tau_2            |  .07 | .04 |           3.0625 |           43.75 |
-| \tau_3            |  .05 | .03 |        2.7777778 |       55.555556 |
+| parameter        |   mu |  sd | alpha (of gamma) | beta (of gamma) |
+|------------------+------+-----+------------------+-----------------|
+| \beta_0               |    3 | 1.5 |               4. |       1.3333333 |
+| \beta_1               | 1.75 |  .3 |        34.027778 |       19.444444 |
+| \beta_2               | 1.25 | .15 |        69.444444 |       55.555556 |
+| \beta_3  (no climate) |    1 | .15 |        44.444444 |       44.444444 |
+| \beta_3  intercept    |   .6 | .15 |              16. |       26.666667 |
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
@@ -2475,21 +2472,21 @@ not too big, maybe as little as .1m and as much as 1m.  So the
 coeffcient might be 0.0167 to 0.167.  The interaction term will also
 be positive, but smaller.
 
+precip
 \[
-\tau_1 \sim Normal(.07, .04)
+\tau_1 \sim Normal(.01, .01)
 \]
 
+gdd
 \[
-\tau_2 \sim Normal(.07, .04)
+\tau_2 \sim Normal(.03, .01)
 \]
 
+gdd:preci
 \[
-\tau_3 \sim Normal(.05, .03)
+\tau_3 \sim Normal(.025, .01)
 \]
 
-| \tau_1        |  .07 | .04 |           3.0625 |           43.75 |
-| \tau_2        |  .07 | .04 |           3.0625 |           43.75 |
-| \tau_3        |  .05 | .03 |        2.7777778 |       55.555556 |
 
 
 *** fitting model
@@ -3531,7 +3528,6 @@ pred.df <- cbind(d, pred)
 #+RESULTS:
 [[file:../figs/cities_wpreds.png]]
 
-
 *** genus/species
 **** model R code
 #+begin_src R :tangle genus_species.R
@@ -3822,7 +3818,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/GenusSpecies_acer_preditions.png]]
 
-
 *** b1 function of climate
 **** model R code
 #+begin_src R :tangle climate_b1.R
@@ -4067,7 +4062,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 [[file:../figs/GenusSpecies_wpreds.png]]
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
-
 
 *** b3 function of climate
 **** model R code
@@ -4381,6 +4375,8 @@ comparison
 
 The difference is significant.  climate affects on \beta_3 not only make
 more sense from a theoretical perspective, but the data support it.
+
+
 
 *** a
 *** TODO intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!  some need to be much smaller than others
