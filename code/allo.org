@@ -4320,11 +4320,69 @@ mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma
 mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma
 #+end_src
 
-#+begin_src R
+#+begin_src R :tangle b1_b3_climate_comparison.R
+library(brms)
+library(loo)
+mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma <- readRDS("../models/genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds")
+mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma <- readRDS("../models/genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds")
 comparison <- loo(mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma, mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma)
+saveRDS(comparison, "../models/b1_b3_climate_comparison.rds")
+#+end_src
+
+#+BEGIN_SRC sh :session a :results verbatim
+  rsync -avz b1_b3_climate_comparison.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: b1_b3_climate_comparison.R
+:
+: sent 379 bytes  received 42 bytes  93.56 bytes/sec
+: total size is 746  speedup is 1.77
+: You have new mail in /var/mail/erker
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH b1_b3_climate_comparison.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat b1_b3_climate_comparison.Rout
+#+END_SRC
+
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/b1_b3_climate_comparison.rds ~/git/allo/models/
+#+END_SRC
+
+
+#+begin_src R
+comparison <- readRDS("../models/b1_b3_climate_comparison.rds")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
 comparison
 #+end_src
 
+#+RESULTS:
+:                                                                                                                                              LOOIC
+: mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma                                                                       42080.32
+: mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma                                                                       42051.44
+: mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma - mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma    28.88
+:                                                                                                                                               SE
+: mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma                                                                       170.68
+: mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma                                                                       171.02
+: mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma - mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma   9.66
+
+The difference is significant.  climate affects on \beta_3 not only make
+more sense from a theoretical perspective, but the data support it.
+
+*** a
 *** TODO intermediate complexity   THINK HARD ABOUT REASONABLE VARIABILITY FOR EACH PARAMETER.  SET Intelligent priors!  some need to be much smaller than others
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle inter.R
