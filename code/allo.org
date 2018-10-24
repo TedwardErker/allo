@@ -3881,7 +3881,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+end_src
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_species_cities_marginaleffects.png
-  #me <-   marginal_effects(prior_mod, spaghetti = T, nsamples = 200, theme = theme_gray())
+  me <-   marginal_effects(prior_mod, spaghetti = T, nsamples = 200, theme = theme_gray())
   ggplot(attr(me$AGE, "spaghetti"), aes(x = AGE, y = estimate__, group = sample__)) +
     geom_line() +
 coord_cartesian(xlim = c(0,5), ylim = c(0,12))
