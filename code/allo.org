@@ -1022,9 +1022,9 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	12687 obs. of  8 variables:
         saveRDS(d3, "../data/age_dbh_testing.rds")
 
 
-  d2.noWARO <- filter(d2, Species != "WARO")
+  d3.noWARO <- filter(d3, Species != "WARO")
 
-  saveRDS(d2.noWARO, "../data/age_dbh_testing_noWARO.rds")
+  saveRDS(d3.noWARO, "../data/age_dbh_testing_noWARO.rds")
 
 #+end_src
 
@@ -2281,6 +2281,28 @@ y = a * log(b*(x+c)^d + 1)
 or something like this.
 
 y = 10 * log((.5x+1)^2 + 1)
+
+#+begin_src R :exports results :results graphics :file ../figs/alt_model_test.png
+        x <- 1:120
+        a <- 10
+        b <- 1
+        c <- 1
+        d <- 1
+
+      alt.mod <- function(x, a, b, c, d) {
+          a * log(b*(x+c)^d +1)
+      }
+
+  alt.d <- expand.grid(x = x, a = a, b = b, c = c, d = d) %>%
+      mutate(y = alt.mod(x,a,b,c,d))
+
+
+        ggplot(alt.d, aes(x = x, y = y)) + geom_line() +
+          coord_cartesian(xlim = c(0,120), ylim = c(0,150))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/alt_model_test.png]]
 
 *** Model
 
