@@ -4740,7 +4740,7 @@ more sense from a theoretical perspective, but the data support it.
                prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
 
 
-  d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
 
   ## prior_mod <-    brm(form,
@@ -4893,6 +4893,9 @@ shape    14.67      0.31    14.05    15.28         25 1.12
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
 #+end_example
 
 
@@ -4903,6 +4906,11 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/plot_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+Looking at this plot, it seems like many of the parameters end up
+converging eventually.  For the sd priors, I wonder if using a prior
+that has less mass around zero would be helpful?
+
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:gdd")
@@ -4971,6 +4979,21 @@ precip.gdd
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/genus_species_cities_climateb3_predictions.png :width 1000 :height 1000
+#    pred <- predict(mod, newdata = d)
+ # pred.df <- cbind(d, pred)
+
+      ggplot(pred.df, aes(x = AGE, y = DBH)) +
+          geom_point() +
+          facet_grid(Genus~City) +
+        geom_line(data = pred.df, aes(x = AGE, y = Estimate), inherit.aes = F, color = "blue")
+ #       geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5), inherit.aes = F, fill = "blue", alpha = .2)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_species_cities_climateb3_predictions.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
    pp_check(mod) + xlim(c(-30,250))
