@@ -4823,9 +4823,10 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
 :
-: sent 16 bytes  received 158 bytes  69.60 bytes/sec
-: total size is 42337983  speedup is 243321.74
+: sent 45608 bytes  received 43641690 bytes  5824973.07 bytes/sec
+: total size is 43816208  speedup is 1.00
 
 **** assess model
 #+begin_src R
@@ -4856,47 +4857,42 @@ Samples: 8 chains, each with iter = 2000; warmup = 1000; thin = 1;
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     1.30      0.33     0.85     2.09         12 1.29
-sd(b1_Intercept)     0.52      0.17     0.28     0.89          6 1.83
-sd(b2_Intercept)     0.66      0.34     0.27     1.20          4 4.38
-sd(b3_Intercept)     0.73      0.39     0.24     1.31          6 1.85
+sd(b0_Intercept)     0.48      0.05     0.38     0.59         84 1.03
+sd(b1_Intercept)     0.19      0.03     0.14     0.25        193 1.03
+sd(b2_Intercept)     0.17      0.02     0.13     0.20         52 1.06
+sd(b3_Intercept)     0.08      0.01     0.06     0.11        100 1.03
 
 ~Genus (Number of levels: 18)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.54      0.31     0.04     1.13          5 1.93
-sd(b1_Intercept)     0.55      0.17     0.28     0.79          7 1.58
-sd(b2_Intercept)     0.47      0.39     0.03     1.13          4 4.95
-sd(b3_Intercept)     0.54      0.38     0.13     1.24          4 6.31
+sd(b0_Intercept)     0.35      0.09     0.18     0.55       2404 1.00
+sd(b1_Intercept)     0.39      0.07     0.23     0.52         18 1.33
+sd(b2_Intercept)     0.18      0.03     0.12     0.24        234 1.03
+sd(b3_Intercept)     0.19      0.02     0.15     0.24       4488 1.01
 
 ~Genus:Species (Number of levels: 25)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample  Rhat
-sd(b0_Intercept)     0.59      0.32     0.09     1.15          5  2.62
-sd(b1_Intercept)     0.46      0.22     0.19     0.83          5  2.59
-sd(b2_Intercept)     0.49      0.49     0.05     1.41          4 10.84
-sd(b3_Intercept)     0.40      0.43     0.02     1.14          4  8.20
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.05      0.04     0.00     0.13       5272 1.00
+sd(b1_Intercept)     0.07      0.04     0.01     0.15         56 1.10
+sd(b2_Intercept)     0.06      0.02     0.01     0.09         92 1.06
+sd(b3_Intercept)     0.05      0.01     0.02     0.08        233 1.03
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.75      0.46     2.11     3.73         27 1.23
-b1_Intercept      1.03      0.36     0.48     1.62          5 2.40
-b2_Intercept      0.93      0.14     0.68     1.23         10 1.40
-b3_Intercept      0.65      0.25     0.27     1.08          5 2.32
-b3_precip         0.52      0.27     0.16     0.97          5 2.22
-b3_gdd            0.26      0.31     0.04     0.91          4 8.89
-b3_precip:gdd     0.27      0.36     0.01     0.93          4 6.22
+b0_Intercept      2.64      0.20     2.27     3.07         21 1.14
+b1_Intercept      1.39      0.15     1.09     1.66         16 1.32
+b2_Intercept      0.96      0.06     0.84     1.09        614 1.01
+b3_Intercept      1.02      0.07     0.88     1.15         44 1.07
+b3_precip         0.01      0.01     0.00     0.03       8000 1.00
+b3_gdd            0.01      0.01     0.00     0.02       8000 1.00
+b3_precip:gdd     0.00      0.00     0.00     0.01          8 1.77
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    11.32      5.36     2.47    15.25          4 4.96
+shape    14.67      0.31    14.05    15.28         25 1.12
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning messages:
-1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
-2: There were 2173 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 
