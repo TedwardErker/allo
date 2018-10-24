@@ -18,12 +18,12 @@ b3_form <- formula(b3 ~ (1 | City) + (1 | Genus/Species))
 
 form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
 
-nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
+nlprior <- c(prior(gamma(9, 3), nlpar = "b0",lb = 0),
              prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
              prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
              prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
              prior(gamma(20, 1), class = "shape"),
-             prior(normal(0, .25), class = "sd", nlpar = "b0", group = "City"),
+             prior(normal(0, .1), class = "sd", nlpar = "b0", group = "City"),
              prior(normal(0, .06), class = "sd", nlpar = "b1", group = "City"),
              prior(normal(0, .03), class = "sd", nlpar = "b2", group = "City"),
              prior(normal(0, .03), class = "sd", nlpar = "b3", group = "City"),
