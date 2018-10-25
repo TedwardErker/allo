@@ -520,12 +520,29 @@ in a way that better captures the natural gradients of climate.
 #+end_src
 
 #+RESULTS:
-:
-: Attaching package: ‘tidyr’
-:
-: The following object is masked from ‘package:ascii’:
-:
-:     expand
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:plyr’:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Attaching package: ‘tidyr’
+
+The following object is masked from ‘package:ascii’:
+
+    expand
+#+end_example
 **** functions
 #+begin_src R
   options(asciiType = "org")
@@ -5167,39 +5184,22 @@ predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp
 [[file:../figs/predictions_dbh_bySpeciesFull_wData.png]]
 
 
-#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData.png :height 1200 :width 1200
-  predictions_apprange.sp.w.multiple.cities <- predictions_apprange %>%       filter(SpCode %in% d.sp.w.multiple.cities$SpCode)
-
-
-  ggplot(d.sp.w.multiple.cities, aes( x = AGE, y = DBH, color = Region)) +
-      geom_point(alpha = .7, size = .5) +
-      facet_wrap(~SpCode, scales = "free") +
-      theme_minimal() +
-      theme(text = element_text(size = 20),
-            legend.position = "none") +
-      geom_line(data = predictions_apprange.sp.w.multiple.cities, aes(group = Region), size = 1.5)
-
-#+end_src
-
-
-#+RESULTS:
-[[file:../figs/predictions_dbh_bySpecies_wData.png]]
-
-#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL.png
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies_wData_ACPL.png
   predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(SpCode == "ACPL")
+      filter(Species == "ACPL")
 
   predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(SpCode == "ACPL")
+      filter(Species == "ACPL")
 
-  ggplot(filter(d, SpCode == "ACPL"), aes( x = AGE, y = DBH, color = Region)) +
-      geom_point(alpha = .7, size = .5) +
-      facet_wrap(~SpCode, scales = "free") +
+  ggplot(filter(d, Species == "ACPL"), aes( x = AGE, y = DBH, color = Region)) +
+      geom_point(alpha = .7, size = 1) +
+      facet_wrap(~Region) +
       theme_minimal() +
       theme(text = element_text(size = 20),
             legend.position = "none") +
-      geom_line(data = predictions_datarange.acpl, aes(group = Region), size = 2, linetype = "1111") +
-      geom_line(data = predictions_apprange.acpl, aes(group = Region), size = 2)
+      geom_line(data = predictions_datarange.acpl, aes(group = Region), size = 1, linetype = "1111") +
+      geom_line(data = predictions_apprange.acpl, aes(group = Region), size = 1)
+
 
 
 #+end_src
