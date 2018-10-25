@@ -490,6 +490,9 @@ Species are then nested within Genera.
 
 The 17 cities in the UTD cover much of the US geographically, [[fig:utd_climate]], and
 much of the variation in climate, [[fig:utd_gdd_precip_space_map]].
+However, New York City only has a few observations and the data for
+Indianapolis is missing too.  There were some irregularities measuring
+the age in these cities (see the report).
 #+name: fig:utd_climate
 #+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
 [[file:../figs/ClimateRegions_UTD.png]]
