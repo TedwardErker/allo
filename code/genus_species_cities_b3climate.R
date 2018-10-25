@@ -29,13 +29,13 @@ nlprior <- c(prior(gamma(9, 3), nlpar = "b0",lb = 0),
              prior(normal(0.005, 0.005), nlpar = "b3", coef = "precip:gdd"),
              prior(gamma(20, 1), class = "shape"),
              prior(normal(0, .1), class = "sd", nlpar = "b0", group = "City"),
-             prior(normal(0, .06), class = "sd", nlpar = "b1", group = "City"),
+             prior(normal(.3, .3), class = "sd", nlpar = "b1", group = "City"),
              prior(normal(0, .03), class = "sd", nlpar = "b2", group = "City"),
              prior(normal(0, .03), class = "sd", nlpar = "b3", group = "City"),
              prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus"),
              prior(normal(0, .05), class = "sd", nlpar = "b0", group = "Genus:Species"),
-             prior(normal(.2, .15), class = "sd", nlpar = "b1", group = "Genus"),
-             prior(normal(0, .05), class = "sd", nlpar = "b1", group = "Genus:Species"),
+             prior(normal(.3, .3), class = "sd", nlpar = "b1", group = "Genus"),
+             prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus:Species"),
              prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
              prior(normal(0, .025), class = "sd", nlpar = "b2", group = "Genus:Species"),
              prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus"),
@@ -57,7 +57,7 @@ mod <- brm(form,
            data = d,
            prior = nlprior,
            family = Gamma("identity"),
-           chains = 8, cores = 8, init_r = .3, iter = 2000)
+           chains = 12, cores = 12, init_r = .3, iter = 4000)
 
 saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here
