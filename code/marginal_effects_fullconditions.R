@@ -1,6 +1,7 @@
 ## [[file:~/git/allo/code/allo.org::*assess%20model][assess model:11]]
 library(brms)
-mod <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds")
+library(dplyr)
+mod <- readRDS("../models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds")
   cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
