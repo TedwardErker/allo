@@ -4724,7 +4724,7 @@ more sense from a theoretical perspective, but the data support it.
 
 *** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
 **** model R code
-#+begin_src R :tangle genus_species_cities_b3climate_loose.R
+#+begin_src R :tangle genus_species_cities_b3climate.R
   library(dplyr)
   library(brms)
 
@@ -4755,12 +4755,12 @@ more sense from a theoretical perspective, but the data support it.
                prior(normal(0.005, 0.005), nlpar = "b3", coef = "precip:gdd"),
                prior(gamma(20, 1), class = "shape"),
                prior(normal(0, .3), class = "sd", nlpar = "b0", group = "City"),
-               prior(normal(0, .3), class = "sd", nlpar = "b1", group = "City"),
+               prior(normal(.1, .3), class = "sd", nlpar = "b1", group = "City"),
                prior(normal(0, .1), class = "sd", nlpar = "b2", group = "City"),
                prior(normal(0, .1), class = "sd", nlpar = "b3", group = "City"),
                prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
                prior(normal(0, .1), class = "sd", nlpar = "b0", group = "Genus:Species"),
-               prior(normal(0, .4), class = "sd", nlpar = "b1", group = "Genus"),
+               prior(normal(.1, .4), class = "sd", nlpar = "b1", group = "Genus"),
                prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus:Species"),
                prior(normal(0, .1), class = "sd", nlpar = "b2", group = "Genus"),
                prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus:Species"),
@@ -4783,9 +4783,9 @@ more sense from a theoretical perspective, but the data support it.
              data = d,
              prior = nlprior,
              family = Gamma("identity"),
-             chains = 12, cores = 12, init_r = .3, iter = 500)
+             chains = 12, cores = 12, init_r = .3, iter = 6000, control = list(adapt_delta = .9))
 
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, "looser_priors.rds"))
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 #+end_src
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_species_cities_climate_b3_prior_marginaleffects11.png
@@ -4845,17 +4845,18 @@ cat genus_species_cities_b3climate.Rout
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
+#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gammatighter_priors.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gammalooser_priors.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
+:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
+: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gammalooser_priors.rds
 :
-: sent 45930 bytes  received 102707768 bytes  4779241.77 bytes/sec
-: total size is 102849233  speedup is 1.00
-: You have new mail in /var/mail/erker
+: sent 38 bytes  received 24011107 bytes  3201486.00 bytes/sec
+: total size is 24195320  speedup is 1.01
 
 **** assess model
 #+begin_src R
@@ -4880,107 +4881,53 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b2 ~ (1 | City) + (1 | Genus/Species)
          b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
    Data: d (Number of observations: 5381)
-Samples: 12 chains, each with iter = 4000; warmup = 2000; thin = 1;
-         total post-warmup samples = 24000
+Samples: 12 chains, each with iter = 500; warmup = 250; thin = 1;
+         total post-warmup samples = 3000
 
 Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.48      0.05     0.38     0.59      24000 1.00
-sd(b1_Intercept)     0.43      0.14     0.25     0.80         11 1.51
-sd(b2_Intercept)     0.16      0.02     0.13     0.19      24000 1.00
-sd(b3_Intercept)     0.10      0.01     0.07     0.13      24000 1.04
+sd(b0_Intercept)     0.48      0.05     0.38     0.59       3000 1.01
+sd(b1_Intercept)     0.29      0.05     0.20     0.41         23 1.16
+sd(b2_Intercept)     0.16      0.02     0.13     0.19       3000 1.00
+sd(b3_Intercept)     0.09      0.01     0.07     0.12        325 1.02
 
 ~Genus (Number of levels: 17)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.35      0.09     0.19     0.54       2318 1.01
-sd(b1_Intercept)     0.60      0.16     0.26     0.91         13 1.33
-sd(b2_Intercept)     0.13      0.03     0.08     0.19         90 1.03
-sd(b3_Intercept)     0.10      0.03     0.02     0.15         15 1.29
+sd(b0_Intercept)     0.33      0.09     0.17     0.52        447 1.03
+sd(b1_Intercept)     0.32      0.10     0.05     0.47         19 1.21
+sd(b2_Intercept)     0.14      0.03     0.09     0.19       1671 1.01
+sd(b3_Intercept)     0.07      0.02     0.01     0.11         25 1.17
 
 ~Genus:Species (Number of levels: 24)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.05      0.03     0.00     0.13      17941 1.00
-sd(b1_Intercept)     0.11      0.07     0.01     0.26         17 1.24
-sd(b2_Intercept)     0.06      0.02     0.02     0.10         40 1.08
-sd(b3_Intercept)     0.05      0.01     0.03     0.08        682 1.01
+sd(b0_Intercept)     0.05      0.04     0.00     0.13       2275 1.00
+sd(b1_Intercept)     0.17      0.09     0.01     0.36        177 1.07
+sd(b2_Intercept)     0.06      0.02     0.02     0.10        136 1.05
+sd(b3_Intercept)     0.06      0.02     0.03     0.09        751 1.02
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.51      0.17     2.17     2.85      16277 1.00
-b1_Intercept      1.67      0.17     1.34     2.02      13060 1.00
-b2_Intercept      0.86      0.06     0.75     0.98        475 1.01
-b3_Intercept      0.97      0.06     0.85     1.08         75 1.04
-b3_precip         0.01      0.01     0.00     0.03      24000 1.01
-b3_gdd            0.01      0.01     0.00     0.02      24000 1.02
-b3_precip:gdd     0.00      0.00     0.00     0.01         27 1.13
+b0_Intercept      2.53      0.17     2.19     2.86       1554 1.00
+b1_Intercept      1.56      0.13     1.33     1.81       1566 1.01
+b2_Intercept      0.88      0.06     0.77     1.00        314 1.03
+b3_Intercept      0.97      0.05     0.88     1.07         91 1.04
+b3_precip         0.01      0.01     0.00     0.03       3000 1.00
+b3_gdd            0.01      0.00     0.00     0.02       3000 1.01
+b3_precip:gdd     0.00      0.00     0.00     0.01         48 1.07
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    14.91      0.29    14.34    15.48      24000 1.00
+shape    14.87      0.30    14.29    15.47       3000 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+Warning messages:
+1: The model has not converged (some Rhats are > 1.1). Do not analyse the results!
 We recommend running more iterations and/or setting stronger priors.
-#+end_example
-
-#+begin_example
- Family: gamma
-  Links: mu = identity; shape = identity
-Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
-         b0 ~ (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | City) + (1 | Genus/Species)
-         b2 ~ (1 | City) + (1 | Genus/Species)
-         b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
-   Data: d (Number of observations: 5548)
-Samples: 8 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 8000
-
-Group-Level Effects:
-~City (Number of levels: 15)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.48      0.05     0.38     0.59         84 1.03
-sd(b1_Intercept)     0.19      0.03     0.14     0.25        193 1.03
-sd(b2_Intercept)     0.17      0.02     0.13     0.20         52 1.06
-sd(b3_Intercept)     0.08      0.01     0.06     0.11        100 1.03
-
-~Genus (Number of levels: 18)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.35      0.09     0.18     0.55       2404 1.00
-sd(b1_Intercept)     0.39      0.07     0.23     0.52         18 1.33
-sd(b2_Intercept)     0.18      0.03     0.12     0.24        234 1.03
-sd(b3_Intercept)     0.19      0.02     0.15     0.24       4488 1.01
-
-~Genus:Species (Number of levels: 25)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.05      0.04     0.00     0.13       5272 1.00
-sd(b1_Intercept)     0.07      0.04     0.01     0.15         56 1.10
-sd(b2_Intercept)     0.06      0.02     0.01     0.09         92 1.06
-sd(b3_Intercept)     0.05      0.01     0.02     0.08        233 1.03
-
-Population-Level Effects:
-              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.64      0.20     2.27     3.07         21 1.14
-b1_Intercept      1.39      0.15     1.09     1.66         16 1.32
-b2_Intercept      0.96      0.06     0.84     1.09        614 1.01
-b3_Intercept      1.02      0.07     0.88     1.15         44 1.07
-b3_precip         0.01      0.01     0.00     0.03       8000 1.00
-b3_gdd            0.01      0.01     0.00     0.02       8000 1.00
-b3_precip:gdd     0.00      0.00     0.00     0.01          8 1.77
-
-Family Specific Parameters:
-      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    14.67      0.31    14.05    15.28         25 1.12
-
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
-is a crude measure of effective sample size, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-The model has not converged (some Rhats are > 1.1). Do not analyse the results!
-We recommend running more iterations and/or setting stronger priors.
+2: There were 4 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 
@@ -5124,7 +5071,8 @@ precip.gdd
   d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
   eqn <- read.csv("../data/RDS-2016-0005/Data/TS6_Growth_coefficients_20180326.csv", stringsAsFactors = F) %>%
-      mutate(a = as.numeric(a))
+      mutate(a = as.numeric(a)) %>%
+      rename(Species = SpCode)
 
   eqn <- eqn %>%
       filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
@@ -5168,11 +5116,16 @@ precip.gdd
 
 #+end_src
 
+#+RESULTS:
+: Joining, by = "Region"
+: Joining, by = c("Region", "Species")
+: There were 50 or more warnings (use warnings() to see the first 50)
+
 
 
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh__byRegion.png
 
-  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = SpCode)) +
+  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Species)) +
       geom_line() +
       facet_wrap(~Region, scales = "free")
 
@@ -5185,7 +5138,7 @@ precip.gdd
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Region)) +
       geom_line() +
-      facet_wrap(~SpCode, scales = "free")
+      facet_wrap(~Species, scales = "free")
 
 #+end_src
 
@@ -5195,13 +5148,17 @@ precip.gdd
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
   predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
 
+dsp <- unique(d$Species)
+
+predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp)
+
   ggplot() +
-      geom_point(data = d, aes( x = AGE, y = DBH, color = Region), alpha = .7, size = .5) +
+      geom_point(data = d, aes( x = AGE, y = DBH, color = Region), alpha = .7, size = 1) +
       facet_wrap(~Species, scales = "free") +
       theme_minimal() +
       theme(text = element_text(size = 20),
             legend.position = "none") +
-      geom_line(data = predictions_apprange, aes(x = AGE, y = predicted_dbh, group = Region), size = 1.5)
+      geom_line(data = predictions_apprange_subspecies, aes(x = AGE, y = predicted_dbh, color = Region), size = 1.5)
 
 #+end_src
 
