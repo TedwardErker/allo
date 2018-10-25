@@ -4724,7 +4724,7 @@ more sense from a theoretical perspective, but the data support it.
 
 *** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
 **** model R code
-#+begin_src R :tangle genus_species_cities_b3climate.R
+#+begin_src R :tangle genus_species_cities_b3climate_loose.R
   library(dplyr)
   library(brms)
 
@@ -4750,22 +4750,22 @@ more sense from a theoretical perspective, but the data support it.
                prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
                prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                prior(gamma(16, 26), nlpar = "b3", lb = 0),
-               prior(normal(0.01, 0.005), nlpar = "b3", coef = "gdd"),
+               prior(normal(0.01, 0.015), nlpar = "b3", coef = "gdd"),
                prior(normal(0.01, 0.01), nlpar = "b3", coef = "precip"),
                prior(normal(0.005, 0.005), nlpar = "b3", coef = "precip:gdd"),
                prior(gamma(20, 1), class = "shape"),
-               prior(normal(0, .1), class = "sd", nlpar = "b0", group = "City"),
-               prior(normal(.3, .3), class = "sd", nlpar = "b1", group = "City"),
-               prior(normal(0, .03), class = "sd", nlpar = "b2", group = "City"),
-               prior(normal(0, .03), class = "sd", nlpar = "b3", group = "City"),
-               prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus"),
-               prior(normal(0, .05), class = "sd", nlpar = "b0", group = "Genus:Species"),
-               prior(normal(.3, .3), class = "sd", nlpar = "b1", group = "Genus"),
+               prior(normal(0, .3), class = "sd", nlpar = "b0", group = "City"),
+               prior(normal(0, .3), class = "sd", nlpar = "b1", group = "City"),
+               prior(normal(0, .1), class = "sd", nlpar = "b2", group = "City"),
+               prior(normal(0, .1), class = "sd", nlpar = "b3", group = "City"),
+               prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
+               prior(normal(0, .1), class = "sd", nlpar = "b0", group = "Genus:Species"),
+               prior(normal(0, .4), class = "sd", nlpar = "b1", group = "Genus"),
                prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus:Species"),
-               prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
-               prior(normal(0, .025), class = "sd", nlpar = "b2", group = "Genus:Species"),
-               prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus"),
-               prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
+               prior(normal(0, .1), class = "sd", nlpar = "b2", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus:Species"),
+               prior(normal(0, .1), class = "sd", nlpar = "b3", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus:Species"))
 
 
   d <- readRDS("../data/age_dbh_testing_noWARO.rds")
@@ -4783,9 +4783,9 @@ more sense from a theoretical perspective, but the data support it.
              data = d,
              prior = nlprior,
              family = Gamma("identity"),
-             chains = 12, cores = 12, init_r = .3, iter = 4000)
+             chains = 12, cores = 12, init_r = .3, iter = 500)
 
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, "looser_priors.rds"))
 #+end_src
 
 #+begin_src R :tangle no :exports results :results graphics :file ../figs/genus_species_cities_climate_b3_prior_marginaleffects11.png
@@ -4822,9 +4822,10 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: genus_species_cities_b3climate_loose.R
 :
-: sent 103 bytes  received 20 bytes  49.20 bytes/sec
-: total size is 2820  speedup is 22.93
+: sent 926 bytes  received 42 bytes  276.57 bytes/sec
+: total size is 2824  speedup is 2.92
 
 **** run on krusty
 
