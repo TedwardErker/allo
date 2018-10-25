@@ -4822,11 +4822,9 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_species_cities_b3climate.R
 :
-: sent 601 bytes  received 72 bytes  192.29 bytes/sec
-: total size is 2820  speedup is 4.19
-: You have new mail in /var/mail/erker
+: sent 103 bytes  received 20 bytes  49.20 bytes/sec
+: total size is 2820  speedup is 22.93
 
 **** run on krusty
 
@@ -5038,10 +5036,12 @@ precip.gdd
 
 
 #+begin_src R
-    cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+  to.include <- c("LIST", "PLAC", "FRPE")
+
+  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
-    cond <- filter(cond, Species %in%  c("LIST"))
+    cond <- filter(cond, Species %in%  to.include)
 
      me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
 #+end_src
@@ -5053,30 +5053,34 @@ precip.gdd
 : Joining, by = "City"
 : Warning message:
 : Column `City` joining factor and character vector, coercing into character vector
-: Warning message:
-: In rgamma(8000L, shape = c(14.3862028262278, 14.760682591648, 14.086845468951,  :
-:   NAs produced
+: There were 50 or more warnings (use warnings() to see the first 50)
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 100
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 300
 
   #arrange the cities by precip * gdd
   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
                           City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
   dd <- mod$data %>%
-      mutate(gddprecip = (gdd - min(gdd)) * (precip - min(precip)),
+      mutate(gddprecip = gdd  * precip,
              City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE)) %>%
-      filter(Species == "LIST")
+      filter(Species %in% to.include)
 
       ggplot(me2) +
           geom_line(aes(x = AGE, y = estimate__), size = 1) +
-  #        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-  #        geom_point(data = dd, aes(x = AGE, y = DBH), alpha = .3, size = .5) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
           facet_grid(Species~City*gddprecip)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+
+#+begin_src R
+
+#+end_src
+
 
 
 #+begin_src R :exports results :results graphics :file ../figs/list_pred.png
