@@ -4822,10 +4822,11 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_species_cities_b3climate_loose.R
+: genus_species_cities_b3climate.R
 :
-: sent 926 bytes  received 42 bytes  276.57 bytes/sec
-: total size is 2824  speedup is 2.92
+: sent 597 bytes  received 72 bytes  267.60 bytes/sec
+: total size is 2848  speedup is 4.26
+: You have new mail in /var/mail/erker
 
 **** run on krusty
 
