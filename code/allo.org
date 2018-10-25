@@ -5195,13 +5195,13 @@ precip.gdd
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
   predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
 
-  ggplot(d, aes( x = AGE, y = DBH, color = Region)) +
-   #   geom_point(alpha = .7, size = .5) +
+  ggplot() +
+      geom_point(data = d, aes( x = AGE, y = DBH, color = Region), alpha = .7, size = .5) +
       facet_wrap(~Species, scales = "free") +
       theme_minimal() +
       theme(text = element_text(size = 20),
             legend.position = "none") +
-      geom_line(data = predictions_apprange, aes(group = Region), size = 1.5)
+      geom_line(data = predictions_apprange, aes(x = AGE, y = predicted_dbh, group = Region), size = 1.5)
 
 #+end_src
 
