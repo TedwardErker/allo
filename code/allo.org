@@ -5081,6 +5081,272 @@ precip.gdd
 #+begin_src R
 
 #+end_src
+**** Plot Urban Tree Allometric equations on top of data
+
+#+begin_src R
+  predict.allo <- function(x, EqName, a, b, c, d, e) {
+      if(EqName == "loglogw1") {
+          y = exp(a + b*log(log(x + 1) + c/2))
+      }
+      else if(EqName == "loglogw2") {
+          y = exp(a + b*log(log(x + 1))+(sqrt(x) * (c/2)))
+      }
+      else if (EqName == "loglogw3") {
+          y = exp(a + b*log(log(x + 1)) + x * c/2)
+      }
+      else if (EqName == "loglogw4") {
+          y = exp(a + b*log(log(x + 1)) + x^2 * c/2)
+      }
+      else if (EqName == "expow1") {
+          y = exp(a+ b * (x) + (c/2))
+      }
+      else if (EqName == "lin") {
+          y = a + b * x
+      }
+      else if (EqName == "quad") {
+          y = a + b * x + c* x^2
+      }
+      else if (EqName == "cub") {
+          y = a+b * x+c *x^2 + d * x^3
+      }
+      else if (EqName == "quart") {
+          y = a+b * x+c *x^2 + d * x^3 + e * x^4
+      }
+      return(y)
+  }
+
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
+
+  eqn <- read.csv("../data/RDS-2016-0005/Data/TS6_Growth_coefficients_20180326.csv", stringsAsFactors = F) %>%
+      mutate(a = as.numeric(a))
+
+  eqn <- eqn %>%
+      filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
+
+  age_min_max = d %>%
+      group_by(Region, Species) %>%
+      summarize(minAGE = min(AGE, na.rm = T),
+                maxAGE = max(AGE, na.rm = T))
+
+  eqn <- left_join(eqn, age_min_max)
+
+  DBH_min_max = d %>%
+      group_by(Region, Species) %>%
+      summarize(minDBH = min(DBH, na.rm = T),
+                maxDBH = max(DBH, na.rm = T))
+
+  eqn <- left_join(eqn, DBH_min_max)
+
+
+                                          # fill in the NAs due to equations existing for species in regions where they weren't sampled.
+  eqn$minAGE[is.na(eqn$minAGE)] <- 0
+  eqn$maxAGE[is.na(eqn$maxAGE)] <- 100
+
+  newdata <- lapply(1:nrow(eqn), function(i) {
+      x <- seq(eqn$minAGE[i], eqn$maxAGE[i],  (eqn$maxAGE[i] - eqn$minAGE[i]) / 20)
+      cbind(x, eqn[i,])
+  })
+
+  newdata <- bind_rows(newdata)
+
+  predictions <- newdata %>% rowwise %>% mutate(predicted_dbh = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
+
+
+
+                                          #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
+  predictions_apprange <- predictions %>%
+      filter(predicted_dbh > Apps.min & predicted_dbh < Apps.max)
+
+  predictions_datarange <- predictions %>%
+      filter(predicted_dbh > minDBH & predicted_dbh < maxDBH)
+
+#+end_src
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh__byRegion.png
+
+  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = SpCode)) +
+      geom_line() +
+      facet_wrap(~Region, scales = "free")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh__byRegion.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies.png :height 1200 :width 1200
+
+  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Region)) +
+      geom_line() +
+      facet_wrap(~SpCode, scales = "free")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
+  predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
+
+  ggplot(d, aes( x = AGE, y = DBH, color = Region)) +
+   #   geom_point(alpha = .7, size = .5) +
+      facet_wrap(~Species, scales = "free") +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none") +
+      geom_line(data = predictions_apprange, aes(group = Region), size = 1.5)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesFull_wData.png]]
+
+
+#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData.png :height 1200 :width 1200
+  predictions_apprange.sp.w.multiple.cities <- predictions_apprange %>%       filter(SpCode %in% d.sp.w.multiple.cities$SpCode)
+
+
+  ggplot(d.sp.w.multiple.cities, aes( x = AGE, y = DBH, color = Region)) +
+      geom_point(alpha = .7, size = .5) +
+      facet_wrap(~SpCode, scales = "free") +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none") +
+      geom_line(data = predictions_apprange.sp.w.multiple.cities, aes(group = Region), size = 1.5)
+
+#+end_src
+
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies_wData.png]]
+
+#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL.png
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(SpCode == "ACPL")
+
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(SpCode == "ACPL")
+
+  ggplot(filter(d, SpCode == "ACPL"), aes( x = AGE, y = DBH, color = Region)) +
+      geom_point(alpha = .7, size = .5) +
+      facet_wrap(~SpCode, scales = "free") +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none") +
+      geom_line(data = predictions_datarange.acpl, aes(group = Region), size = 2, linetype = "1111") +
+      geom_line(data = predictions_apprange.acpl, aes(group = Region), size = 2)
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies_wData_ACPL.png]]
+
+Funny thing about the Apps range is that for functions that eventually
+decrease, they don't properly stop inference.  Look at the pink line
+above.  The application range should be given for both the predictor
+and the response variable.
+
+#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL_facet.png
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(SpCode == "ACPL")
+
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(SpCode == "ACPL")
+
+  ggplot(filter(d, SpCode == "ACPL"), aes( x = AGE, y = DBH)) +
+      geom_point(alpha = .7, size = .5) +
+      facet_wrap(~SpCode, scales = "free") +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none") +
+      geom_line(data = predictions_datarange.acpl, aes(group = Region, color = Region), size = 1, linetype = "1111") +
+      geom_line(data = predictions_apprange.acpl, aes(group = Region, color = Region), size = 1) +
+      facet_wrap(~Region)
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies_wData_ACPL_facet.png]]
+
+We should be able to borrow information from other regions to extend
+the applicable range for regions with smaller ranges.
+
+There is an equation for the lower midwest, but no data?
+
+#+begin_src R :results org
+  ascii.nowarn.print(filter(eqn, SpCode == "ACPL"))
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC org
+  |   | Region | Scientific.Name  | SpCode | Independent.variable | Predicts.component | Units.of.predicted.components | Model.weight | EqName |     a |    b |     c |     d | e | Apps.min | Apps.max | Sigma |     n | adj.R2 | Data.min..from.raw.data. | Data.max..from.raw.data. |    DF | minAGE | maxAGE | minDBH | maxDBH |
+  |---+--------+------------------+--------+----------------------+--------------------+-------------------------------+--------------+--------+-------+------+-------+-------+---+----------+----------+-------+-------+--------+--------------------------+--------------------------+-------+--------+--------+--------+--------|
+  | 1 | LoMidW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  0.98 | 0.25 |  0.04 | -0.00 |   |     0.98 |   103.07 |  0.48 | 13.00 |   0.98 |                     4.80 |                    98.60 |  9.00 |   0.00 | 100.00 |        |        |
+  | 2 | MidWst | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | cub    | -7.95 | 3.81 | -0.09 |  0.00 |   |     2.66 |    93.26 |  8.92 | 48.00 |   0.97 |                     4.60 |                    77.50 | 44.00 |   2.00 |  44.00 |   4.60 |  77.50 |
+  | 3 | NMtnPr | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age^2      | quad   |  2.84 | 1.32 | -0.00 |       |   |     2.84 |    92.73 |  0.08 | 60.00 |   0.94 |                     2.90 |                   103.10 | 57.00 |   0.00 |  88.00 |   2.90 | 103.10 |
+  | 4 | NoEast | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | lin    |  5.62 | 0.92 |       |       |   |     5.62 |   114.66 | 36.41 | 48.00 |   0.91 |                     2.70 |                   120.70 | 46.00 |   0.00 |  75.00 |   3.80 |  87.10 |
+  | 5 | PacfNW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    | -0.85 | 2.44 | -0.03 |  0.00 |   |     1.56 |   146.78 |  1.40 | 74.00 |   0.98 |                     1.10 |                   129.40 | 70.00 |   1.00 |  81.00 |   1.10 | 129.40 |
+  | 6 | TpIntW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  4.42 | 1.08 |  0.01 | -0.00 |   |     4.42 |    79.42 |  0.81 | 62.00 |   0.96 |                     5.30 |                    95.00 | 58.00 |   1.00 | 105.00 |   5.30 |  95.00 |
+#+END_SRC
+
+#+begin_src R :results org
+  ascii.nowarn.print(filter(d, SpCode == "ACPL", Region == "NoEast"))
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC org
+  |   | Region | City       |    TreeID | SpCode |   DBH |   Leaf |   Age |   AGE |
+  |---+--------+------------+-----------+--------+-------+--------+-------+-------|
+  | 1 | NoEast | Queens, NY | 900243.00 | ACPL   |  3.80 |   3.10 |  0.00 |  0.00 |
+  | 2 | NoEast | Queens, NY |  46681.00 | ACPL   | 87.10 | 445.50 | 75.00 | 75.00 |
+#+END_SRC
+
+The reason that the equation for ACPL in the North East is linear is
+because there are only two observations.  Yikes.
+
+
+TIAM TpIntW
+#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_TIAM.pdf :height 3 :width 5
+
+  theme_set(theme_classic(base_size = 12))
+  predictions_apprange.tiam <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(SpCode == "TIAM", Region == "TpIntW")
+
+  predictions_datarange.tiam <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(SpCode == "TIAM", Region == "TpIntW")
+
+  ggplot(filter(d, SpCode == "TIAM", Region == "TpIntW"), aes( x = AGE, y = DBH)) +
+      geom_point(alpha = .7, size = 1) +
+      theme(text = element_text(size = 20)) +
+      geom_line(data = predictions_datarange.tiam, aes(group = Region), size = 1, linetype = "1111") +
+      geom_line(data = predictions_apprange.tiam, aes(group = Region), size = 1)
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies_wData_TIAM.pdf]]
+
+
+#+begin_src R :exports results :results graphics :file figs/quadratic.png :height 1200 :width 1200
+  ggplot(predictions_apprange %>% filter(EqName == "quad"), aes(x = AGE, y = DBH)) +
+      geom_line() +
+      facet_wrap(~interaction(SpCode, Region))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/quadratic.png]]
+
+TIAM TpIntW
 
 
 
