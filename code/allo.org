@@ -2242,6 +2242,36 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 
 
 Is minneapolis an influential point?
+**** density of dbh by species
+#+begin_src R
+dd <- readRDS("../data/age_dbh_testing.rds")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/species_density.png
+ggplot(dd, aes(x = DBH)) + geom_density()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/species_density.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/species_density_species.png
+ggplot(dd, aes(x = DBH, color = Species)) + geom_density()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/species_density_species.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/species_density_species_facet.png
+  ggplot(dd, aes(x = DBH, color = Species)) + geom_density() +
+    facet_wrap(~Species)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/species_density_species_facet.png]]
+
 
 ** Modelling
 *** Model requirements
@@ -4813,8 +4843,9 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 : receiving file list ... done
 : genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
 :
-: sent 45608 bytes  received 43641690 bytes  5824973.07 bytes/sec
-: total size is 43816208  speedup is 1.00
+: sent 46399 bytes  received 42723323 bytes  2759336.90 bytes/sec
+: total size is 42898182  speedup is 1.00
+: You have new mail in /var/mail/erker
 
 **** assess model
 #+begin_src R
@@ -4830,6 +4861,62 @@ mod <- mod_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family
 #+end_src
 
 #+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ (1 | City) + (1 | Genus/Species)
+         b1 ~ (1 | City) + (1 | Genus/Species)
+         b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
+   Data: d (Number of observations: 5381)
+Samples: 8 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 8000
+
+Group-Level Effects:
+~City (Number of levels: 15)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.47      0.05     0.37     0.58       8000 1.01
+sd(b1_Intercept)     0.23      0.04     0.17     0.31         12 1.21
+sd(b2_Intercept)     0.16      0.02     0.13     0.19       8000 1.01
+sd(b3_Intercept)     0.09      0.01     0.07     0.12         85 1.03
+
+~Genus (Number of levels: 17)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.34      0.09     0.18     0.52       2021 1.02
+sd(b1_Intercept)     0.51      0.09     0.31     0.68         12 1.22
+sd(b2_Intercept)     0.14      0.03     0.09     0.20       1457 1.01
+sd(b3_Intercept)     0.10      0.03     0.03     0.15         11 1.25
+
+~Genus:Species (Number of levels: 24)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.05      0.04     0.00     0.13       4935 1.00
+sd(b1_Intercept)     0.06      0.04     0.00     0.16          9 1.34
+sd(b2_Intercept)     0.06      0.02     0.02     0.10         52 1.05
+sd(b3_Intercept)     0.05      0.01     0.03     0.08       2575 1.01
+
+Population-Level Effects:
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      2.52      0.17     2.18     2.86       3969 1.00
+b1_Intercept      1.57      0.15     1.30     1.87         47 1.05
+b2_Intercept      0.89      0.06     0.77     1.01         54 1.04
+b3_Intercept      0.98      0.06     0.87     1.08         37 1.06
+b3_precip         0.01      0.01     0.00     0.03       8000 1.00
+b3_gdd            0.01      0.01     0.00     0.02       8000 1.01
+b3_precip:gdd     0.00      0.00     0.00     0.01         23 1.09
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape    14.84      0.29    14.29    15.40       8000 1.01
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
+#+end_example
+
 #+begin_example
  Family: gamma
   Links: mu = identity; shape = identity
@@ -5009,6 +5096,8 @@ precip.gdd
 
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+
 
 *** Full model
 
