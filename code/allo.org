@@ -5135,11 +5135,17 @@ rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
-#+BEGIN_SRC sh :session a
+#+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds
+:
+: sent 6482 bytes  received 1125319 bytes  452720.40 bytes/sec
+: total size is 1139994  speedup is 1.01
 
 #+begin_src R
 me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
@@ -5254,11 +5260,10 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
   predictions_datarange <- predictions %>%
       filter(predicted_dbh > minDBH & predicted_dbh < maxDBH)
 
+  predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
 #+end_src
 
 #+RESULTS:
-: Warning message:
-: package ‘bindrcpp’ was built under R version 3.4.4
 : Joining, by = c("Region", "Species")
 : Joining, by = c("Region", "Species")
 : There were 50 or more warnings (use warnings() to see the first 50)
@@ -5288,7 +5293,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 [[file:../figs/predictions_dbh_bySpecies.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
-  predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
+
 
 dsp <- unique(d$Species)
 
@@ -5307,8 +5312,8 @@ predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp
 #+RESULTS:
 [[file:../figs/predictions_dbh_bySpeciesFull_wData.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more.png :height 400 :width 1200
 
+#+begin_src R
     me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
                             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
@@ -5318,14 +5323,8 @@ predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp
 
   dsp <- unique(dd$Species)
 
-  predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% to.include)
-#%>%
- #       mutate(gddprecip = gdd  * precip)
-
-
 
   blue <- "blue"
-
 
 
    me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -5335,18 +5334,47 @@ me2 <- left_join(me2, unique(select(d, Region, City)))
 
   dd <- mod$data %>%
       mutate(gddprecip = gdd  * precip,
-             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE)) %>%
-      filter(Species %in% to.include)
+             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
 
   dd <- left_join(dd, unique(select(d, Region, City)))
+
+
+predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(me2$Species))
+
+#+end_src
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more.png :height 2000 :width 1200 :bg transparent
+    teal <- "#00ffff"
+    blue <- "#1500ff"
+    purple <- "#aa00ff"
+    purplered <- "#ff00ff"
+  red <- "#ff0000"
+    yellow <- "#ffff00"
+    yellowgreen <- "#80ff00"
+    orange <- "#ff8000"
+    bluepurple <- "#5500ff"
+    bluepurplepurple <- "#7f00ff"
+    blueteal <- "#007fff"
+    green <- "#00ff00"
+    greenteal <- "#00ff80"
+    darkergreen <- "#04e600"
+
+
+
+
 
       ggplot(me2) +
           geom_line(aes(x = AGE, y = estimate__), size = 1) +
           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = "blue") +
           geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
           facet_grid(Species~Region) +
-          geom_line(data = predictions_apprange_subspecies, aes(x = AGE, y = predicted_dbh), size = 1.5, color = blue)
+          geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = blue) +
+            theme_solarized(light = F, base_size = 18) +
+      theme(axis.text = element_text(size = 18, color = "#839496"),
+            rect = element_rect(fill = "transparent"),
+            panel.background = element_rect(fill = "transparent"),
+            panel.grid = element_blank())
 
 #+end_src
 
