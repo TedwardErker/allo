@@ -5837,8 +5837,6 @@ pd <- cbind(nd, pred.nd)
 [[file:../figs/predicting_unobserved_groups.png]]
 
 
-
-
 * Results
 
 ** parameter estimates
