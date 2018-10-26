@@ -5314,56 +5314,69 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 
 
 #+begin_src R
-  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
+    d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
-  eqn <- read.csv("../data/RDS-2016-0005/Data/TS6_Growth_coefficients_20180326.csv", stringsAsFactors = F) %>%
-      mutate(a = as.numeric(a)) %>%
-      rename(Species = SpCode)
+    eqn <- read.csv("../data/RDS-2016-0005/Data/TS6_Growth_coefficients_20180326.csv", stringsAsFactors = F) %>%
+        mutate(a = as.numeric(a)) %>%
+        rename(Species = SpCode)
 
-  eqn <- eqn %>%
-      filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
+    city_region <- read.csv("../data/city_climate.csv") %>%
+      select(Region, City)
 
-  age_min_max = d %>%
-      group_by(Region, Species) %>%
-      summarize(minAGE = min(AGE, na.rm = T),
-                maxAGE = max(AGE, na.rm = T))
+  city_clim <- read.csv("../data/cities_gdd_precip.csv") %>%
+    mutate(gdd = gdd / 1000, precip = precip /1000)
 
-  eqn <- left_join(eqn, age_min_max)
+  eqn <- left_join(eqn, city_region)
+  eqn <- left_join(eqn, city_clim)
 
-  DBH_min_max = d %>%
-      group_by(Region, Species) %>%
-      summarize(minDBH = min(DBH, na.rm = T),
-                maxDBH = max(DBH, na.rm = T))
+    eqn <- eqn %>%
+        filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
 
-  eqn <- left_join(eqn, DBH_min_max)
+    age_min_max = d %>%
+        group_by(Region, Species) %>%
+        summarize(minAGE = min(AGE, na.rm = T),
+                  maxAGE = max(AGE, na.rm = T))
 
+    eqn <- left_join(eqn, age_min_max)
 
-                                          # fill in the NAs due to equations existing for species in regions where they weren't sampled.
-  eqn$minAGE[is.na(eqn$minAGE)] <- 0
-  eqn$maxAGE[is.na(eqn$maxAGE)] <- 100
+    DBH_min_max = d %>%
+        group_by(Region, Species) %>%
+        summarize(minDBH = min(DBH, na.rm = T),
+                  maxDBH = max(DBH, na.rm = T))
 
-  newdata <- lapply(1:nrow(eqn), function(i) {
-      x <- seq(eqn$minAGE[i], eqn$maxAGE[i],  (eqn$maxAGE[i] - eqn$minAGE[i]) / 20)
-      cbind(x, eqn[i,])
-  })
-
-  newdata <- bind_rows(newdata)
-
-  predictions <- newdata %>% rowwise %>% mutate(predicted_dbh = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
+    eqn <- left_join(eqn, DBH_min_max)
 
 
+                                            # fill in the NAs due to equations existing for species in regions where they weren't sampled.
+    eqn$minAGE[is.na(eqn$minAGE)] <- 0
+    eqn$maxAGE[is.na(eqn$maxAGE)] <- 100
 
-                                          #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
-  predictions_apprange <- predictions %>%
-      filter(predicted_dbh > Apps.min & predicted_dbh < Apps.max)
+    newdata <- lapply(1:nrow(eqn), function(i) {
+        x <- seq(eqn$minAGE[i], eqn$maxAGE[i],  (eqn$maxAGE[i] - eqn$minAGE[i]) / 20)
+        cbind(x, eqn[i,])
+    })
 
-  predictions_datarange <- predictions %>%
-      filter(predicted_dbh > minDBH & predicted_dbh < maxDBH)
+    newdata <- bind_rows(newdata)
 
-  predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
+    predictions <- newdata %>% rowwise %>% mutate(predicted_dbh = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
+
+
+
+                                            #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
+    predictions_apprange <- predictions %>%
+        filter(predicted_dbh > Apps.min & predicted_dbh < Apps.max)
+
+    predictions_datarange <- predictions %>%
+        filter(predicted_dbh > minDBH & predicted_dbh < maxDBH)
+
+    predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
 #+end_src
 
 #+RESULTS:
+: Joining, by = "Region"
+: Warning message:
+: Column `Region` joining character vector and factor, coercing into character vector
+: Joining, by = "City"
 : Joining, by = c("Region", "Species")
 : Joining, by = c("Region", "Species")
 : There were 50 or more warnings (use warnings() to see the first 50)
@@ -5374,7 +5387,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Species)) +
       geom_line() +
-      facet_wrap(~Region, scales = "free")
+      facet_wrap(~City, scales = "free")
 
 #+end_src
 
@@ -5383,7 +5396,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies.png :height 1200 :width 1200
 
-  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Region)) +
+  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = City)) +
       geom_line() +
       facet_wrap(~Species, scales = "free")
 
@@ -5421,6 +5434,10 @@ predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp
         mutate(gddprecip = gdd  * precip,
                City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
+predictions_apprange <- predictions_apprange %>%
+        mutate(gddprecip = gdd  * precip,
+               City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
   dsp <- unique(dd$Species)
 
 
@@ -5444,6 +5461,15 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 
 #+end_src
 
+#+RESULTS:
+: There were 50 or more warnings (use warnings() to see the first 50)
+: Joining, by = "City"
+: Warning message:
+: Column `City` joining factor and character vector, coercing into character vector
+: Joining, by = "City"
+: Warning message:
+: Column `City` joining factor and character vector, coercing into character vector
+
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png :height 2000 :width 1200
 
       red <- "#dc322f"
@@ -5455,12 +5481,14 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
      violet <- "#6c71c4"
      magenta <- "#d33682"
 
-      ggplot(me2) +
+p <-       ggplot(me2) +
           geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
           geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = red) +
-          facet_grid(Species~Region) +
-          geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green) +
+          facet_grid(Species~City*gddprecip) +
+          geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green)
+
+p +
             theme_solarized_2(light = F, base_size = 18) +
       theme(axis.text = element_text(size = 18, color = "#839496"))
 #            rect = element_rect(fill = "transparent"),
@@ -5474,14 +5502,7 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 
 #+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png :height 20000 :width 12000 :bg transparent :res 600
 
-   ggplot(me2) +
-       geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
-       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
-       geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = red) +
-       facet_grid(Species~Region) +
-       geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green) +
-     scale_x_continuous(breaks = c(0,75)) +
-   theme(axis.text = element_text(size = 18, color = "#839496"))
+p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
 #+end_src
 
@@ -5523,7 +5544,7 @@ predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp
        geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
        geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
        geom_point(data = dd.sub, aes(x = AGE, y = DBH), alpha = .5, size = 1, color = red) +
-       facet_grid(Species~Region) +
+          facet_grid(Species~City) +
        geom_line(data = predictions_apprange_sub.sub, aes(x = AGE, y = predicted_dbh), size = 1, color = green) +
      scale_x_continuous(breaks = c(0,75)) +
    theme(text = element_text(size = 18, color = "#839496"))
@@ -5895,7 +5916,9 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 ** Comparing to existing equations
 
 *** illustrative comparisons
-
+#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus.png]]
 
 
 *** COMMENT all comparisons for model
