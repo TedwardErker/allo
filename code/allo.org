@@ -5150,7 +5150,8 @@ precip.gdd
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_wCities.png
   plot(precip.gdd)[[1]] +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
-      geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15)
+      geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
+    coord_flip()
 #+end_src
 
 #+RESULTS:
@@ -5471,7 +5472,7 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 #+RESULTS:
 [[file:../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more.png :height 20000 :width 12000 :bg transparent :res 600
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png :height 20000 :width 12000 :bg transparent :res 600
 
    ggplot(me2) +
        geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
@@ -5813,7 +5814,8 @@ x = age since transplant (years)
 
 * Results
 
-Posterior distributions with 80% interval and median for parameters in
+** parameter estimates
+Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
 
 #+name: fig:main_effects_posterior
 [[file:../figs/posterior_distributions_model_mainparameters.png]]
@@ -5833,6 +5835,18 @@ Posterior distributions with 80% interval and median for parameters in
 
 #+name: fig:shape_posterior
 [[file:../figs/posterior_distributions_model_shape.png]]
+
+** climate effects
+There is a positive effect of growing degree days (gdd) and annual
+precipitation (precip) on tree diameter (dbh), and a postive
+interaction between the two.  Marginal effects of climate on DBH in
+[[fig:marginal_effects_climate_labels]].  There is an estimated 40cm difference
+in dbh between an average tree in Orlando, FL and one in Boise, ID.
+
+#+name: fig:marginal_effects_climate_labels
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
+
+** Comparing to existing equations
 
 
 
