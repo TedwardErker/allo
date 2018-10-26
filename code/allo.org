@@ -4872,9 +4872,10 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
 :
-: sent 16 bytes  received 158 bytes  69.60 bytes/sec
-: total size is 102849233  speedup is 591087.55
+: sent 71067 bytes  received 148558577 bytes  2340624.31 bytes/sec
+: total size is 148669211  speedup is 1.00
 : You have new mail in /var/mail/erker
 
 **** assess model
@@ -4891,6 +4892,66 @@ mod <- mod_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family
 #+end_src
 
 #+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ (1 | City) + (1 | Genus/Species)
+         b1 ~ (1 | City) + (1 | Genus/Species)
+         b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
+   Data: d (Number of observations: 5381)
+Samples: 12 chains, each with iter = 6000; warmup = 3000; thin = 1;
+         total post-warmup samples = 36000
+
+Group-Level Effects:
+~City (Number of levels: 15)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.83      0.13     0.61     1.11      24073 1.00
+sd(b1_Intercept)     0.38      0.08     0.25     0.58      17614 1.00
+sd(b2_Intercept)     0.28      0.04     0.21     0.37      20967 1.00
+sd(b3_Intercept)     0.15      0.03     0.10     0.22      19786 1.00
+
+~Genus (Number of levels: 17)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.42      0.13     0.17     0.69      10239 1.00
+sd(b1_Intercept)     0.61      0.13     0.39     0.90      19152 1.00
+sd(b2_Intercept)     0.15      0.05     0.04     0.25       7541 1.00
+sd(b3_Intercept)     0.11      0.03     0.04     0.17       9574 1.00
+
+~Genus:Species (Number of levels: 24)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.12      0.08     0.01     0.29      10158 1.00
+sd(b1_Intercept)     0.12      0.06     0.01     0.25       9660 1.00
+sd(b2_Intercept)     0.09      0.03     0.05     0.16       7914 1.00
+sd(b3_Intercept)     0.06      0.02     0.03     0.11       9304 1.00
+
+Population-Level Effects:
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      2.46      0.25     1.96     2.95      12399 1.00
+b1_Intercept      1.65      0.17     1.34     1.99      14097 1.00
+b2_Intercept      0.95      0.08     0.81     1.11      15411 1.00
+b3_Intercept      0.93      0.08     0.78     1.07      15675 1.00
+b3_precip         0.01      0.01     0.00     0.03      45951 1.00
+b3_gdd            0.01      0.01     0.00     0.03      37118 1.00
+b3_precip:gdd     0.00      0.00     0.00     0.01      26547 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape    15.03      0.29    14.46    15.61      64154 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 6 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+
+
+
+
 #+begin_example
  Family: gamma
   Links: mu = identity; shape = identity
@@ -4957,11 +5018,6 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
 #+RESULTS:
 [[file:../figs/plot_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
-Looking at this plot, it seems like many of the parameters end up
-converging eventually.  For the sd priors, I wonder if using a prior
-that has less mass around zero would be helpful?
-
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:gdd")
@@ -5456,46 +5512,61 @@ TIAM TpIntW
 
 **** test some predictions
 #+begin_src R
-  wg  <-  read.csv("../data/precip_qt_ll.csv")
-  wp <-     read.csv("../data/gdd_qt_ll.csv")
+    wg  <-  read.csv("../data/precip_qt_ll.csv")
+    wp <-     read.csv("../data/gdd_qt_ll.csv")
 
-  w <- left_join(wg, wp, by = c("station", "lat", "long"))
+    w <- left_join(wg, wp, by = c("station", "lat", "long"))
 
-  stl <- c(lat = 38.6270, long = -90.1994)
+    stl <- c(lat = 38.6270, long = -90.1994)
 
-  w2 <- filter(w, lat > stl["lat"] - .1,
-               lat < stl["lat"] + .1,
-               long > stl["long"] - .1,
-               long < stl["long"] + .1)
+    w2 <- filter(w, lat > stl["lat"] - .1,
+                 lat < stl["lat"] + .1,
+                 long > stl["long"] - .1,
+                 long < stl["long"] + .1)
 
 
-#  ggplot(w, aes(x = long, y = lat)) +
- #     geom_point() +
-  #    geom_point(data = w2, color = "pink")
+  #  ggplot(w, aes(x = long, y = lat)) +
+   #     geom_point() +
+    #    geom_point(data = w2, color = "pink")
 
-  Species <- c("ACPL","UNKNOWN", "UNKNOWN")
-  Genus <- c("Acer", "Acer", "UNKNOWN")
-  gs <- data.frame(Genus, Species)
-  City <- c("Sacramento, CA", "St. Louis, MO")
-  gdd <- c(5.41, 4822/1000)
-  precip <- c(2.03, 4273/1000)
+    Species <- c("ACPL","UNKNOWN", "UNKNOWN")
+    Genus <- c("Acer", "Acer", "UNKNOWN")
+    gs <- data.frame(Genus, Species)
+    City <- c("Sacramento, CA", "St. Louis, MO")
+    gdd <- c(5.41, 4822/1000)
+    precip <- c(2.03, 4273/1000)
 
-  nd.clim <- data.frame(City, gdd, precip)
+    nd.clim <- data.frame(City, gdd, precip)
 
-  nd <- expand.grid(City = City, AGE = 1:120)
+    nd <- expand.grid(City = City, AGE = 1:120)
 
-  nd <- left_join(nd, nd.clim)
+    nd <- left_join(nd, nd.clim)
 
-  expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
+    expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
 
-  nd <- expand.grid.df(nd, gs)
+    nd <- expand.grid.df(nd, gs)
 
-  pred.nd <- predict(mod, nd, allow_new_levels = T)
+    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975))
 #+end_src
 
 #+begin_src R
 pd <- cbind(nd, pred.nd)
 #+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/newpred.png :width 800 :height 800
+  ggplot(pd, aes(x = AGE, y = Estimate)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
+    geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
+    facet_grid(City~Genus*Species) +
+    theme(text = element_text(size = 20))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/newpred.png]]
+
 *** Full model
 
 \[
