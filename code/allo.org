@@ -2317,92 +2317,6 @@ there is no asymptote.
 
 #+RESULTS:
 [[file:../figs/alt_model2_test.png]]
-
-*** COMMENT What should the structure of the equations be?
-
-DBH ~ age
-
-assymetrical
-
-**** Height
-from cite:Weiskittel_ForestGrowthAndYieldModeling:
-For example, a cumulative growth curve of height over age shows three
-primary stages: (1) juvenile period where growth is rapid and often
-exponential; (2) a long period of maturation where the trend is nearly
-linear; and (3) old age, where growth is nearly asymptotic
-
-height ~ dbh - weibull? see pg 116 cite:Weiskittel_ForestGrowthAndYieldModeling
-
-Constraining the model with very low dbh's
-In addition to asymptotic behavior, most height-to-diameter equation
-forms are also constrained to predict a height of 1.3 or 1.37
-(i.e. breast height) when DBH is equal to zero, but this constraint
-may cause poorer model performance across the full range of DBH
-(Newton and Amponsah, 2007).
-
-Hardwood heights tend to be harder to predict because of the lack of a
-true leader and the difficulty of measuring hardwood heights
-accurately (e.g. Kitahara et al., 2010).
-
-
-Why Weibull is a decent option:  pg116 cite:Weiskittel_ForestGrowthAndYieldModeling
-#+BEGIN_QUOTE
-Significant differences between model forms can exist, however, when
-limited data are available. For example, Temesgen and von Gadow (2004)
-found that the percentage difference in root mean square error between
-the best and worst equation for five commonly used model forms varied
-from 5 to 33%. Huang et al. (1992) found in their analysis that the
-Chapman–Richards, Weibull, and a modified logistic-type function were
-consistently among the best performing models because they were
-flexible, able to assume a variety of shapes, and extrapolated well.
-#+END_QUOTE
-
-**** DBH
-cite:Weiskittel_ForestGrowthAndYieldModeling
-A diameter growth curve would show much the same trend, except there
-is a tendency toward more sustained growth rate as the tree matures
-(Hann and Hanus, 2002b). While height increment may nearly cease in
-maturity, diameter increment must continue in order to produce the
-xylem and phloem needed for tree survival
-**** sigmoidal forms, see the citations within:
-cite:Weiskittel_ForestGrowthAndYieldModeling
-Various theoretical sigmoid model forms are used to predict growth in
-forestry (Zeide, 1993), but most of them can be generalized with a
-single equation form (Garcıa, 2005c). The most common sigmoid model
-forms include the Gompertz (1825), Bertalanffy (1949), and Richards
-(1959) equations.
-
-Although these theoretical models offer some biological
-interpretability (e.g. Zeide, 2004), it is easily shown that
-well-formulated empirical sigmoid equations can be just as accurate or
-even more accurate for a wide range of data (e.g. Martin and Ek, 1984)
-
-
-
-cite:garcia_2005
-
-cite:zeide_2004
-
-**** It would be nice to have repeat measures of trees to get diameter increments.  Individual variation can be large and noisy.
-**** Could the response be multivariate?  For example: height, crown length, leaf area etc are covariate.  Modeling them together could make sense :ATTACH:
-:PROPERTIES:
-:Attachments: Screenshot%202018-04-26%2008.17.38.png
-:ID:       4B81E555-8C81-4BD7-8DA9-0827A9F2FB79
-:END:
-
-cite:dietze_e_2008 have a multivariate response
-The decision to fit all three-response variables simultaneously using
-a full covariance matrix, rather than to fit each variable separately,
-acknowledges the fact that response variables are likely related to
-each other.
-
-[[file:/Users/erker/projects/allo/data/4B/81E555-8C81-4BD7-8DA9-0827A9F2FB79/Screenshot 2018-04-26 08.17.38.png]]
-**** cite:mcpherson_simpson_99
-see pg 168
-
-they follow frelich 1992
-look at his equation form.
-also
 *** Model
 
 (Notation below.  I don't use conventional subscript letters.  The
@@ -2626,14 +2540,100 @@ gdd:preci
 \tau_3 \sim Normal(.025, .01)
 \]
 
-*** COMMENT fitting model
+*** COMMENT Modeling Notes
+**** COMMENT What should the structure of the equations be?
+
+DBH ~ age
+
+assymetrical
+
+***** Height
+from cite:Weiskittel_ForestGrowthAndYieldModeling:
+For example, a cumulative growth curve of height over age shows three
+primary stages: (1) juvenile period where growth is rapid and often
+exponential; (2) a long period of maturation where the trend is nearly
+linear; and (3) old age, where growth is nearly asymptotic
+
+height ~ dbh - weibull? see pg 116 cite:Weiskittel_ForestGrowthAndYieldModeling
+
+Constraining the model with very low dbh's
+In addition to asymptotic behavior, most height-to-diameter equation
+forms are also constrained to predict a height of 1.3 or 1.37
+(i.e. breast height) when DBH is equal to zero, but this constraint
+may cause poorer model performance across the full range of DBH
+(Newton and Amponsah, 2007).
+
+Hardwood heights tend to be harder to predict because of the lack of a
+true leader and the difficulty of measuring hardwood heights
+accurately (e.g. Kitahara et al., 2010).
+
+
+Why Weibull is a decent option:  pg116 cite:Weiskittel_ForestGrowthAndYieldModeling
+#+BEGIN_QUOTE
+Significant differences between model forms can exist, however, when
+limited data are available. For example, Temesgen and von Gadow (2004)
+found that the percentage difference in root mean square error between
+the best and worst equation for five commonly used model forms varied
+from 5 to 33%. Huang et al. (1992) found in their analysis that the
+Chapman–Richards, Weibull, and a modified logistic-type function were
+consistently among the best performing models because they were
+flexible, able to assume a variety of shapes, and extrapolated well.
+#+END_QUOTE
+
+***** DBH
+cite:Weiskittel_ForestGrowthAndYieldModeling
+A diameter growth curve would show much the same trend, except there
+is a tendency toward more sustained growth rate as the tree matures
+(Hann and Hanus, 2002b). While height increment may nearly cease in
+maturity, diameter increment must continue in order to produce the
+xylem and phloem needed for tree survival
+***** sigmoidal forms, see the citations within:
+cite:Weiskittel_ForestGrowthAndYieldModeling
+Various theoretical sigmoid model forms are used to predict growth in
+forestry (Zeide, 1993), but most of them can be generalized with a
+single equation form (Garcıa, 2005c). The most common sigmoid model
+forms include the Gompertz (1825), Bertalanffy (1949), and Richards
+(1959) equations.
+
+Although these theoretical models offer some biological
+interpretability (e.g. Zeide, 2004), it is easily shown that
+well-formulated empirical sigmoid equations can be just as accurate or
+even more accurate for a wide range of data (e.g. Martin and Ek, 1984)
+
+
+
+cite:garcia_2005
+
+cite:zeide_2004
+
+***** It would be nice to have repeat measures of trees to get diameter increments.  Individual variation can be large and noisy.
+***** Could the response be multivariate?  For example: height, crown length, leaf area etc are covariate.  Modeling them together could make sense :ATTACH:
+:PROPERTIES:
+:Attachments: Screenshot%202018-04-26%2008.17.38.png
+:ID:       4B81E555-8C81-4BD7-8DA9-0827A9F2FB79
+:END:
+
+cite:dietze_e_2008 have a multivariate response
+The decision to fit all three-response variables simultaneously using
+a full covariance matrix, rather than to fit each variable separately,
+acknowledges the fact that response variables are likely related to
+each other.
+
+[[file:/Users/erker/projects/allo/data/4B/81E555-8C81-4BD7-8DA9-0827A9F2FB79/Screenshot 2018-04-26 08.17.38.png]]
+***** cite:mcpherson_simpson_99
+see pg 168
+
+they follow frelich 1992
+look at his equation form.
+also
+**** COMMENT fitting model
 (but when fit in stan, reparameterized so beta's are closer to one
 another 1-4 range)
 p\[
 \mu_i = \beta_0 + 100 * \beta_1 (1 - \exp(-1 * 10^{-\beta_2} x_i^{\beta_3}))
 \]
 
-*** COMMENT notes on how to do modeling in brms
+**** COMMENT notes on how to do modeling in brms
 IN STAN:
 vignette("brms_nonlinear")
 http://discourse.mc-stan.org/t/hierarchical-nonlinear-regression/4382/6
@@ -2662,9 +2662,10 @@ cite:buerkner_2017
 diagnostics:
 https://arxiv.org/pdf/1709.01449.pdf
 
-**** great example explaning hamiltonian monte carlo
+***** great example explaning hamiltonian monte carlo  mcmc
+http://chi-feng.github.io/mcmc-demo/
 http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/
-*** COMMENT model form: Weibull
+**** COMMENT model form: Weibull
 model form:
 cite:Weiskittel_ForestGrowthAndYieldModeling:
 "This reality should lead to model forms that are complex enough to
@@ -2672,7 +2673,7 @@ accurately and adequately characterize the expected major behaviors of
 the population, but simple enough to avoid being overly influenced by
 the sample’s peculiarities."
 
-**** why weibull
+***** why weibull
 it was good for height:
 
 Why Weibull is a decent option:  pg116 cite:Weiskittel_ForestGrowthAndYieldModeling
@@ -2698,7 +2699,7 @@ is a tendency toward more sustained growth rate as the tree matures
 maturity, diameter increment must continue in order to produce the
 xylem and phloem needed for tree survival
 #+END_QUOTE
-**** look at weibull
+***** look at weibull
 
 \[
 \beta_0  (1 - exp(\beta_1 * DBH^{\beta_2})
@@ -2800,7 +2801,7 @@ Achieved convergence tolerance: 1.869e-06
 "b" can't be negative because it causes negative growth and negative
 dbh values, impossible
 "c" can't be negative because it causes negative growth, impossible
-***** what is the range of reasonable parameter values,  can be helpful for priors
+****** what is the range of reasonable parameter values,  can be helpful for priors
 #+begin_src R :exports results :results graphics :file ../figs/weibull_reasonable.png
 
     x <- 1:200
@@ -3023,7 +3024,7 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
-*** COMMENT a look at gamma family
+**** COMMENT a look at gamma family
 #+begin_src R
     library(brms)
     source("allo_functions.R")
@@ -3166,7 +3167,7 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 
 #+RESULTS:
 [[file:../figs/test_gamma.png]]
-*** COMMENT look at distributions
+**** COMMENT look at distributions
 
 Priors
 
@@ -3251,7 +3252,49 @@ beta called rate
 #+RESULTS:
 [[file:../figs/ttest.png]]
 
-*** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
+**** COMMENT bits
+
+WRITE OUT THE MODEL.....
+then convert to latex.
+
+Use brm(..., sample_prior = "only")
+
+- Goal is to model tree dimensions as a function of age (and other factors).
+  - I'm not doing allometric models (relating dimensions to one
+    another) because
+    - they are usually log-log, simpler and less interesting
+    - But doing them would be a natural extension
+- from simple to complex
+  - single species, single location, homoskedasticity
+  - single species, single location, heteroskedasticity
+  - multiple species, single location, heteroskedasticity
+  - multiple species, vary by climate, heteroskedasticity
+
+- for each of these approaches follow the workflow:
+  - problem
+  - model
+  - fake data
+  - fit
+  - diagnostics
+  - graph fit
+  - PPCs (Posterior Predictive Check)
+  - Compare models
+- criteria for model form
+  - Theoretically realistic
+    - follow what we know about biology
+    - increase confidence in extrapolation
+    - assymetrical sigmoidal for growth
+  - Interpretable and parsimonious
+    - few parameters that correspond as much as possible to an
+      interpretable part of growth
+  - Can fit in Stan
+- think hard about smart priors to help with convergence.
+  - I need to address the initial value errors.
+
+y = diameter at breast height (cm)
+x = age since transplant (years)
+
+*** COMMENT genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :END:
@@ -3519,7 +3562,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
-*** many cities
+*** COMMENT many cities
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 :END:
@@ -3741,7 +3784,7 @@ pred.df <- cbind(d, pred)
 #+RESULTS:
 [[file:../figs/cities_wpreds.png]]
 
-*** genus/species
+*** COMMENT genus/species
 **** model R code
 #+begin_src R :tangle genus_species.R
   library(dplyr)
@@ -4031,7 +4074,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/GenusSpecies_acer_preditions.png]]
 
-*** City and Genus/species
+*** COMMENT City and Genus/species
 **** model R code
 #+begin_src R :tangle genus_species_cities.R
     library(dplyr)
@@ -4273,7 +4316,7 @@ new conditions needed.
 
 #+end_src
 
-*** b1 function of climate
+*** COMMENT b1 function of climate
 **** model R code
 #+begin_src R :tangle climate_b1.R
     library(dplyr)
@@ -4518,7 +4561,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
-*** b3 function of climate
+*** COMMENT b3 function of climate
 **** model R code
 #+begin_src R :tangle climate_b3.R
     library(dplyr)
@@ -4763,7 +4806,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
-*** compare climate beta 1 to climate beta 3
+*** COMMENT compare climate beta 1 to climate beta 3
 #+begin_src R
 mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma
 mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma
@@ -5793,47 +5836,8 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
 
-*** COMMENT bits
 
-WRITE OUT THE MODEL.....
-then convert to latex.
 
-Use brm(..., sample_prior = "only")
-
-- Goal is to model tree dimensions as a function of age (and other factors).
-  - I'm not doing allometric models (relating dimensions to one
-    another) because
-    - they are usually log-log, simpler and less interesting
-    - But doing them would be a natural extension
-- from simple to complex
-  - single species, single location, homoskedasticity
-  - single species, single location, heteroskedasticity
-  - multiple species, single location, heteroskedasticity
-  - multiple species, vary by climate, heteroskedasticity
-
-- for each of these approaches follow the workflow:
-  - problem
-  - model
-  - fake data
-  - fit
-  - diagnostics
-  - graph fit
-  - PPCs (Posterior Predictive Check)
-  - Compare models
-- criteria for model form
-  - Theoretically realistic
-    - follow what we know about biology
-    - increase confidence in extrapolation
-    - assymetrical sigmoidal for growth
-  - Interpretable and parsimonious
-    - few parameters that correspond as much as possible to an
-      interpretable part of growth
-  - Can fit in Stan
-- think hard about smart priors to help with convergence.
-  - I need to address the initial value errors.
-
-y = diameter at breast height (cm)
-x = age since transplant (years)
 
 * Results
 
