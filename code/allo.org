@@ -5079,10 +5079,37 @@ rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :session a
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
 #+END_SRC
 
+#+RESULTS:
+
+#+begin_src R
+me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_full.png :width 1000 :height 2000
+
+  #arrange the cities by precip * gdd
+  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
+                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+  dd <- mod$data %>%
+      mutate(gddprecip = gdd  * precip,
+             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+      ggplot(me2) +
+          geom_line(aes(x = AGE, y = estimate__), size = 1) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
+          facet_grid(Species~City*gddprecip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_full.png]]
 
 
 **** Plot Urban Tree Allometric equations on top of data
@@ -5240,14 +5267,6 @@ predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp
 
 
   blue <- "blue"
-
-  ##   ggplot() +
-  ##       geom_point(data = d, aes( x = AGE, y = DBH), alpha = .7, size = 1) +
-  ##       facet_grid(Region~Species) +
-  ##       theme_minimal() +
-  ##       theme(text = element_text(size = 20),
-  ##             legend.position = "none") +
-  ##       geom_line(data = predictions_apprange_subspecies, aes(x = AGE, y = predicted_dbh), size = 1.5, color = blue)
 
 
 
