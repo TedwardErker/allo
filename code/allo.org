@@ -5510,51 +5510,68 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 [[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus.png :height 200 :width 600 :bg transparent
-  library(ggthemes)
-      red <- "#dc322f"
-      yellow <- "#b58900"
-      blue <- "#268bd2"
-      green <- "#859900"
-      cyan <- "#2aa198"
-      orange <- "#cb4b16"
-     violet <- "#6c71c4"
-     magenta <- "#d33682"
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png :height 200 :width 600
+      library(ggthemes)
+          red <- "#dc322f"
+          yellow <- "#b58900"
+          blue <- "#268bd2"
+          green <- "#859900"
+          cyan <- "#2aa198"
+          orange <- "#cb4b16"
+         violet <- "#6c71c4"
+         magenta <- "#d33682"
 
-    cols <- c(c(red, blue, green, violet),
-              rep(blue, 2),
-              c(red, blue, green),
-              rep(blue, 12),
-              c(red, blue, green),
-              blue)
+    sp.subset <- c("ULAM")
+    r.subset <- c("NoCalC","PacfNW", "MidWst", "NMtnPr")
 
-#            theme_solarized_2(light = F, base_size = 18) +
- #         geom_line(data = pred.df, aes(x = AGE, y = Estimate, group = Species), inherit.aes = F, color = "#93a1a1", size = 1) +
-  #        geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, color = Species), size = .3, inherit.aes = F, fill = NA)
+    me2.sub <- filter(me2, Species %in% sp.subset, Region %in% r.subset)
+    dd.sub <- filter(dd, Species %in% sp.subset, Region %in% r.subset)
+    predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp.subset, Region %in% r.subset)
 
-
-sp.subset <- c("ULAM")
-r.subset <- c("NoCalC","PacfNW", "MidWst", "NMtnPr")
-
-me2.sub <- filter(me2, Species %in% sp.subset, Region %in% r.subset)
-dd.sub <- filter(dd, Species %in% sp.subset, Region %in% r.subset)
-predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp.subset, Region %in% r.subset)
-
-   ggplot(me2.sub) +
-       geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
-       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
-       geom_point(data = dd.sub, aes(x = AGE, y = DBH), alpha = .5, size = 1, color = red) +
-          facet_grid(Species~City) +
-       geom_line(data = predictions_apprange_sub.sub, aes(x = AGE, y = predicted_dbh), size = 1, color = green) +
-     scale_x_continuous(breaks = c(0,75)) +
-   theme(text = element_text(size = 18, color = "#839496"))
+       ggplot(me2.sub) +
+           geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
+           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
+           geom_point(data = dd.sub, aes(x = AGE, y = DBH), alpha = .5, size = 1, color = red) +
+              facet_grid(Species~City) +
+           geom_line(data = predictions_apprange_sub.sub, aes(x = AGE, y = predicted_dbh), size = 1, color = green) +
+         scale_x_continuous(breaks = c(0,75)) +
+         scale_y_continuous("DBH") +
+         theme_minimal() +
+       theme(text = element_text(size = 18),
+             panel.border = element_rect(color = "black", fill = NA))
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus.png]]
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
 
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 500 :width 600
+      library(ggthemes)
+
+    sp.subset <- c("ACPL")
+    r.subset <- c("MidWst", "NMtnPr", "NoEast", "PacfNW","TpIntW")
+
+    me2.sub <- filter(me2, Species %in% sp.subset, Region %in% r.subset)
+    dd.sub <- filter(dd, Species %in% sp.subset, Region %in% r.subset)
+    predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp.subset, Region %in% r.subset)
+
+       ggplot(me2.sub) +
+           geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
+           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
+           geom_point(data = dd.sub, aes(x = AGE, y = DBH), alpha = .5, size = 1, color = red) +
+              facet_wrap(~Region) +
+           geom_line(data = predictions_apprange_sub.sub, aes(x = AGE, y = predicted_dbh), size = 1, color = green) +
+         scale_x_continuous(breaks = c(0,75)) +
+         scale_y_continuous("DBH") +
+         theme_minimal() +
+       theme(text = element_text(size = 18),
+             panel.border = element_rect(color = "black", fill = NA))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
 
 What city is the lower midwest?  Indianapolis.  There is no data for that.
 
@@ -5586,64 +5603,8 @@ decrease, they don't properly stop inference.  Look at the pink line
 above.  The application range should be given for both the predictor
 and the response variable.
 
-#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_ACPL_facet.png
-  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(SpCode == "ACPL")
-
-  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(SpCode == "ACPL")
-
-  ggplot(filter(d, SpCode == "ACPL"), aes( x = AGE, y = DBH)) +
-      geom_point(alpha = .7, size = .5) +
-      facet_wrap(~SpCode, scales = "free") +
-      theme_minimal() +
-      theme(text = element_text(size = 20),
-            legend.position = "none") +
-      geom_line(data = predictions_datarange.acpl, aes(group = Region, color = Region), size = 1, linetype = "1111") +
-      geom_line(data = predictions_apprange.acpl, aes(group = Region, color = Region), size = 1) +
-      facet_wrap(~Region)
 
 
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_dbh_bySpecies_wData_ACPL_facet.png]]
-
-We should be able to borrow information from other regions to extend
-the applicable range for regions with smaller ranges.
-
-There is an equation for the lower midwest, but no data?
-
-#+begin_src R :results org
-  ascii.nowarn.print(filter(eqn, SpCode == "ACPL"))
-#+end_src
-
-#+RESULTS:
-#+BEGIN_SRC org
-  |   | Region | Scientific.Name  | SpCode | Independent.variable | Predicts.component | Units.of.predicted.components | Model.weight | EqName |     a |    b |     c |     d | e | Apps.min | Apps.max | Sigma |     n | adj.R2 | Data.min..from.raw.data. | Data.max..from.raw.data. |    DF | minAGE | maxAGE | minDBH | maxDBH |
-  |---+--------+------------------+--------+----------------------+--------------------+-------------------------------+--------------+--------+-------+------+-------+-------+---+----------+----------+-------+-------+--------+--------------------------+--------------------------+-------+--------+--------+--------+--------|
-  | 1 | LoMidW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  0.98 | 0.25 |  0.04 | -0.00 |   |     0.98 |   103.07 |  0.48 | 13.00 |   0.98 |                     4.80 |                    98.60 |  9.00 |   0.00 | 100.00 |        |        |
-  | 2 | MidWst | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | cub    | -7.95 | 3.81 | -0.09 |  0.00 |   |     2.66 |    93.26 |  8.92 | 48.00 |   0.97 |                     4.60 |                    77.50 | 44.00 |   2.00 |  44.00 |   4.60 |  77.50 |
-  | 3 | NMtnPr | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age^2      | quad   |  2.84 | 1.32 | -0.00 |       |   |     2.84 |    92.73 |  0.08 | 60.00 |   0.94 |                     2.90 |                   103.10 | 57.00 |   0.00 |  88.00 |   2.90 | 103.10 |
-  | 4 | NoEast | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1            | lin    |  5.62 | 0.92 |       |       |   |     5.62 |   114.66 | 36.41 | 48.00 |   0.91 |                     2.70 |                   120.70 | 46.00 |   0.00 |  75.00 |   3.80 |  87.10 |
-  | 5 | PacfNW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    | -0.85 | 2.44 | -0.03 |  0.00 |   |     1.56 |   146.78 |  1.40 | 74.00 |   0.98 |                     1.10 |                   129.40 | 70.00 |   1.00 |  81.00 |   1.10 | 129.40 |
-  | 6 | TpIntW | Acer platanoides | ACPL   | age                  | dbh                | centimeters                   | 1/age        | cub    |  4.42 | 1.08 |  0.01 | -0.00 |   |     4.42 |    79.42 |  0.81 | 62.00 |   0.96 |                     5.30 |                    95.00 | 58.00 |   1.00 | 105.00 |   5.30 |  95.00 |
-#+END_SRC
-
-#+begin_src R :results org
-  ascii.nowarn.print(filter(d, SpCode == "ACPL", Region == "NoEast"))
-#+end_src
-
-#+RESULTS:
-#+BEGIN_SRC org
-  |   | Region | City       |    TreeID | SpCode |   DBH |   Leaf |   Age |   AGE |
-  |---+--------+------------+-----------+--------+-------+--------+-------+-------|
-  | 1 | NoEast | Queens, NY | 900243.00 | ACPL   |  3.80 |   3.10 |  0.00 |  0.00 |
-  | 2 | NoEast | Queens, NY |  46681.00 | ACPL   | 87.10 | 445.50 | 75.00 | 75.00 |
-#+END_SRC
-
-The reason that the equation for ACPL in the North East is linear is
-because there are only two observations.  Yikes.
 
 
 
@@ -5709,12 +5670,13 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/predicting_unobserved_groups.png :width 800 :height 800
-  ggplot(pd, aes(x = AGE, y = Estimate)) +
-    geom_line() +
-    geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
-    geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
-    facet_grid(City~Genus*Species) +
-    theme(text = element_text(size = 20))
+    ggplot(pd, aes(x = AGE, y = Estimate)) +
+      geom_line() +
+      geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
+      geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
+      facet_grid(City~Genus*Species) +
+      theme(text = element_text(size = 20),
+            )
 #+end_src
 
 #+RESULTS:
