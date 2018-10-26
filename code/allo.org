@@ -4866,18 +4866,16 @@ cat genus_species_cities_b3climate.Rout
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gammatighter_priors.rds ~/git/allo/models/
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gammalooser_priors.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gammalooser_priors.rds
 :
-: sent 38 bytes  received 24011107 bytes  3201486.00 bytes/sec
-: total size is 24195320  speedup is 1.01
+: sent 16 bytes  received 158 bytes  69.60 bytes/sec
+: total size is 102849233  speedup is 591087.55
+: You have new mail in /var/mail/erker
 
 **** assess model
 #+begin_src R
