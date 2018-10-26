@@ -5201,6 +5201,8 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 #+end_src
 
 #+RESULTS:
+: Warning message:
+: package ‘bindrcpp’ was built under R version 3.4.4
 : Joining, by = c("Region", "Species")
 : Joining, by = c("Region", "Species")
 : There were 50 or more warnings (use warnings() to see the first 50)
@@ -5452,7 +5454,48 @@ TIAM TpIntW
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
 
+**** test some predictions
+#+begin_src R
+  wg  <-  read.csv("../data/precip_qt_ll.csv")
+  wp <-     read.csv("../data/gdd_qt_ll.csv")
 
+  w <- left_join(wg, wp, by = c("station", "lat", "long"))
+
+  stl <- c(lat = 38.6270, long = -90.1994)
+
+  w2 <- filter(w, lat > stl["lat"] - .1,
+               lat < stl["lat"] + .1,
+               long > stl["long"] - .1,
+               long < stl["long"] + .1)
+
+
+#  ggplot(w, aes(x = long, y = lat)) +
+ #     geom_point() +
+  #    geom_point(data = w2, color = "pink")
+
+  Species <- c("ACPL","UNKNOWN", "UNKNOWN")
+  Genus <- c("Acer", "Acer", "UNKNOWN")
+  gs <- data.frame(Genus, Species)
+  City <- c("Sacramento, CA", "St. Louis, MO")
+  gdd <- c(5.41, 4822/1000)
+  precip <- c(2.03, 4273/1000)
+
+  nd.clim <- data.frame(City, gdd, precip)
+
+  nd <- expand.grid(City = City, AGE = 1:120)
+
+  nd <- left_join(nd, nd.clim)
+
+  expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
+
+  nd <- expand.grid.df(nd, gs)
+
+  pred.nd <- predict(mod, nd, allow_new_levels = T)
+#+end_src
+
+#+begin_src R
+pd <- cbind(nd, pred.nd)
+#+end_src
 *** Full model
 
 \[
