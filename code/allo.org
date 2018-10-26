@@ -250,6 +250,11 @@ predictions of tree size from tree age will improve our ability to
 predict the important ecosystem services these trees provide urban
 dwellers.
 
+Stan
+
+BRMS
+
+limitations of existing approach and how our model addresses them.
 
 | Existing Approach                                                                                                                                                                                                                                     | This Paper                                                                                                                          |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------|
@@ -260,6 +265,7 @@ dwellers.
 | what equation to use for unobserved species and city combinations is not clear.  (e.g. should species or city be weighted more?  use equation of different (but similar) species in the same city or of same species in different (but similar city)? | Provides predictions for all species and city combinations.                                                                         |
 | Equations derived in the 17 cities are meant to apply to work in 17 large and heterogeneous regions.                                                                                                                                                  | Using climate data as city level predictors we can vary model parameter continuously across the entire US.                          |
 |                                                                                                                                                                                                                                                       |                                                                                                                                     |
+
 
 
 maybe the framewaork should be broader, just growth equations for all
@@ -489,8 +495,7 @@ Species are then nested within Genera.
 The 17 cities in the UTD cover much of the US geographically, [[fig:utd_climate]], and
 much of the variation in climate, [[fig:utd_gdd_precip_space_map]].
 However, New York City only has a few observations and the data for
-Indianapolis is missing too.  There were some irregularities measuring
-the age in these cities (see the report).
+Indianapolis is missing too.
 #+name: fig:utd_climate
 #+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
 [[file:../figs/ClimateRegions_UTD.png]]
@@ -501,7 +506,8 @@ the age in these cities (see the report).
 
 Rather than using the aggregated sunset zones as done in UTD, we used
 growing degree days (GDD) and precipitation data from climate NOAA's
-climate normals.  Figure [[fig:utd_gdd_precip_space_map]] shows each
+climate normals to continuously vary equation parameters across
+climate.  Figure [[fig:utd_gdd_precip_space_map]] shows each
 census tract centroid in the conterminous US plotted in GDD and precipitation
 space.  We appoximated the GDD and precipitation for each tract by
 assigning the values of the weather station closest to the centroid.
@@ -509,7 +515,7 @@ This allows us to vary our model continouously across geographic space
 in a way that better captures the natural gradients of climate.
 
 
-*** Tidy data for this analysis
+*** COMMENT Tidy data for this analysis
 **** load libraries
 #+begin_src R :exports none
   library(plyr)
@@ -1056,7 +1062,7 @@ rsync -avz ../data/age_dbh_testing.rds erker@krusty:~/allo/data/
 rsync -avz ../data/age_dbh_testing_noWARO.rds erker@krusty:~/allo/data/
 #+END_SRC
 
-*** The Species for which we have age and dbh:
+*** COMMENT The Species for which we have age and dbh:
 #+begin_src R
     sampled_species <- readRDS("../data/tidy_age_dbh.rds") %>%
       pull(ScientificName) %>%
@@ -1238,7 +1244,7 @@ sampled_species %>% ascii.nowarn.print
 
 161 Species
 
-*** Cities and Climate
+*** COMMENT Cities and Climate
 
 #+name: city_climate
 | Region | City             |  CDD |  HDD | Precip |  Longitude | Latitude |
@@ -1287,7 +1293,7 @@ make the plot cover the values seen in the US.
 
 We also have unequal observations across cities.  NY has very few.
 
-*** Get new climate data.  Growing degree days and Precip. Make plots
+*** COMMENT Get new climate data.  Growing degree days and Precip. Make plots
 
 Plot, census tracts in GDD and Precip Space.  An inset of the US
 continental with the color scheme.
@@ -2041,7 +2047,7 @@ The dots should instead be a contour plot of the US population.
 #+RESULTS:
 [[file:../figs/gdd_precip_cont.png]]
 
-*** Making figures for this data section
+*** COMMENT Making figures for this data section
 **** species by city raster, black if the combination exists
 #+begin_src R
   library(dplyr)
