@@ -5019,6 +5019,105 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+RESULTS:
 [[file:../figs/plot_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_mainparameters.png :height 250
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[1:4],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_mainparameters.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_climate_effects.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[5:7],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_climate_effects.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta0.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[8:10],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta0.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta1.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[11:13],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta1.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta2.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[14:16],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta2.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta3.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[17:19],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta3.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_shape.png :height 100
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[20],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_shape.png]]
+
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:gdd")
 #+end_src
@@ -5344,37 +5443,44 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 
 #+end_src
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more.png :height 2000 :width 1200 :bg transparent
-    teal <- "#00ffff"
-    blue <- "#1500ff"
-    purple <- "#aa00ff"
-    purplered <- "#ff00ff"
-  red <- "#ff0000"
-    yellow <- "#ffff00"
-    yellowgreen <- "#80ff00"
-    orange <- "#ff8000"
-    bluepurple <- "#5500ff"
-    bluepurplepurple <- "#7f00ff"
-    blueteal <- "#007fff"
-    green <- "#00ff00"
-    greenteal <- "#00ff80"
-    darkergreen <- "#04e600"
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png :height 2000 :width 1200
 
-
-
-
+      red <- "#dc322f"
+      yellow <- "#b58900"
+      blue <- "#268bd2"
+      green <- "#859900"
+      cyan <- "#2aa198"
+      orange <- "#cb4b16"
+     violet <- "#6c71c4"
+     magenta <- "#d33682"
 
       ggplot(me2) +
-          geom_line(aes(x = AGE, y = estimate__), size = 1) +
-          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = "blue") +
-          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
+          geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = red) +
           facet_grid(Species~Region) +
-          geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = blue) +
-            theme_solarized(light = F, base_size = 18) +
-      theme(axis.text = element_text(size = 18, color = "#839496"),
-            rect = element_rect(fill = "transparent"),
-            panel.background = element_rect(fill = "transparent"),
-            panel.grid = element_blank())
+          geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green) +
+            theme_solarized_2(light = F, base_size = 18) +
+      theme(axis.text = element_text(size = 18, color = "#839496"))
+#            rect = element_rect(fill = "transparent"),
+ #           panel.background = element_rect(fill = "transparent"))
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more.png :height 20000 :width 12000 :bg transparent :res 600
+
+   ggplot(me2) +
+       geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
+       geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
+       geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = red) +
+       facet_grid(Species~Region) +
+       geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green) +
+     scale_x_continuous(breaks = c(0,75)) +
+   theme(axis.text = element_text(size = 18, color = "#839496"))
 
 #+end_src
 
@@ -5472,41 +5578,6 @@ The reason that the equation for ACPL in the North East is linear is
 because there are only two observations.  Yikes.
 
 
-TIAM TpIntW
-#+begin_src R :exports results :results graphics :file figs/predictions_dbh_bySpecies_wData_TIAM.pdf :height 3 :width 5
-
-  theme_set(theme_classic(base_size = 12))
-  predictions_apprange.tiam <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(SpCode == "TIAM", Region == "TpIntW")
-
-  predictions_datarange.tiam <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(SpCode == "TIAM", Region == "TpIntW")
-
-  ggplot(filter(d, SpCode == "TIAM", Region == "TpIntW"), aes( x = AGE, y = DBH)) +
-      geom_point(alpha = .7, size = 1) +
-      theme(text = element_text(size = 20)) +
-      geom_line(data = predictions_datarange.tiam, aes(group = Region), size = 1, linetype = "1111") +
-      geom_line(data = predictions_apprange.tiam, aes(group = Region), size = 1)
-
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_dbh_bySpecies_wData_TIAM.pdf]]
-
-
-#+begin_src R :exports results :results graphics :file figs/quadratic.png :height 1200 :width 1200
-  ggplot(predictions_apprange %>% filter(EqName == "quad"), aes(x = AGE, y = DBH)) +
-      geom_line() +
-      facet_wrap(~interaction(SpCode, Region))
-#+end_src
-
-#+RESULTS:
-[[file:../figs/quadratic.png]]
-
-TIAM TpIntW
-
-
 
 #+begin_src R :exports results :results graphics :file ../figs/list_pred.png
   ggplot(me2) + geom_line(aes(x = AGE, y = estimate__, color = gddprecip, group = City)) +
@@ -5515,20 +5586,6 @@ TIAM TpIntW
 
 #+RESULTS:
 [[file:../figs/list_pred.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/genus_species_cities_climateb3_predictions.png :width 1000 :height 1000
-#    pred <- predict(mod, newdata = d)
- # pred.df <- cbind(d, pred)
-
-      ggplot(pred.df, aes(x = AGE, y = DBH)) +
-          geom_point() +
-          facet_grid(Genus~City) +
-        geom_line(data = pred.df, aes(x = AGE, y = Estimate), inherit.aes = F, color = "blue")
- #       geom_ribbon(data = pred.df, aes(x = AGE, ymin = Q2.5, ymax = Q97.5), inherit.aes = F, fill = "blue", alpha = .2)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/genus_species_cities_climateb3_predictions.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
    pp_check(mod) + xlim(c(-30,250))
@@ -5755,6 +5812,29 @@ y = diameter at breast height (cm)
 x = age since transplant (years)
 
 * Results
+
+Posterior distributions with 80% interval and median for parameters in
+
+#+name: fig:main_effects_posterior
+[[file:../figs/posterior_distributions_model_mainparameters.png]]
+#+name: fig:climate_effects_posterior
+[[file:../figs/posterior_distributions_model_climate_effects.png]]
+#+name: fig:sd_beta0_posterior
+[[file:../figs/posterior_distributions_model_sd_beta0.png]]
+
+#+name: fig:sd_beta1_posterior
+[[file:../figs/posterior_distributions_model_sd_beta1.png]]
+
+#+name: fig:sd_beta2_posterior
+[[file:../figs/posterior_distributions_model_sd_beta2.png]]
+
+#+name: fig:sd_beta3_posterior
+[[file:../figs/posterior_distributions_model_sd_beta3.png]]
+
+#+name: fig:shape_posterior
+[[file:../figs/posterior_distributions_model_shape.png]]
+
+
 
 summary figure showing parameter marginal posterior distributions.  Or
 maybe just mean and a couple confidence intervals
