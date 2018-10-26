@@ -2625,9 +2625,7 @@ gdd:preci
 \tau_3 \sim Normal(.025, .01)
 \]
 
-
-*** fitting model
-**** COMMENT adjust for fit in stan, can mention
+*** COMMENT fitting model
 (but when fit in stan, reparameterized so beta's are closer to one
 another 1-4 range)
 p\[
@@ -2660,9 +2658,12 @@ https://journal.r-project.org/archive/2018/RJ-2018-017/index.html
 about brms:
 cite:buerkner_2017
 
+diagnostics:
+https://arxiv.org/pdf/1709.01449.pdf
+
 **** great example explaning hamiltonian monte carlo
 http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/
-*** model form: Weibull
+*** COMMENT model form: Weibull
 model form:
 cite:Weiskittel_ForestGrowthAndYieldModeling:
 "This reality should lead to model forms that are complex enough to
@@ -3021,7 +3022,7 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
-*** a look at gamma family
+*** COMMENT a look at gamma family
 #+begin_src R
     library(brms)
     source("allo_functions.R")
@@ -4186,7 +4187,6 @@ new conditions needed.
 
 #+end_src
 
-
 *** b1 function of climate
 **** model R code
 #+begin_src R :tangle climate_b1.R
@@ -4744,7 +4744,6 @@ comparison
 
 The difference is significant.  climate affects on \beta_3 not only make
 more sense from a theoretical perspective, but the data support it.
-
 
 *** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
 **** model R code
@@ -5708,37 +5707,8 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
 
-*** Full model
-
-\[
-DBH \sim N(\beta_0 * (1 - \exp(-\beta_1 * AGE ^ {\beta_2})), \sigma)
-\]
-
-\[
-\beta_0, \beta_1, \beta_2 \sim
-\]
-
-\[
-\sigma \sim
-\]
-
-species within genus within ...
-
-
-Model selection
-1) Do all the betas vary by groups (City, Species, or both), or just beta0?
-   1) There would be 4 models to compare:
-      1) \beta_0 + \beta_1 + \beta_2 ~ City + Species
-      2) \beta_0 ~ City + Species, \beta_1 + \beta_2 ~ 1
-      3) \beta_0 ~ City + Species, \beta_1 + \beta_2 ~ City
-      4) \beta_0 ~ City + Species, \beta_1 + \beta_2 ~ Species
-   2) It might be worth doing this test on a reasonable subset of the
-      data, otherwise this may take a _very_ long time
-2) What is the proper form of the climate variables on the beta's?
-   1)
-
 *** for diagnostics
-https://arxiv.org/pdf/1709.01449.pdf
+
 
 *** look at distributions
 
