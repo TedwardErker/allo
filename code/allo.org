@@ -5850,9 +5850,9 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 
 *** illustrative comparisons
 
-*** all comparisons for model
 
 
+*** COMMENT all comparisons for model
 #+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
