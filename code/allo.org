@@ -5546,9 +5546,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 [[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 500 :width 600
-      library(ggthemes)
-
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 1000 :width 1300 :res 300
     sp.subset <- c("ACPL")
     r.subset <- c("MidWst", "NMtnPr", "NoEast", "PacfNW","TpIntW")
 
@@ -5556,17 +5554,38 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
     dd.sub <- filter(dd, Species %in% sp.subset, Region %in% r.subset)
     predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp.subset, Region %in% r.subset)
 
-       ggplot(me2.sub) +
-           geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
-           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
-           geom_point(data = dd.sub, aes(x = AGE, y = DBH), alpha = .5, size = 1, color = red) +
-              facet_wrap(~Region) +
-           geom_line(data = predictions_apprange_sub.sub, aes(x = AGE, y = predicted_dbh), size = 1, color = green) +
-         scale_x_continuous(breaks = c(0,75)) +
-         scale_y_continuous("DBH") +
-         theme_minimal() +
-       theme(text = element_text(size = 18),
-             panel.border = element_rect(color = "black", fill = NA))
+    me3 <- me2.sub %>%
+        select(City, estimate__, AGE) %>%
+        rename(DBH = estimate__) %>%
+        mutate(Acer_platanoides = "prediction (95% PI)")
+
+    dd.sub <- dd.sub %>% select(City, DBH, AGE) %>%
+        mutate(Acer_platanoides = "observations")
+
+
+    utd.pred <- predictions_apprange_sub.sub %>%
+        select(City, DBH, AGE) %>%
+        mutate(Acer_platanoides = "UTD prediction")
+
+
+
+    d.com <- rbind(utd.pred, me3)
+
+  cols <- c(red, blue, green)
+
+    ggplot(d.com, aes(x = AGE, y = DBH)) +
+        geom_point(data = dd.sub, aes(x = AGE, y = DBH, color = Acer_platanoides), alpha = .4, size = .75) +
+        geom_line(aes(color = Acer_platanoides, group = interaction(Acer_platanoides,City))) +
+        geom_ribbon(data = me2.sub, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__,group = City), inherit.aes = F, alpha = .15) +
+        facet_wrap(~City) +
+        scale_x_continuous(breaks = c(0,75)) +
+        scale_color_manual("Acer platanoides", values = cols) +
+        theme_minimal() +
+        theme(text = element_text(size = 14),
+              panel.border = element_rect(color = "black", fill = NA),
+              legend.position = c(.84, .2),
+              legend.text = element_text(size = 8),
+              legend.title = element_text(size = 12))
 
 #+end_src
 
@@ -5669,14 +5688,17 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/predicting_unobserved_groups.png :width 800 :height 800
+#+begin_src R :exports results :results graphics :file ../figs/predicting_unobserved_groups.png :width 1000 :height 800 :res 300
     ggplot(pd, aes(x = AGE, y = Estimate)) +
       geom_line() +
       geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
       geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
       facet_grid(City~Genus*Species) +
-      theme(text = element_text(size = 20),
-            )
+        scale_x_continuous(breaks = c(0,75)) +
+      theme_minimal() +
+       theme(text = element_text(size = 10),
+             panel.border = element_rect(color = "black", fill = NA))
+
 #+end_src
 
 #+RESULTS:
@@ -5878,9 +5900,12 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 ** Comparing to existing equations
 
 *** illustrative comparisons
-#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
+#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus.png]]
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
 
 *** COMMENT all comparisons for model
