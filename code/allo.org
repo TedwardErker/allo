@@ -1,8 +1,8 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
-#+PROPERTY:  header-args:sh :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -3165,9 +3165,94 @@ pp_check(mod, type = "ecdf_overlay") + xlim(c(-10,200))
 
 #+RESULTS:
 [[file:../figs/test_gamma.png]]
+*** COMMENT look at distributions
+
+Priors
+
+gamma
+alpha called shape
+beta called rate
+ mean is alpha/beta; variance is alpha/beta^2
+
+#+begin_src R :exports results :results graphics :file ../figs/fnorm.png
+  x <- seq(-.1,.3,.01)
+  y <- dnorm(x, .07, .04)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/fnorm.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/ftest.png
+  x <- seq(0,1,.1)
+  y <- dgamma(x, 4, 13)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftest.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/ftest2.png
+  x <- seq(0,8,.1)
+  y <- dgamma(x, shape = 34, rate = 19.4)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftest2.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/ftest_bsigma.png
+  x <- seq(0,1,.01)
+  y <- dgamma(x, shape = 10, rate = 100)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftest_bsigma.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/ftestt.png
+  x <- seq(0,10,.1)
+  y <- dgamma(x, 1.3, 1.3)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftestt.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/ftesttt.png
+  x <- seq(0,5,.1)
+  y <- dgamma(x, 2, 10)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ftesttt.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/cauchtest.png
+  x <- seq(0,5,.1)
+  y <- dcauchy(x,0,.3)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/cauchtest.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/ttest.png
+  x <- seq(0,5,.1)
+  y <- dt(x,.2)
+  plot(x, y, type = "l")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/ttest.png]]
+
 *** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :END:
 **** model R code
 #+begin_src R
@@ -3435,7 +3520,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 *** many cities
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 :END:
 **** model R code
 #+begin_src R :tangle many_cities.R
@@ -3540,7 +3625,7 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_yes_climate_no_
 
 **** diagnostics
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 
 #+begin_src R
@@ -3752,7 +3837,7 @@ rsync -avz erker@krusty:~/allo/models/genus_yes_species_yes_cities_no_climate_no
 
 **** diagnostics
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 
 #+begin_src R
@@ -4073,7 +4158,7 @@ rsync -avz erker@krusty:~/allo/models/genus_yes_species_yes_cities_yes_climate_n
 
 **** diagnostics
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 
 #+begin_src R
@@ -4299,7 +4384,7 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b1_h
 
 **** diagnostics
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 
 #+begin_src R
@@ -4544,7 +4629,7 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b3_h
 
 **** diagnostics
 :PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval yes :tangle no
+:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
 :END:
 
 #+begin_src R
@@ -5707,93 +5792,6 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
 
-*** for diagnostics
-
-
-*** look at distributions
-
-Priors
-
-gamma
-alpha called shape
-beta called rate
- mean is alpha/beta; variance is alpha/beta^2
-
-#+begin_src R :exports results :results graphics :file ../figs/fnorm.png
-  x <- seq(-.1,.3,.01)
-  y <- dnorm(x, .07, .04)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/fnorm.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/ftest.png
-  x <- seq(0,1,.1)
-  y <- dgamma(x, 4, 13)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ftest.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/ftest2.png
-  x <- seq(0,8,.1)
-  y <- dgamma(x, shape = 34, rate = 19.4)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ftest2.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/ftest_bsigma.png
-  x <- seq(0,1,.01)
-  y <- dgamma(x, shape = 10, rate = 100)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ftest_bsigma.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/ftestt.png
-  x <- seq(0,10,.1)
-  y <- dgamma(x, 1.3, 1.3)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ftestt.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/ftesttt.png
-  x <- seq(0,5,.1)
-  y <- dgamma(x, 2, 10)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ftesttt.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/cauchtest.png
-  x <- seq(0,5,.1)
-  y <- dcauchy(x,0,.3)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/cauchtest.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/ttest.png
-  x <- seq(0,5,.1)
-  y <- dt(x,.2)
-  plot(x, y, type = "l")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/ttest.png]]
 
 *** bits
 
