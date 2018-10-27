@@ -4061,7 +4061,6 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                  prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                  prior(gamma(20, 1), class = "shape"),
                prior(normal(0, .3), class = "sd", nlpar = "b0", group = "City"),
-               prior(normal(.1, .3), class = "sd", nlpar = "b1", group = "City"),
                prior(normal(0, .1), class = "sd", nlpar = "b2", group = "City"),
                prior(normal(0, .1), class = "sd", nlpar = "b3", group = "City"),
                prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
@@ -4152,17 +4151,12 @@ rsync -avz erker@krusty:~/allo/models/genus_yes_species_yes_cities_yes_climate_n
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma.rds
 :
-: sent 25982 bytes  received 17844101 bytes  3971129.56 bytes/sec
-: total size is 18021864  speedup is 1.01
+: sent 16 bytes  received 149 bytes  47.14 bytes/sec
+: total size is 18021864  speedup is 109223.42
 : You have new mail in /var/mail/erker
 
 **** diagnostics
-:PROPERTIES:
-:header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no :tangle no
-:END:
-
 #+begin_src R
 mod_genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma <- readRDS("../models/genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma.rds")
 mod <- mod_genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma
@@ -4191,37 +4185,40 @@ Group-Level Effects:
 ~City (Number of levels: 15)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
 sd(b0_Intercept)     0.76      0.10     0.58     0.97        697 1.01
-sd(b2_Intercept)     0.30      0.04     0.23     0.40        658 1.01
+sd(b2_Intercept)     0.30      0.04     0.23     0.40        647 1.01
 sd(b3_Intercept)     0.10      0.02     0.07     0.14          5 1.60
 
 ~Genus (Number of levels: 17)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.28      0.11     0.05     0.48         11 1.16
+sd(b0_Intercept)     0.28      0.11     0.05     0.48         15 1.16
 sd(b1_Intercept)     0.34      0.09     0.18     0.50          5 1.54
 sd(b2_Intercept)     0.17      0.03     0.12     0.22        629 1.02
 sd(b3_Intercept)     0.09      0.02     0.04     0.13        270 1.03
 
 ~Genus:Species (Number of levels: 24)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.05      0.04     0.00     0.15        657 1.00
-sd(b1_Intercept)     0.04      0.03     0.00     0.12        392 1.01
-sd(b2_Intercept)     0.05      0.02     0.01     0.09         10 1.20
-sd(b3_Intercept)     0.05      0.01     0.03     0.08        144 1.03
+sd(b0_Intercept)     0.05      0.04     0.00     0.15        652 1.00
+sd(b1_Intercept)     0.04      0.03     0.00     0.12        380 1.01
+sd(b2_Intercept)     0.05      0.02     0.01     0.09         12 1.20
+sd(b3_Intercept)     0.05      0.01     0.03     0.08        216 1.03
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     2.52      0.31     1.93     3.09          6 1.38
+b0_Intercept     2.52      0.31     1.93     3.09          7 1.38
 b1_Intercept     1.49      0.18     1.17     1.83          4 1.77
 b2_Intercept     0.99      0.08     0.84     1.15        336 1.02
-b3_Intercept     1.10      0.05     1.01     1.20          7 1.31
+b3_Intercept     1.10      0.05     1.01     1.20          8 1.31
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    14.32      0.32    13.69    14.95       1500 1.11
+shape    14.32      0.32    13.69    14.95         18 1.11
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+The model has not converged (some Rhats are > 1.1). Do not analyse the results!
+We recommend running more iterations and/or setting stronger priors.
 #+end_example
 
 #+begin_src R :exports results :results graphics :file ../figs/pairs_genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.png
@@ -4920,9 +4917,8 @@ more sense from a theoretical perspective, but the data support it.
 : building file list ... done
 : genus_species_citiesNotB1_b3climate.R
 :
-: sent 877 bytes  received 42 bytes  262.57 bytes/sec
-: total size is 2450  speedup is 2.67
-: You have new mail in /var/mail/erker
+: sent 150 bytes  received 66 bytes  61.71 bytes/sec
+: total size is 2450  speedup is 11.34
 
 **** run on krusty
 
