@@ -26,24 +26,22 @@ family <- "Gamma"
              prior(gamma(20, 1), class = "shape"))
 
 
-d <- readRDS("../data/age_dbh_testing.rds")
+d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
 
-prior_mod <-  brm(form,
-             data = d,
-             prior = nlprior,
-             family = Gamma("identity"),
-           sample_prior = "only",
-             chains = 2, cores = 2, init_r = .3, iter = 500)
-
-
-## pred <- predict(prior_mod, newdata = d)
-
-##    mod <- brm(form,
+## prior_mod <-  brm(form,
 ##              data = d,
 ##              prior = nlprior,
 ##              family = Gamma("identity"),
-##              chains = 8, cores = 8, init_r = .3, iter = 2000)
+##            sample_prior = "only",
+##              chains = 2, cores = 2, init_r = .3, iter = 500)
 
-##   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+
+   mod <- brm(form,
+             data = d,
+             prior = nlprior,
+             family = Gamma("identity"),
+             chains = 8, cores = 8, init_r = .3, iter = 2000)
+
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here

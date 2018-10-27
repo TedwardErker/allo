@@ -26,7 +26,7 @@ library(dplyr)
                prior(normal(0.03, 0.01), nlpar = "b3", coef = "precip"),
                prior(normal(0.025, 0.01), nlpar = "b3", coef = "gdd:precip"))
 
-d <- readRDS("../data/age_dbh_testing.rds")
+d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
    ## prior_mod <-  brm(form,
    ##                   data = d,
@@ -42,7 +42,7 @@ d <- readRDS("../data/age_dbh_testing.rds")
              data = d,
              prior = nlprior,
              family = Gamma("identity"),
-             chains = 6, cores = 6, init_r = .3, iter = 1000)
+             chains = 4, cores = 2, init_r = .3, iter = 2000)
 
   saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here

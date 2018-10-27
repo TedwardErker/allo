@@ -3294,7 +3294,7 @@ Use brm(..., sample_prior = "only")
 y = diameter at breast height (cm)
 x = age since transplant (years)
 
-*** COMMENT genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
+*** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 **** model R code
 #+begin_src R :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
     library(dplyr)
@@ -3387,15 +3387,16 @@ C-c C-v t
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
   rsync -avz genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R erker@krusty:~/allo/code/
+
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
 :
-: sent 148 bytes  received 20 bytes  48.00 bytes/sec
-: total size is 1490  speedup is 8.87
-: You have new mail in /var/mail/erker
+: sent 457 bytes  received 60 bytes  147.71 bytes/sec
+: total size is 1453  speedup is 2.81
 
 **** run on krusty
 
@@ -3502,7 +3503,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
-*** COMMENT many cities
+*** many cities
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 :END:
@@ -3582,8 +3583,8 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 : building file list ... done
 : many_cities.R
 :
-: sent 126 bytes  received 60 bytes  53.14 bytes/sec
-: total size is 1826  speedup is 9.82
+: sent 494 bytes  received 60 bytes  158.29 bytes/sec
+: total size is 1833  speedup is 3.31
 
 **** run on krusty
 
@@ -3733,7 +3734,7 @@ pred.df <- cbind(d, pred)
 #+RESULTS:
 [[file:../figs/cities_wpreds.png]]
 
-*** COMMENT genus/species
+*** genus/species
 **** model R code
 #+begin_src R :tangle genus_species.R
   library(dplyr)
@@ -3802,8 +3803,8 @@ pred.df <- cbind(d, pred)
 : building file list ... done
 : genus_species.R
 :
-: sent 128 bytes  received 66 bytes  77.60 bytes/sec
-: total size is 2226  speedup is 11.47
+: sent 403 bytes  received 66 bytes  134.00 bytes/sec
+: total size is 2233  speedup is 4.76
 
 **** run on krusty
 
@@ -4032,7 +4033,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/GenusSpecies_acer_preditions.png]]
 
-*** COMMENT City and Genus/species
+*** City and Genus/species
 **** model R code
 #+begin_src R :tangle genus_species_cities.R
     library(dplyr)
@@ -4059,18 +4060,18 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                  prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
                  prior(gamma(44.4, 44.4), nlpar = "b3",lb = 0),
                  prior(gamma(20, 1), class = "shape"),
-                 prior(normal(0, .2), class = "sd", nlpar = "b0", group = "City"),
-  #               prior(normal(0, .1), class = "sd", nlpar = "b1", group = "City"),
-                 prior(normal(0, .1), class = "sd", nlpar = "b2", group = "City"),
-                 prior(normal(0, .03), class = "sd", nlpar = "b3", group = "City"),
-                 prior(normal(0, .2), class = "sd", nlpar = "b0", group = "Genus"),
-                 prior(normal(0, .05), class = "sd", nlpar = "b0", group = "Genus:Species"),
-                 prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus"),
-                 prior(normal(0, .05), class = "sd", nlpar = "b1", group = "Genus:Species"),
-                 prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus"),
-                 prior(normal(0, .025), class = "sd", nlpar = "b2", group = "Genus:Species"),
-                 prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus"),
-                 prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
+               prior(normal(0, .3), class = "sd", nlpar = "b0", group = "City"),
+               prior(normal(.1, .3), class = "sd", nlpar = "b1", group = "City"),
+               prior(normal(0, .1), class = "sd", nlpar = "b2", group = "City"),
+               prior(normal(0, .1), class = "sd", nlpar = "b3", group = "City"),
+               prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
+               prior(normal(0, .1), class = "sd", nlpar = "b0", group = "Genus:Species"),
+               prior(normal(.1, .4), class = "sd", nlpar = "b1", group = "Genus"),
+               prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus:Species"),
+               prior(normal(0, .1), class = "sd", nlpar = "b2", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus:Species"),
+               prior(normal(0, .1), class = "sd", nlpar = "b3", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus:Species"))
 
 
     d <- readRDS("../data/age_dbh_testing_noWARO.rds")
@@ -4089,7 +4090,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
                data = d,
                prior = nlprior,
                family = Gamma("identity"),
-               chains = 6, cores = 6, init_r = .1, iter = 500, control = list(adapt_delta = .8))
+               chains = 8, cores = 8, init_r = .1, iter = 6000, control = list(adapt_delta = .8))
 
     saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
@@ -4124,9 +4125,8 @@ ppc_dens_overlay(y = d$DBH, yrep=pp)
 : building file list ... done
 : genus_species_cities.R
 :
-: sent 878 bytes  received 66 bytes  377.60 bytes/sec
-: total size is 2710  speedup is 2.87
-: You have new mail in /var/mail/erker
+: sent 872 bytes  received 66 bytes  375.20 bytes/sec
+: total size is 2593  speedup is 2.76
 
 **** run on krusty
 
@@ -4274,7 +4274,7 @@ new conditions needed.
 
 #+end_src
 
-*** COMMENT b1 function of climate
+*** b1 function of climate
 **** model R code
 #+begin_src R :tangle climate_b1.R
     library(dplyr)
@@ -4304,7 +4304,7 @@ new conditions needed.
                  prior(normal(0.07, 0.04), nlpar = "b1", coef = "precip"),
                  prior(normal(0.05, 0.03), nlpar = "b1", coef = "gdd:precip"))
 
-  d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
     ## prior_mod <-  brm(form,
     ##                   data = d,
@@ -4320,7 +4320,7 @@ new conditions needed.
                data = d,
                prior = nlprior,
                family = Gamma("identity"),
-               chains = 6, cores = 6, init_r = .3, iter = 1000)
+               chains = 4, cores = 2, init_r = .3, iter = 1000)
 
     saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
@@ -4354,6 +4354,15 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+BEGIN_SRC sh :session a :results verbatim
   rsync -avz climate_b1.R erker@krusty:~/allo/code/
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: climate_b1.R
+:
+: sent 492 bytes  received 60 bytes  157.71 bytes/sec
+: total size is 1772  speedup is 3.21
+
 **** run on krusty
 
 run from krusty terminal
@@ -4519,7 +4528,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
-*** COMMENT b3 function of climate
+*** b3 function of climate
 **** model R code
 #+begin_src R :tangle climate_b3.R
     library(dplyr)
@@ -4549,7 +4558,7 @@ intercept (of \beta_1) isn't allowed to vary by city.
                  prior(normal(0.03, 0.01), nlpar = "b3", coef = "precip"),
                  prior(normal(0.025, 0.01), nlpar = "b3", coef = "gdd:precip"))
 
-  d <- readRDS("../data/age_dbh_testing.rds")
+  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
      ## prior_mod <-  brm(form,
      ##                   data = d,
@@ -4565,7 +4574,7 @@ intercept (of \beta_1) isn't allowed to vary by city.
                data = d,
                prior = nlprior,
                family = Gamma("identity"),
-               chains = 6, cores = 6, init_r = .3, iter = 1000)
+               chains = 4, cores = 2, init_r = .3, iter = 2000)
 
     saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 
@@ -4599,6 +4608,15 @@ ppc_dens_overlay(y = d$DBH, yrep=pp) + ylim(c(0,0.018))
 #+BEGIN_SRC sh :session a :results verbatim
   rsync -avz climate_b3.R erker@krusty:~/allo/code/
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: climate_b3.R
+:
+: sent 549 bytes  received 60 bytes  174.00 bytes/sec
+: total size is 1862  speedup is 3.06
+: You have new mail in /var/mail/erker
 
 **** run on krusty
 
@@ -4764,7 +4782,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
-*** COMMENT compare climate beta 1 to climate beta 3
+*** compare climate beta 1 to climate beta 3
 #+begin_src R
 mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma
 mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma
@@ -4918,23 +4936,23 @@ run from krusty terminal
 #+END_SRC
 
 #+BEGIN_SRC sh
-cat genus_species_cities_b3climate.Rout
+cat genus_species_citiesNotB1_b3climate.Rout
 #+END_SRC
 
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
-: receiving file list ... done
-: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
+: receiving file list ... rsync: link_stat "/home/erker/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds" failed: No such file or directory (2)
+: done
 :
-: sent 71067 bytes  received 148558577 bytes  2340624.31 bytes/sec
-: total size is 148669211  speedup is 1.00
-: You have new mail in /var/mail/erker
+: sent 8 bytes  received 21 bytes  8.29 bytes/sec
+: total size is 0  speedup is 0.00
+: rsync error: some files could not be transferred (code 23) at /BuildRoot/Library/Caches/com.apple.xbs/Sources/rsync/rsync-52.200.1/rsync/main.c(1404) [receiver=2.6.9]
 
 **** assess model
 #+begin_src R

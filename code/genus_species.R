@@ -32,7 +32,7 @@ nlprior <- c(prior(gamma(4, 1.33), nlpar = "b0",lb = 0),
              prior(normal(0, .025), class = "sd", nlpar = "b3", group = "Genus:Species"))
 
 
-d <- readRDS("../data/age_dbh_testing.rds")
+d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
 ## prior_mod <-  brm(form,
 ##                   data = d,
@@ -48,7 +48,7 @@ mod <- brm(form,
            data = d,
            prior = nlprior,
            family = Gamma("identity"),
-           chains = 6, cores = 6, init_r = .3, iter = 1000)
+           chains = 6, cores = 6, init_r = .3, iter = 8000)
 
 saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
 ## model R code:1 ends here
