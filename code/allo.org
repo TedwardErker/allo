@@ -6231,19 +6231,75 @@ pd <- cbind(nd, pred.nd)
 
 *** compare models
 #+begin_src R :tangle compare_models.R
+  library(brms)
+  library(loo)
+    models <- c("../models/genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds",
+                "../models/genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.rds",
+                "../models/genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma.rds",
+                "../models/genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds",
+                "../models/genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds",
+                "../models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds",
+                "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
 
-models <- c("
+  loo.list <- lapply(models, function(m) {
+      model <- readRDS(m)
+      loo.model <- loo(model)
+      })
 
-/Users/erker/git/allo/models/genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.rds
+  comparison <- compare(x = loo.list)
 
-/Users/erker/git/allo/models/genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma.rds
-/Users/erker/git/allo/models/genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds
-/Users/erker/git/allo/models/genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds
-
-
-/Users/erker/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
-/Users/erker/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds
+  saveRDS(list(loo.list, comparison), "../models/model_comparison_loo.rds")
 #+end_src
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+  rsync -avz compare_models.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: compare_models.R
+:
+: sent 458 bytes  received 42 bytes  200.00 bytes/sec
+: total size is 1055  speedup is 2.11
+: You have new mail in /var/mail/erker
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH compare_models.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat compare_models.Rout
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/model_comparison_loo.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+:
+: sent 21368 bytes  received 12462468 bytes  1468686.59 bytes/sec
+: total size is 12560017  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+**** look at results
+#+begin_src R
+res <- readRDS("../models/model_comparison_loo.rds")
+res
+#+end_src
+
 * Results
 
 ** parameter estimates
