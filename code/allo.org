@@ -3424,8 +3424,8 @@ rsync -avz erker@krusty:~/allo/models/genus_none_species_single_cities_single_cl
 : receiving file list ... done
 : genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
 :
-: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
-: total size is 12598354  speedup is 1.01
+: sent 21368 bytes  received 12462468 bytes  1468686.59 bytes/sec
+: total size is 12560017  speedup is 1.01
 : You have new mail in /var/mail/erker
 
 **** diagnostics
@@ -3611,11 +3611,10 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_yes_climate_no_
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+: genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.rds
 :
-: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
-: total size is 12598354  speedup is 1.01
-: You have new mail in /var/mail/erker
+: sent 23636 bytes  received 18591618 bytes  1618717.74 bytes/sec
+: total size is 18703952  speedup is 1.00
 
 **** diagnostics
 :PROPERTIES:
@@ -3832,11 +3831,10 @@ rsync -avz erker@krusty:~/allo/models/genus_yes_species_yes_cities_no_climate_no
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+: genus_yes_species_yes_cities_no_climate_no_hetero_no_family_Gamma.rds
 :
-: sent 38 bytes  received 12500133 bytes  2777815.78 bytes/sec
-: total size is 12598354  speedup is 1.01
-: You have new mail in /var/mail/erker
+: sent 27620 bytes  received 78242721 bytes  1981527.62 bytes/sec
+: total size is 78350170  speedup is 1.00
 
 **** diagnostics
 :PROPERTIES:
@@ -4637,8 +4635,8 @@ rsync -avz erker@krusty:~/allo/models/genus_no_species_no_cities_no_climate_b3_h
 : receiving file list ... done
 : genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds
 :
-: sent 38 bytes  received 12038846 bytes  2675307.56 bytes/sec
-: total size is 12131606  speedup is 1.01
+: sent 20960 bytes  received 12201735 bytes  1437964.12 bytes/sec
+: total size is 12295397  speedup is 1.01
 
 **** diagnostics
 :PROPERTIES:
@@ -5013,7 +5011,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_mainparameters.png :height 250
   library(bayesplot)
@@ -6231,7 +6229,21 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
 
+*** compare models
+#+begin_src R :tangle compare_models.R
 
+models <- c("
+
+/Users/erker/git/allo/models/genus_no_species_no_cities_yes_climate_no_hetero_no_family_Gamma.rds
+
+/Users/erker/git/allo/models/genus_yes_species_yes_cities_yes_climate_no_hetero_no_family_Gamma.rds
+/Users/erker/git/allo/models/genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma.rds
+/Users/erker/git/allo/models/genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma.rds
+
+
+/Users/erker/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds
+/Users/erker/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds
+#+end_src
 * Results
 
 ** parameter estimates
