@@ -6288,10 +6288,10 @@ rsync -avz erker@krusty:~/allo/models/model_comparison_loo.rds ~/git/allo/models
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.rds
+: model_comparison_loo.rds
 :
-: sent 21368 bytes  received 12462468 bytes  1468686.59 bytes/sec
-: total size is 12560017  speedup is 1.01
+: sent 38 bytes  received 1596463 bytes  456143.14 bytes/sec
+: total size is 1595573  speedup is 1.00
 : You have new mail in /var/mail/erker
 
 **** look at results
@@ -6299,6 +6299,141 @@ rsync -avz erker@krusty:~/allo/models/model_comparison_loo.rds ~/git/allo/models
 res <- readRDS("../models/model_comparison_loo.rds")
 res
 #+end_src
+
+#+RESULTS:
+#+begin_example
+[[1]]
+[[1]][[1]]
+
+Computed from 8000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -20513.1  81.6
+p_loo         4.9   0.2
+looic     41026.2 163.1
+------
+Monte Carlo SE of elpd_loo is 0.0.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+
+[[1]][[2]]
+
+Computed from 6000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -19764.5  88.7
+p_loo        47.6   3.8
+looic     39529.0 177.4
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     5379  100.0%  473
+ (0.5, 0.7]   (ok)          2    0.0%  812
+   (0.7, 1]   (bad)         0    0.0%  <NA>
+   (1, Inf)   (very bad)    0    0.0%  <NA>
+
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+
+[[1]][[3]]
+
+Computed from 24000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -18989.2  94.1
+p_loo       185.8  12.2
+looic     37978.5 188.2
+------
+Monte Carlo SE of elpd_loo is NA.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     5367  99.7%   2583
+ (0.5, 0.7]   (ok)         11   0.2%   316
+   (0.7, 1]   (bad)         2   0.0%   398
+   (1, Inf)   (very bad)    1   0.0%   9
+See help('pareto-k-diagnostic') for details.
+
+[[1]][[4]]
+
+Computed from 2000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -20195.2  82.6
+p_loo         7.0   0.3
+looic     40390.4 165.2
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+
+[[1]][[5]]
+
+Computed from 4000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -20180.4  82.8
+p_loo         6.8   0.3
+looic     40360.8 165.5
+------
+Monte Carlo SE of elpd_loo is 0.0.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+
+[[1]][[6]]
+
+Computed from 36000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -18845.4  95.9
+p_loo       163.6  14.5
+looic     37690.8 191.7
+------
+Monte Carlo SE of elpd_loo is NA.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     5363  99.7%   1638
+ (0.5, 0.7]   (ok)         12   0.2%   801
+   (0.7, 1]   (bad)         5   0.1%   201
+   (1, Inf)   (very bad)    1   0.0%   3
+See help('pareto-k-diagnostic') for details.
+
+[[1]][[7]]
+
+Computed from 36000 by 5381 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -18976.4  93.7
+p_loo       142.4   9.7
+looic     37952.8 187.3
+------
+Monte Carlo SE of elpd_loo is NA.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     5370  99.8%   4725
+ (0.5, 0.7]   (ok)          7   0.1%   623
+   (0.7, 1]   (bad)         4   0.1%   77
+   (1, Inf)   (very bad)    0   0.0%   <NA>
+See help('pareto-k-diagnostic') for details.
+
+
+[[2]]
+       elpd_diff elpd_loo se_elpd_loo p_loo    se_p_loo looic    se_looic
+model6      0.0  -18845.4     95.9       163.6     14.5  37690.8    191.7
+model7   -131.0  -18976.4     93.7       142.4      9.7  37952.8    187.3
+model3   -143.8  -18989.2     94.1       185.8     12.2  37978.5    188.2
+model2   -919.1  -19764.5     88.7        47.6      3.8  39529.0    177.4
+model5  -1335.0  -20180.4     82.8         6.8      0.3  40360.8    165.5
+model4  -1349.8  -20195.2     82.6         7.0      0.3  40390.4    165.2
+model1  -1667.7  -20513.1     81.6         4.9      0.2  41026.2    163.1
+#+end_example
 
 * Results
 
