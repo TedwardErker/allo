@@ -6987,4 +6987,7 @@ What should the structure of the paper be?
 bibliography:~/git/notes/references.bib
 bibliographystyle:apa
 
+* COMMENT supplemental figures
+
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
