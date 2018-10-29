@@ -5644,7 +5644,7 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/predicting_unobserved_groups.png :width 1000 :height 800 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predicting_cities_notB1_unobserved_groups.png :width 1000 :height 800 :res 300
     ggplot(pd, aes(x = AGE, y = Estimate)) +
       geom_line() +
       geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
@@ -5658,7 +5658,7 @@ pd <- cbind(nd, pred.nd)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predicting_unobserved_groups.png]]
+[[file:../figs/predicting_cities_notB1_unobserved_groups.png]]
 
 
 *** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
