@@ -5216,8 +5216,8 @@ rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
 : building file list ... done
 : marginal_effects_fullconditions.R
 :
-: sent 514 bytes  received 48 bytes  160.57 bytes/sec
-: total size is 1411  speedup is 2.51
+: sent 500 bytes  received 60 bytes  160.00 bytes/sec
+: total size is 1411  speedup is 2.52
 
 #+BEGIN_SRC sh
 
@@ -5242,12 +5242,12 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climat
 : total size is 1139994  speedup is 1.01
 
 #+begin_src R
-me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_full.png :width 1000 :height 2000
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png :width 1000 :height 2000
 
   #arrange the cities by precip * gdd
   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -5266,6 +5266,435 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_full.png]]
+
+**** Plot Urban Tree Allometric equations on top of data
+
+#+begin_src R
+  predict.allo <- function(x, EqName, a, b, c, d, e) {
+      if(EqName == "loglogw1") {
+          y = exp(a + b*log(log(x + 1) + c/2))
+      }
+      else if(EqName == "loglogw2") {
+          y = exp(a + b*log(log(x + 1))+(sqrt(x) * (c/2)))
+      }
+      else if (EqName == "loglogw3") {
+          y = exp(a + b*log(log(x + 1)) + x * c/2)
+      }
+      else if (EqName == "loglogw4") {
+          y = exp(a + b*log(log(x + 1)) + x^2 * c/2)
+      }
+      else if (EqName == "expow1") {
+          y = exp(a+ b * (x) + (c/2))
+      }
+      else if (EqName == "lin") {
+          y = a + b * x
+      }
+      else if (EqName == "quad") {
+          y = a + b * x + c* x^2
+      }
+      else if (EqName == "cub") {
+          y = a+b * x+c *x^2 + d * x^3
+      }
+      else if (EqName == "quart") {
+          y = a+b * x+c *x^2 + d * x^3 + e * x^4
+      }
+      return(y)
+  }
+
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+    d <- readRDS("../data/age_dbh_testing_noWARO.rds")
+
+    eqn <- read.csv("../data/RDS-2016-0005/Data/TS6_Growth_coefficients_20180326.csv", stringsAsFactors = F) %>%
+        mutate(a = as.numeric(a)) %>%
+        rename(Species = SpCode)
+
+    city_region <- read.csv("../data/city_climate.csv") %>%
+      select(Region, City)
+
+  city_clim <- read.csv("../data/cities_gdd_precip.csv") %>%
+    mutate(gdd = gdd / 1000, precip = precip /1000)
+
+  eqn <- left_join(eqn, city_region)
+  eqn <- left_join(eqn, city_clim)
+
+    eqn <- eqn %>%
+        filter(Predicts.component %in% c("dbh"), Independent.variable == "age")
+
+    age_min_max = d %>%
+        group_by(Region, Species) %>%
+        summarize(minAGE = min(AGE, na.rm = T),
+                  maxAGE = max(AGE, na.rm = T))
+
+    eqn <- left_join(eqn, age_min_max)
+
+    DBH_min_max = d %>%
+        group_by(Region, Species) %>%
+        summarize(minDBH = min(DBH, na.rm = T),
+                  maxDBH = max(DBH, na.rm = T))
+
+    eqn <- left_join(eqn, DBH_min_max)
+
+
+                                            # fill in the NAs due to equations existing for species in regions where they weren't sampled.
+    eqn$minAGE[is.na(eqn$minAGE)] <- 0
+    eqn$maxAGE[is.na(eqn$maxAGE)] <- 100
+
+    newdata <- lapply(1:nrow(eqn), function(i) {
+        x <- seq(eqn$minAGE[i], eqn$maxAGE[i],  (eqn$maxAGE[i] - eqn$minAGE[i]) / 20)
+        cbind(x, eqn[i,])
+    })
+
+    newdata <- bind_rows(newdata)
+
+    predictions <- newdata %>% rowwise %>% mutate(predicted_dbh = predict.allo(x = x, EqName = EqName, a = a, b = b, c = c, d = d, e = e))
+
+
+
+                                            #filter out predictions that are outside range of data and label those in range of appsmin and appsmax
+    predictions_apprange <- predictions %>%
+        filter(predicted_dbh > Apps.min & predicted_dbh < Apps.max)
+
+    predictions_datarange <- predictions %>%
+        filter(predicted_dbh > minDBH & predicted_dbh < maxDBH)
+
+    predictions_apprange <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh)
+#+end_src
+
+#+RESULTS:
+: Joining, by = "Region"
+: Warning message:
+: Column `Region` joining character vector and factor, coercing into character vector
+: Joining, by = "City"
+: Joining, by = c("Region", "Species")
+: Joining, by = c("Region", "Species")
+: There were 50 or more warnings (use warnings() to see the first 50)
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh__byRegion.png
+
+  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Species)) +
+      geom_line() +
+      facet_wrap(~City, scales = "free")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh__byRegion.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies.png :height 1200 :width 1200
+
+  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = City)) +
+      geom_line() +
+      facet_wrap(~Species, scales = "free")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
+
+dsp <- unique(d$Species)
+
+predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp)
+
+  ggplot() +
+      geom_point(data = d, aes( x = AGE, y = DBH, color = Region), alpha = .7, size = 1) +
+      facet_wrap(~Species, scales = "free") +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none") +
+      geom_line(data = predictions_apprange_subspecies, aes(x = AGE, y = predicted_dbh, color = Region), size = 1.5)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesFull_wData.png]]
+
+
+#+begin_src R
+    me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
+                            City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+    dd <- mod$data %>%
+        mutate(gddprecip = gdd  * precip,
+               City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+predictions_apprange <- predictions_apprange %>%
+        mutate(gddprecip = gdd  * precip,
+               City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+  dsp <- unique(dd$Species)
+
+
+  blue <- "blue"
+
+
+   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
+                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+me2 <- left_join(me2, unique(select(d, Region, City)))
+
+  dd <- mod$data %>%
+      mutate(gddprecip = gdd  * precip,
+             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+
+  dd <- left_join(dd, unique(select(d, Region, City)))
+
+
+predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(me2$Species))
+
+#+end_src
+
+#+RESULTS:
+: There were 50 or more warnings (use warnings() to see the first 50)
+: Joining, by = "City"
+: Warning message:
+: Column `City` joining factor and character vector, coercing into character vector
+: Joining, by = "City"
+: Warning message:
+: Column `City` joining factor and character vector, coercing into character vector
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png :height 2000 :width 1200
+
+      red <- "#dc322f"
+      yellow <- "#b58900"
+      blue <- "#268bd2"
+      green <- "#859900"
+      cyan <- "#2aa198"
+      orange <- "#cb4b16"
+     violet <- "#6c71c4"
+     magenta <- "#d33682"
+
+p <-       ggplot(me2) +
+          geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = red) +
+          facet_grid(Species~City*gddprecip) +
+          geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green)
+
+p +
+            theme_solarized_2(light = F, base_size = 18) +
+      theme(axis.text = element_text(size = 18, color = "#839496"))
+#            rect = element_rect(fill = "transparent"),
+ #           panel.background = element_rect(fill = "transparent"))
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png :height 20000 :width 12000 :bg transparent :res 600
+
+p +   theme(axis.text = element_text(size = 18, color = "#839496"))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png :height 200 :width 600
+      library(ggthemes)
+          red <- "#dc322f"
+          yellow <- "#b58900"
+          blue <- "#268bd2"
+          green <- "#859900"
+          cyan <- "#2aa198"
+          orange <- "#cb4b16"
+         violet <- "#6c71c4"
+         magenta <- "#d33682"
+
+    sp.subset <- c("ULAM")
+    r.subset <- c("NoCalC","PacfNW", "MidWst", "NMtnPr")
+
+    me2.sub <- filter(me2, Species %in% sp.subset, Region %in% r.subset)
+    dd.sub <- filter(dd, Species %in% sp.subset, Region %in% r.subset)
+    predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp.subset, Region %in% r.subset)
+
+       ggplot(me2.sub) +
+           geom_line(aes(x = AGE, y = estimate__), size = 1, color = blue) +
+           geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .1, fill = blue) +
+           geom_point(data = dd.sub, aes(x = AGE, y = DBH), alpha = .5, size = 1, color = red) +
+              facet_grid(Species~City) +
+           geom_line(data = predictions_apprange_sub.sub, aes(x = AGE, y = predicted_dbh), size = 1, color = green) +
+         scale_x_continuous(breaks = c(0,75)) +
+         scale_y_continuous("DBH") +
+         theme_minimal() +
+       theme(text = element_text(size = 18),
+             panel.border = element_rect(color = "black", fill = NA))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 1000 :width 1300 :res 300
+    sp.subset <- c("ACPL")
+    r.subset <- c("MidWst", "NMtnPr", "NoEast", "PacfNW","TpIntW")
+
+    me2.sub <- filter(me2, Species %in% sp.subset, Region %in% r.subset)
+    dd.sub <- filter(dd, Species %in% sp.subset, Region %in% r.subset)
+    predictions_apprange_sub.sub <- filter(predictions_apprange_sub, Species %in% sp.subset, Region %in% r.subset)
+
+    me3 <- me2.sub %>%
+        select(City, estimate__, AGE) %>%
+        rename(DBH = estimate__) %>%
+        mutate(Acer_platanoides = "prediction (95% PI)")
+
+    dd.sub <- dd.sub %>% select(City, DBH, AGE) %>%
+        mutate(Acer_platanoides = "observations")
+
+
+    utd.pred <- predictions_apprange_sub.sub %>%
+        select(City, DBH, AGE) %>%
+        mutate(Acer_platanoides = "UTD prediction")
+
+
+
+    d.com <- rbind(utd.pred, me3)
+
+  cols <- c(red, blue, green)
+
+    ggplot(d.com, aes(x = AGE, y = DBH)) +
+        geom_point(data = dd.sub, aes(x = AGE, y = DBH, color = Acer_platanoides), alpha = .4, size = .75) +
+        geom_line(aes(color = Acer_platanoides, group = interaction(Acer_platanoides,City))) +
+        geom_ribbon(data = me2.sub, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__,group = City), inherit.aes = F, alpha = .15) +
+        facet_wrap(~City) +
+        scale_x_continuous(breaks = c(0,75)) +
+        scale_color_manual("Acer platanoides", values = cols) +
+        theme_minimal() +
+        theme(text = element_text(size = 14),
+              panel.border = element_rect(color = "black", fill = NA),
+              legend.position = c(.84, .2),
+              legend.text = element_text(size = 8),
+              legend.title = element_text(size = 12))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+
+What city is the lower midwest?  Indianapolis.  There is no data for that.
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies_wData_ACPL.png
+  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(Species == "ACPL")
+
+  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
+      filter(Species == "ACPL")
+
+  ggplot(filter(d, Species == "ACPL"), aes( x = AGE, y = DBH, color = Region)) +
+      geom_point(alpha = .7, size = 1) +
+      facet_wrap(~Region) +
+      theme_minimal() +
+      theme(text = element_text(size = 20),
+            legend.position = "none") +
+      geom_line(data = predictions_datarange.acpl, aes(group = Region), size = 1, linetype = "1111") +
+      geom_line(data = predictions_apprange.acpl, aes(group = Region), size = 1)
+
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predictions_dbh_bySpecies_wData_ACPL.png]]
+
+Funny thing about the Apps range is that for functions that eventually
+decrease, they don't properly stop inference.  Look at the pink line
+above.  The application range should be given for both the predictor
+and the response variable.
+
+
+
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/list_pred.png
+  ggplot(me2) + geom_line(aes(x = AGE, y = estimate__, color = gddprecip, group = City)) +
+    scale_color_distiller(palette = "Spectral")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/list_pred.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
+   pp_check(mod) + xlim(c(-30,250))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+**** test some predictions
+#+begin_src R
+    wg  <-  read.csv("../data/precip_qt_ll.csv")
+    wp <-     read.csv("../data/gdd_qt_ll.csv")
+
+    w <- left_join(wg, wp, by = c("station", "lat", "long"))
+
+    stl <- c(lat = 38.6270, long = -90.1994)
+
+    w2 <- filter(w, lat > stl["lat"] - .1,
+                 lat < stl["lat"] + .1,
+                 long > stl["long"] - .1,
+                 long < stl["long"] + .1)
+
+
+  #  ggplot(w, aes(x = long, y = lat)) +
+   #     geom_point() +
+    #    geom_point(data = w2, color = "pink")
+
+    Species <- c("ACPL","UNKNOWN", "UNKNOWN")
+    Genus <- c("Acer", "Acer", "UNKNOWN")
+    gs <- data.frame(Genus, Species)
+    City <- c("Sacramento, CA", "St. Louis, MO")
+    gdd <- c(5.41, 4822/1000)
+    precip <- c(2.03, 4273/1000)
+
+    nd.clim <- data.frame(City, gdd, precip)
+
+    nd <- expand.grid(City = City, AGE = 1:120)
+
+    nd <- left_join(nd, nd.clim)
+
+    expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
+
+    nd <- expand.grid.df(nd, gs)
+
+    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975))
+#+end_src
+
+#+begin_src R
+pd <- cbind(nd, pred.nd)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/predicting_unobserved_groups.png :width 1000 :height 800 :res 300
+    ggplot(pd, aes(x = AGE, y = Estimate)) +
+      geom_line() +
+      geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
+      geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
+      facet_grid(City~Genus*Species) +
+        scale_x_continuous(breaks = c(0,75)) +
+      theme_minimal() +
+       theme(text = element_text(size = 10),
+             panel.border = element_rect(color = "black", fill = NA))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/predicting_unobserved_groups.png]]
+
 
 *** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
 **** model R code
@@ -6167,7 +6596,6 @@ and the response variable.
 #+RESULTS:
 [[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
-
 **** test some predictions
 #+begin_src R
     wg  <-  read.csv("../data/precip_qt_ll.csv")
@@ -6228,6 +6656,7 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
+
 
 *** compare models
 #+begin_src R :tangle compare_models.R
