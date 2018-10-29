@@ -5063,7 +5063,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
   posterior <- as.matrix(mod)
   mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[11:13],
+             pars = attr(posterior, "dimnames")$parameters[11:12],
              prob = 0.8) + plot_title
 #+end_src
 
@@ -5077,7 +5077,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
   posterior <- as.matrix(mod)
   mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[14:16],
+             pars = attr(posterior, "dimnames")$parameters[13:15],
              prob = 0.8) + plot_title
 #+end_src
 
@@ -5091,7 +5091,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
   posterior <- as.matrix(mod)
   mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[17:19],
+             pars = attr(posterior, "dimnames")$parameters[16:18],
              prob = 0.8) + plot_title
 #+end_src
 
@@ -5105,26 +5105,26 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 
   posterior <- as.matrix(mod)
   mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[20],
+             pars = attr(posterior, "dimnames")$parameters[19],
              prob = 0.8) + plot_title
 #+end_src
 
 #+RESULTS:
 [[file:../figs/posterior_distributions_model_shape.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:gdd")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
   marginal_effects(mod, effects = "AGE:precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
 
 
@@ -5134,14 +5134,14 @@ precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
 precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_wCities.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png
   plot(precip.gdd)[[1]] +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
@@ -5149,7 +5149,7 @@ precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
 
 
 #+begin_src R
@@ -5172,7 +5172,7 @@ precip.gdd
 : Column `City` joining factor and character vector, coercing into character vector
 : There were 50 or more warnings (use warnings() to see the first 50)
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 300
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 300
 
   #arrange the cities by precip * gdd
   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -5191,7 +5191,7 @@ precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
 
 #+begin_src R :tangle marginal_effects_fullconditions.R
