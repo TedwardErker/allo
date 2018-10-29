@@ -5194,16 +5194,17 @@ precip.gdd
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
 
+
 #+begin_src R :tangle marginal_effects_fullconditions.R
 library(brms)
 library(dplyr)
-mod <- readRDS("../models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.rds")
+mod <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
   cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
      me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
-saveRDS(me, "../models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
 #+end_src
 
 #+BEGIN_SRC sh :session a :results verbatim
@@ -5215,9 +5216,8 @@ rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
 : building file list ... done
 : marginal_effects_fullconditions.R
 :
-: sent 492 bytes  received 48 bytes  216.00 bytes/sec
-: total size is 699  speedup is 1.29
-: You have new mail in /var/mail/erker
+: sent 514 bytes  received 48 bytes  160.57 bytes/sec
+: total size is 1411  speedup is 2.51
 
 #+BEGIN_SRC sh
 
