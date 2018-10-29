@@ -2255,6 +2255,9 @@ a linear function or a smoothed spline function of age.  However, this
 still could yield negative predictions at low ages.  Instead we
 adopted the approach of modeling DBH from a gamma distribution, which yielded
 more realistic posterior predictions.
+
+We fit models of generally increasing complexity and then ..
+
 **** COMMENT possible alternative model form.  One that doesn't have an asympote
 
 y = a * log(b*(x+c)^d + 1)
@@ -6621,7 +6624,6 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
 
-
 *** compare models
 #+begin_src R :tangle compare_models.R
   library(brms)
@@ -6828,8 +6830,66 @@ model4  -1349.8  -20195.2     82.6         7.0      0.3  40390.4    165.2
 model1  -1667.7  -20513.1     81.6         4.9      0.2  41026.2    163.1
 #+end_example
 
+#+begin_src R
+
+#+end_src
+
 * Results
 ** Model Comparisons
+
+Short descriptions of the models tested and the brms sytax are in
+table [[tab:model_descriptions]]
+
+
+
+
+
+
+
+#+name: tab:model_descriptions
+| Model | Description                                  | brms formula syntax                                  |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     1 | No varying parameters                        | DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))) |
+|       |                                              | b0 ~ 1                                               |
+|       |                                              | b1 ~ 1                                               |
+|       |                                              | b2 ~ 1                                               |
+|       |                                              | b3 ~ 1                                               |
+|     2 | parameters vary by city                      |                                                      |
+|       |                                              |                                                      |
+|       |                                              |                                                      |
+|       |                                              |                                                      |
+|       |                                              |                                                      |
+|     3 | parameters vary by genus and species         |                                                      |
+|     4 | asympotote (\beta_1) varies by climate            |                                                      |
+|     5 | growth rate (\beta_3) varies by climate           |                                                      |
+|     6 | parameters vary by city, genus, and species. |                                                      |
+|       | Growth rate varies by climate.               |                                                      |
+|     7 | parameters vary by city, genus, and species  |                                                      |
+|       | (but asympote does not vary by city).        |                                                      |
+|       | Growth rate varies by climate.               |                                                      |
+|       |                                              |                                                      |
+
+
+#+begin_src R
+res[[2]]
+#+end_src
+
+#+RESULTS:
+:        elpd_diff elpd_loo se_elpd_loo p_loo    se_p_loo looic    se_looic
+: model6      0.0  -18845.4     95.9       163.6     14.5  37690.8    191.7
+: model7   -131.0  -18976.4     93.7       142.4      9.7  37952.8    187.3
+: model3   -143.8  -18989.2     94.1       185.8     12.2  37978.5    188.2
+: model2   -919.1  -19764.5     88.7        47.6      3.8  39529.0    177.4
+: model5  -1335.0  -20180.4     82.8         6.8      0.3  40360.8    165.5
+: model4  -1349.8  -20195.2     82.6         7.0      0.3  40390.4    165.2
+: model1  -1667.7  -20513.1     81.6         4.9      0.2  41026.2    163.1
+
+| Model |   |   |   |   |
+|-------+---+---+---+---|
+|       |   |   |   |   |
+
+
+
 ** parameter estimates
 Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
 
@@ -6868,9 +6928,7 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
-#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
-#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]
+
 
 
 *** COMMENT all comparisons for model
@@ -6987,6 +7045,10 @@ bibliography:~/git/notes/references.bib
 bibliographystyle:apa
 
 * COMMENT supplemental figures
+#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
+
 
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
