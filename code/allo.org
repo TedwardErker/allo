@@ -6830,7 +6830,6 @@ model1  -1667.7  -20513.1     81.6         4.9      0.2  41026.2    163.1
 #+end_example
 
 * Results
-
 ** parameter estimates
 Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
 
