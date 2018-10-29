@@ -5230,16 +5230,17 @@ rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds
 :
-: sent 6482 bytes  received 1125319 bytes  452720.40 bytes/sec
-: total size is 1139994  speedup is 1.01
+: sent 38 bytes  received 1125699 bytes  321639.14 bytes/sec
+: total size is 1141606  speedup is 1.01
+: You have new mail in /var/mail/erker
 
 #+begin_src R
 me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
@@ -5265,7 +5266,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_full.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png]]
 
 **** Plot Urban Tree Allometric equations on top of data
 
@@ -5433,9 +5434,6 @@ predictions_apprange <- predictions_apprange %>%
   dsp <- unique(dd$Species)
 
 
-  blue <- "blue"
-
-
    me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
                           City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
@@ -5462,7 +5460,7 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 : Warning message:
 : Column `City` joining factor and character vector, coercing into character vector
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png :height 2000 :width 1200
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized.png :height 2000 :width 1200
 
       red <- "#dc322f"
       yellow <- "#b58900"
@@ -5490,19 +5488,19 @@ p +
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_more_solarized.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png :height 20000 :width 12000 :bg transparent :res 600
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png :height 20000 :width 12000 :bg transparent :res 600
 
 p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png :height 200 :width 600
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png :height 200 :width 600
       library(ggthemes)
           red <- "#dc322f"
           yellow <- "#b58900"
@@ -5535,10 +5533,10 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 1000 :width 1300 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 1000 :width 1300 :res 300
     sp.subset <- c("ACPL")
     r.subset <- c("MidWst", "NMtnPr", "NoEast", "PacfNW","TpIntW")
 
@@ -5582,57 +5580,24 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
 
 What city is the lower midwest?  Indianapolis.  There is no data for that.
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies_wData_ACPL.png
-  predictions_apprange.acpl <- predictions_apprange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(Species == "ACPL")
-
-  predictions_datarange.acpl <- predictions_datarange %>% mutate(AGE = x, DBH = predicted_dbh) %>%
-      filter(Species == "ACPL")
-
-  ggplot(filter(d, Species == "ACPL"), aes( x = AGE, y = DBH, color = Region)) +
-      geom_point(alpha = .7, size = 1) +
-      facet_wrap(~Region) +
-      theme_minimal() +
-      theme(text = element_text(size = 20),
-            legend.position = "none") +
-      geom_line(data = predictions_datarange.acpl, aes(group = Region), size = 1, linetype = "1111") +
-      geom_line(data = predictions_apprange.acpl, aes(group = Region), size = 1)
-
-
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_dbh_bySpecies_wData_ACPL.png]]
-
-Funny thing about the Apps range is that for functions that eventually
-decrease, they don't properly stop inference.  Look at the pink line
-above.  The application range should be given for both the predictor
-and the response variable.
-
-
-
-
-
-
 #+begin_src R :exports results :results graphics :file ../figs/list_pred.png
-  ggplot(me2) + geom_line(aes(x = AGE, y = estimate__, color = gddprecip, group = City)) +
+  ggplot(filter(me2, Species == "LIST")) + geom_line(aes(x = AGE, y = estimate__, color = gddprecip, group = City)) +
     scale_color_distiller(palette = "Spectral")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/list_pred.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
    pp_check(mod) + xlim(c(-30,250))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/pp_check_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
 **** test some predictions
 #+begin_src R
