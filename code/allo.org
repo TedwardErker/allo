@@ -6192,7 +6192,6 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_many_climate_b3li
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_full.png]]
 
-
 **** Plot Urban Tree Allometric equations on top of data
 
 #+begin_src R
@@ -6830,6 +6829,7 @@ model1  -1667.7  -20513.1     81.6         4.9      0.2  41026.2    163.1
 #+end_example
 
 * Results
+** Model Comparisons
 ** parameter estimates
 Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
 
@@ -6867,10 +6867,10 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 *** illustrative comparisons
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]
 
 
 *** COMMENT all comparisons for model
