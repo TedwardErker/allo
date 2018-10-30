@@ -6857,7 +6857,8 @@ scaled so that the parameters are on the same order of magnitude and
 HMC sampling is improved.
 
 #+name: tab:model_descriptions
-#+latex: \resizebox{\textwidth}{!}{%
+#+caption: model numbers, short descriptions, and brms formula syntax
+#+latex: \resizebox*{!}{\textheight}{%
 | Model | Description                                  | brms formula syntax                                  |
 |-------+----------------------------------------------+------------------------------------------------------|
 |     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
@@ -6897,8 +6898,8 @@ HMC sampling is improved.
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
 #+latex: }
 
-#+begin_src R :exports none
-res[[2]]
+#+begin_src R :exports none :eval no
+#res[[2]]
 #+end_src
 
 #+RESULTS:
