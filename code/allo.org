@@ -6857,6 +6857,7 @@ scaled so that the parameters are on the same order of magnitude and
 HMC sampling is improved.
 
 #+name: tab:model_descriptions
+#+latex: \resizebox{\textwidth}{!}{%
 | Model | Description                                  | brms formula syntax                                  |
 |-------+----------------------------------------------+------------------------------------------------------|
 |     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
@@ -6894,6 +6895,7 @@ HMC sampling is improved.
 |       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
+#+latex: }
 
 #+begin_src R :exports none
 res[[2]]
