@@ -235,6 +235,10 @@ that I should mention.
 A paragraph on the impact of these equations for managing forests to
 predict/forecast ecosystem services.
 
+Talk more about the bayesian multilevel/hierarchical modeling
+framework and why it is useful.
+
+
 ** COMMENT other thoughts
 Age is an uncertain
 
@@ -58246,6 +58250,8 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 
 #+name: fig:marginal_effects_climate_labels
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
+
+Include an uncertainty / standard error panel also.
 
 ** Comparing to existing equations
 
