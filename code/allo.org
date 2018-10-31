@@ -198,14 +198,20 @@ unrealistic.  These unrealistic estimates and the inability to
 extrapolate severely limits managers' ability to predict growth over
 meaningful time scales (a century rather than a few decades).  A
 second limitations is that some models predict negative diameters, an
-impossibility.  Third, models are only provided for the cities
-and the species sampled.  If a manager wants to predict the diameter growth of a tree
-species in an unsampled city, the researchers recommend using the
-model from the reference city in the same climate region.  However
+impossibility.  Third, models are only provided for the cities and the
+species sampled.  If a manager wants to predict the diameter growth of
+a tree species in an unsampled city, the researchers recommend using
+the model from the reference city in the same climate region.  However
 many of the reference cities are on the border of climate regions and
 there is known large variability in growth within regions (see figure
 XX in utd report which is from McPherson.... comparing Cheyenne to Ft
-Collins).  Furthermore, if a manager
+Collins).  Furthermore, if a manager wants to predict growth for an
+unsampled species or a species that was sampled in a different city it
+is not obvious which equation/model to use and the additional
+uncertainty that this introduces is not quantified.
+
+Our approach address the above limitations.  By fitting a 
+
 
 Age is an uncertain 
 
