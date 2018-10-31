@@ -169,11 +169,12 @@ provide urban dwellers.
 Stan is a probabilistic programming language for bayesian inference
 cite:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
 Hamiltonian Monte Carlo sampling, to effectively draw samples from the
-specified log posterior density.  Here, we use Stan through the R
-package brms . brms allows the user to specify the likelihood and
-priors in syntax similar to R's converts
+specified log posterior density.  Here, we access Stan via the R
+package brms cite:buerkner_2017. brms allows the user to specify the
+likelihood and priors in syntax similar to the R package lme4 commonly
+used for frequentist? multilevel (mixed effects) models
 
-BRMS
+converts
 
 limitations of existing approach and how our model addresses them.
 
