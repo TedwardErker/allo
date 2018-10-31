@@ -143,7 +143,6 @@ species variability and complex relationships, particularly when the
 goal is to estimate regional and national biomass (Zianis and
 Mancuccini, 2004)."
 
-
 * Introduction
 
 Multilevel models have been used for decades in tree growth equations
@@ -178,6 +177,12 @@ doesn't require the user to know how to write efficient Stan code and
 can convert a few lines of R code into many lines of Stan. brms is not
 as flexible as stan, but still can be used to fit many types of models
 including nonlinear multilevel regression models, such as ours here.
+Some of the key advantages of fitting a model in Stan via brms include
+relatively simple syntax and efficient posterior sampling for
+multilevel non-linear models.  The bayesian approach gives better
+estimates of parameter uncertainty and provides a formal way to
+include prior information.
+
 
 the
 
@@ -391,7 +396,6 @@ equations have been integrated with numerical models of tree benefits
 in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 #+END_QUOTE
-
 
 * Methods
 ** Data
@@ -58302,7 +58306,6 @@ show predicitive intervals for
 Show how the equations vary continuously across geographic space,
 show the equations for a variety of unsampled cities.
 
-
 * Discussoins
 
 
@@ -58373,7 +58376,6 @@ What should the structure of the paper be?
 - Model selection
 
 - posterior predicitive checks
-
 
 * bibliography                                                       :ignore:
 bibliography:~/git/notes/references.bib
