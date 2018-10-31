@@ -2400,7 +2400,8 @@ Priors:
 
 Priors were selected to be slightly informative and make very
 biologically unreasonable parameters improbable.  The quanitity of
-data overwhelms the priors
+data overwhelms the priors, but the relatively narrow priors also
+helps with sampling.
 
 for gamma
 \alpha = \mu^2/\sigma^2
@@ -2412,7 +2413,6 @@ for gamma
 | \beta_2                                    | 1.25 | .15 |        69.444444 |       55.555556 |
 | \beta_3  (no climate)                      |    1 | .15 |        44.444444 |       44.444444 |
 | \beta_3  intercept (climate)               |   .6 | .15 |              16. |       26.666667 |
-| \beta_3  intercept (climate,genus,species) |   .3 | .15 |               4. |       13.333333 |
 #+TBLFM: $4=vmean($2^2/$3^2)::$5=vmean($2/$3^2)
 
 \[
@@ -2428,7 +2428,7 @@ for gamma
 \]
 
 \[
-\beta_3 \sim Gamma(44.4, 44.4)
+\beta_3 \sim Gamma(16, 26)
 \]
 
 these priors selected because they create a wide range of possible
@@ -2449,7 +2449,7 @@ This is the highest sd I would expect.  Set the prior so that I'm
 saying I think there is a 99.7% chance I think the the sd is less than
 this.  So I make the sd on the prior, 1/3 the highest sd I think is possible.
 
-species is half of genus
+species is quarter of genus
 
 \[
 \sigma_{0_g[i]} \sim \text{Normal}(0, .4)
@@ -58192,7 +58192,7 @@ org(data.frame(res[[2]]))
 |       |     4 |         -20195.21 |   -1349.80 |
 | Worst |     1 |         -20513.12 |   -1667.70 |
 
-#+begin_src R
+#+begin_src R :exports none
 loo::compare(res[[1]][[6]], res[[1]][[7]])
 #+end_src
 
