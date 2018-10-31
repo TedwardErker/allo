@@ -210,10 +210,33 @@ unsampled species or a species that was sampled in a different city it
 is not obvious which equation/model to use and the additional
 uncertainty that this introduces is not quantified.
 
-Our approach address the above limitations.  By fitting a 
+Our approach addresses the above limitations.  First, we use a weibull
+curve, commonly used in foresty growth equations and biologically
+realistic, which makes extrapolation to ages outside the data range
+less fraught.  Second, using this sigmoidal curve and modeling
+diameter with a gamma distribution ensures our estimates of diameter
+are positive.  Third, by modeling the weibull curve parameters as
+functions of species, city, and climate, we are able to borrow
+information across cities and across species to provide predictions an
+associated uncertainty of diameter growth even in even in cities or
+species with very little or no data.
 
+Multilevel modeling in non-urban forestry ....  other work.  how is
+this different?  Well the urban part, management practices like
+topping, pollarding, pruning, drastically alter growth and tree
+dimensions.  Others have discussed the difference between forest and
+urban/open grown trees a fair bit.  The Stan and brms part, these
+software are new.  What about the modeling approach?  I don't think
+many past effects have so many levels, or have things vary by climate.
+The geographic extent of these urban models is very large.  There are
+a number of papers that have done multilevel modeling for tree growth
+that I should mention.
 
-Age is an uncertain 
+A paragraph on the impact of these equations for managing forests to
+predict/forecast ecosystem services.
+
+** COMMENT other thoughts
+Age is an uncertain
 
 limitations of existing approach and how our model addresses them.
 
@@ -226,8 +249,6 @@ limitations of existing approach and how our model addresses them.
 | what equation to use for unobserved species and city combinations is not clear.  (e.g. should species or city be weighted more?  use equation of different (but similar) species in the same city or of same species in different (but similar city)? | Provides predictions for all species and city combinations.                                                                         |
 | Equations derived in the 17 cities are meant to apply to work in 17 large and heterogeneous regions.                                                                                                                                                  | Using climate data as city level predictors we can vary model parameter continuously across the entire US.                          |
 |                                                                                                                                                                                                                                                       |                                                                                                                                     |
-
-
 
 maybe the framewaork should be broader, just growth equations for all
 trees with urban tree as a case study/example of application.
@@ -300,14 +321,13 @@ species and the climate of the city.
 DBH for illustrative purposes.
 
 on selecting a model form
-cite:Weiskittel_ForestGrowthAndYieldModeling:
+cite:weiskittel_e_2011
 "This reality should lead to model forms that are complex enough to
 accurately and adequately characterize the expected major behaviors of
 the population, but simple enough to avoid being overly influenced by
 the sample’s peculiarities."
 
-
-** past work
+** COMMENT past work
 
 cite:nothdurft_e_2006
 
@@ -400,7 +420,7 @@ application outside their region of origin (fig. 5).
 
 #+END_QUOTE
 
-** urban trees equations
+** COMMENT urban trees equations
 
 "Growth equa- tions for forest trees may not be directly transferable
 to open-grown urban trees because they grow and partition bole,
@@ -409,7 +429,7 @@ Nowak 1994a, Peper and McPherson 1998) (fig. 4). For example, in
 forests, tree crowns compete for limited space and may not reach their
 maximum expansion potential (Martin et al. 2012)." from the
 
-** past modelling
+** COMMENT past modelling
 #+BEGIN_QUOTE
 This report presents the third, most recent and most complete sets of
 growth equations. The equations presented in this report were
