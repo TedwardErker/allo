@@ -172,7 +172,14 @@ Hamiltonian Monte Carlo sampling, to effectively draw samples from the
 specified log posterior density.  Here, we access Stan via the R
 package brms cite:buerkner_2017. brms allows the user to specify the
 likelihood and priors in syntax similar to the R package lme4 commonly
-used for frequentist? multilevel (mixed effects) models
+used for frequentist? multilevel (mixed effects) models.  This makes
+harnessing the power of Stan much simpler and concise because it
+doesn't require the user to know how to write efficient Stan code and
+can convert a few lines of R code into many lines of Stan. brms is not
+as flexible as stan, but still can be used to fit many types of models
+including nonlinear multilevel regression models, such as ours here.
+
+the
 
 converts
 
@@ -3303,7 +3310,7 @@ Use brm(..., sample_prior = "only")
 y = diameter at breast height (cm)
 x = age since transplant (years)
 
-*** genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
+*** COMMENT genus: none;  species: single; cities: single; climate: none; hetero: no; family gamma
 **** model R code
 #+begin_src R :tangle genus_none_species_single_cities_single_climate_none_hetero_no_family_gamma.R
     library(dplyr)
@@ -3512,7 +3519,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
 
-*** many cities
+*** COMMENT many cities
 :PROPERTIES:
 :header-args:R: :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 :END:
@@ -3742,7 +3749,7 @@ pred.df <- cbind(d, pred)
 #+RESULTS:
 [[file:../figs/cities_wpreds.png]]
 
-*** genus/species
+*** COMMENT genus/species
 **** model R code
 #+begin_src R :tangle genus_species.R
   library(dplyr)
@@ -4040,7 +4047,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 #+RESULTS:
 [[file:../figs/GenusSpecies_acer_preditions.png]]
 
-*** City and Genus/species
+*** COMMENT City and Genus/species
 **** model R code
 #+begin_src R :tangle genus_species_cities.R
     library(dplyr)
@@ -4279,7 +4286,7 @@ new conditions needed.
 
 #+end_src
 
-*** b1 function of climate
+*** COMMENT b1 function of climate
 **** model R code
 #+begin_src R :tangle climate_b1.R
     library(dplyr)
@@ -4528,7 +4535,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
-*** b3 function of climate
+*** COMMENT b3 function of climate
 **** model R code
 #+begin_src R :tangle climate_b3.R
     library(dplyr)
@@ -4782,7 +4789,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 I would expect some of these fits to not be so great, because the
 intercept (of \beta_1) isn't allowed to vary by city.
 
-*** compare climate beta 1 to climate beta 3
+*** COMMENT compare climate beta 1 to climate beta 3
 #+begin_src R
 mod_genus_no_species_no_cities_no_climate_b1_hetero_no_family_Gamma
 mod_genus_no_species_no_cities_no_climate_b3_hetero_no_family_Gamma
@@ -4850,7 +4857,7 @@ comparison
 The difference is significant.  climate affects on \beta_3 not only make
 more sense from a theoretical perspective, but the data support it.
 
-*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma
+*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate.R
   library(dplyr)
@@ -5669,8 +5676,7 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_cities_notB1_unobserved_groups.png]]
 
-
-*** genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
+*** COMMENT genus: many;  species: many; cities: many; climate: b3linint; hetero: no; family: Gamma
 **** model R code
 #+begin_src R :tangle genus_species_cities_b3climate.R
   library(dplyr)
@@ -6630,7 +6636,7 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
 
-*** compare models
+*** COMMENT compare models
 cite:vehtari_e_2017
 
 http://mc-stan.org/loo/
