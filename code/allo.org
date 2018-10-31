@@ -236,7 +236,8 @@ A paragraph on the impact of these equations for managing forests to
 predict/forecast ecosystem services.
 
 Talk more about the bayesian multilevel/hierarchical modeling
-framework and why it is useful.
+framework and why it is useful. Show the basis of bayesian
+hierarchical model.
 
 
 ** COMMENT other thoughts
@@ -2332,7 +2333,6 @@ section details this model, and other models tested are in
 supplementary materials.
 
 *** Model
-
 (Notation below.  I don't use conventional subscript letters.  The
 nesting of species within genus isn't obvious either until lower
 levels.  I did this because genus could also end up being nested.
@@ -58365,3 +58365,7 @@ bibliographystyle:apa
 
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
+* NEXT contact committee for biometry
+- ask people
+- set date
+- get paperwork done through John Schuppel.
