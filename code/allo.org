@@ -2398,6 +2398,9 @@ for each j. City random effect:
 
 Priors:
 
+Just describe the priors roughly, gamma, half normal etc.  Then put
+the details in an appendix.
+
 Priors were selected to be slightly informative and make very
 biologically unreasonable parameters improbable.  The quanitity of
 data overwhelms the priors, but the relatively narrow priors also

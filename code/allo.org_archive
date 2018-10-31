@@ -12718,3 +12718,30 @@ there is no asymptote.
 
 #+RESULTS:
 [[file:../figs/alt_model2_test.png]]
+
+* COMMENT misc
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-10-31 Wed 11:07
+:ARCHIVE_FILE: ~/git/allo/code/allo.org
+:ARCHIVE_CATEGORY: allo
+:ARCHIVE_ITAGS: work allo
+:END:
+** Meeting with Jun [2018-08-27 Mon]
+
+What should the structure of the paper be?
+- Premise of paper: showing a new method to fit multilevel non-linear
+  growth models for trees
+- Our working example is the urban tree
+
+- Show different types of posterior predictions (e.g. new tree in a
+  observed city of an observed species, versus new tree in an
+  unobserved city of an unobserved species, but known climate and genus)
+
+- Show predictions compared to the existing method.
+  - will show better potential to extrapolate, both to unobserved ages
+    and unobserved species/city combinations.
+
+- Model selection
+
+- posterior predicitive checks
+
