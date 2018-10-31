@@ -58181,16 +58181,25 @@ org(data.frame(res[[2]]))
 #+END_SRC
 
 #+name: tab:model_comparison
-#+caption: \widehat{elpd}_{loo} = estimated expected log pointwise predictive density. cite:vehtari_e_2017 for descriptions
-|       | Model | \widehat{elpd}_{loo} | elpd diff | se elpd loo |
-|-------+-------+-------------------+-----------+-------------|
-| Best  |     6 |         -18845.41 |      0.00 |       95.85 |
-|       |     7 |         -18976.38 |   -130.97 |       93.66 |
-|       |     3 |         -18989.24 |   -143.83 |       94.11 |
-|       |     2 |         -19764.48 |   -919.06 |       88.69 |
-|       |     5 |         -20180.41 |  -1334.99 |       82.75 |
-|       |     4 |         -20195.21 |  -1349.80 |       82.60 |
-| Worst |     1 |         -20513.12 |  -1667.70 |       81.57 |
+#+caption: \widehat{elpd}_{loo} is the estimated expected log pointwise predictive density. elpd diff is the difference from the \widehat{elpd}_{loo} of the top model. se elpd loo is standard error of    cite:vehtari_e_2017 for descriptions
+|       | Model | \widehat{elpd}_{loo} | elpd diff |
+|-------+-------+-------------------+-----------|
+| Best  |     6 |         -18845.41 |      0.00 |
+|       |     7 |         -18976.38 |   -130.97 |
+|       |     3 |         -18989.24 |   -143.83 |
+|       |     2 |         -19764.48 |   -919.06 |
+|       |     5 |         -20180.41 |  -1334.99 |
+|       |     4 |         -20195.21 |  -1349.80 |
+| Worst |     1 |         -20513.12 |  -1667.70 |
+
+#+begin_src R
+loo::compare(res[[1]][[6]], res[[1]][[7]])
+#+end_src
+
+#+RESULTS:
+: elpd_diff        se
+:    -131.0      21.4
+
 
 
 
