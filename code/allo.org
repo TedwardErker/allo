@@ -6914,16 +6914,19 @@ HMC sampling is improved.
 
 
 #+name: tab:model_comparison
-|       | Model |   |   |   |   |
-|-------+-------+---+---+---+---|
-| Best  |       |   |   |   |   |
-|       |       |   |   |   |   |
-|       |       |   |   |   |   |
-|       |       |   |   |   |   |
-|       |       |   |   |   |   |
-| Worst |       |   |   |   |   |
+#+caption: elpd loo = expected log pointwise predictive density
+|       | Model | elpd loo |   |   |   |
+|-------+-------+---------+---+---+---|
+| Best  |     6 |         |   |   |   |
+|       |     7 |         |   |   |   |
+|       |     3 |         |   |   |   |
+|       |     2 |         |   |   |   |
+|       |     5 |         |   |   |   |
+|       |     4 |         |   |   |   |
+| Worst |     1 |         |   |   |   |
 
-
+*** COMMENT elpd loo
+[[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
 
 ** parameter estimates
 Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
