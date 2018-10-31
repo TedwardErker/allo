@@ -58182,15 +58182,15 @@ org(data.frame(res[[2]]))
 
 #+name: tab:model_comparison
 #+caption: \widehat{elpd}_{loo} is the estimated expected log pointwise predictive density. elpd diff is the difference from the \widehat{elpd}_{loo} of the top model. se elpd loo is standard error of    cite:vehtari_e_2017 for descriptions
-|       | Model | \widehat{elpd}_{loo} | elpd diff |
-|-------+-------+-------------------+-----------|
-| Best  |     6 |         -18845.41 |      0.00 |
-|       |     7 |         -18976.38 |   -130.97 |
-|       |     3 |         -18989.24 |   -143.83 |
-|       |     2 |         -19764.48 |   -919.06 |
-|       |     5 |         -20180.41 |  -1334.99 |
-|       |     4 |         -20195.21 |  -1349.80 |
-| Worst |     1 |         -20513.12 |  -1667.70 |
+|       | Model | \widehat{elpd}_{loo} | difference |
+|-------+-------+-------------------+------------|
+| Best  |     6 |         -18845.41 |       0.00 |
+|       |     7 |         -18976.38 |    -130.97 |
+|       |     3 |         -18989.24 |    -143.83 |
+|       |     2 |         -19764.48 |    -919.06 |
+|       |     5 |         -20180.41 |   -1334.99 |
+|       |     4 |         -20195.21 |   -1349.80 |
+| Worst |     1 |         -20513.12 |   -1667.70 |
 
 #+begin_src R
 loo::compare(res[[1]][[6]], res[[1]][[7]])
@@ -58201,11 +58201,17 @@ loo::compare(res[[1]][[6]], res[[1]][[7]])
 :    -131.0      21.4
 
 
+The standard error for the elpd difference of 131 between model 6 and
+model 7 is 21.4.  Therefore, there is strong evidence that model 6 has
+higher out of sample predictive accuracy than model 7.
+
 
 
 
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
+
+
 
 ** parameter estimates
 Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
@@ -58336,7 +58342,7 @@ make better
   sidewalk/underpowerlines etc.
 - There are some funny things with minneapolis data.  is it from the
   same individual for each species?
-* misc
+* COMMENT misc
 ** Meeting with Jun [2018-08-27 Mon]
 
 What should the structure of the paper be?
