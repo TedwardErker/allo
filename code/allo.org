@@ -183,10 +183,31 @@ multilevel non-linear models.  The bayesian approach gives better
 estimates of parameter uncertainty and provides a formal way to
 include prior information.
 
+The existing approach to modeling the diameter growth of trees in the
+urban tree database (UTD) was to fit a separate model for each tree
+species in each city and test several model forms with different
+weights and then select the model with the lowest Akaike Information
+Criterion (AIC).  This approach has several limitations, many
+highlighted in the report.  First, while the model form selected
+provided the lowest AIC, many of the estimates are not biologically
+realistic (for example they begin to increase sharply at old ages,
+cubic fits, or decrease at old ages, quadratic fits).  Therefore, the
+researchers discouraged applying the models beyond the range of the
+data, or sometimes even within the range of data if the estimates were
+unrealistic.  These unrealistic estimates and the inability to
+extrapolate severely limits managers' ability to predict growth over
+meaningful time scales (a century rather than a few decades).  A
+second limitations is that some models predict negative diameters, an
+impossibility.  Third, models are only provided for the cities
+and the species sampled.  If a manager wants to predict the diameter growth of a tree
+species in an unsampled city, the researchers recommend using the
+model from the reference city in the same climate region.  However
+many of the reference cities are on the border of climate regions and
+there is known large variability in growth within regions (see figure
+XX in utd report which is from McPherson.... comparing Cheyenne to Ft
+Collins).  Furthermore, if a manager
 
-the
-
-converts
+Age is an uncertain 
 
 limitations of existing approach and how our model addresses them.
 
