@@ -59196,7 +59196,7 @@ bibliographystyle:apa
 
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
-* NEXT contact committee for biometry
+* contact committee for biometry
 - ask people
 - set date
 - get paperwork done through John Schuppel.
