@@ -58120,7 +58120,7 @@ attr(,"class")
 
 #+end_src
 
-*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
+*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm.R
   library(dplyr)
