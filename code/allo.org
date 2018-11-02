@@ -2,7 +2,7 @@
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
-#+PROPERTY:  header-args:sh :eval no
+#+PROPERTY:  header-args:sh :eval yes
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -2303,7 +2303,6 @@ exclude <- c("WARO")
 
 #+RESULTS:
 [[file:../figs/species_density_species_facet_excluded.png]]
-
 
 ** Modelling
 *** Model requirements
@@ -5825,6 +5824,7 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/predicting_unobserved_groups.png]]
+
 *** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate.R
@@ -6643,6 +6643,434 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/predicting_cities_notB1_unobserved_groups.png]]
+
+*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma  MODEL parameter coreelations | ID | maybe this help with predictions?
+**** model R code
+#+begin_src R :tangle genus_species_citiesNotB1_b3climate.R
+  library(dplyr)
+  library(brms)
+
+
+  genus <- "many"
+  species <- "many"
+  cities <- "many_notB1"
+  climate <- "b3linint"
+  hetero <- "no"
+  family <- "Gamma"
+
+  data_form <- formula(DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3))))
+  b0_form <- formula(b0 ~ (1 |cid| City) + (1|gid|Genus) + (1|sid|Genus:Species))
+  b1_form <- formula(b1 ~ (1 | gid | Genus) + (1|sid|Genus:Species))
+  b2_form <- formula(b2 ~ (1 |cid| City) + (1|gid|Genus) + (1|sid|Genus:Species))
+  b3_form <- formula(b3 ~ precip * gdd +  (1 | cid | City) + (1 | gid | Genus) + (1 | sid | Genus:Species))
+
+
+  form <- bf(data_form, b0_form, b1_form, b2_form, b3_form, nl = T)
+
+
+  nlprior <- c(prior(gamma(9, 3), nlpar = "b0",lb = 0),
+               prior(gamma(34, 19.4), nlpar = "b1",lb = 0),
+               prior(gamma(69.4, 55.5), nlpar = "b2", lb = 0),
+               prior(gamma(16, 26), nlpar = "b3", lb = 0),
+               prior(normal(0.01, 0.015), nlpar = "b3", coef = "gdd"),
+               prior(normal(0.01, 0.01), nlpar = "b3", coef = "precip"),
+               prior(normal(0.005, 0.005), nlpar = "b3", coef = "precip:gdd"),
+               prior(gamma(20, 1), class = "shape"),
+               prior(normal(0, .3), class = "sd", nlpar = "b0", group = "City"),
+               prior(normal(0, .1), class = "sd", nlpar = "b2", group = "City"),
+               prior(normal(0, .1), class = "sd", nlpar = "b3", group = "City"),
+               prior(normal(0, .4), class = "sd", nlpar = "b0", group = "Genus"),
+               prior(normal(0, .1), class = "sd", nlpar = "b0", group = "Genus:Species"),
+               prior(normal(.1, .4), class = "sd", nlpar = "b1", group = "Genus"),
+               prior(normal(0, .1), class = "sd", nlpar = "b1", group = "Genus:Species"),
+               prior(normal(0, .1), class = "sd", nlpar = "b2", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b2", group = "Genus:Species"),
+               prior(normal(0, .1), class = "sd", nlpar = "b3", group = "Genus"),
+               prior(normal(0, .05), class = "sd", nlpar = "b3", group = "Genus:Species"))
+
+
+  d <- readRDS("../data/age_dbh_testing_noWARO.rds")
+
+
+  mod <- brm(form,
+             data = d,
+             prior = nlprior,
+             family = Gamma("identity"),
+             chains = 12, cores = 12, init_r = .3, iter = 2000, control = list(adapt_delta = .9))
+
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+#+end_src
+
+**** tangle
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz genus_species_citiesNotB1_b3climate.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: genus_species_citiesNotB1_b3climate.R
+:
+: sent 150 bytes  received 66 bytes  61.71 bytes/sec
+: total size is 2450  speedup is 11.34
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH genus_species_citiesNotB1_b3climate.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat genus_species_citiesNotB1_b3climate.Rout
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
+#+END_SRC
+
+**** assess model
+#+begin_src R
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
+mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+  summary(mod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ Family: gamma
+  Links: mu = identity; shape = identity
+Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
+         b0 ~ (1 | City) + (1 | Genus/Species)
+         b1 ~ (1 | Genus/Species)
+         b2 ~ (1 | City) + (1 | Genus/Species)
+         b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
+   Data: d (Number of observations: 5381)
+Samples: 12 chains, each with iter = 6000; warmup = 3000; thin = 1;
+         total post-warmup samples = 36000
+
+Group-Level Effects:
+~City (Number of levels: 15)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.87      0.13     0.64     1.14      27351 1.00
+sd(b2_Intercept)     0.29      0.04     0.22     0.38      23630 1.00
+sd(b3_Intercept)     0.12      0.03     0.08     0.18      20861 1.00
+
+~Genus (Number of levels: 17)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.30      0.13     0.03     0.56       8428 1.00
+sd(b1_Intercept)     0.54      0.13     0.32     0.83      18906 1.00
+sd(b2_Intercept)     0.24      0.05     0.16     0.34      19282 1.00
+sd(b3_Intercept)     0.10      0.03     0.04     0.16      11249 1.00
+
+~Genus:Species (Number of levels: 24)
+                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sd(b0_Intercept)     0.14      0.08     0.01     0.30      10027 1.00
+sd(b1_Intercept)     0.06      0.04     0.00     0.16      18855 1.00
+sd(b2_Intercept)     0.07      0.03     0.02     0.13      12587 1.00
+sd(b3_Intercept)     0.07      0.02     0.04     0.11      12748 1.00
+
+Population-Level Effects:
+              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+b0_Intercept      2.70      0.25     2.21     3.21      10939 1.00
+b1_Intercept      1.49      0.15     1.23     1.80      14798 1.00
+b2_Intercept      1.00      0.08     0.85     1.17      16319 1.00
+b3_Intercept      0.88      0.07     0.74     1.01      17048 1.00
+b3_precip         0.02      0.01     0.00     0.03      43967 1.00
+b3_gdd            0.01      0.01     0.00     0.03      39234 1.00
+b3_precip:gdd     0.01      0.00     0.00     0.01      24587 1.00
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+shape    14.27      0.27    13.74    14.81      74886 1.00
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+Warning message:
+There were 10 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+#+end_example
+
+
+
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png :height 1300
+  plot(mod, ask = F, N = 40)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_mainparameters.png :height 250
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[1:4],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_mainparameters.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_climate_effects.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[5:7],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_climate_effects.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta0.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[8:10],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta0.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta1.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[11:12],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta1.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta2.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[13:15],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta2.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta3.png :height 200
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[16:18],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_sd_beta3.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_shape.png :height 100
+  library(bayesplot)
+  plot_title <- ggtitle("Posterior distributions",
+                        "with medians and 80% intervals")
+
+  posterior <- as.matrix(mod)
+  mcmc_areas(posterior,
+             pars = attr(posterior, "dimnames")$parameters[19],
+             prob = 0.8) + plot_title
+#+end_src
+
+#+RESULTS:
+[[file:../figs/posterior_distributions_model_shape.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+  marginal_effects(mod, effects = "AGE:gdd")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+  marginal_effects(mod, effects = "AGE:precip")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+
+
+#+begin_src R
+precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+precip.gdd
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png
+  plot(precip.gdd)[[1]] +
+      geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
+      geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
+    coord_flip()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
+
+
+#+begin_src R
+  to.include <- c("LIST", "PLAC", "FRPE")
+
+  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
+    cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
+    cond <- filter(cond, Species %in%  to.include)
+
+     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
+#+end_src
+
+#+RESULTS:
+: Joining, by = "Species"
+: Warning message:
+: Column `Species` joining factor and character vector, coercing into character vector
+: Joining, by = "City"
+: Warning message:
+: Column `City` joining factor and character vector, coercing into character vector
+: There were 50 or more warnings (use warnings() to see the first 50)
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 300
+
+  #arrange the cities by precip * gdd
+  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
+                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+  dd <- mod$data %>%
+      mutate(gddprecip = gdd  * precip,
+             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE)) %>%
+      filter(Species %in% to.include)
+
+      ggplot(me2) +
+          geom_line(aes(x = AGE, y = estimate__), size = 1) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
+          facet_grid(Species~City*gddprecip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+
+
+
+#+begin_src R :tangle marginal_effects_fullconditions.R
+library(brms)
+library(dplyr)
+mod <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
+  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
+    cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
+
+     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
+saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+#+end_src
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: marginal_effects_fullconditions.R
+:
+: sent 500 bytes  received 60 bytes  160.00 bytes/sec
+: total size is 1411  speedup is 2.52
+
+#+BEGIN_SRC sh
+
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH marginal_effects_fullconditions.R &
+  cat marginal_effects_fullconditions.Rout
+  exit
+
+#+END_SRC
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds
+:
+: sent 38 bytes  received 1125699 bytes  321639.14 bytes/sec
+: total size is 1141606  speedup is 1.01
+: You have new mail in /var/mail/erker
+
+#+begin_src R
+me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png :width 1000 :height 2000
+
+  #arrange the cities by precip * gdd
+  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
+                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+  dd <- mod$data %>%
+      mutate(gddprecip = gdd  * precip,
+             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+      ggplot(me2) +
+          geom_line(aes(x = AGE, y = estimate__), size = 1) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
+          facet_grid(Species~City*gddprecip)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png]]
+
 
 *** COMMENT compare models
 cite:vehtari_e_2017
@@ -58213,10 +58641,18 @@ cat genus_species_citiesNotB1_b3climate_fulldata_noPalm.Rout
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds ~/git/allo/models/
 #+END_SRC
 
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds
+:
+: sent 38 bytes  received 552906005 bytes  7323258.85 bytes/sec
+: total size is 552791606  speedup is 1.00
+
 **** assess model
 #+begin_src R
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
-mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
+mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
 #+end_src
 
 #+RESULTS:
@@ -58235,63 +58671,63 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b1 ~ (1 | Genus/Species)
          b2 ~ (1 | City) + (1 | Genus/Species)
          b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
-   Data: d (Number of observations: 5381)
+   Data: d (Number of observations: 12156)
 Samples: 12 chains, each with iter = 6000; warmup = 3000; thin = 1;
          total post-warmup samples = 36000
 
 Group-Level Effects:
-~City (Number of levels: 15)
+~City (Number of levels: 16)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.87      0.13     0.64     1.14      27351 1.00
-sd(b2_Intercept)     0.29      0.04     0.22     0.38      23630 1.00
-sd(b3_Intercept)     0.12      0.03     0.08     0.18      20861 1.00
+sd(b0_Intercept)     0.86      0.12     0.65     1.11      18222 1.00
+sd(b2_Intercept)     0.26      0.04     0.20     0.35      16785 1.00
+sd(b3_Intercept)     0.11      0.02     0.08     0.17      14946 1.00
 
-~Genus (Number of levels: 17)
+~Genus (Number of levels: 76)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.30      0.13     0.03     0.56       8428 1.00
-sd(b1_Intercept)     0.54      0.13     0.32     0.83      18906 1.00
-sd(b2_Intercept)     0.24      0.05     0.16     0.34      19282 1.00
-sd(b3_Intercept)     0.10      0.03     0.04     0.16      11249 1.00
+sd(b0_Intercept)     0.27      0.09     0.09     0.44       6483 1.00
+sd(b1_Intercept)     0.57      0.08     0.43     0.75       8746 1.00
+sd(b2_Intercept)     0.22      0.05     0.12     0.32       2613 1.01
+sd(b3_Intercept)     0.12      0.02     0.08     0.17       8200 1.00
 
-~Genus:Species (Number of levels: 24)
+~Genus:Species (Number of levels: 152)
                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.14      0.08     0.01     0.30      10027 1.00
-sd(b1_Intercept)     0.06      0.04     0.00     0.16      18855 1.00
-sd(b2_Intercept)     0.07      0.03     0.02     0.13      12587 1.00
-sd(b3_Intercept)     0.07      0.02     0.04     0.11      12748 1.00
+sd(b0_Intercept)     0.20      0.07     0.04     0.33       5491 1.00
+sd(b1_Intercept)     0.07      0.04     0.00     0.16       4548 1.00
+sd(b2_Intercept)     0.20      0.03     0.16     0.26       6230 1.00
+sd(b3_Intercept)     0.10      0.01     0.08     0.12       7096 1.00
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.70      0.25     2.21     3.21      10939 1.00
-b1_Intercept      1.49      0.15     1.23     1.80      14798 1.00
-b2_Intercept      1.00      0.08     0.85     1.17      16319 1.00
-b3_Intercept      0.88      0.07     0.74     1.01      17048 1.00
-b3_precip         0.02      0.01     0.00     0.03      43967 1.00
-b3_gdd            0.01      0.01     0.00     0.03      39234 1.00
-b3_precip:gdd     0.01      0.00     0.00     0.01      24587 1.00
+b0_Intercept      2.62      0.23     2.17     3.07       5655 1.00
+b1_Intercept      1.50      0.10     1.31     1.71        947 1.02
+b2_Intercept      0.98      0.07     0.85     1.12       9704 1.00
+b3_Intercept      0.91      0.06     0.79     1.02       9187 1.00
+b3_precip         0.02      0.01     0.00     0.03      34489 1.00
+b3_gdd            0.01      0.01     0.00     0.03      25159 1.00
+b3_precip:gdd     0.01      0.00     0.00     0.01      14563 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    14.27      0.27    13.74    14.81      74886 1.00
+shape    13.36      0.18    13.01    13.70      47958 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
-There were 10 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
+There were 54 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png :height 1300
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.png :height 1300
   plot(mod, ask = F, N = 40)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_mainparameters.png :height 250
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_mainparameters.png :height 250
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58303,10 +58739,10 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_mainparameters.png]]
+[[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_climate_effects.png :height 200
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_climate_effects.png :height 200
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58318,9 +58754,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_climate_effects.png]]
+[[file:../figs/posterior_distributions_model_FullData_climate_effects.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta0.png :height 200
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_sd_beta0.png :height 200
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58332,9 +58768,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta0.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta0.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta1.png :height 200
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_sd_beta1.png :height 200
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58346,9 +58782,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta1.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta1.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta2.png :height 200
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_sd_beta2.png :height 200
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58360,9 +58796,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta2.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta2.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta3.png :height 200
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_sd_beta3.png :height 200
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58374,9 +58810,9 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta3.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta3.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_shape.png :height 100
+#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_FullData_shape.png :height 100
   library(bayesplot)
   plot_title <- ggtitle("Posterior distributions",
                         "with medians and 80% intervals")
@@ -58388,38 +58824,47 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_src
 
 #+RESULTS:
-[[file:../figs/posterior_distributions_model_shape.png]]
+[[file:../figs/posterior_distributions_model_FullData_shape.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png
   marginal_effects(mod, effects = "AGE:gdd")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png
   marginal_effects(mod, effects = "AGE:precip")
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_limitedAgeRange.png
+#p <-     marginal_effects(mod, effects = "AGE:precip")
+plot(p)[[1]] +
+        xlim(c(0,120))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_limitedAgeRange.png]]
 
 
 
 #+begin_src R
-precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T)
+precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100)
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png
 precip.gdd
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities.png
   plot(precip.gdd)[[1]] +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
@@ -58450,7 +58895,7 @@ precip.gdd
 : Column `City` joining factor and character vector, coercing into character vector
 : There were 50 or more warnings (use warnings() to see the first 50)
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 300
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png :width 1000 :height 300
 
   #arrange the cities by precip * gdd
   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -58473,20 +58918,20 @@ precip.gdd
 
 
 
-#+begin_src R :tangle marginal_effects_fullconditions.R
+#+begin_src R :tangle marginal_effects_fullconditions_FullData.R
 library(brms)
 library(dplyr)
-mod <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
+mod <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
   cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
     cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
      me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
-saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 #+end_src
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
+rsync -avz marginal_effects_fullconditions_FullData.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
@@ -58501,14 +58946,14 @@ rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
 
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH marginal_effects_fullconditions.R &
-  cat marginal_effects_fullconditions.Rout
+  nohup R CMD BATCH marginal_effects_fullconditions_FullData.R &
+  cat marginal_effects_fullconditions_FullData.Rout
   exit
 
 #+END_SRC
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
@@ -58521,12 +58966,12 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_
 : You have new mail in /var/mail/erker
 
 #+begin_src R
-me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png :width 1000 :height 2000
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full.png :width 1000 :height 2000
 
   #arrange the cities by precip * gdd
   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -58586,8 +59031,8 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 
 
 #+begin_src R
-    d <- readRDS("../data/age_dbh_testing_noWARO.rds")
 
+  d <- readRDS("../data/age_dbh_full_noPalms.rds")
     eqn <- read.csv("../data/RDS-2016-0005/Data/TS6_Growth_coefficients_20180326.csv", stringsAsFactors = F) %>%
         mutate(a = as.numeric(a)) %>%
         rename(Species = SpCode)
@@ -58655,7 +59100,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh__byRegion.png
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh__byRegion_FullData.png
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Species)) +
       geom_line() +
@@ -58666,7 +59111,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 #+RESULTS:
 [[file:../figs/predictions_dbh__byRegion.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies.png :height 1200 :width 1200
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies_FullData.png :height 1200 :width 1200
 
   ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = City)) +
       geom_line() +
@@ -58677,7 +59122,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 #+RESULTS:
 [[file:../figs/predictions_dbh_bySpecies.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData.png :height 1200 :width 1200
+#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData_FullData.png :height 1200 :width 1200
 
 dsp <- unique(d$Species)
 
@@ -58738,7 +59183,7 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 : Warning message:
 : Column `City` joining factor and character vector, coercing into character vector
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized.png :height 2000 :width 1200
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized_FullData.png :height 2000 :width 1200
 
       red <- "#dc322f"
       yellow <- "#b58900"
@@ -58768,7 +59213,7 @@ p +
 #+RESULTS:
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png :height 20000 :width 12000 :bg transparent :res 600
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png :height 20000 :width 12000 :bg transparent :res 600
 
 p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
@@ -58778,7 +59223,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png :height 200 :width 600
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam_FullData.png :height 200 :width 600
       library(ggthemes)
           red <- "#dc322f"
           yellow <- "#b58900"
@@ -58814,7 +59259,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png :height 1000 :width 1300 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png :height 1000 :width 1300 :res 300
     sp.subset <- c("ACPL")
     r.subset <- c("MidWst", "NMtnPr", "NoEast", "PacfNW","TpIntW")
 
@@ -58862,7 +59307,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
 What city is the lower midwest?  Indianapolis.  There is no data for that.
 
-#+begin_src R :exports results :results graphics :file ../figs/list_pred.png
+#+begin_src R :exports results :results graphics :file ../figs/list_pred_FullData.png
   ggplot(filter(me2, Species == "LIST")) + geom_line(aes(x = AGE, y = estimate__, color = gddprecip, group = City)) +
     scale_color_distiller(palette = "Spectral")
 #+end_src
@@ -58870,7 +59315,7 @@ What city is the lower midwest?  Indianapolis.  There is no data for that.
 #+RESULTS:
 [[file:../figs/list_pred.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png
    pp_check(mod) + xlim(c(-30,250))
 #+end_src
 
@@ -58922,7 +59367,7 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/predicting_cities_notB1_unobserved_groups.png :width 1000 :height 800 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predicting_cities_notB1_unobserved_groups_FullData.png :width 1000 :height 800 :res 300
     ggplot(pd, aes(x = AGE, y = Estimate)) +
       geom_line() +
       geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
