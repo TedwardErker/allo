@@ -2352,30 +2352,38 @@ There is a fair bit going on here, suggestions for how to improve are
 much appreciated.)
 
 \[
-y_i \sim Gamma(\mu_i, \alpha_y)
+y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
+
 \[
-\mu_i = \beta_{0sc[i]} + \beta_{1sc[i]} (1 - \exp(-\beta_{2sc[i]} x_i^{\beta_{3sc[i]}}))
+\mu_i = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_i^{\beta_{3sc[i]}}))
 \]
 
 where:
 
-/y_i/ is the diameter at breast height of tree /i/ and has a gamma
-distribution with mean, \mu_i, and shape, \alpha_y.
+/y_{igsc}/ is the diameter at breast height of tree /i/ and has a gamma
+distribution with mean, \mu_{igsc}, and shape, \alpha_y.
 
-\beta_0 is the intercept, or the diameter of a tree at time of transplanting.
+i = 1, ...., n_{sc}; where n_{sc} is the number of trees sampled for species,
+/s/, and city, /c/.
+/g/ = 1, ..., /G/; where /G/ is the number of genera (G)
+/s/ = 1, ..., /S_g/; where /S_g/ is the number of species in genus
+/g/.
 
-\beta_1 (plus \beta_0) is the asymptote of the sigmoidal weibull curve.  For most species there
+
+\beta^0 is the intercept, or the diameter of a tree at time of transplanting.
+
+\beta^1 (plus \beta_0) is the asymptote of the sigmoidal weibull curve.  For most species there
 are no data near the true asymptote and so this parameter should be
 considered a highly uncertain estimate of the real maximum dbh of a
 tree.  Pragmatically, it models/causes the slowing of the diameter growth of a tree
 as it ages.
 
-\beta_2 and \beta_3 affect the rate of growth.  \beta_2 provides flexibility to have
+\beta^2 and \beta^3 affect the rate of growth.  \beta^2 provides flexibility to have
 slow or fast growth at young ages.
 
 All \beta's must be positive and they are likely correlated with one
-another, especially \beta_1 and \beta_3.  Without very old trees that are close
+another, especially \beta^1 and \beta^3.  Without very old trees that are close
 to their asympototic dbh, it is harder to separate these two parameters.
 
 for each beta, j = 0,1,2, species, s, and each city, c.
