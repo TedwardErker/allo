@@ -6644,9 +6644,9 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_cities_notB1_unobserved_groups.png]]
 
-*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma  MODEL parameter coreelations | ID | maybe this help with predictions?
+*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma  MODEL parameter coreelations | ID | maybe this help with predictions?
 **** model R code
-#+begin_src R :tangle genus_species_citiesNotB1_b3climate.R
+#+begin_src R :tangle genus_species_citiesNotB1_b3climate_correlated.R
   library(dplyr)
   library(brms)
 
@@ -6698,14 +6698,14 @@ pd <- cbind(nd, pred.nd)
              family = Gamma("identity"),
              chains = 12, cores = 12, init_r = .3, iter = 2000, control = list(adapt_delta = .9))
 
-  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, ".rds"))
+  saveRDS(mod, paste0("../models/genus_",genus,"_species_",species,"_cities_", cities, "_climate_", climate, "_hetero_", hetero, "_family_", family, "_correlated.rds"))
 #+end_src
 
 **** tangle
 **** send to krusty
 #+BEGIN_SRC sh :session a :results verbatim
 
-  rsync -avz genus_species_citiesNotB1_b3climate.R erker@krusty:~/allo/code/
+  rsync -avz genus_species_citiesNotB1_b3climate_correlated.R erker@krusty:~/allo/code/
 
 #+END_SRC
 
