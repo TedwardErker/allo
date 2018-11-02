@@ -6735,13 +6735,22 @@ cat genus_species_citiesNotB1_b3climate_correlated.Rout
 **** pull back from krusty
 
 #+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds ~/git/allo/models/
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds
+:
+: sent 38 bytes  received 58293114 bytes  4020217.38 bytes/sec
+: total size is 58418576  speedup is 1.00
+: You have new mail in /var/mail/erker
 
 **** assess model
 #+begin_src R
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
-mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds")
+mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated
 #+end_src
 
 #+RESULTS:
@@ -6756,321 +6765,201 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
  Family: gamma
   Links: mu = identity; shape = identity
 Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
-         b0 ~ (1 | City) + (1 | Genus/Species)
-         b1 ~ (1 | Genus/Species)
-         b2 ~ (1 | City) + (1 | Genus/Species)
-         b3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
+         b0 ~ (1 | cid | City) + (1 | gid | Genus) + (1 | sid | Genus:Species)
+         b1 ~ (1 | gid | Genus) + (1 | sid | Genus:Species)
+         b2 ~ (1 | cid | City) + (1 | gid | Genus) + (1 | sid | Genus:Species)
+         b3 ~ precip * gdd + (1 | cid | City) + (1 | gid | Genus) + (1 | sid | Genus:Species)
    Data: d (Number of observations: 5381)
-Samples: 12 chains, each with iter = 6000; warmup = 3000; thin = 1;
-         total post-warmup samples = 36000
+Samples: 12 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 12000
 
 Group-Level Effects:
 ~City (Number of levels: 15)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.87      0.13     0.64     1.14      27351 1.00
-sd(b2_Intercept)     0.29      0.04     0.22     0.38      23630 1.00
-sd(b3_Intercept)     0.12      0.03     0.08     0.18      20861 1.00
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.87      0.12     0.65     1.14       8697
+sd(b2_Intercept)                   0.28      0.04     0.21     0.37       9016
+sd(b3_Intercept)                   0.10      0.02     0.07     0.13       7374
+cor(b0_Intercept,b2_Intercept)    -0.46      0.16    -0.72    -0.12       7451
+cor(b0_Intercept,b3_Intercept)     0.30      0.19    -0.11     0.63       6635
+cor(b2_Intercept,b3_Intercept)    -0.87      0.09    -0.97    -0.65       7688
+                               Rhat
+sd(b0_Intercept)               1.00
+sd(b2_Intercept)               1.00
+sd(b3_Intercept)               1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b0_Intercept,b3_Intercept) 1.00
+cor(b2_Intercept,b3_Intercept) 1.00
 
 ~Genus (Number of levels: 17)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.30      0.13     0.03     0.56       8428 1.00
-sd(b1_Intercept)     0.54      0.13     0.32     0.83      18906 1.00
-sd(b2_Intercept)     0.24      0.05     0.16     0.34      19282 1.00
-sd(b3_Intercept)     0.10      0.03     0.04     0.16      11249 1.00
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.25      0.14     0.02     0.55       2018
+sd(b1_Intercept)                   0.46      0.12     0.24     0.72        194
+sd(b2_Intercept)                   0.23      0.05     0.15     0.33       3425
+sd(b3_Intercept)                   0.10      0.03     0.05     0.16       6645
+cor(b0_Intercept,b1_Intercept)     0.26      0.35    -0.48     0.87       1164
+cor(b0_Intercept,b2_Intercept)    -0.15      0.33    -0.75     0.56       1253
+cor(b1_Intercept,b2_Intercept)    -0.50      0.18    -0.79    -0.09       6951
+cor(b0_Intercept,b3_Intercept)    -0.11      0.36    -0.78     0.61       2320
+cor(b1_Intercept,b3_Intercept)    -0.42      0.23    -0.79     0.09       9779
+cor(b2_Intercept,b3_Intercept)    -0.38      0.23    -0.76     0.13      10415
+                               Rhat
+sd(b0_Intercept)               1.01
+sd(b1_Intercept)               1.04
+sd(b2_Intercept)               1.01
+sd(b3_Intercept)               1.00
+cor(b0_Intercept,b1_Intercept) 1.02
+cor(b0_Intercept,b2_Intercept) 1.01
+cor(b1_Intercept,b2_Intercept) 1.01
+cor(b0_Intercept,b3_Intercept) 1.00
+cor(b1_Intercept,b3_Intercept) 1.00
+cor(b2_Intercept,b3_Intercept) 1.00
 
 ~Genus:Species (Number of levels: 24)
-                 Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sd(b0_Intercept)     0.14      0.08     0.01     0.30      10027 1.00
-sd(b1_Intercept)     0.06      0.04     0.00     0.16      18855 1.00
-sd(b2_Intercept)     0.07      0.03     0.02     0.13      12587 1.00
-sd(b3_Intercept)     0.07      0.02     0.04     0.11      12748 1.00
+                               Estimate Est.Error l-95% CI u-95% CI Eff.Sample
+sd(b0_Intercept)                   0.17      0.08     0.01     0.31       2893
+sd(b1_Intercept)                   0.06      0.05     0.00     0.17       2875
+sd(b2_Intercept)                   0.07      0.03     0.03     0.13        130
+sd(b3_Intercept)                   0.06      0.02     0.03     0.10       3008
+cor(b0_Intercept,b1_Intercept)     0.09      0.42    -0.74     0.82      13506
+cor(b0_Intercept,b2_Intercept)    -0.36      0.37    -0.91     0.51       4724
+cor(b1_Intercept,b2_Intercept)    -0.22      0.43    -0.89     0.69       3787
+cor(b0_Intercept,b3_Intercept)    -0.04      0.36    -0.72     0.66       4735
+cor(b1_Intercept,b3_Intercept)     0.04      0.42    -0.74     0.81       2488
+cor(b2_Intercept,b3_Intercept)    -0.22      0.35    -0.78     0.54        434
+                               Rhat
+sd(b0_Intercept)               1.01
+sd(b1_Intercept)               1.01
+sd(b2_Intercept)               1.05
+sd(b3_Intercept)               1.01
+cor(b0_Intercept,b1_Intercept) 1.00
+cor(b0_Intercept,b2_Intercept) 1.00
+cor(b1_Intercept,b2_Intercept) 1.01
+cor(b0_Intercept,b3_Intercept) 1.00
+cor(b1_Intercept,b3_Intercept) 1.01
+cor(b2_Intercept,b3_Intercept) 1.02
 
 Population-Level Effects:
               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept      2.70      0.25     2.21     3.21      10939 1.00
-b1_Intercept      1.49      0.15     1.23     1.80      14798 1.00
-b2_Intercept      1.00      0.08     0.85     1.17      16319 1.00
-b3_Intercept      0.88      0.07     0.74     1.01      17048 1.00
-b3_precip         0.02      0.01     0.00     0.03      43967 1.00
-b3_gdd            0.01      0.01     0.00     0.03      39234 1.00
-b3_precip:gdd     0.01      0.00     0.00     0.01      24587 1.00
+b0_Intercept      2.63      0.26     2.14     3.14        600 1.02
+b1_Intercept      1.43      0.14     1.16     1.72        158 1.04
+b2_Intercept      1.00      0.08     0.85     1.17       9015 1.00
+b3_Intercept      0.92      0.05     0.82     1.01       5770 1.00
+b3_precip         0.02      0.01     0.01     0.04      11580 1.00
+b3_gdd            0.01      0.00     0.00     0.02      11714 1.00
+b3_precip:gdd     0.01      0.00     0.00     0.01       8910 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape    14.27      0.27    13.74    14.81      74886 1.00
+shape    14.26      0.28    13.73    14.80      25321 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
-Warning message:
-There were 10 divergent transitions after warmup. Increasing adapt_delta above 0.9 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #+end_example
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png :height 1300
+#+begin_src R :exports results :results graphics :file ../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.png :height 2000
   plot(mod, ask = F, N = 40)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/plot_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_mainparameters.png :height 250
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[1:4],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_mainparameters.png]]
-
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_climate_effects.png :height 200
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[5:7],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_climate_effects.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta0.png :height 200
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[8:10],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta0.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta1.png :height 200
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[11:12],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta1.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta2.png :height 200
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[13:15],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta2.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_sd_beta3.png :height 200
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[16:18],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_sd_beta3.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/posterior_distributions_model_shape.png :height 100
-  library(bayesplot)
-  plot_title <- ggtitle("Posterior distributions",
-                        "with medians and 80% intervals")
-
-  posterior <- as.matrix(mod)
-  mcmc_areas(posterior,
-             pars = attr(posterior, "dimnames")$parameters[19],
-             prob = 0.8) + plot_title
-#+end_src
-
-#+RESULTS:
-[[file:../figs/posterior_distributions_model_shape.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
-  marginal_effects(mod, effects = "AGE:gdd")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_AGEgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
-  marginal_effects(mod, effects = "AGE:precip")
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_AGEprecip_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
-
-
+**** test some predictions
 #+begin_src R
-precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T)
+    wg  <-  read.csv("../data/precip_qt_ll.csv")
+    wp <-     read.csv("../data/gdd_qt_ll.csv")
+
+    w <- left_join(wg, wp, by = c("station", "lat", "long"))
+
+    stl <- c(lat = 38.6270, long = -90.1994)
+
+    w2 <- filter(w, lat > stl["lat"] - .1,
+                 lat < stl["lat"] + .1,
+                 long > stl["long"] - .1,
+                 long < stl["long"] + .1)
+
+
+  #  ggplot(w, aes(x = long, y = lat)) +
+   #     geom_point() +
+    #    geom_point(data = w2, color = "pink")
+
+    Species <- c("ACPL","UNKNOWN", "UNKNOWN")
+    Genus <- c("Acer", "Acer", "UNKNOWN")
+    gs <- data.frame(Genus, Species)
+    City <- c("Sacramento, CA", "St. Louis, MO")
+    gdd <- c(5.41, 4822/1000)
+    precip <- c(2.03, 4273/1000)
+
+    nd.clim <- data.frame(City, gdd, precip)
+
+    nd <- expand.grid(City = City, AGE = 1:120)
+
+    nd <- left_join(nd, nd.clim)
+
+    expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
+
+    nd <- expand.grid.df(nd, gs)
+
+    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975))
 #+end_src
 
 #+RESULTS:
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png
-precip.gdd
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png
-  plot(precip.gdd)[[1]] +
-      geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
-      geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
-    coord_flip()
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
-
-
-#+begin_src R
-  to.include <- c("LIST", "PLAC", "FRPE")
-
-  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
-    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
-    cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
-    cond <- filter(cond, Species %in%  to.include)
-
-     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
-#+end_src
-
-#+RESULTS:
-: Joining, by = "Species"
 : Warning message:
-: Column `Species` joining factor and character vector, coercing into character vector
+: Column `station` joining factors with different levels, coercing to character vector
+: Warning message:
+: package ‘bindrcpp’ was built under R version 3.4.4
 : Joining, by = "City"
-: Warning message:
-: Column `City` joining factor and character vector, coercing into character vector
 : There were 50 or more warnings (use warnings() to see the first 50)
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png :width 1000 :height 300
-
-  #arrange the cities by precip * gdd
-  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
-                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
-
-  dd <- mod$data %>%
-      mutate(gddprecip = gdd  * precip,
-             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE)) %>%
-      filter(Species %in% to.include)
-
-      ggplot(me2) +
-          geom_line(aes(x = AGE, y = estimate__), size = 1) +
-          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
-          facet_grid(Species~City*gddprecip)
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
-
-
-
-#+begin_src R :tangle marginal_effects_fullconditions.R
-library(brms)
-library(dplyr)
-mod <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
-  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
-    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
-    cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
-
-     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
-saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
-#+end_src
-
-#+BEGIN_SRC sh :session a :results verbatim
-rsync -avz marginal_effects_fullconditions.R erker@krusty:~/allo/code/
-#+END_SRC
-
-#+RESULTS:
-: erker@krusty's password:
-: building file list ... done
-: marginal_effects_fullconditions.R
-:
-: sent 500 bytes  received 60 bytes  160.00 bytes/sec
-: total size is 1411  speedup is 2.52
-
-#+BEGIN_SRC sh
-
-  ssh krusty
-  cd allo/code
-  nohup R CMD BATCH marginal_effects_fullconditions.R &
-  cat marginal_effects_fullconditions.Rout
-  exit
-
-#+END_SRC
-
-#+BEGIN_SRC sh :session a :results verbatim
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds ~/git/allo/models/
-#+END_SRC
-
-#+RESULTS:
-: erker@krusty's password:
-: receiving file list ... done
-: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds
-:
-: sent 38 bytes  received 1125699 bytes  321639.14 bytes/sec
-: total size is 1141606  speedup is 1.01
-: You have new mail in /var/mail/erker
-
 #+begin_src R
-me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_marginaleffects.rds")
+pd <- cbind(nd, pred.nd)
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png :width 1000 :height 2000
+#+begin_src R :exports results :results graphics :file ../figs/predicting_cities_notB1_correlated_unobserved_groups.png :width 1000 :height 800 :res 300
+    ggplot(pd, aes(x = AGE, y = Estimate)) +
+      geom_line() +
+      geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
+      geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
+      facet_grid(City~Genus*Species) +
+        scale_x_continuous(breaks = c(0,75)) +
+      theme_minimal() +
+       theme(text = element_text(size = 10),
+             panel.border = element_rect(color = "black", fill = NA))
 
-  #arrange the cities by precip * gdd
-  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
-                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
-
-  dd <- mod$data %>%
-      mutate(gddprecip = gdd  * precip,
-             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
-
-      ggplot(me2) +
-          geom_line(aes(x = AGE, y = estimate__), size = 1) +
-          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
-          facet_grid(Species~City*gddprecip)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png]]
+[[file:../figs/predicting_cities_notB1_correlated_unobserved_groups.png]]
 
+**** compare to not corellated
+#+begin_src R
+library(loo)
+library(brms)
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds")
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
+
+res <- loo(mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma, mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated)
+res
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading required package: Rcpp
+Loading 'brms' package (version 2.6.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+Run theme_set(theme_default()) to use the default bayesplot theme.
+Warning messages:
+1: package ‘brms’ was built under R version 3.4.4
+2: package ‘Rcpp’ was built under R version 3.4.4
+Error in compare(mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma,  :
+  All inputs should have class 'loo'.
+Error: object 'res' not found
+#+end_example
 
 *** COMMENT compare models
 cite:vehtari_e_2017
