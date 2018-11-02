@@ -2360,7 +2360,7 @@ y_i \sim Gamma(\mu_i, \alpha_y)
 
 where:
 
-y_i is the diameter at breast height of tree /i/ and has a gamma
+/y_i/ is the diameter at breast height of tree /i/ and has a gamma
 distribution with mean, \mu_i, and shape, \alpha_y.
 
 \beta_0 is the intercept, or the diameter of a tree at time of transplanting.
@@ -2372,7 +2372,7 @@ tree.  Pragmatically, it models/causes the slowing of the diameter growth of a t
 as it ages.
 
 \beta_2 and \beta_3 affect the rate of growth.  \beta_2 provides flexibility to have
-slow or fast growth at young ages (small x).
+slow or fast growth at young ages.
 
 All \beta's must be positive and they are likely correlated with one
 another, especially \beta_1 and \beta_3.  Without very old trees that are close
