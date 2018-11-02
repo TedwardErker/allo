@@ -6712,10 +6712,10 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_species_citiesNotB1_b3climate.R
+: genus_species_citiesNotB1_b3climate_correlated.R
 :
-: sent 150 bytes  received 66 bytes  61.71 bytes/sec
-: total size is 2450  speedup is 11.34
+: sent 918 bytes  received 42 bytes  274.29 bytes/sec
+: total size is 2557  speedup is 2.66
 
 **** run on krusty
 
@@ -6724,12 +6724,12 @@ run from krusty terminal
 #+BEGIN_SRC sh :session b :results raw
   ssh krusty
   cd allo/code
-  nohup R CMD BATCH genus_species_citiesNotB1_b3climate.R &
+  nohup R CMD BATCH genus_species_citiesNotB1_b3climate_correlated.R &
   exit
 #+END_SRC
 
 #+BEGIN_SRC sh
-cat genus_species_citiesNotB1_b3climate.Rout
+cat genus_species_citiesNotB1_b3climate_correlated.Rout
 #+END_SRC
 
 **** pull back from krusty
