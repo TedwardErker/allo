@@ -2351,7 +2351,7 @@ y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
 
 \[
-\mu_igsc = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_{igsc}^{\beta^3_{igsc}}))
+\mu_{igsc} = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_{igsc}^{\beta^3_{igsc}}))
 \]
 
 where:
@@ -2360,43 +2360,41 @@ where:
 species, /s/, and city, /c/. /y_{igsc}/ has a gamma distribution with
 mean, \mu_{igsc}, and shape, /\alpha_y/.
 
-i = 1, ...., n_{sc}; where n_{sc} is the number of trees sampled for species,
-/s/, and city, /c/.
+/i/ = 1, ...., /n_{sc}/; where /n_{sc}/ is the number of trees sampled for
+species, /s/, and city, /c/.
+
 /g/ = 1, ..., /G/; where /G/ is the number of genera (G)
+
 /s/ = 1, ..., /S_g/; where /S_g/ is the number of species in genus
 /g/.
 
 /x_{igsc}/ is the transplant age in years of tree /igsc/ (i.e. years
 since transplanting).
 
-/\beta^0_{igsc}/ is the intercept, or the diameter of a tree at time
+$\beta^0_{igsc}$ is the intercept, or the diameter of a tree at time
 of transplanting.
 
-/\beta^1_{igsc}/ (plus /\beta_0_{igsc}/) is the asymptote of the
+$\beta^1_{igsc}$ (plus $\beta^0_{igsc}$) is the asymptote of the
 sigmoidal weibull curve.
 
-/\beta^2_{igsc}/ and /\beta^3_{igsc}/ affect the rate of growth.  /\beta^2_{igsc}/ provides flexibility to have
+$\beta^2_{igsc}$ and $\beta^3_{igsc}$ affect the rate of growth.  $\beta^2_{igsc}$ provides flexibility to have
 slow or fast growth at young ages.
 
-All \beta's must be positive and they are likely correlated with one
-another, especially /\beta^1_{igsc}/ and /\beta^3_{igsc}/.  Without very old trees that are close
-to their asympototic dbh, it is harder to separate these two parameters.
-
-for each \beta, j = 0,1,2, genus, /g/, species, /s/, and each city, /c/.
+For each $\beta^j_{igsc}$, /j/ = 0,1,2:
 
 \[
-\beta^j_{igsc} = \beta^j_0 + \gamma^j_{igs}+\delta^j_{ic]}
+\beta^j_{igsc} = \beta^j_0 + \gamma^j_{igs}+\delta^j_{ic}
 \]
 
-for beta^3
+for $\beta^3_{igsc}$
 \[
 \beta^3_{igsc} = \beta^3_0 + \tau_1 * Precip_c + \tau_2 * GDD_c + \tau_3 *
 (Precip_c * GDD_c) + \gamma^3_{igs}+\delta^3_{ic}
 \]
 
-where \beta^j_0 is the mean for \beta coefficient \beta_j. \gamma_js is
-the contribution of genetic (species) effect for species s on \beta_j.
-\delta_jc is the city effect for city c on \beta_j.
+where $\beta^j_0$ is the mean for $\beta^j_{igsc}$. $\gamma_{igs}$ is
+genetic (genus and species) effect on $\beta^j$.  $\delta_{ic}$ is the
+city effect on $\beta^j$
 
 Species effect:
 \[
@@ -2427,7 +2425,14 @@ biologically unreasonable parameters improbable.  The quanitity of
 data overwhelms the priors, but the relatively narrow priors also
 helps with sampling.
 
+
+
 **** COMMENT Prior stuff for appendix
+All \beta's must be positive and they are likely correlated with one
+another, especially /\beta^1_{igsc}/ and /\beta^3_{igsc}/.  Without very old trees that are close
+to their asympototic dbh, it is harder to separate these two parameters.
+
+
 for gamma
 \alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
