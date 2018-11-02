@@ -2345,18 +2345,13 @@ section details this model, and other models tested are in
 supplementary materials.
 
 *** Model
-(Notation below.  I don't use conventional subscript letters.  The
-nesting of species within genus isn't obvious either until lower
-levels.  I did this because genus could also end up being nested.
-There is a fair bit going on here, suggestions for how to improve are
-much appreciated.)
-
+**** likelihood
 \[
 y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
 
 \[
-\mu_i = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_i^{\beta_{3sc[i]}}))
+\mu_igsc = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_i^{\beta^3_{igsc}}))
 \]
 
 where:
@@ -2420,7 +2415,8 @@ for each j. City random effect:
 \]
 
 
-Priors:
+**** Priors:
+
 
 Just describe the priors roughly, gamma, half normal etc.  Then put
 the details in an appendix.
@@ -2430,6 +2426,7 @@ biologically unreasonable parameters improbable.  The quanitity of
 data overwhelms the priors, but the relatively narrow priors also
 helps with sampling.
 
+**** COMMENT Prior stuff for appendix
 for gamma
 \alpha = \mu^2/\sigma^2
 \beta = \mu/\sigma^2
