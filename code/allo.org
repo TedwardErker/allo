@@ -2351,13 +2351,14 @@ y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
 
 \[
-\mu_igsc = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_i^{\beta^3_{igsc}}))
+\mu_igsc = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_{igsc}^{\beta^3_{igsc}}))
 \]
 
 where:
 
-/y_{igsc}/ is the diameter at breast height of tree /i/ and has a gamma
-distribution with mean, \mu_{igsc}, and shape, \alpha_y.
+/y_{igsc}/ is the diameter at breast height of tree /i/ of genus, /g/,
+species, /s/, and city, /c/. /y_{igsc}/ has a gamma distribution with
+mean, \mu_{igsc}, and shape, /\alpha_y/.
 
 i = 1, ...., n_{sc}; where n_{sc} is the number of trees sampled for species,
 /s/, and city, /c/.
@@ -2365,23 +2366,23 @@ i = 1, ...., n_{sc}; where n_{sc} is the number of trees sampled for species,
 /s/ = 1, ..., /S_g/; where /S_g/ is the number of species in genus
 /g/.
 
+/x_{igsc}/ is the transplant age in years of tree /igsc/ (i.e. years
+since transplanting).
 
-\beta^0_{igsc} is the intercept, or the diameter of a tree at time of transplanting.
+/\beta^0_{igsc}/ is the intercept, or the diameter of a tree at time
+of transplanting.
 
-\beta^1_{igsc} (plus \beta_0_{igsc}) is the asymptote of the sigmoidal weibull curve.  For most species there
-are no data near the true asymptote and so this parameter should be
-considered a highly uncertain estimate of the real maximum dbh of a
-tree.  Pragmatically, it models/causes the slowing of the diameter growth of a tree
-as it ages.
+/\beta^1_{igsc}/ (plus /\beta_0_{igsc}/) is the asymptote of the
+sigmoidal weibull curve.
 
-\beta^2_{igsc} and \beta^3_{igsc} affect the rate of growth.  \beta^2_{igsc} provides flexibility to have
+/\beta^2_{igsc}/ and /\beta^3_{igsc}/ affect the rate of growth.  /\beta^2_{igsc}/ provides flexibility to have
 slow or fast growth at young ages.
 
 All \beta's must be positive and they are likely correlated with one
-another, especially \beta^1_{igsc} and \beta^3_{igsc}.  Without very old trees that are close
+another, especially /\beta^1_{igsc}/ and /\beta^3_{igsc}/.  Without very old trees that are close
 to their asympototic dbh, it is harder to separate these two parameters.
 
-for each beta, j = 0,1,2, genus, /g/, species, /s/, and each city, /c/.
+for each \beta, j = 0,1,2, genus, /g/, species, /s/, and each city, /c/.
 
 \[
 \beta^j_{igsc} = \beta^j_0 + \gamma^j_{igs}+\delta^j_{ic]}
@@ -59411,6 +59412,7 @@ Posterior distributions with 80% interval and median for parameters in [[fig:mai
 #+name: fig:shape_posterior
 [[file:../figs/posterior_distributions_model_shape.png]]
 
+
 ** climate effects
 There is a positive effect of growing degree days (gdd) and annual
 precipitation (precip) on tree diameter (dbh), and a postive
@@ -59470,6 +59472,12 @@ show the equations for a variety of unsampled cities.
 
 * Discussoins
 
+interpreting parameter estimates:
+For most species there are no data near the
+true asymptote and so this parameter should be considered a highly
+uncertain estimate of the real maximum dbh of a tree.  Pragmatically,
+it models/causes the slowing of the diameter growth of a tree as it
+ages.
 
 An early version of the UTD equations didn't have as much data, but
 their approach modified parameters based on the number of frost free
