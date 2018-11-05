@@ -59204,8 +59204,6 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
-
-
 *** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm.  Max AGE is 150
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm_ageless150.R
