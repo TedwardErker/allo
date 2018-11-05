@@ -2412,8 +2412,9 @@ The effect of city is normally distributed:
 \]
 
 
-**** Priors:
+**** Priors
 
+The priors for the \beta's are gamma distributed
 
 Just describe the priors roughly, gamma, half normal etc.  Then put
 the details in an appendix.
@@ -58793,16 +58794,26 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 
 #+BEGIN_SRC sh :session a :results verbatim
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds ~/git/allo/models/
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds ~/git/allo/models/
+#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
 #+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds
+:
+: sent 38 bytes  received 7409376 bytes  1646536.44 bytes/sec
+: total size is 7507573  speedup is 1.01
+: You have new mail in /var/mail/erker
 
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png
+precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
+[[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities.png
   plot(precip.gdd)[[1]] +
@@ -58812,7 +58823,7 @@ precip.gdd
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities.png]]
 
 
 #+begin_src R
@@ -58821,7 +58832,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full.png :width 1000 :height 2000
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full.png :width 1000 :height 20000
 
   #arrange the cities by precip * gdd
   me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -58839,7 +58850,7 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_full.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full.png]]
 
 **** Plot Urban Tree Allometric equations on top of data
 
@@ -58950,48 +58961,6 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh__byRegion_FullData.png
-
-  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = Species)) +
-      geom_line() +
-      facet_wrap(~City, scales = "free")
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_dbh__byRegion.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpecies_FullData.png :height 1200 :width 1200
-
-  ggplot(predictions_apprange, aes(x = x, y = predicted_dbh, group = City)) +
-      geom_line() +
-      facet_wrap(~Species, scales = "free")
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_dbh_bySpecies.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/predictions_dbh_bySpeciesFull_wData_FullData.png :height 1200 :width 1200
-
-dsp <- unique(d$Species)
-
-predictions_apprange_subspecies <- filter(predictions_apprange, Species %in% dsp)
-
-  ggplot() +
-      geom_point(data = d, aes( x = AGE, y = DBH, color = Region), alpha = .7, size = 1) +
-      facet_wrap(~Species, scales = "free") +
-      theme_minimal() +
-      theme(text = element_text(size = 20),
-            legend.position = "none") +
-      geom_line(data = predictions_apprange_subspecies, aes(x = AGE, y = predicted_dbh, color = Region), size = 1.5)
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_dbh_bySpeciesFull_wData.png]]
-
-
 #+begin_src R
     me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
                             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
@@ -59033,7 +59002,8 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 : Warning message:
 : Column `City` joining factor and character vector, coercing into character vector
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized_FullData.png :height 2000 :width 1200
+
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png :height 200000 :width 12000 :bg transparent
 
       red <- "#dc322f"
       yellow <- "#b58900"
@@ -59051,26 +59021,12 @@ p <-       ggplot(me2) +
           facet_grid(Species~City*gddprecip) +
           geom_line(data = predictions_apprange_sub, aes(x = AGE, y = predicted_dbh), size = 1.5, color = green)
 
-p +
-            theme_solarized_2(light = F, base_size = 18) +
-      theme(axis.text = element_text(size = 18, color = "#839496"))
-#            rect = element_rect(fill = "transparent"),
- #           panel.background = element_rect(fill = "transparent"))
-
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_more_solarized.png]]
-
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png :height 20000 :width 12000 :bg transparent :res 600
-
 p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam_FullData.png :height 200 :width 600
