@@ -58754,14 +58754,14 @@ plot(p)[[1]] +
   library(brms)
   mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
   mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
-  precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100)
+  precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100, nsamples = 10)
   saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 
   cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
   cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
   cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
-  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
+  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 1000)
   saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 
 #+end_src
@@ -58777,8 +58777,8 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 :
-: sent 431 bytes  received 54 bytes  194.00 bytes/sec
-: total size is 1148  speedup is 2.37
+: sent 579 bytes  received 54 bytes  97.38 bytes/sec
+: total size is 1182  speedup is 1.87
 : You have new mail in /var/mail/erker
 
 #+BEGIN_SRC sh
