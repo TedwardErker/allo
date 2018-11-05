@@ -2414,19 +2414,22 @@ The effect of city is normally distributed:
 
 **** Priors
 
-The priors for the \beta's are gamma distributed
+The priors were selected to make biologically unrealistic parameters
+highly improbable, but they have a small effect on the posterior
+estimates.  The \beta's and \alpha_y are gamma distributed, while the
+variance parameters are half-normal.  More details on the selection of
+priors are available in supplementary materials and code.  Many priors
+that might appear to be narrow (e.g Half-Normal(0,.1)) are actually
+fairly wide given the scale of the predictors and the reasonable range
+of some parameters.
 
-Just describe the priors roughly, gamma, half normal etc.  Then put
-the details in an appendix.
-
+**** COMMENT Prior stuff for appendix
 Priors were selected to be slightly informative and make very
 biologically unreasonable parameters improbable.  The quanitity of
 data overwhelms the priors, but the relatively narrow priors also
 helps with sampling.
 
 
-
-**** COMMENT Prior stuff for appendix
 All \beta's must be positive and they are likely correlated with one
 another, especially /\beta^1_{igsc}/ and /\beta^3_{igsc}/.  Without very old trees that are close
 to their asympototic dbh, it is harder to separate these two parameters.
@@ -2573,6 +2576,10 @@ gdd:precip
 \[
 \tau_3 \sim Normal(.005, .005)
 \]
+
+
+
+
 
 *** COMMENT Modeling Notes
 **** COMMENT What should the structure of the equations be?
