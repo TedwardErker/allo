@@ -58774,12 +58774,13 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 
 #+RESULTS:
 : erker@krusty's password:
+: Permission denied, please try again.
+: erker@krusty's password:
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 :
-: sent 571 bytes  received 42 bytes  81.73 bytes/sec
-: total size is 1157  speedup is 1.89
-: You have new mail in /var/mail/erker
+: sent 427 bytes  received 54 bytes  106.89 bytes/sec
+: total size is 1149  speedup is 2.39
 
 #+BEGIN_SRC sh
 
