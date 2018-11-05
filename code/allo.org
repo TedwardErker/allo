@@ -59010,7 +59010,7 @@ predictions_apprange_sub <- predictions_apprange %>% filter(Species %in% unique(
 : Column `City` joining factor and character vector, coercing into character vector
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png :height 200000 :width 12000 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png :bg transparent  :width 1000 :height 20000
 
       red <- "#dc322f"
       yellow <- "#b58900"
@@ -60055,7 +60055,6 @@ higher out of sample predictive accuracy than model 7.
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
 
-
 ** parameter estimates
 Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
 
@@ -60077,7 +60076,6 @@ Posterior distributions with 80% interval and median for parameters in [[fig:mai
 
 #+name: fig:shape_posterior
 [[file:../figs/posterior_distributions_model_shape.png]]
-
 
 ** climate effects
 There is a positive effect of growing degree days (gdd) and annual
@@ -60135,7 +60133,8 @@ show predicitive intervals for
 
 An extension on this.  Rather than showing the predictive intervals, I
 could make draws for random species, genus, city from the posterior
-and plot the estimates.
+and plot the estimates.  Imagine sampling 30 new genera, 4 species for
+each genera, and a couple cities.  Then making spaghetti plot of these.
 
 Show how the equations vary continuously across geographic space,
 show the equations for a variety of unsampled cities.
