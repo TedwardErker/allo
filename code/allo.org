@@ -59171,8 +59171,14 @@ What city is the lower midwest?  Indianapolis.  There is no data for that.
 
     nd <- expand.grid.df(nd, gs)
 
-    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975))
+    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
 #+end_src
+
+#+RESULTS:
+: Warning message:
+: Column `station` joining factors with different levels, coercing to character vector
+: Joining, by = "City"
+: There were 50 or more warnings (use warnings() to see the first 50)
 
 #+begin_src R
 pd <- cbind(nd, pred.nd)
@@ -59180,23 +59186,27 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/predicting_cities_notB1_unobserved_groups_FullData.png :width 1000 :height 800 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predicting_cities_notB1_unobserved_groups_FullData.png :width 1300 :height 900 :res 300
     ggplot(pd, aes(x = AGE, y = Estimate)) +
       geom_line() +
       geom_ribbon(aes(ymin = Q2.5, ymax = Q97.5), alpha = .3) +
       geom_ribbon(aes(ymin = Q25, ymax = Q75), alpha = .3) +
-      facet_grid(City~Genus*Species) +
+      facet_grid(City~Genus*Species, labeller = label_both) +
         scale_x_continuous(breaks = c(0,75)) +
+        scale_y_continuous("DBH") +
       theme_minimal() +
        theme(text = element_text(size = 10),
-             panel.border = element_rect(color = "black", fill = NA))
+             panel.border = element_rect(color = "black", fill = NA),
+             strip.text = element_text(size = 7))
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predicting_cities_notB1_unobserved_groups.png]]
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
-*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm.  Max AGE is
+
+
+*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm.  Max AGE is 150
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm_ageless150.R
   library(dplyr)
@@ -59268,10 +59278,11 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: genus_species_citiesNotB1_b3climate.R
+: genus_species_citiesNotB1_b3climate_fulldata_noPalm_ageless150.R
 :
-: sent 150 bytes  received 66 bytes  61.71 bytes/sec
-: total size is 2450  speedup is 11.34
+: sent 1079 bytes  received 42 bytes  320.29 bytes/sec
+: total size is 2845  speedup is 2.54
+: You have new mail in /var/mail/erker
 
 **** run on krusty
 
@@ -59285,7 +59296,7 @@ run from krusty terminal
 #+END_SRC
 
 #+BEGIN_SRC sh
-cat genus_species_citiesNotB1_b3climate_fulldata_noPalm_ageless150.Rout
+
 #+END_SRC
 
 **** pull back from krusty
@@ -60121,6 +60132,10 @@ show predicitive intervals for
 - known genus, unknown species in known city
 - unknown genus, unknown species in unknown city
 -
+
+An extension on this.  Rather than showing the predictive intervals, I
+could make draws for random species, genus, city from the posterior
+and plot the estimates.
 
 Show how the equations vary continuously across geographic space,
 show the equations for a variety of unsampled cities.
