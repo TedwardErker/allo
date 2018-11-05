@@ -58749,13 +58749,20 @@ plot(p)[[1]] +
 
 
 
-#+begin_src R :tangle calc_marginal_effects.R
-library(dplyr)
-library(brms)
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
-mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
-precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 1000)
-saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
+#+begin_src R :tangle calc_marginal_effects_fulldata.R
+  library(dplyr)
+  library(brms)
+  mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
+  mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
+  precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 1000)
+  saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
+
+  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+  cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
+  cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
+
+  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
+  saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 
 #+end_src
 
@@ -58823,15 +58830,7 @@ precip.gdd
 
 
 #+begin_src R :tangle marginal_effects_fullconditions_FullData.R
-library(brms)
-library(dplyr)
-mod <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
-  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
-    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
-    cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
-     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict")
-saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 #+end_src
 
 #+BEGIN_SRC sh :session a :results verbatim
