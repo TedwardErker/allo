@@ -58446,7 +58446,7 @@ attr(,"class")
 
 #+end_src
 
-*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
+*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm.R
   library(dplyr)
@@ -58749,8 +58749,14 @@ plot(p)[[1]] +
 
 
 
-#+begin_src R
-precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100)
+#+begin_src R :tangle calc_marginal_effects.R
+library(dplyr)
+library(brms)
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
+mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
+precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 1000)
+saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
+
 #+end_src
 
 #+RESULTS:
