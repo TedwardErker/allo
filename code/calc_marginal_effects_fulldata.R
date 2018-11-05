@@ -3,7 +3,7 @@ library(dplyr)
 library(brms)
 mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
 mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
-precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100, nsamples = 1000)
+precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100, nsamples = 10)
 saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 
 cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
