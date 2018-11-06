@@ -58823,8 +58823,12 @@ precip.gdd
 #+RESULTS:
 [[file:../figs/marginal_effects_surface_precipgdd_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData.png]]
 
+
+I should make these contours and label the contour lines with DBH.
+
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities.png
   plot(precip.gdd, stype = "raster")[[1]] +
+      scale_fill_continuous(type = "viridis", limits = c(25.5, 137)) +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
     coord_flip()
@@ -58844,7 +58848,7 @@ red <- "#dc322f"
      magenta <- "#d33682"
 
   ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) + geom_raster(aes(fill = se__)) +
-      scale_fill_gradient(low = blue, high = red) +
+      scale_fill_gradient("Standard Error", low = blue, high = red) +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
 
@@ -58855,7 +58859,7 @@ red <- "#dc322f"
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_lower.png
   ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) + geom_raster(aes(fill = lower__)) +
-      scale_fill_continuous(type = "viridis") +
+      scale_fill_continuous(type = "viridis", limits = c(25.5, 137)) +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
 
@@ -58866,7 +58870,7 @@ red <- "#dc322f"
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_upper.png
   ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) + geom_raster(aes(fill = upper__)) +
-      scale_fill_continuous(type = "viridis") +
+      scale_fill_continuous(type = "viridis", limits = c(25.5, 137)) +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
 #+end_src
