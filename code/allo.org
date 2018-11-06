@@ -58834,7 +58834,17 @@ precip.gdd
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png
+red <- "#dc322f"
+      yellow <- "#b58900"
+      blue <- "#268bd2"
+      green <- "#859900"
+      cyan <- "#2aa198"
+      orange <- "#cb4b16"
+     violet <- "#6c71c4"
+     magenta <- "#d33682"
+
   ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) + geom_raster(aes(fill = se__)) +
+      scale_fill_gradient(low = blue, high = red) +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
 
@@ -58842,6 +58852,27 @@ precip.gdd
 
 #+RESULTS:
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_lower.png
+  ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) + geom_raster(aes(fill = lower__)) +
+      scale_fill_continuous(type = "viridis") +
+      geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
+      geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_lower.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_upper.png
+  ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) + geom_raster(aes(fill = upper__)) +
+      scale_fill_continuous(type = "viridis") +
+      geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
+      geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_upper.png]]
 
 
 
