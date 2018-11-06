@@ -58782,10 +58782,12 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
-: ssh: Could not resolve hostname krusty: nodename nor servname provided, or not known
-: rsync: connection unexpectedly closed (0 bytes received so far) [sender]
-: rsync error: error in rsync protocol data stream (code 12) at /BuildRoot/Library/Caches/com.apple.xbs/Sources/rsync/rsync-52.200.1/rsync/io.c(453) [sender=2.6.9]
-: You have new mail in /var/mail/erker
+: erker@krusty's password:
+: building file list ... done
+: calc_marginal_effects_fulldata.R
+:
+: sent 450 bytes  received 54 bytes  144.00 bytes/sec
+: total size is 1213  speedup is 2.41
 
 #+BEGIN_SRC sh
 
@@ -58808,8 +58810,8 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_
 : receiving file list ... done
 : genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds
 :
-: sent 2864 bytes  received 327111 bytes  94278.57 bytes/sec
-: total size is 329961  speedup is 1.00
+: sent 2870 bytes  received 326956 bytes  131930.40 bytes/sec
+: total size is 329847  speedup is 1.00
 
 #+begin_src R
 precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
@@ -58830,21 +58832,34 @@ I should make these contours and label the contour lines with DBH.
 Use the direct label package
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png :res 100
-    library(directlabels)
-
-     p <-  ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) +
-           scale_fill_continuous(type = "viridis") +
-        geom_raster(data = precip.gdd[[1]],aes(fill = estimate__), show.legend = TRUE) +
-         geom_contour(aes(z = estimate__, color = ..level..)) +
-         scale_colour_gradient(guide = 'none', high = "black", low = "black")
+      library(directlabels)
 
 
-  p1 = direct.label(p, list("bottom.pieces", colour='black',  hjust = 1))
+  shifted.city <- unique(select(mod$data, City, gdd, precip))
+  shifted.city$gdd[shifted.city$City == "Longview, WA"] <- 4
+  shifted.city$gdd[shifted.city$City == "Honolulu, HI"] <- 9.5
+  shifted.city$gdd[shifted.city$City == "Minneapolis, MN"] <- 4.2
+  shifted.city$gdd[shifted.city$City == "Fort Collins, CO"] <- 4.2
 
-    p1 +
-          geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip), color = "white") +
-          geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15) +
-ggtitle("Posterior median DBH at age 25")
+  shifted.city <- shifted.city %>% filter(!City %in% c("Santa Monica, CA", "Modesto, CA"))
+
+       p <-  ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) +
+             scale_fill_continuous(type = "viridis") +
+          geom_raster(data = precip.gdd[[1]],aes(fill = estimate__), show.legend = TRUE) +
+           geom_contour(aes(z = estimate__, color = ..level..)) +
+           scale_colour_gradient(guide = 'none', high = "black", low = "black") +
+           theme_bw() +
+           theme(text = element_text(size = 13)) +
+           scale_y_continuous("Annual Precipitation (10 in)") +
+           scale_x_continuous("Growing Degree Days (th)")
+
+
+    p1 = direct.label(p, list("bottom.pieces", colour='black',  hjust = 1))
+
+      p1 +
+            geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip), color = "white") +
+            geom_label(data = shifted.city, aes(x = gdd, y = precip, label = City), nudge_y = .18) +
+  ggtitle("Posterior median DBH at age 25")
 
 #+end_src
 
@@ -58857,15 +58872,19 @@ ggtitle("Posterior median DBH at age 25")
 
    p <-       ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) +
                geom_raster(aes(fill = se__)) +
-               geom_contour(aes(z = , z = se__, color = ..level..), breaks = c(15,12,9, 7, 6)) +
-               scale_colour_gradient(guide = 'none', high = "white", low = "white") +
-              scale_fill_gradient("Standard Error", low = blue, high = red)
+               geom_contour(aes(z = , z = se__, color = ..level..), breaks = c(15,12,9, 7, 6, 5)) +
+               scale_colour_gradient(guide = 'none', high = "black", low = "black") +
+              scale_fill_gradient("Standard Error", low = blue, high = red) +
+           theme_bw() +
+           theme(text = element_text(size = 13)) +
+           scale_y_continuous("Annual Precipitation (10 in)") +
+           scale_x_continuous("Growing Degree Days (th)")
 
-           p1 = direct.label(p, list("bottom.pieces", colour="white",  hjust = 1))
+           p1 = direct.label(p, list("bottom.pieces", colour="black",  hjust = 1, cex = 1.4, vjust = -1))
 
       p1 +
            geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
-          geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15) +
+          geom_label(data = shifted.city, aes(x = gdd, y = precip, label = City), nudge_y = .15) +
 ggtitle("Posterior standard error of DBH at age 25")
 
 
