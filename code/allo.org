@@ -58826,8 +58826,10 @@ precip.gdd
 
 I should make these contours and label the contour lines with DBH.
 
+Use the direct label package
+
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities.png
-  plot(precip.gdd, stype = "raster")[[1]] +
+  plot(precip.gdd, stype = "contour")[[1]] +
       scale_fill_continuous(type = "viridis", limits = c(25.5, 137)) +
       geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd)) +
       geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = precip, y = gdd, label = City), nudge_y = .15) +
