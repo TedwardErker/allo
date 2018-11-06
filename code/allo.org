@@ -58832,49 +58832,74 @@ I should make these contours and label the contour lines with DBH.
 
 Use the direct label package
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png :res 100
     library(directlabels)
 
      p <-  ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) +
-          geom_raster(aes(fill = estimate__)) +
-          scale_fill_continuous(type = "viridis") +
-         geom_contour(aes(z = , z = estimate__, color = ..level..)) +
-      scale_colour_gradient(guide = 'none', high = "black", low = "black")
+           scale_fill_continuous(type = "viridis") +
+        geom_raster(data = precip.gdd[[1]],aes(fill = estimate__), show.legend = TRUE) +
+         geom_contour(aes(z = estimate__, color = ..level..)) +
+         scale_colour_gradient(guide = 'none', high = "black", low = "black")
+
 
   p1 = direct.label(p, list("bottom.pieces", colour='black',  hjust = 1))
 
     p1 +
           geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip), color = "white") +
-          geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
+          geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15) +
+ggtitle("Posterior median DBH at age 25")
+
 #+end_src
 
 #+RESULTS:
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
 
-
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png
-    red <- "#dc322f"
-          yellow <- "#b58900"
-          blue <- "#268bd2"
-          green <- "#859900"
-          cyan <- "#2aa198"
-          orange <- "#cb4b16"
-         violet <- "#6c71c4"
-         magenta <- "#d33682"
+  red <- "#dc322f"
+  blue <- "#268bd2"
+
+   p <-       ggplot(precip.gdd[[1]], aes(x = gdd, y = precip, fill = se__)) +
+               geom_raster(aes(fill = se__)) +
+               geom_contour(aes(z = , z = se__, color = ..level..), breaks = c(15,12,9, 6, 5)) +
+               scale_colour_gradient(guide = 'none', high = "black", low = "black") +
+              scale_fill_gradient("Standard Error", low = blue, high = red)
+
+           p1 = direct.label(p, list("bottom.pieces", colour='black',  hjust = 1))
+  p1
+    #  p1 +
+     #      geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
+      #    geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
+
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se_directlabels.png
+       red <- "#dc322f"
+             yellow <- "#b58900"
+             blue <- "#268bd2"
+             green <- "#859900"
+             cyan <- "#2aa198"
+             orange <- "#cb4b16"
+            violet <- "#6c71c4"
+            magenta <- "#d33682"
 
 
 
-p <-       ggplot(precip.gdd[[1]], aes(x = gdd, y = precip)) +
-          geom_raster(aes(fill = se__)) +
-          scale_fill_gradient("Standard Error", low = blue, high = red) +
-          geom_contour(aes(z = , z = se__, color = ..level..), breaks = c(15,12,9, 6, 5)) +
-          scale_colour_gradient(high = "black", low = "black")
-p
-#      p1 = direct.label(p, list("bottom.pieces", colour='black',  hjust = 1))
+   p <-       ggplot(precip.gdd[[1]], aes(x = gdd, y = precip, fill = se__)) +
+             geom_raster(aes(fill = se__)) +
+             geom_contour(aes(z = , z = se__, color = ..level..), breaks = c(15,12,9, 6, 5)) +
+             scale_colour_gradient(guide = 'none', high = "black", low = "black") +
+            scale_fill_gradient("Standard Error", low = blue, high = red)
 
- # p1 +
-  #    geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
-   #   geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
+         p1 = direct.label(p, list("bottom.pieces", colour='black',  hjust = 1))
+p1
+  #  p1 +
+   #      geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip)) +
+    #    geom_label(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip, label = City), nudge_y = .15)
 
 
 #+end_src
