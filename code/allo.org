@@ -221,7 +221,7 @@ information across cities and across species to provide predictions an
 associated uncertainty of diameter growth even in even in cities or
 species with very little or no data.
 
-The sigmoidal curves similar to the weibull have been used before in
+Sigmoidal curves very similar to the weibull have been used before in
 modeling urban tree diameter growth as a function of age.
 cite:frelich_1992, using an equation of form $y = B_0 (1 - exp(B_1
 x))^{B_{2}}$, predicted DBH from age for healthy trees (12 species,
@@ -3087,6 +3087,31 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/w5.png]]
+****** frelich 1992
+#+begin_src R :exports results :results graphics :file ../figs/frelich_reasonable.png
+
+    x <- 1:150
+    a <- seq(50,250,50)
+   b <- c(.01, .0125, .015)
+    c <- c(.5, 1, 2)
+
+    d <- expand.grid(x = x,a = a, b = b, c = c)
+
+    w <- function(a,b,c,x) a * (1 - exp(-b * x))^c
+
+    d <- d %>%
+        mutate(y = w(a,b,c,x))
+
+    ggplot(d, aes( x = x, y = y)) +
+        #geom_point(data = data, alpha = .1) +
+        geom_line(aes(color =  a, group = interaction(a,b,c))) +
+        facet_grid(b~c) +
+        xlim(c(0,150))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/frelich_reasonable.png]]
+
 **** COMMENT a look at gamma family
 #+begin_src R
     library(brms)
