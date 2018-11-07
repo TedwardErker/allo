@@ -383,6 +383,9 @@ cite:hall_bailey_2001
  - multilevel non-linear mixed model
  - loblolly in se US
  - Chapman-Richards growth model
+ - levels are tree and plot
+ - covariate of tree density (trees per hectare)
+ - they really detail the use of these models in forestry.
 
 cite:weiskittel_e_2011
 
