@@ -388,14 +388,23 @@ cite:hall_bailey_2001
  - they really detail the use of these models in forestry.  Talk about
    the general approach.
 
-cite:li_e_2011
- - bayesian approach
- -
- -
 
 cite:manso_e_2015
  - need to read
  - interesting covariates?
+
+
+cite:dietze_e_2008
+ - bayesian
+ - crown dimensions (tree height, canopy depth, crown radius) ~ dbh
+ - levels: individual trees nested in species.  a number of species
+   level covariates
+ -
+
+cite:li_e_2011
+ - bayesian approach
+ -
+ -
 
 
 cite:weiskittel_e_2011
