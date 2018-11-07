@@ -238,7 +238,22 @@ curve to logarithm regression and selected the logarithm regression
 based on a higher R^2.  Subsequent urban tree growth equations did not
 use sigmoidal curves cite:mcpherson_e_2016.
 
-Multilevel modeling in non-urban forestry ....  other work.  how is
+Multilevel modeling was first introduced to forestry by
+cite:lappi_bailey_1988 and has since been widely used to account for
+multiple levels of variability in allometric and growth equations.
+cite:hall_bailey_2001 give a general overview of the approach and an
+example of loblolly pine height growth in the Southeastern US.  Levels
+in the model are plot and tree nested within plot, and they use tree
+density as a plot level covariate.  cite:nothdurft_e_2006 provide
+another example of modeling tree height growth using norway spruce in
+Germany.  They use the Sloboda function and levels in the model are
+plot and trees nested in plot with elevation as a plot level
+covariate.  cite:li_e_2011 provide a bayesian example modeling balsam
+fir height growth in Maine.
+
+
+
+....  other work.  how is
 this different?  Well the urban part, management practices like
 topping, pollarding, pruning, drastically alter growth and tree
 dimensions.  Others have discussed the difference between forest and
@@ -248,15 +263,6 @@ many past effects have so many levels, or have things vary by climate.
 The geographic extent of these urban models is very large.  There are
 a number of papers that have done multilevel modeling for tree growth
 that I should mention.
-
-lappi and bailey 1988
-cite:hall_bailey_2001
-
-cite:nothdurft_e_2006
-
-
-
-
 
 
 A paragraph on the impact of these equations for managing forests to
