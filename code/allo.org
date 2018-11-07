@@ -366,6 +366,9 @@ the sample’s peculiarities."
 
 ** COMMENT past work
 
+cite:lappi_bailey_1988
+- first paper
+
 cite:nothdurft_e_2006
 - predict height from age
   - non-linear hierarchical mixed model to describe tree height growth
@@ -374,9 +377,6 @@ cite:nothdurft_e_2006
   - random effects for individual trees and plots.  Fixed effect at
     plot level of elevation
   - Use SAS procedure NLMIXED
-
-cite:yang_e_2009
- - basal area increment ~ tree dbh?
 
 cite:hall_bailey_2001
  - height from age
@@ -388,7 +388,25 @@ cite:hall_bailey_2001
  - they really detail the use of these models in forestry.  Talk about
    the general approach.
 
+cite:li_e_2011
+ - bayesian approach
+ -
+ -
+
+cite:manso_e_2015
+ - need to read
+ - interesting covariates?
+
+
 cite:weiskittel_e_2011
+
+
+cite:sirkia_e_2015 - I don't understand this paper, though I think I
+should.  It has to do with parameter estimation.
+
+cite:yang_e_2009
+ - basal area increment ~ tree dbh?
+
 
 Growth estimate of Eucalyptus stands
 based on nonlinear multilevel mixed-effects model theory
