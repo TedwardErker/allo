@@ -385,7 +385,8 @@ cite:hall_bailey_2001
  - Chapman-Richards growth model
  - levels are tree and plot
  - covariate of tree density (trees per hectare)
- - they really detail the use of these models in forestry.
+ - they really detail the use of these models in forestry.  Talk about
+   the general approach.
 
 cite:weiskittel_e_2011
 
