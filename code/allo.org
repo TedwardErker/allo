@@ -357,6 +357,14 @@ the sample’s peculiarities."
 ** COMMENT past work
 
 cite:nothdurft_e_2006
+- predict height from age
+  - non-linear hierarchical mixed model to describe tree height growth
+  - Sloboda function
+  - norway spruce in germany
+  - random effects for individual trees and plots.  Fixed effect at
+    plot level of elevation
+  - Use SAS procedure NLMIXED
+
 
 cite:yang_e_2009
 
