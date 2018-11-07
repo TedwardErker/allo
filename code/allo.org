@@ -259,7 +259,7 @@ hierarchical model.
 
 cite:peper_e_2014 varying coefficients model because they have repeat
 measures on individual trees.  Fit polynomial, log-log, and
-exponential curves.
+exponential curves, picked cubic.
 
 
 ** COMMENT other thoughts
