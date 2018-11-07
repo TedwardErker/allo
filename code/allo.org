@@ -243,13 +243,23 @@ cite:lappi_bailey_1988 and has since been widely used to account for
 multiple levels of variability in allometric and growth equations.
 cite:hall_bailey_2001 give a general overview of the approach and an
 example of loblolly pine height growth in the Southeastern US.  Levels
-in the model are plot and tree nested within plot, and they use tree
+in their model are plot and tree nested within plot, and they use tree
 density as a plot level covariate.  cite:nothdurft_e_2006 provide
 another example of modeling tree height growth using norway spruce in
 Germany.  They use the Sloboda function and levels in the model are
 plot and trees nested in plot with elevation as a plot level
 covariate.  cite:li_e_2011 provide a bayesian example modeling balsam
-fir height growth in Maine.
+fir height growth in Maine, also with tree nested within plot.  They
+found the bayesian approach has similar parameter point estimates to
+the frequentist approach.
+
+
+Our approach -
+
+nested and non nested with covariates.  We don't have repeat tree
+measures.  like cite:dietze_e_2008 we use nest trees within species,
+but then also nest within genus.  Covariates are at the level of
+city.  More covariates could be added at individual tree and species level.
 
 
 
