@@ -234,7 +234,9 @@ cite:mcpherson_simpson_99 fit the same curve to a small number of
 observations and adjusted parameters for different locations based on
 the number of frost free days based on expert opinion.
 cite:peper_2001a and cite:peper_2001b compared this modified weibull
-curve to logaritm regression
+curve to logarithm regression and selected the logarithm regression
+based on a higher R^2.  Subsequent urban tree growth equations did not
+use sigmoidal curves cite:mcpherson_e_2016.
 
 Multilevel modeling in non-urban forestry ....  other work.  how is
 this different?  Well the urban part, management practices like
@@ -254,15 +256,10 @@ Talk more about the bayesian multilevel/hierarchical modeling
 framework and why it is useful. Show the basis of bayesian
 hierarchical model.
 
-an early verison of the utd equations when there was very little data
-used the weibull curve cite:mcpherson_simpson_99.  They used the
-number of frost-free days to adjust parameters.
 
-following
-
-
-cite:peper_2001a compared the weibull to the logarithm regression and
-selected logarithm regression for it's higher R^2 (.85)
+cite:peper_e_2014 varying coefficients model because they have repeat
+measures on individual trees.  Fit polynomial, log-log, and
+exponential curves.
 
 
 ** COMMENT other thoughts
