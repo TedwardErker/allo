@@ -365,8 +365,8 @@ cite:nothdurft_e_2006
     plot level of elevation
   - Use SAS procedure NLMIXED
 
-
 cite:yang_e_2009
+ - basal area increment ~ tree dbh?
 
 cite:hall_bailey_2001
 
@@ -407,8 +407,14 @@ Wang, Y., LeMay, V.M., Baker, T.G., 2007b. Modelling and prediction of dominant 
 index of Eucalyptus globulus plantations using a nonlinear mixed-effects model approach.
 Canadian Journal of Forest Research 37, 1390–1403.
 
+Calama, Rafael, and Gregorio Montero. "Interregional nonlinear height
+diameter model with random coefficients for stone pine in Spain."
+Canadian Journal of Forest Research 34.1 (2004): 150-163.
+
+
 Urban Tree Growth Modeling
 https://www.fs.fed.us/psw/publications/mcpherson/psw_2012_mcpherson001.pdf
+
 
 
 Urban Tree Database and Allometric Equations
