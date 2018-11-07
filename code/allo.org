@@ -239,6 +239,13 @@ Talk more about the bayesian multilevel/hierarchical modeling
 framework and why it is useful. Show the basis of bayesian
 hierarchical model.
 
+an early verison of the utd equations used the weibull curve, as did
+cite:frelich_1992, who predicted dbh from age for healthy trees (12
+species, 221 trees total).  This equation form worked very well (8 out
+of 12 species had an R^2 over .9), but the trees used were only
+healthly open grown trees, which is not representative of urban trees generally.
+
+
 
 ** COMMENT other thoughts
 Age is an uncertain
@@ -2411,7 +2418,6 @@ The effect of city is normally distributed:
 \delta^j_{c} \sim N(0, \sigma^j_{city})
 \]
 
-
 **** Priors
 
 The priors were selected to make biologically unrealistic parameters
@@ -2576,7 +2582,6 @@ gdd:precip
 \[
 \tau_3 \sim Normal(.005, .005)
 \]
-
 
 
 
