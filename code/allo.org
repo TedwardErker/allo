@@ -221,13 +221,18 @@ information across cities and across species to provide predictions an
 associated uncertainty of diameter growth even in even in cities or
 species with very little or no data.
 
-The weibull curve has been used before in modeling urban tree diameter
-growth as a function of age.  cite:frelich_1992, predicted DBH from
-age for healthy trees (12 species, 221 trees total) in Minneapolis and
-St. Paul, Minnesota.  This equation form worked very well (8 out of 12
-species had an R^2 over .9), but the trees used were only healthly
-open grown trees, which is not representative of urban trees
-generally.
+The sigmoidal curves similar to the weibull have been used before in
+modeling urban tree diameter growth as a function of age.
+cite:frelich_1992, using an equation of form $y = B_0 (1 - exp(B_1
+x))^{B_{2}}$, predicted DBH from age for healthy trees (12 species,
+221 trees total) in Minneapolis and St. Paul, Minnesota.  This
+equation form worked very well (8 out of 12 species had an R^2 over
+.9), but the trees used were only healthly open grown trees, which is
+not representative of urban trees generally.  Following
+cite:frelich_1992, in an early version of the urban tree database,
+cite:mcpherson_simpson_99 fit the same curve to a small number of
+observations and adjusted parameters for different locations based on
+the number of frost free days based on expert opinion.
 
 
 Multilevel modeling in non-urban forestry ....  other work.  how is
