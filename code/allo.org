@@ -251,7 +251,12 @@ plot and trees nested in plot with elevation as a plot level
 covariate.  cite:li_e_2011 provide a bayesian example modeling balsam
 fir height growth in Maine using the Chapman-Richards equation, also
 with tree nested within plot.  They found the bayesian approach has
-similar parameter point estimates to the frequentist approach.
+similar parameter point estimates to the frequentist approach.  In an
+urban tree context, cite:peper_e_2014 model DBH growth with repeat
+measures data on individual trees and test a varying coefficients model
+because they have repeat measures on individual trees.  Compared to
+past work, our approach is new in the use of a bayesian approach with
+both nested and non-nested groupings
 
 
 Our approach -
@@ -285,8 +290,7 @@ framework and why it is useful. Show the basis of bayesian
 hierarchical model.
 
 
-cite:peper_e_2014 varying coefficients model because they have repeat
-measures on individual trees.  Fit polynomial, log-log, and
+ Fit polynomial, log-log, and
 exponential curves, picked cubic.
 
 
