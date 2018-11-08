@@ -240,25 +240,26 @@ use sigmoidal curves cite:mcpherson_e_2016.
 
 Multilevel modeling was first introduced to forestry by
 cite:lappi_bailey_1988 and has since been widely used to account for
-multiple levels of variability in allometric and growth equations.
-cite:hall_bailey_2001 give a general overview of the approach and an
-example of loblolly pine height growth in the Southeastern US.  Levels
-in their model are plot and tree nested within plot, and they use tree
-density as a plot level covariate.  cite:nothdurft_e_2006 provide
-another example of modeling tree height growth using norway spruce in
-Germany.  They use the Sloboda function and levels in the model are
-plot and trees nested in plot with elevation as a plot level
-covariate.  cite:li_e_2011 provide a bayesian example modeling balsam
-fir height growth in Maine using the Chapman-Richards equation, also
-with tree nested within plot.  They found the bayesian approach has
-similar parameter point estimates to the frequentist approach.  In an
-urban tree context, cite:peper_e_2014 model DBH growth with repeat
-measures data on individual trees and test a varying coefficients
-model because they have repeat measures on individual trees.
+multiple levels of variability (observations correlated within groups)
+in allometric and growth equations.  cite:hall_bailey_2001 give a
+general overview of the approach and an example of loblolly pine
+height growth in the Southeastern US.  Levels in their model are plot
+and tree nested within plot, and they use tree density as a plot level
+covariate.  cite:nothdurft_e_2006 provide another example of modeling
+tree height growth using norway spruce in Germany.  They use the
+Sloboda function and levels in the model are plot and trees nested in
+plot with elevation as a plot level covariate.  cite:li_e_2011 provide
+a bayesian example modeling balsam fir height growth in Maine using
+the Chapman-Richards equation, also with tree nested within plot.
+They found the bayesian approach has similar parameter point estimates
+to the frequentist approach.  In an urban tree context,
+cite:peper_e_2014 model DBH growth with repeat measures data on
+individual trees and test a varying coefficients model because they
+have repeat measures on individual trees.
 
 Compared to past work, our approach is new from a modeling standpoint
 in the use of a bayesian approach with both nested and non-nested
-groupings and group level predictors.  Bayesian
+groupings and group level predictors.  The Bayesian
 multilevel/hierarchical modeling framework
 
 provide the basis for the method and it's strengths.
@@ -2422,8 +2423,8 @@ means trees can have substantial diameter at age 0.
 The type of curve that meets these criteria would be an asymmetric
 sigmoidal curve with an intercept.  A modified weibull is such a curve
 that has worked well in forestry and is the one we use here
-cite:weiskittel_e_2011.  However, there are many
-other curves that meet these criteria and could be used.
+cite:weiskittel_e_2011.  However, there are many other curves such as
+the Chapman-Richards that meet these criteria and could be used.
 
 Another characteristic of tree growth curves is heterosckedasticity,
 namely that as the age of a tree increases, so does the variability
@@ -2444,6 +2445,8 @@ section details this model, and other models tested are in
 supplementary materials.
 
 *** Model
+**** Bayesian Mulitlevel Modeling
+a bit of background?
 **** likelihood
 \[
 y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
@@ -2674,7 +2677,6 @@ gdd:precip
 \[
 \tau_3 \sim Normal(.005, .005)
 \]
-
 
 
 
