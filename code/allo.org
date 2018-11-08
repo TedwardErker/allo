@@ -146,10 +146,7 @@ Mancuccini, 2004)."
 * Introduction
 
 Multilevel models have been used for decades in tree growth equations
-(Lappi and Bailey 1988).  Indeed the test dataset, "orange", in the
-statistical programming language, R, is used to demonstrate the
-fitting of nonlinear multilevel (mixed effects) models cite:r_lang
-[[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange]].  Multilevel modeling is an attractive approach because it
+(Lappi and Bailey 1988).  Multilevel modeling is an attractive approach because it
 provides a coherent framework to account for the many levels of
 observation or of groupings in data and to pool information across
 groups.  This paper has two main contributions.  First, we demonstrate
@@ -256,6 +253,11 @@ to the frequentist approach.  In an urban tree context,
 cite:peper_e_2014 model DBH growth with repeat measures data on
 individual trees and test a varying coefficients model because they
 have repeat measures on individual trees.
+
+Indeed the test dataset, "orange", in the
+statistical programming language, R, is used to demonstrate the
+fitting of nonlinear multilevel (mixed effects) models cite:r_lang
+[[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange]].
 
 Compared to past work, our approach is new from a modeling standpoint
 in the use of a bayesian approach with both nested and non-nested
