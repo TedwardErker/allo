@@ -262,17 +262,16 @@ in the use of a bayesian approach with both nested and non-nested
 groupings and group level predictors.  The Bayesian
 multilevel/hierarchical modeling framework has many strengths as
 discussed in cite:li_e_2011 (and others) and includes the ability to
-sample parameters from the entire posterior, rather than
-
-provide the basis for the method and it's strengths.
-
-
-Talk more about the bayesian multilevel/hierarchical modeling
-framework and why it is useful. Show the basis of bayesian
-hierarchical model.
-
-
-
+sample parameter values from the entire posterior, rather than maximum
+likelihood estimates.  Nonlinear multilevel models in the frequentist
+approach depend on linear approximations such as first-order taylor
+expansion, which is not required in the bayesian framework.  Summary
+statistics of parameters (mean, median, quantiles) can be easily
+calculated from posterior samples and the common assumption in the
+frequentist paradigm that parameters are normally distributed can be
+relaxed.  The ability to incorporate prior information from experts or
+past studies on parameters is another strength of the bayesian
+approach.
 
 
 A paragraph on the impact of these equations for managing forests to
@@ -374,6 +373,12 @@ the population, but simple enough to avoid being overly influenced by
 the sample’s peculiarities."
 
 ** COMMENT past work
+
+
+and asymtoptically normal approximations which are difficult
+to (I don't fully understand how
+parameters are estimated in the frequentist approach cite:hall_bailey_2001).
+
 
 cite:lappi_bailey_1988
 - first paper
@@ -545,6 +550,7 @@ equations have been integrated with numerical models of tree benefits
 in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 #+END_QUOTE
+
 
 * Methods
 ** Data
@@ -59753,7 +59759,6 @@ bibliographystyle:apa
 
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 
-* contact committee for biometry
-- ask people
-- set date
-- get paperwork done through John Schuppel.
+* to address
+- fitting multilevel models in the frequentist way (lme4) seems quite
+  complex and is much over my head.  Talk to Jun about this concern.
