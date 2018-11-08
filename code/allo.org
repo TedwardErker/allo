@@ -253,37 +253,26 @@ fir height growth in Maine using the Chapman-Richards equation, also
 with tree nested within plot.  They found the bayesian approach has
 similar parameter point estimates to the frequentist approach.  In an
 urban tree context, cite:peper_e_2014 model DBH growth with repeat
-measures data on individual trees and test a varying coefficients model
-because they have repeat measures on individual trees.  Compared to
-past work, our approach is new in the use of a bayesian approach with
-both nested and non-nested groupings
+measures data on individual trees and test a varying coefficients
+model because they have repeat measures on individual trees.
+
+Compared to past work, our approach is new from a modeling standpoint
+in the use of a bayesian approach with both nested and non-nested
+groupings and group level predictors.  Bayesian
+multilevel/hierarchical modeling framework
+
+provide the basis for the method and it's strengths.
+
+ Unlike many past studies we do
+not have repeat measures on individual trees, but it would be
+straightforward to incorporate such data in the model.
 
 
-Our approach -
-
-nested and non nested with covariates.  We don't have repeat tree
-measures.  like cite:dietze_e_2008 we use nest trees within species,
-but then also nest within genus.  Covariates are at the level of
-city.  More covariates could be added at individual tree and species
-level.
-
-
-
-
-....  other work.  how is
-this different?  Well the urban part, management practices like
-topping, pollarding, pruning, drastically alter growth and tree
-dimensions.  Others have discussed the difference between forest and
-urban/open grown trees a fair bit.  The Stan and brms part, these
-software are new.  What about the modeling approach?  I don't think
-many past effects have so many levels, or have things vary by climate.
-The geographic extent of these urban models is very large.  There are
-a number of papers that have done multilevel modeling for tree growth
-that I should mention.
 
 
 A paragraph on the impact of these equations for managing forests to
 predict/forecast ecosystem services.
+
 
 Talk more about the bayesian multilevel/hierarchical modeling
 framework and why it is useful. Show the basis of bayesian
@@ -422,6 +411,13 @@ cite:dietze_e_2008
  - levels: individual trees nested in species.  a number of species
    level covariates
  -
+
+
+like cite:dietze_e_2008 we use nest trees within species,
+but then also nest within genus.  Covariates are at the level of
+city.  More covariates could be added at individual tree and species
+level.
+
 
 cite:li_e_2011
  - bayesian approach
@@ -59731,6 +59727,16 @@ make better
 - There are some funny things with minneapolis data.  is it from the
   same individual for each species?
 - challenges of separating \beta_1 and \beta_3 without old trees.
+
+
+this different?  Well the urban part, management practices like
+topping, pollarding, pruning, drastically alter growth and tree
+dimensions.  Others have discussed the difference between forest and
+urban/open grown trees a fair bit.
+
+because of the richness of the dataset, the geographic range of that
+these equations can be applied to is larger than many other equations
+which are usually for a particular speices in a particular region.
 
 * bibliography                                                       :ignore:
 bibliography:~/git/notes/references.bib
