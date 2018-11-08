@@ -260,13 +260,17 @@ have repeat measures on individual trees.
 Compared to past work, our approach is new from a modeling standpoint
 in the use of a bayesian approach with both nested and non-nested
 groupings and group level predictors.  The Bayesian
-multilevel/hierarchical modeling framework
+multilevel/hierarchical modeling framework has many strengths as
+discussed in cite:li_e_2011 (and others) and includes the ability to
+sample parameters from the entire posterior, rather than
 
 provide the basis for the method and it's strengths.
 
- Unlike many past studies we do
-not have repeat measures on individual trees, but it would be
-straightforward to incorporate such data in the model.
+
+Talk more about the bayesian multilevel/hierarchical modeling
+framework and why it is useful. Show the basis of bayesian
+hierarchical model.
+
 
 
 
@@ -275,13 +279,6 @@ A paragraph on the impact of these equations for managing forests to
 predict/forecast ecosystem services.
 
 
-Talk more about the bayesian multilevel/hierarchical modeling
-framework and why it is useful. Show the basis of bayesian
-hierarchical model.
-
-
- Fit polynomial, log-log, and
-exponential curves, picked cubic.
 
 
 ** COMMENT other thoughts
@@ -59739,6 +59736,10 @@ urban/open grown trees a fair bit.
 because of the richness of the dataset, the geographic range of that
 these equations can be applied to is larger than many other equations
 which are usually for a particular speices in a particular region.
+
+ Unlike many past studies we do
+not have repeat measures on individual trees, but it would be
+straightforward to incorporate such data in the model.
 
 * bibliography                                                       :ignore:
 bibliography:~/git/notes/references.bib
