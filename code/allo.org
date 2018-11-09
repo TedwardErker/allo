@@ -1,8 +1,8 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
-#+PROPERTY:  header-args:sh :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -552,7 +552,6 @@ equations have been integrated with numerical models of tree benefits
 in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 #+END_QUOTE
-
 
 * Methods
 ** Data
