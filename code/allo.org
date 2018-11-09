@@ -7102,8 +7102,8 @@ pd <- cbind(nd, pred.nd)
 : building file list ... done
 : compare_cor_nocorr.R
 :
-: sent 382 bytes  received 42 bytes  169.60 bytes/sec
-: total size is 832  speedup is 1.96
+: sent 193 bytes  received 54 bytes  98.80 bytes/sec
+: total size is 844  speedup is 3.42
 
 **** run on krusty
 
