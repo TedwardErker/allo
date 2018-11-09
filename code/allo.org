@@ -2,7 +2,7 @@
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
-#+PROPERTY:  header-args:sh :eval no
+#+PROPERTY:  header-args:sh :eval yes
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -7081,15 +7081,60 @@ pd <- cbind(nd, pred.nd)
 [[file:../figs/predicting_cities_notB1_correlated_unobserved_groups.png]]
 
 **** compare to not corellated
-#+begin_src R :compare_cor_nocorr.R
-library(loo)
-library(brms)
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds")
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
+#+begin_src R :tangle compare_cor_nocorr.R
+  library(loo)
+  library(brms)
+  mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds")
+  mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
 
-res <- loo(mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma, mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated)
-saveRDS(res, "../models/corr_nocorr_comparison.rds")
+  res <- loo(mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma, mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated, cores = 20)
+  saveRDS(res, "../models/corr_nocorr_comparison.rds")
 #+end_src
+**** send to krusty
+#+BEGIN_SRC sh :session a :results verbatim
+
+  rsync -avz compare_cor_nocorr.R erker@krusty:~/allo/code/
+
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: building file list ... done
+: compare_cor_nocorr.R
+:
+: sent 382 bytes  received 42 bytes  169.60 bytes/sec
+: total size is 832  speedup is 1.96
+
+**** run on krusty
+
+run from krusty terminal
+
+#+BEGIN_SRC sh :session b :results raw
+  ssh krusty
+  cd allo/code
+  nohup R CMD BATCH compare_cor_nocorr.R &
+  exit
+#+END_SRC
+
+#+BEGIN_SRC sh
+cat genus_species_citiesNotB1_b3climate_correlated.Rout
+#+END_SRC
+
+**** pull back from krusty
+
+#+BEGIN_SRC sh :session a :results verbatim
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds ~/git/allo/models/
+#+END_SRC
+
+#+RESULTS:
+: erker@krusty's password:
+: receiving file list ... done
+: genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds
+:
+: sent 38 bytes  received 58293114 bytes  4020217.38 bytes/sec
+: total size is 58418576  speedup is 1.00
+: You have new mail in /var/mail/erker
+
 
 *** COMMENT compare models
 cite:vehtari_e_2017
