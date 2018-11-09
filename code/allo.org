@@ -2,7 +2,7 @@
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
-#+PROPERTY:  header-args:sh :eval yes
+#+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -6789,7 +6789,7 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/predicting_cities_notB1_unobserved_groups.png]]
 
-*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma  MODEL parameter coreelations | ID | maybe this help with predictions?
+*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma  MODEL parameter coreelations | ID | maybe this help with predictions?
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_correlated.R
   library(dplyr)
@@ -7134,7 +7134,6 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_
 : sent 38 bytes  received 58293114 bytes  4020217.38 bytes/sec
 : total size is 58418576  speedup is 1.00
 : You have new mail in /var/mail/erker
-
 
 *** COMMENT compare models
 cite:vehtari_e_2017
@@ -58612,7 +58611,7 @@ attr(,"class")
 
 #+end_src
 
-*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
+*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm.R
   library(dplyr)
