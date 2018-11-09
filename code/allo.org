@@ -7081,30 +7081,15 @@ pd <- cbind(nd, pred.nd)
 [[file:../figs/predicting_cities_notB1_correlated_unobserved_groups.png]]
 
 **** compare to not corellated
-#+begin_src R
+#+begin_src R :compare_cor_nocorr.R
 library(loo)
 library(brms)
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds")
-mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated.rds")
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma.rds")
 
 res <- loo(mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma, mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_correlated)
-res
+saveRDS(res, "../models/corr_nocorr_comparison.rds")
 #+end_src
-
-#+RESULTS:
-#+begin_example
-Loading required package: Rcpp
-Loading 'brms' package (version 2.6.0). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-Error in compare(mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma,  :
-  All inputs should have class 'loo'.
-Error: object 'res' not found
-#+end_example
 
 *** COMMENT compare models
 cite:vehtari_e_2017
@@ -59763,3 +59748,4 @@ bibliographystyle:apa
 * to address
 - fitting multilevel models in the frequentist way (lme4) seems quite
   complex and is much over my head.  Talk to Jun about this concern.
+- why model correlations of parameters within groups?
