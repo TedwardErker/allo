@@ -59509,7 +59509,6 @@ pd <- cbind(nd, pred.nd)
 Short descriptions of the models tested and the brms sytax are in
 table [[tab:model_descriptions]]
 
-
 Note, I removed the scaling of the parameters (multiplying and
 dividing by 100) in the formula for clarity.  In the code they are
 scaled so that the parameters are on the same order of magnitude and
@@ -59545,14 +59544,14 @@ HMC sampling is improved.
 |       |                                              | b1 \sim 1                                               |
 |       |                                              | b2 \sim 1                                               |
 |       |                                              | b3 \sim gdd * precip                                    |
-|     6 | Parameters vary by city, genus, and species. | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       | Growth rate varies by climate.               | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
-|     7 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|     6 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       | (but asympote does not vary by city).        | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
+|       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
+|     7 | Parameters vary by city, genus, and species. | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       | Growth rate varies by climate.               | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
 #+latex: }
@@ -59639,18 +59638,16 @@ Posterior distributions with 80% interval and median for parameters in [[fig:mai
 ** climate effects
 There is a positive effect of growing degree days (gdd) and annual
 precipitation (precip) on tree diameter (dbh), and a postive
-interaction between the two.  Marginal effects of climate on DBH in
-[[fig:marginal_effects_climate_labels]].  There is an estimated 40cm difference
+interaction between the two.  Marginal effects of climate on DBH for a
+tree 25 years after planting in [[fig:marginal_effects_climate_25AGE_mean_labels]].  There is an estimated 40cm difference
 in dbh between an average tree in Orlando, FL and one in Boise, ID.
 
-#+name: fig:marginal_effects_climate_labels
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_many_climate_b3linint_hetero_no_family_Gamma_wCities.png]]
-
-Include an uncertainty / standard error panel also.
-
+#+name: fig:marginal_effects_climate_25AGE_mean_labels
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
 
+#+name: fig:marginal_effects_climate_25AGE_se_labels
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
+
 
 ** Comparing to existing equations
 
@@ -59703,6 +59700,8 @@ Show how the equations vary continuously across geographic space,
 show the equations for a variety of unsampled cities.
 
 * Discussoins
+
+
 
 interpreting parameter estimates:
 For most species there are no data near the
