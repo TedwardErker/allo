@@ -59638,9 +59638,12 @@ Posterior distributions with 80% interval and median for parameters in [[fig:mai
 ** climate effects
 There is a positive effect of growing degree days (gdd) and annual
 precipitation (precip) on tree diameter (dbh), and a postive
-interaction between the two.  Marginal effects of climate on DBH for a
-tree 25 years after planting in [[fig:marginal_effects_climate_25AGE_mean_labels]].  There is an estimated 40cm difference
-in dbh between an average tree in Orlando, FL and one in Boise, ID.
+interaction between the two.  Marginal effects of climate on posterior
+mean of DBH for a tree 25 years after planting in
+[[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
+mean is in [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
+estimated 40cm difference in dbh between an average tree in Orlando,
+FL and one in Boise, ID.
 
 #+name: fig:marginal_effects_climate_25AGE_mean_labels
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
@@ -59666,7 +59669,7 @@ in dbh between an average tree in Orlando, FL and one in Boise, ID.
 ** Uncertainty increases when predicting out of sample cities, genera, and species
 
 #+name: fig:predicting_ubobserved_groups
-[[file:../figs/predicting_unobserved_groups.png]]
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 ** COMMENT ideas
 summary figure showing parameter marginal posterior distributions.  Or
