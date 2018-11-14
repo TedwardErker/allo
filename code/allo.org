@@ -59706,16 +59706,13 @@ show the equations for a variety of unsampled cities.
 
 
 
+
 interpreting parameter estimates:
 For most species there are no data near the
 true asymptote and so this parameter should be considered a highly
 uncertain estimate of the real maximum dbh of a tree.  Pragmatically,
 it models/causes the slowing of the diameter growth of a tree as it
 ages.
-
-An early version of the UTD equations didn't have as much data, but
-their approach modified parameters based on the number of frost free
-days cite:frelich_1992
 
 cite:peper_2001a - tested modified weibull following
 cite:frelich_1992, but went with logarithm regression model because it
