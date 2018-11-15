@@ -59718,6 +59718,7 @@ the urban environment.  As noted by cite:peper_2001a, differences in
 the dimensions of sweetgum and camphor in Modesto and in Santa Monica
 were due to different pruning regimes and cultural practices.
 This shows
+
 the challenges in modelling.  There are some difficult to capture
 human cultural elements.  Perhaps including some predictors of
 management practices would help explain things.
