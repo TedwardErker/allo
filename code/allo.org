@@ -59706,9 +59706,22 @@ show the equations for a variety of unsampled cities.
 
 Our selected model provides biologically realistic models of tree
 diameter growth for all species and cities observed, and also a way to
-make predictions for species with little or no data while reporting
-uncertainty.
+make predictions for species with little or no data while
+appropriately reporting uncertainty.  We found the growth curve
+parameters, \beta_0, \beta_2, \beta_3, vary more across cities, than they do across
+genera.  The is much less varation due to species within genera.  This
+suggests that management practices and other factors that vary across
+cities have a stronger impact on growth than the genetic potential of
+trees.  For \beta_0, the diameter of trees when they are transplanted, this
+is an expected result since it is almost completely determined by
+management decisions about when a tree is large enough to withstand
+the urban environment.
 
+
+
+sd city is greater than sd genus.  sd species is small.
+
+there is little species differences,
 
 The hierachical bayesian approah provides the flexibility
 
