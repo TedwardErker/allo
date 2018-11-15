@@ -59716,7 +59716,8 @@ is an expected result since it is almost completely determined by
 management decisions about when a tree is large enough to withstand
 the urban environment.
 
-Including climate.  how does it change the sd city b3?
+Including climate.  how does it change the sd city b3? not really,
+maybe a slight decline but I couldn't get the nonclimate
 
 
 
