@@ -59653,7 +59653,6 @@ FL and one in Boise, ID.
 
 
 ** Comparing to existing equations
-
 *** illustrative comparisons
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
@@ -59716,6 +59715,8 @@ trees.  For \beta_0, the diameter of trees when they are transplanted, this
 is an expected result since it is almost completely determined by
 management decisions about when a tree is large enough to withstand
 the urban environment.
+
+Including climate.  how does it change the sd city b3?
 
 
 
