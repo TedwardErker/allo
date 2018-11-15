@@ -59714,7 +59714,15 @@ cities have a stronger impact on growth than the genetic potential of
 trees.  For \beta_0, the diameter of trees when they are transplanted, this
 is an expected result since it is almost completely determined by
 management decisions about when a tree is large enough to withstand
-the urban environment.
+the urban environment.  As noted by cite:peper_2001a, differences in
+the dimensions of sweetgum and camphor in Modesto and in Santa Monica
+were due to different pruning regimes and cultural practices.
+This shows
+the challenges in modelling.  There are some difficult to capture
+human cultural elements.  Perhaps including some predictors of
+management practices would help explain things.
+
+
 
 Including climate.  how does it change the sd city b3? not really,
 maybe a slight decline but I couldn't get the nonclimate
@@ -59742,13 +59750,6 @@ cite:frelich_1992, but went with logarithm regression model because it
 had the best in-sample fit.  We think weibull would have
 the best out of sample fit.
 
-
-
-cite:peper_2001a noted that differences in the dimensions of sweetgum
-and camphor in Modesto and in Santa Monica were due to different
-pruning regimes, cultural practices.  This shows the challenges in
-modelling.  There are some difficult to capture human cultural
-elements.
 
 
 several trees
