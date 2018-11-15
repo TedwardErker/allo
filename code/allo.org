@@ -59704,6 +59704,14 @@ show the equations for a variety of unsampled cities.
 
 * Discussoins
 
+Our selected model provides biologically realistic models of tree
+diameter growth for all species and cities observed, and also a way to
+make predictions for species with little or no data while reporting
+uncertainty.
+
+
+The hierachical bayesian approah provides the flexibility
+
 
 
 
@@ -59735,11 +59743,14 @@ several trees
 - We need to be able to predict to older ages if we want to make
   realistic predictions.
 
+
+
 make better
 - more data, duh, perhaps used results to identify where to sample
 - more cities, this is important for interpolation across climate
   space. Could allow for nonlinear relationships and for more variables.
 - better climate predictors
+
 - interactions between climate and species.
 - use phylogenetic distance, gaussian process, instead of multiple
   levels of taxonomy.
@@ -59747,6 +59758,7 @@ make better
   deciduous, evergreen conifer, etc.)
 - extend species with species level predictors (leaf morphology, wood
   characteristics, shade tolerance, etc).
+
 - smarter priors (e.g. max dbh based on champion trees?)  is this
   possible?  I think it would be a very neat extension, but need to
   think about how these champions are not urban trees most the time.
@@ -59761,6 +59773,8 @@ make better
 - There are some funny things with minneapolis data.  is it from the
   same individual for each species?
 - challenges of separating \beta_1 and \beta_3 without old trees.
+- urban trees don't live very long
+- our sample of species is not representative.
 
 
 this different?  Well the urban part, management practices like
@@ -59792,3 +59806,4 @@ bibliographystyle:apa
 - fitting multilevel models in the frequentist way (lme4) seems quite
   complex and is much over my head.  Talk to Jun about this concern.
 - why model correlations of parameters within groups?
+
