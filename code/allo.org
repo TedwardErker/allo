@@ -59764,12 +59764,13 @@ Our selected model provides biologically realistic estimates of tree
 diameter growth for all species and cities observed, and also a way to
 make predictions for species with little or no data while
 appropriately reporting uncertainty.  Our model will make better out
-of sample predictions than the existing UTC equationsWe found the growth curve
-parameters, \beta_0, \beta_2, \beta_3, vary more across cities, than they do across
-genera, and there is much less varation due to species within genera.
-This suggests that management practices and other factors that vary
-across cities have a stronger impact on growth than the genetic
-potential of trees.  This result is not surprising for \beta_0, the
+of sample predictions than the existing UTC equations which are
+overfit to single species by cities combinations.  We found the growth
+curve parameters, \beta_0, \beta_2, \beta_3, vary more across cities, than they do
+across genera, and there is much less varation due to species within
+genera.  This suggests that management practices and other factors
+that vary across cities have a stronger impact on growth than the
+genetic potential of trees.  This result is not surprising for \beta_0, the
 diameter of trees when they are transplanted, since it is almost
 completely determined by management decisions about when a tree is
 large enough to withstand the urban environment.  Differences in other
@@ -59811,6 +59812,18 @@ needed.  Another alternative could be to create constraints on maximum
 DBH based on the largest individuals (called champion trees) of the
 species found anywhere (not just urban).
 
+Extimates of uncertainty reveal We have
+modeling extensions
+phylo distance
+uncertainty in age
+individual tree level covariates like utility poles, sidewalk etc
+model more than just diameter, also height and crown.
+
+new data:
+more cities
+less common species
+older trees
+management practices
 
 
 cite:peper_2001a - tested modified weibull following
