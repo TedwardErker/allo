@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -59435,6 +59435,8 @@ What city is the lower midwest?  Indianapolis.  There is no data for that.
 [[file:../figs/pp_check_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma.png]]
 
 **** test some predictions
+
+***** acpl in sacramento and STL
 #+begin_src R
     wg  <-  read.csv("../data/precip_qt_ll.csv")
     wp <-     read.csv("../data/gdd_qt_ll.csv")
@@ -59502,6 +59504,65 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
+
+***** prye
+#+begin_src R
+    wg  <-  read.csv("../data/precip_qt_ll.csv")
+    wp <-     read.csv("../data/gdd_qt_ll.csv")
+
+    w <- left_join(wg, wp, by = c("station", "lat", "long"))
+
+    stl <- c(lat = 38.6270, long = -90.1994)
+
+    w2 <- filter(w, lat > stl["lat"] - .1,
+                 lat < stl["lat"] + .1,
+                 long > stl["long"] - .1,
+                 long < stl["long"] + .1)
+
+
+    Species <- c("ACPL","UNKNOWN", "UNKNOWN")
+    Genus <- c("Acer", "Acer", "UNKNOWN")
+    gs <- data.frame(Genus, Species)
+    City <- c("Sacramento, CA", "St. Louis, MO")
+    gdd <- c(5.41, 4822/1000)
+    precip <- c(2.03, 4273/1000)
+
+    nd.clim <- data.frame(City, gdd, precip)
+
+    nd <- expand.grid(City = City, AGE = 1:120)
+
+    nd <- left_join(nd, nd.clim)
+
+    expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
+
+    nd <- expand.grid.df(nd, gs)
+
+    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+#+end_src
+
+#+begin_src R
+      prye <- filter(d, Species == "PRYE")
+
+    nd.prye <- prye %>%
+        select(City, Species, Genus, gdd, precip) %>%
+        unique() %>%
+        cbind(data.frame(AGE = 1:200))
+
+      pred.prye <- predict(mod, nd.prye, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+
+  pred.prye <- cbind(nd.prye,pred.prye)
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/yoshinocherry.png
+  ggplot() + geom_point(data = prye, aes(x = AGE, y = DBH)) + geom_line(data = pred.prye, aes(x = AGE, y = Estimate), inherit.aes = F)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/yoshinocherry.png]]
 
 * Results
 ** Model Comparisons
