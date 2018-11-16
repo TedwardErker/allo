@@ -59635,7 +59635,7 @@ Posterior distributions with 80% interval and median for parameters in [[fig:mai
 #+name: fig:shape_posterior
 [[file:../figs/posterior_distributions_model_shape.png]]
 
-** climate effects
+** Climate Effects on Growth Rate
 There is a positive effect of growing degree days (gdd) and annual
 precipitation (precip) on tree diameter (dbh), and a postive
 interaction between the two.  Marginal effects of climate on posterior
@@ -59716,33 +59716,25 @@ is an expected result since it is almost completely determined by
 management decisions about when a tree is large enough to withstand
 the urban environment.  As noted by cite:peper_2001a, differences in
 the dimensions of sweetgum and camphor in Modesto and in Santa Monica
-were due to different pruning regimes and cultural practices.
+were due to different pruning regimes and cultural practices.  While
+including more information at the genus level such as leaf foliar
+traits or wood characteristics (e.g. cite:dietze_e_2008) could
+certainly help explain variation in growth, our results show that an
+information on city-level management practices would do more to
+improve predictive performance, especially in unsampled cities.
 
 There is considerable variation in growth rate (\beta_3) due to climatic
 differences across cities, but there is still considerable uncertainty
 in these effects due largely to the relatively small sample size of
-cities.
-
-
-This shows
-
-the challenges in modelling.  There are some difficult to capture
-human cultural elements.  Perhaps including some predictors of
-management practices would help explain things.
-
-
-
-Including climate.  how does it change the sd city b3? not really,
-maybe a slight decline but I couldn't get the nonclimate
-
-
-
-sd city is greater than sd genus.  sd species is small.
-
-there is little species differences,
-
-The hierachical bayesian approah provides the flexibility
-
+cities and their uneven distribution in climate space.  25 years after
+planting, the model predicts that trees in warm and wet climates
+(e.g. central florida) will be about 60 cm greater in DBH than trees
+grown in cool dry climates (e.g. Fort Collins).  While this is
+physically possible, the high uncertainty qualifies this estimate.
+Orlando is the only city sampled from a very warm and wet climate,
+it's large influence in the model and the high uncertainty suggests
+more cities need to be sampled in places like Louisiana and eastern
+Texas.
 
 
 
