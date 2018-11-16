@@ -59763,7 +59763,8 @@ show the equations for a variety of unsampled cities.
 Our selected model provides biologically realistic estimates of tree
 diameter growth for all species and cities observed, and also a way to
 make predictions for species with little or no data while
-appropriately reporting uncertainty.  We found the growth curve
+appropriately reporting uncertainty.  Our model will make better out
+of sample predictions than the existing UTC equationsWe found the growth curve
 parameters, \beta_0, \beta_2, \beta_3, vary more across cities, than they do across
 genera, and there is much less varation due to species within genera.
 This suggests that management practices and other factors that vary
@@ -59810,26 +59811,7 @@ needed.  Another alternative could be to create constraints on maximum
 DBH based on the largest individuals (called champion trees) of the
 species found anywhere (not just urban).
 
-more data (older ages), better priors
 
-Almost all of the species in the
-data have champion individuals The relatively shorter lives of urban
-trees compared to their non-urban counterparts combined with the
-diffculty of accurately measuring the age of trees makes this estimate
-less of a true asymptote to diameter growth and more of a parameter
-that indicates
-
-the true asym
-the observed maximum for many tree species is sever
-
-b1_Intercept      1.50      0.10     1.31     1.71        947 1.02
-
-interpreting parameter estimates:
-For most species there are no data near the
-true asymptote and so this parameter should be considered a highly
-uncertain estimate of the real maximum dbh of a tree.  Pragmatically,
-it models/causes the slowing of the diameter growth of a tree as it
-ages.
 
 cite:peper_2001a - tested modified weibull following
 cite:frelich_1992, but went with logarithm regression model because it
