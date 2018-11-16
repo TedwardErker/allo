@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -59501,7 +59501,7 @@ pd <- cbind(nd, pred.nd)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData_200.png]]
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 * Results
 ** Model Comparisons
