@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -59501,7 +59501,7 @@ pd <- cbind(nd, pred.nd)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData_200.png]]
 
 * Results
 ** Model Comparisons
@@ -59738,11 +59738,14 @@ the model and the high uncertainty suggests more cities need to be
 sampled in places like Louisiana and eastern Texas.
 
 The mean asympotote for diameter growth of common urban species (\beta_1)
-is 150 cm (95% CI: 131 - 171).  The relatively shorter lives of urban
+is about 150 cm (95% CI: 131 - 171).
+
+Almost all of the species in the
+data have champion individuals The relatively shorter lives of urban
 trees compared to their non-urban counterparts combined with the
-diffculty of accurately measuring the age of trees makes this
-estimate less of a true asymptote to diameter growth and more of a
-parameter that indicates
+diffculty of accurately measuring the age of trees makes this estimate
+less of a true asymptote to diameter growth and more of a parameter
+that indicates
 
 the true asym
 the observed maximum for many tree species is sever
