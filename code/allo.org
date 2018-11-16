@@ -59507,40 +59507,6 @@ pd <- cbind(nd, pred.nd)
 
 ***** prye
 #+begin_src R
-    wg  <-  read.csv("../data/precip_qt_ll.csv")
-    wp <-     read.csv("../data/gdd_qt_ll.csv")
-
-    w <- left_join(wg, wp, by = c("station", "lat", "long"))
-
-    stl <- c(lat = 38.6270, long = -90.1994)
-
-    w2 <- filter(w, lat > stl["lat"] - .1,
-                 lat < stl["lat"] + .1,
-                 long > stl["long"] - .1,
-                 long < stl["long"] + .1)
-
-
-    Species <- c("ACPL","UNKNOWN", "UNKNOWN")
-    Genus <- c("Acer", "Acer", "UNKNOWN")
-    gs <- data.frame(Genus, Species)
-    City <- c("Sacramento, CA", "St. Louis, MO")
-    gdd <- c(5.41, 4822/1000)
-    precip <- c(2.03, 4273/1000)
-
-    nd.clim <- data.frame(City, gdd, precip)
-
-    nd <- expand.grid(City = City, AGE = 1:120)
-
-    nd <- left_join(nd, nd.clim)
-
-    expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL), list(...))
-
-    nd <- expand.grid.df(nd, gs)
-
-    pred.nd <- predict(mod, nd, allow_new_levels = T, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
-#+end_src
-
-#+begin_src R
       prye <- filter(d, Species == "PRYE")
 
     nd.prye <- prye %>%
@@ -59563,6 +59529,36 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/yoshinocherry.png]]
+
+***** rops
+
+#+begin_src R
+      rops <- filter(d, Species == "ROPS")
+
+    nd.rops <- rops %>%
+        select(City, Species, Genus, gdd, precip) %>%
+        unique() %>%
+        cbind(data.frame(AGE = 1:200))
+
+      pred.rops <- predict(mod, nd.rops, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+
+  pred.rops <- cbind(nd.rops,pred.rops)
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/robiniapsuedoacacia.png
+      ggplot() +
+          geom_point(data = rops, aes(x = AGE, y = DBH, color = City)) +
+          geom_line(data = pred.rops, aes(x = AGE, y = Estimate, color = City), inherit.aes = F)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/robiniapsuedoacacia.png]]
+
+
 
 * Results
 ** Model Comparisons
@@ -59799,7 +59795,22 @@ the model and the high uncertainty suggests more cities need to be
 sampled in places like Louisiana and eastern Texas.
 
 The mean asympotote for diameter growth of common urban species (\beta_1)
-is about 150 cm (95% CI: 131 - 171).
+is about 150 cm (95% CI: 131 - 171).  This varies considerably by
+genus and at times in unrealistic ways due to data limitations.  For
+example, the estimated mean asympototic DBH for Prunus (cherry), a
+small tree is 194 cm, while for Robinina psuedoacacia, a larger tree,
+it is 107 cm.  Prunus has such a large estimated asymptote because
+there are several trees younger than 30 with a DBH greater than 80 cm,
+but the oldest tree sampled was just 30 years old.  Extrapolation and
+the interpretion of \beta_1 as the asympotic dbh should be used with
+caution depending on the presence of observations at large ages.  Half
+of the species observed have an oldest tree of less than 55 years.  To
+make better predictions of diameter at large ages, older trees are
+needed.  Another alternative could be to create constraints on maximum
+DBH based on the largest individuals (called champion trees) of the
+species found anywhere (not just urban).
+
+more data (older ages), better priors
 
 Almost all of the species in the
 data have champion individuals The relatively shorter lives of urban
@@ -59826,6 +59837,14 @@ had the best in-sample fit.  We think weibull would have
 the best out of sample fit.
 
 
+age
+#+begin_src R :exports none
+d %>% group_by(Species) %>% summarize(maxAGE = max(AGE)) %>% pull(maxAGE) %>% summary()
+#+end_src
+
+#+RESULTS:
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+:   23.00   43.75   55.00   68.04   94.00  350.00
 
 several trees
 - what is the distribution of maximum age by species?  many have very
