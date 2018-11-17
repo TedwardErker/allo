@@ -189,20 +189,21 @@ highlighted in the report.  First, while the model form selected
 provided the lowest AIC, many of the estimates are not biologically
 realistic (for example, estimates of diameter may begin to increase
 sharply at old ages, cubic fits, or they may decrease at old ages,
-quadratic fits).  Therefore, the researchers cautioned against applying the
-models beyond the range of the data, or sometimes even within the
-range of data if the estimates were unrealistic.  These unrealistic
-estimates and the inability to extrapolate severely limits managers'
-ability to predict growth over meaningful time scales (a century
-rather than a few decades).  A second limitations is that some models
-predict negative diameters, an impossibility.  Third, models are only
-provided for the cities and the species sampled.  If a manager wants
-to predict the diameter growth of a tree species in an unsampled city,
-the researchers recommend using the model from the reference city in
-the same climate region.  However many of the reference cities are on
-the border of climate regions and there is known large variability in
-growth within regions (see figure XX in utd report which is from
-McPherson.... comparing Cheyenne to Ft Collins).  Furthermore, if a
+quadratic fits).  Therefore, the researchers cautioned against
+applying the models beyond the range of the data, or sometimes even
+within the range of data if the estimates were unrealistic.  These
+unrealistic estimates and the inability to extrapolate severely limits
+managers' ability to predict growth over meaningful time scales (a
+century rather than a few decades).  A second limitations is that some
+models predict negative diameters, an impossibility.  Third, models
+are only provided for the cities and the species sampled.  If a
+manager wants to predict the diameter growth of a tree species in an
+unsampled city, the researchers recommend using the model from the
+reference city in the same climate region.  However many of the
+reference cities are on the border of climate regions and there is
+known large variability in growth within regions (see figure 5 in the
+UTD report which is from McPherson and Peper 2012, comparing Cheyenne
+to Ft Collins, also provided in supplementary figures).  Furthermore, if a
 manager wants to predict growth for an unsampled species or a species
 that was sampled in a different city it is not obvious which
 equation/model to use and the additional uncertainty that this
@@ -59934,6 +59935,9 @@ bibliographystyle:apa
 
 
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+
+** fort collins versus cheyenne
+[[file:../figs/ftcollins_cheyenne_ash.png]]
 
 * to address
 - fitting multilevel models in the frequentist way (lme4) seems quite
