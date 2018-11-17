@@ -240,7 +240,9 @@ use sigmoidal curves citep:mcpherson_e_2016.
 Multilevel modeling was first introduced to forestry by
 cite:lappi_bailey_1988 and has since been widely used to account for
 multiple levels of variability (observations correlated within groups)
-in allometric and growth equations.  cite:hall_bailey_2001 give a
+in allometric and growth equations. Indeed, one of the test datasets
+in R to demonstrate nonlinear multilevel modeling are observations of
+orange tree growth citep:r_lang [[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange]]. cite:hall_bailey_2001 give a
 general overview of the frequentist multilevel approach and an example
 of loblolly pine height growth in the Southeastern US.  Levels in
 their model are plot and tree nested within plot, and they use tree
@@ -255,11 +257,6 @@ similar parameter point estimates to the frequentist approach.  In an
 urban tree context, cite:peper_e_2014 model DBH growth with repeat
 measures data on individual trees and test a varying coefficients
 model because they have repeat measures on individual trees.
-
-Indeed the test dataset, "orange", in the
-statistical programming language, R, is used to demonstrate the
-fitting of nonlinear multilevel (mixed effects) models cite:r_lang
-[[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange]].
 
 Compared to past work, our approach is new from a modeling standpoint
 in the use of a bayesian approach with both nested and non-nested
