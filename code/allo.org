@@ -157,7 +157,7 @@ the Urban Tree Database cite:utd_2016,mcpherson_e_2016.  This dataset
 is the result an over a decade long effort to collect age and size
 data on thousands of trees in 17 cities across the US.  Multilevel
 modeling has the potential to extract more information from the data
-and improve predictions compared to the existing modeling approach.
+and improve predictions compared to the existing approach.
 Improving predictions of tree size from tree age will improve our
 ability to predict the important ecosystem services these trees
 provide urban dwellers.
@@ -166,7 +166,7 @@ Stan is a probabilistic programming language for bayesian inference
 cite:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
 Hamiltonian Monte Carlo sampling, to effectively draw samples from the
 specified log posterior density.  Here, we access Stan via the R
-package brms cite:buerkner_2017. brms allows the user to specify the
+package =brms= cite:buerkner_2017. =brms= allows the user to specify the
 likelihood and priors in syntax similar to the R package lme4 commonly
 used for frequentist? multilevel (mixed effects) models.  This makes
 harnessing the power of Stan much simpler and concise because it
@@ -59798,12 +59798,12 @@ sampled in places like Louisiana and eastern Texas.
 The mean asymptote for diameter growth of common urban species (\beta_1)
 is about 150 cm (95% CI: 131 - 171).  This varies considerably by
 genus and at times in unrealistic ways due to data limitations.  For
-example, the estimated mean asympototic DBH for Prunus (cherry), a
+example, the estimated mean asymptotic DBH for Prunus (cherry), a
 small tree is 194 cm, while for Robinina psuedoacacia, a larger tree,
 it is 107 cm.  Prunus has such a large estimated asymptote because
 there are several trees younger than 30 with a DBH greater than 80 cm,
 but the oldest tree sampled was just 30 years old.  Extrapolation and
-the interpretion of \beta_1 as the asympotic dbh should be used with
+the interpretion of \beta_1 as the asymptotic dbh should be used with
 caution depending on the presence of observations at large ages.  Half
 of the species observed have an oldest tree of less than 55 years.  To
 make better predictions of diameter at large ages, older trees are
@@ -59823,11 +59823,15 @@ There are also a number of modeling extensions that could improve
 either predictive performance or quantification of uncertainty.
 Additional covariates at the level of individuals (e.g. location
 relative to street, sidewalk, and utilities) and at the level of a
-city or species could improve prediction.  Age is actually measured
-with highly uncertainty.  The bayesian approach allows the modeling of
-age as a random variable
+city or species could improve prediction.  The age of trees in the
+dataset is actually highly uncertain.  The bayesian approach allows
+the modeling of age as a random variable and including age as a part
+of the posterior could give a more honest quantification of the
+uncertainty in tree diameter growth.  Other dimensions of trees, such
+as height and crown width could also be included in a multivariate
+model.
 
-
+** COMMENT comments
 
 We have
 modeling extensions
@@ -59850,7 +59854,6 @@ had the best in-sample fit.  We think weibull would have
 the best out of sample fit.
 
 
-** COMMENT comments
 age
 #+begin_src R :exports none
 d %>% group_by(Species) %>% summarize(maxAGE = max(AGE)) %>% pull(maxAGE) %>% summary()
@@ -59914,6 +59917,10 @@ which are usually for a particular speices in a particular region.
  Unlike many past studies we do
 not have repeat measures on individual trees, but it would be
 straightforward to incorporate such data in the model.
+
+* Conclusion
+
+large geographic range
 
 * bibliography                                                       :ignore:
 bibliography:~/git/notes/references.bib
