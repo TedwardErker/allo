@@ -2416,11 +2416,11 @@ rate starts slow, reaches a maximum at a young age, and then gradually
 declines to nearly zero.  Diameter for trees much always increase
 however slightly because the growth of new wood is essential for
 proper function.  This is different than tree height which often
-reaches its asympotote.  Instead the asympote in our curve could be
+reaches its asymptote.  Instead the asymptote in our curve could be
 considered a pragmatic way to constrain diameter growth, or a
-practical asympote.  While trees could theoretically continue to
+practical asymptote.  While trees could theoretically continue to
 increase in diameter indefinitely, they don't in reality.  The
-asympote represents this practical maximum diameter.  An additional
+asymptote represents this practical maximum diameter.  An additional
 feature to the data is that age is time since transplanting.  This
 means trees can have substantial diameter at age 0.
 
@@ -2662,7 +2662,7 @@ I'll set the variation to about half of what I set it for \beta_1.
 The coefficients for climate variables on \beta_1
 gdd are in thosands.  range in data is about 6000 gdd, or 6 thousands
 gdd.  I expect the effects of gdd, precip, and their interaction to be
-positive.  I expect the increase in asympote across this range to be
+positive.  I expect the increase in asymptote across this range to be
 not too big, maybe as little as .1m and as much as 1m.  So the
 coeffcient might be 0.0167 to 0.167.  The interaction term will also
 be positive, but smaller.
@@ -59590,7 +59590,7 @@ HMC sampling is improved.
 |       |                                              | b1 \sim (1 \vert Genus / Species)                           |
 |       |                                              | b2 \sim (1 \vert Genus / Species)                           |
 |       |                                              | b3 \sim (1 \vert Genus / Species)                           |
-|     4 | Asympotote (\beta_1) varies by climate            | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|     4 | Asymptote (\beta_1) varies by climate             | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       |                                              | b0 \sim 1                                               |
 |       |                                              | b1 \sim gdd * precip                                    |
 |       |                                              | b2 \sim 1                                               |
@@ -59601,7 +59601,7 @@ HMC sampling is improved.
 |       |                                              | b2 \sim 1                                               |
 |       |                                              | b3 \sim gdd * precip                                    |
 |     6 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       | (but asympote does not vary by city).        | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       | (but asymptote does not vary by city).       | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
@@ -59795,7 +59795,7 @@ city sampled from a very warm and wet climate, it's large influence in
 the model and the high uncertainty suggests more cities need to be
 sampled in places like Louisiana and eastern Texas.
 
-The mean asympotote for diameter growth of common urban species (\beta_1)
+The mean asymptote for diameter growth of common urban species (\beta_1)
 is about 150 cm (95% CI: 131 - 171).  This varies considerably by
 genus and at times in unrealistic ways due to data limitations.  For
 example, the estimated mean asympototic DBH for Prunus (cherry), a
@@ -59824,7 +59824,8 @@ either predictive performance or quantification of uncertainty.
 Additional covariates at the level of individuals (e.g. location
 relative to street, sidewalk, and utilities) and at the level of a
 city or species could improve prediction.  Age is actually measured
-with highly uncertain
+with highly uncertainty.  The bayesian approach allows the modeling of
+age as a random variable
 
 
 
