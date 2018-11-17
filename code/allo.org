@@ -59820,7 +59820,11 @@ repeated measures on individual tree would improve predictions for
 trees that are already planted (not just those at age 0).
 
 There are also a number of modeling extensions that could improve
-either predictive performance or estimates of uncertainty.
+either predictive performance or quantification of uncertainty.
+Additional covariates at the level of individuals (e.g. location
+relative to street, sidewalk, and utilities) and at the level of a
+city or species could improve prediction.  Age is actually measured
+with highly uncertain
 
 
 
