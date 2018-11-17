@@ -166,16 +166,16 @@ Stan is a probabilistic programming language for bayesian inference
 cite:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
 Hamiltonian Monte Carlo sampling, to effectively draw samples from the
 specified log posterior density.  Here, we access Stan via the R
-package =brms= cite:buerkner_2017. =brms= allows the user to specify the
-likelihood and priors in syntax similar to the R package lme4 commonly
-used for frequentist? multilevel (mixed effects) models.  This makes
-harnessing the power of Stan much simpler and concise because it
-doesn't require the user to know how to write efficient Stan code and
-can convert a few lines of R code into many lines of Stan. brms is not
-as flexible as stan, but still can be used to fit many types of models
+package =brms= cite:buerkner_2017. =brms= allows the user to specify
+the likelihood and priors in syntax similar to the R package lme4
+commonly used for frequentist multilevel (mixed effects) models.  This
+makes using Stan much simpler and concise because it doesn't require
+the user to know how to write efficient Stan code and can convert a
+few lines of R code into many lines of Stan.  =brms= is not as
+flexible as Stan, but still can be used to fit many types of models
 including nonlinear multilevel regression models, such as ours here.
-Some of the key advantages of fitting a model in Stan via brms include
-relatively simple syntax and efficient posterior sampling for
+Some of the key advantages of fitting a model in Stan via =brms=
+include relatively simple syntax and efficient posterior sampling for
 multilevel non-linear models.  The bayesian approach gives better
 estimates of parameter uncertainty and provides a formal way to
 include prior information.
@@ -187,25 +187,26 @@ weights and then select the model with the lowest Akaike Information
 Criterion (AIC).  This approach has several limitations, many
 highlighted in the report.  First, while the model form selected
 provided the lowest AIC, many of the estimates are not biologically
-realistic (for example they begin to increase sharply at old ages,
-cubic fits, or decrease at old ages, quadratic fits).  Therefore, the
-researchers discouraged applying the models beyond the range of the
-data, or sometimes even within the range of data if the estimates were
-unrealistic.  These unrealistic estimates and the inability to
-extrapolate severely limits managers' ability to predict growth over
-meaningful time scales (a century rather than a few decades).  A
-second limitations is that some models predict negative diameters, an
-impossibility.  Third, models are only provided for the cities and the
-species sampled.  If a manager wants to predict the diameter growth of
-a tree species in an unsampled city, the researchers recommend using
-the model from the reference city in the same climate region.  However
-many of the reference cities are on the border of climate regions and
-there is known large variability in growth within regions (see figure
-XX in utd report which is from McPherson.... comparing Cheyenne to Ft
-Collins).  Furthermore, if a manager wants to predict growth for an
-unsampled species or a species that was sampled in a different city it
-is not obvious which equation/model to use and the additional
-uncertainty that this introduces is not quantified.
+realistic (for example, estimates of diameter may begin to increase
+sharply at old ages, cubic fits, or they may decrease at old ages,
+quadratic fits).  Therefore, the researchers cautioned against applying the
+models beyond the range of the data, or sometimes even within the
+range of data if the estimates were unrealistic.  These unrealistic
+estimates and the inability to extrapolate severely limits managers'
+ability to predict growth over meaningful time scales (a century
+rather than a few decades).  A second limitations is that some models
+predict negative diameters, an impossibility.  Third, models are only
+provided for the cities and the species sampled.  If a manager wants
+to predict the diameter growth of a tree species in an unsampled city,
+the researchers recommend using the model from the reference city in
+the same climate region.  However many of the reference cities are on
+the border of climate regions and there is known large variability in
+growth within regions (see figure XX in utd report which is from
+McPherson.... comparing Cheyenne to Ft Collins).  Furthermore, if a
+manager wants to predict growth for an unsampled species or a species
+that was sampled in a different city it is not obvious which
+equation/model to use and the additional uncertainty that this
+introduces is not quantified.
 
 Our approach addresses the above limitations.  First, we use a weibull
 curve, commonly used in foresty growth equations and biologically
