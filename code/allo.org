@@ -59812,7 +59812,15 @@ needed.  Another alternative could be to create constraints on maximum
 DBH based on the largest individuals (called champion trees) of the
 species found anywhere (not just urban).
 
-Extimates of uncertainty reveal We have
+Extimates of uncertainty reveal where new observations are most
+needed.  Older trees, new cities in warm and wet climates, less common
+species, and repeated measures on individual tree would all improve
+predictions, each
+
+To improve predictions at greater ages, older trees are
+needed.
+
+We have
 modeling extensions
 phylo distance
 uncertainty in age
@@ -59824,6 +59832,7 @@ more cities
 less common species
 older trees
 management practices
+within individuals
 
 
 cite:peper_2001a - tested modified weibull following
