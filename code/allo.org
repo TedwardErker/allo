@@ -274,12 +274,13 @@ relaxed.  The ability to incorporate prior information from experts or
 past studies on parameters is another strength of the bayesian
 approach.
 
-
-A paragraph on the impact of these equations for managing forests to
-predict/forecast ecosystem services.
-
-
-
+From the perspective of urban ecosystem services and disservices, the
+size of trees is directly related to their potential to reduce noise,
+air pollution, and storm water runoff.  It is also related to their
+potential to interfer with infrastructure such as roads and
+powerlines.  Thus models to predict urban tree growth are useful to
+managers and scientists interested in better quanitifying urban tree
+impacts on human wellbeing.
 
 ** COMMENT other thoughts
 Age is an uncertain
@@ -555,7 +556,7 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 * Methods
 ** Data
 
-The urban tree database (UTD) consists of measurements on 14487 trees of 170
+The urban tree database (UTD, cite:utd_2016) consists of measurements on 14487 trees of 170
 species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
 data (161 species, 17 cities, 309 species by city combinations [[fig:City_Species_Ntrees]]).
@@ -567,8 +568,8 @@ data (161 species, 17 cities, 309 species by city combinations [[fig:City_Specie
 
 Some species were measured in multiple cities, but not most.  The number of
 trees of each city by species combination sampled ranged from 1
-(both Liquidambar styraciflu and Prunus serrulata in Queens, NY) to 79
-(Quercus laurifolia in Charleston, SC).  The median number of trees in
+(both /Liquidambar styraciflua/ and /Prunus serrulata/ in Queens, NY) to 79
+(/Quercus laurifolia/ in Charleston, SC).  The median number of trees in
 each species-city combination was 37.
 
 Age is defined in this dataset as time since planting, since this is
