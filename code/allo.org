@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -59559,7 +59559,6 @@ pd <- cbind(nd, pred.nd)
 [[file:../figs/robiniapsuedoacacia.png]]
 
 
-
 * Results
 ** Model Comparisons
 
@@ -59813,12 +59812,17 @@ DBH based on the largest individuals (called champion trees) of the
 species found anywhere (not just urban).
 
 Extimates of uncertainty reveal where new observations are most
-needed.  Older trees, new cities in warm and wet climates, less common
-species, and repeated measures on individual tree would all improve
-predictions, each
+needed.  Sampling older trees would improve extrapolation to century
+scales, new cities in warm and wet climates will improve extrapolation
+to more regions across the country, sampling less common species will
+improve estimates of how all (not just common) urban trees grow, and
+repeated measures on individual tree would improve predictions for
+trees that are already planted (not just those at age 0).
 
-To improve predictions at greater ages, older trees are
-needed.
+There are also a number of modeling extensions that could improve
+either predictive performance or estimates of uncertainty.
+
+
 
 We have
 modeling extensions
@@ -59841,6 +59845,7 @@ had the best in-sample fit.  We think weibull would have
 the best out of sample fit.
 
 
+** COMMENT comments
 age
 #+begin_src R :exports none
 d %>% group_by(Species) %>% summarize(maxAGE = max(AGE)) %>% pull(maxAGE) %>% summary()
