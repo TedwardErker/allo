@@ -2412,17 +2412,17 @@ exclude <- c("WARO")
 We sought a model of tree growth that would adequately represent the
 known biological dynamics of tree growth, namely that diameter growth
 rate starts slow, reaches a maximum at a young age, and then gradually
-declines to nearly zero.  Diameter for trees must always increase,
-however slightly, because the growth of new wood is essential for
-proper function.  This is different than tree height which often
-reaches a true asymptote.  Since there is no true asymptote for tree
-diameter, the asymptote in our function could be considered a
-pragmatic way to constrain diameter growth, or a practical asymptote.
-While trees could theoretically continue to increase in diameter
-indefinitely, they do not in reality.  The asymptote represents this
-practical maximum diameter.  An additional feature to the data is that
-age is time since transplanting.  This means trees can have
-substantial diameter at age 0.
+declines to nearly zero.  Unlike tree height, which often reaches a
+true asymptote, diameter of trees must always increase, however
+slightly, because the growth of new wood is essential for proper
+function.  Since there is no true asymptote for tree diameter,
+the asymptote in our function could be considered a pragmatic way to
+constrain diameter growth, or a practical asymptote.  While trees
+could theoretically continue to increase in diameter indefinitely,
+they do not in reality.  The asymptote represents this practical
+maximum diameter.  An additional feature to the data is that age is
+time since transplanting.  This means trees can have substantial
+diameter at age 0.
 
 The type of curve that meets these criteria would be an asymmetric
 sigmoidal curve with an intercept.  A modified weibull is such a curve
@@ -2432,7 +2432,7 @@ the Chapman-Richards that meet these criteria and could be used.
 
 Another characteristic of tree growth curves is heterosckedasticity,
 namely that as the age of a tree increases, so does the variability
-around the mean.  Often past modellers controlled this using log - log
+around the mean.  Often past modelers controlled this using log - log
 transformations cite:troxel_e_2013, but we wanted to keep units in
 their original scale.  We tested fitting models where the variance was
 a linear function or a smoothed spline function of age.  However, this
