@@ -2415,13 +2415,14 @@ rate starts slow, reaches a maximum at a young age, and then gradually
 declines to nearly zero.  Diameter for trees must always increase,
 however slightly, because the growth of new wood is essential for
 proper function.  This is different than tree height which often
-reaches a true asymptote.  Instead the asymptote in our function could be
-considered a pragmatic way to constrain diameter growth, or a
-practical asymptote.  While trees could theoretically continue to
-increase in diameter indefinitely, they don't in reality.  The
-asymptote represents this practical maximum diameter.  An additional
-feature to the data is that age is time since transplanting.  This
-means trees can have substantial diameter at age 0.
+reaches a true asymptote.  Since there is no true asymptote for tree
+diameter, the asymptote in our function could be considered a
+pragmatic way to constrain diameter growth, or a practical asymptote.
+While trees could theoretically continue to increase in diameter
+indefinitely, they do not in reality.  The asymptote represents this
+practical maximum diameter.  An additional feature to the data is that
+age is time since transplanting.  This means trees can have
+substantial diameter at age 0.
 
 The type of curve that meets these criteria would be an asymmetric
 sigmoidal curve with an intercept.  A modified weibull is such a curve
