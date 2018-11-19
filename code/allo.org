@@ -2317,9 +2317,8 @@ city, by genus and species, and by climate.  Using approximate
 leave-one-out cross validation we selected the model with the highest
 estimated log posterior density cite:vehtari_e_2017.  The following
 section details this model.  The source code for this paper and
-details for all other models tested is available at
-, and   are in
-supplementary materials.
+details for all other models tested is available on [[https://github.com/TedwardErker/allo][github]].
+
 **** COMMENT comment
 and, especially in the urban setting, they
 often die before the get close
@@ -2332,7 +2331,7 @@ they do not in reality.  The asymptote represents this practical
 maximum diameter.
 *** COMMENT Bayesian Mulitlevel Modeling
 a bit of background?
-*** likelihood
+*** Likelihood
 \[
 y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
@@ -2562,7 +2561,6 @@ gdd:precip
 \[
 \tau_3 \sim Normal(.005, .005)
 \]
-
 
 *** COMMENT Modeling Notes
 **** COMMENT What should the structure of the equations be?
@@ -59445,7 +59443,6 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/robiniapsuedoacacia.png]]
-
 
 
 * Results
