@@ -59749,13 +59749,12 @@ loo::compare(res[[1]][[6]], res[[1]][[7]])
 : elpd_diff        se
 :    -131.0      21.4
 
-Table [[tab:model_comparison]] shows the
-The standard error for the elpd difference of 131 between model 6 and
-model 7 is 21.4.  Therefore, there is strong evidence that model 6 has
-higher out of sample predictive accuracy than model 7.
-
-
-
+Table [[tab:model_comparison]] shows the models ranked by the approximate
+leave-one-out expected log pointwise predictive density
+cite:vehtari_e_2017. Lower values indicate better model predictive
+performance. The standard error for the elpd difference of 131 between
+model 6 and model 7 is 21.4, giving strong evidence that model 6 is
+superior to the other models.
 
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
