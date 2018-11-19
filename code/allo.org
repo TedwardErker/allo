@@ -59615,8 +59615,21 @@ FL and one in Boise, ID.
 Figure
 [[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
 compares our model to existing UTD equations for /Acer platanoides/
-(Comparisons for all species and cities are in supplementary
-figures).
+(Comparisons for all species and cities are in supplementary figures).
+In the case of Fort Collins, UTD and our equations have high
+agreement.  Similarly in Minneapolis, however we are able to provide
+more reasonable extrapolation.  In the case of Boise, UTD predicts
+declining DBH at large ages, and in Longview it predicts rapidly
+increasing DBH at large ages.  Our model does not fit the sample of
+data from those individual cities as well, but it shares information
+across all cities so that it will likely make a better out of sample
+prediction and extrapolates more reasonably.  In the case of Queens,
+there were only two observations and so the UTD growth equation was a
+straight line (there may be a missing point used to fit the line which
+is not in the data and would explain why the line doesn't connect the
+two observations).  By borrowing information across all cities, we are
+able to make a more reasonable prediction even with only two
+observations in that city.
 #+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
@@ -59626,7 +59639,8 @@ figures).
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 ** Uncertainty increases when predicting out of sample cities, genera, and species
-
+It is also possible to make predictions to unsampled cities and
+species while accounting for the increased uncertainty.
 #+name: fig:predicting_ubobserved_groups
 [[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** Model Comparisons
