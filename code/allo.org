@@ -59575,26 +59575,25 @@ pd <- cbind(nd, pred.nd)
 
 * Results
 ** Parameter Estimates
-Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
-
+Posterior distributions with 80% interval and median for parameters.
 #+name: fig:main_effects_posterior
-[[file:../figs/posterior_distributions_model_mainparameters.png]]
+[[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
 #+name: fig:climate_effects_posterior
-[[file:../figs/posterior_distributions_model_climate_effects.png]]
+[[file:../figs/posterior_distributions_model_FullData_climate_effects.png]]
 #+name: fig:sd_beta0_posterior
-[[file:../figs/posterior_distributions_model_sd_beta0.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta0.png]]
 
 #+name: fig:sd_beta1_posterior
-[[file:../figs/posterior_distributions_model_sd_beta1.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta1.png]]
 
 #+name: fig:sd_beta2_posterior
-[[file:../figs/posterior_distributions_model_sd_beta2.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta2.png]]
 
 #+name: fig:sd_beta3_posterior
-[[file:../figs/posterior_distributions_model_sd_beta3.png]]
+[[file:../figs/posterior_distributions_model_FullData_sd_beta3.png]]
 
 #+name: fig:shape_posterior
-[[file:../figs/posterior_distributions_model_shape.png]]
+[[file:../figs/posterior_distributions_model_FullData_shape.png]]
 
 ** Climate Effects on Growth Rate
 There is a positive effect of growing degree days (gdd) and annual
@@ -59617,8 +59616,6 @@ FL and one in Boise, ID.
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
-
-
 
 *** COMMENT all comparisons for model
 #+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
