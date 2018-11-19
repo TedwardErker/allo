@@ -144,20 +144,20 @@ goal is to estimate regional and national biomass (Zianis and
 Mancuccini, 2004)."
 
 * Introduction
-
-Multilevel models have been used for decades in tree growth equations
-(Lappi and Bailey 1988).  Multilevel modeling is an attractive approach because it
-provides a coherent framework to account for the many levels of
-observation or of groupings in data and to pool information across
-groups.  This paper has two main contributions.  First, we demonstrate
-the use of Stan via the "brms" package in R to fit bayesian nonlinear
-multilevel models to predict tree diameter growth from age
-cite:carpenter_e_2017,buerkner_2017.  Second, we apply the method to
-the Urban Tree Database cite:utd_2016,mcpherson_e_2016.  This dataset
-is the result an over a decade long effort to collect age and size
-data on thousands of trees in 17 cities across the US.  Multilevel
-modeling has the potential to extract more information from the data
-and improve predictions compared to the existing approach.
+Modeling the growth of trees has been important to estimate timber
+production and other ecosystem services of forests for decades.
+Multilevel modeling is an attractive approach because it provides a
+coherent framework to account for the many levels of observation or of
+groupings in data and to pool information across groups
+cite:lappi_bailey_1988.  This paper has two main contributions.
+First, we demonstrate the use of Stan via the =brms= package in R to
+fit bayesian nonlinear multilevel models to predict tree diameter
+growth from age cite:carpenter_e_2017,buerkner_2017.  Second, we apply
+the method to the Urban Tree Database cite:utd_2016,mcpherson_e_2016.
+This dataset is the result an over a decade long effort to collect age
+and size data on thousands of trees in 17 cities across the US.
+Multilevel modeling has the potential to extract more information from
+the data and improve predictions compared to the existing approach.
 Improving predictions of tree size from tree age will improve our
 ability to predict the important ecosystem services these trees
 provide urban dwellers.
@@ -169,45 +169,46 @@ specified log posterior density.  Here, we access Stan via the R
 package =brms= cite:buerkner_2017. =brms= allows the user to specify
 the likelihood and priors in syntax similar to the R package lme4
 commonly used for frequentist multilevel (mixed effects) models.  This
-makes using Stan much simpler and concise because it doesn't require
-the user to know how to write efficient Stan code and can convert a
-few lines of R code into many lines of Stan.  =brms= is not as
-flexible as Stan, but still can be used to fit many types of models
-including nonlinear multilevel regression models, such as ours here.
-Some of the key advantages of fitting a model in Stan via =brms=
-include relatively simple syntax and efficient posterior sampling for
-multilevel non-linear models.  The bayesian approach gives better
-estimates of parameter uncertainty and provides a formal way to
-include prior information.
+makes using Stan much simpler and concise because it frees the user
+from the need to optimize Stan code (=brms= is already very efficient)
+and can convert a few lines of R code into many lines of Stan.  =brms=
+is not as flexible as Stan, but still can be used to fit many types of
+models including nonlinear multilevel regression models, such as ours
+here.  Some of the key advantages of fitting a model in Stan via
+=brms= include relatively simple syntax and efficient posterior
+sampling for multilevel non-linear models.  The bayesian approach
+gives better estimates of parameter uncertainty and provides a formal
+way to include prior information.
 
 The existing approach to modeling the diameter growth of trees in the
 urban tree database (UTD) was to fit a separate model for each tree
-species in each city and test several model forms with different
-weights and then select the model with the lowest Akaike Information
-Criterion (AIC).  This approach has several limitations, many
-highlighted in the report.  First, while the model form selected
-provided the lowest AIC, many of the estimates are not biologically
-realistic (for example, estimates of diameter may begin to increase
-sharply at old ages, cubic fits, or they may decrease at old ages,
-quadratic fits).  Therefore, the researchers cautioned against
-applying the models beyond the range of the data, or sometimes even
-within the range of data if the estimates were unrealistic.  These
-unrealistic estimates and the inability to extrapolate severely limits
-managers' ability to predict growth over meaningful time scales (a
-century rather than a few decades).  A second limitations is that some
-models predict negative diameters, an impossibility.  Third, models
-are only provided for the cities and the species sampled.  If a
-manager wants to predict the diameter growth of a tree species in an
-unsampled city, the researchers recommend using the model from the
-reference city in the same climate region.  However, many of the
-reference cities are on the border of climate regions and as noted in
-the UTC report there is known large variability in growth within
-regions (see figure 5 in the UTD report which is from McPherson and
-Peper 2012, comparing Cheyenne to Ft Collins, also provided in
-supplementary figures).  Furthermore, if a manager wants to predict
-growth for an unsampled species or a species that was sampled in a
-different city it is not obvious which equation to use and the
-additional uncertainty that this introduces is not quantified.
+species in each city and test several model forms (various polynomials
+and log transformations) with different weights and then select the
+model with the lowest Akaike Information Criterion (AIC).  This
+approach has several limitations, many highlighted in the report.
+First, while the model form selected provided the lowest AIC, many of
+the estimates are not biologically realistic (for example, estimates
+of diameter may begin to increase sharply at old ages, cubic fits, or
+they may decrease at old ages, quadratic fits).  Therefore, the
+researchers cautioned against applying the models beyond the range of
+the data, or sometimes even within the range of data if the estimates
+were unrealistic.  These unrealistic estimates and the inability to
+extrapolate severely limits managers' ability to predict growth over
+meaningful time scales (a century rather than a few decades).  A
+second limitations is that some models predict negative diameters, an
+impossibility.  Third, models are only provided for the cities and the
+species sampled.  If a manager wants to predict the diameter growth of
+a tree species in an unsampled city, the researchers recommend using
+the model from the reference city in the same climate region.
+However, many of the reference cities are on the border of climate
+regions and as noted in the UTC report there is known large
+variability in growth within regions (see figure 5 in the UTD report
+which is from McPherson and Peper 2012, comparing Cheyenne to Ft.
+Collins. Figure is reproduced in supplementary figures).  Furthermore,
+if a manager wants to predict growth for an unsampled species or a
+species that was sampled in a different city it is not obvious which
+equation to use and the additional uncertainty that this introduces is
+not quantified.
 
 Our approach addresses the above limitations.  First, we use a weibull
 curve, commonly used in foresty growth equations for its biological
@@ -231,18 +232,19 @@ which is not representative of urban trees generally.  Following
 cite:frelich_1992, in an early version of the urban tree database,
 cite:mcpherson_simpson_99 fit the same curve to a small number of
 observations and adjusted parameters for different locations based on
-the number of frost free days based on expert opinion.
-cite:peper_2001a and cite:peper_2001b compared this Chapman-Richards
-curve to logarithm regression and selected the logarithm regression
-based on a higher R^2.  Subsequent urban tree growth equations did not
-use sigmoidal curves citep:mcpherson_e_2016.
+the number of frost free days.  The amount the parameters were
+adjusted was based on expert opinion, not data.  cite:peper_2001a and
+cite:peper_2001b compared this Chapman-Richards curve to logarithm
+regression and selected the logarithm regression based on a higher R^2.
+Subsequent UTD growth equations did not use sigmoidal curves
+citep:mcpherson_e_2016.
 
 Multilevel modeling was first introduced to forestry by
 cite:lappi_bailey_1988 and has since been widely used to account for
 multiple levels of variability (observations correlated within groups)
 in allometric and growth equations. Indeed, one of the test datasets
 in R to demonstrate nonlinear multilevel modeling are observations of
-orange tree growth citep:r_lang [[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange]]. cite:hall_bailey_2001 give a
+ [[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange tree growth]] citep:r_lang. cite:hall_bailey_2001 give a
 general overview of the frequentist multilevel approach and an example
 of loblolly pine height growth in the Southeastern US.  Levels in
 their model are plot and tree nested within plot, and they use tree
