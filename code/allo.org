@@ -59664,8 +59664,8 @@ scaling was omitted from table [[tab:model_descriptions]] for clarity.
 
 
 #+name: tab:model_descriptions
-#+latex: \resizebox*{!}{\textheight}{%
-#+attr_latex: :align lll :caption \caption{model numbers, short descriptions, and brms formula syntax}
+#+caption: Model numbers, short descriptions, and brms formula syntax
+#+attr_latex: :align l{.5cm}ll :font \small
 | Model | Description                                  | brms formula syntax                                  |
 |-------+----------------------------------------------+------------------------------------------------------|
 |     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
@@ -59673,37 +59673,42 @@ scaling was omitted from table [[tab:model_descriptions]] for clarity.
 |       |                                              | b1 \sim 1                                               |
 |       |                                              | b2 \sim 1                                               |
 |       |                                              | b3 \sim 1                                               |
+|-------+----------------------------------------------+------------------------------------------------------|
 |     2 | Parameters vary by city                      | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       |                                              | b0 \sim (1 \vert City)                                      |
 |       |                                              | b1 \sim (1 \vert City)                                      |
 |       |                                              | b2 \sim (1 \vert City)                                      |
 |       |                                              | b3 \sim (1 \vert City)                                      |
+|-------+----------------------------------------------+------------------------------------------------------|
 |     3 | Parameters vary by genus and species         | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       | Species is nested in genus                   | b0 \sim (1 \vert Genus / Species)                           |
 |       |                                              | b1 \sim (1 \vert Genus / Species)                           |
 |       |                                              | b2 \sim (1 \vert Genus / Species)                           |
 |       |                                              | b3 \sim (1 \vert Genus / Species)                           |
+|-------+----------------------------------------------+------------------------------------------------------|
 |     4 | Asymptote (\beta_1) varies by climate             | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       |                                              | b0 \sim 1                                               |
 |       |                                              | b1 \sim gdd * precip                                    |
 |       |                                              | b2 \sim 1                                               |
 |       |                                              | b3 \sim 1                                               |
+|-------+----------------------------------------------+------------------------------------------------------|
 |     5 | Growth rate (\beta_3) varies by climate           | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       |                                              | b0 \sim 1                                               |
 |       |                                              | b1 \sim 1                                               |
 |       |                                              | b2 \sim 1                                               |
 |       |                                              | b3 \sim gdd * precip                                    |
+|-------+----------------------------------------------+------------------------------------------------------|
 |     6 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       | (but asymptote does not vary by city).       | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
+|-------+----------------------------------------------+------------------------------------------------------|
 |     7 | Parameters vary by city, genus, and species. | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       | Growth rate varies by climate.               | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
-#+latex: }
 
 
 #+begin_src R :exports none :eval no :colnames yes :results org
