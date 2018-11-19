@@ -59641,18 +59641,25 @@ observations in that city.
 ** Uncertainty increases when predicting out of sample cities, genera, and species
 It is also possible to make predictions to unsampled cities and
 species while accounting for the increased uncertainty.  Figure
-[[fig:predicting_ubobserved_groups]] shows
+[[fig:predicting_ubobserved_groups]] shows how the predictive interval for
+DBH increases for an unknown species of /Acer/ (second column) and
+increases even more for an unknown genus and unknown species (third
+column).  For an unsampled city, such as St. Louis, MO (second row),
+uncertainty is higher than for a sampled city, Sacramento, CA (first
+row).  The large 95% predictive intervals for a tree of unknown genus
+and species shows how great the genetic variablility is across trees.
+
 #+name: fig:predicting_ubobserved_groups
+#+caption: Uncertainty in mean diameter growth increases for unsampled genera, species, and cities.  DBH estimate shown in black, 50% predictive interval in dark gray and 95% predictive interval in gray.
 [[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** Model Comparisons
-
-Short descriptions of the models tested and the brms sytax are in
-table [[tab:model_descriptions]]
-
-Note, I removed the scaling of the parameters (multiplying and
-dividing by 100) in the formula for clarity.  In the code they are
-scaled so that the parameters are on the same order of magnitude and
-HMC sampling is improved.
+Our approach increased model complexity at each step, first fitting a
+single weibull curve to all trees, and then allowing all parameters to
+vary by city, genus, and climate.  Table [[tab:model_descriptions]]
+provides short descriptions of the models tested and the brms sytax
+used.  Note, in the code used parameters were rescaled so that all
+parameters would be on roughly the same order of magnitude.  This
+scaling was omitted from table [[tab:model_descriptions]] for clarity.
 
 #+name: tab:model_descriptions
 #+caption: model numbers, short descriptions, and brms formula syntax
@@ -59742,7 +59749,7 @@ loo::compare(res[[1]][[6]], res[[1]][[7]])
 : elpd_diff        se
 :    -131.0      21.4
 
-
+Table [[tab:model_comparison]] shows the
 The standard error for the elpd difference of 131 between model 6 and
 model 7 is 21.4.  Therefore, there is strong evidence that model 6 has
 higher out of sample predictive accuracy than model 7.
