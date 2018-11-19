@@ -59598,15 +59598,17 @@ There is a positive effect of growing degree days (gdd) and annual
 precipitation (precip) on tree diameter (dbh), and a postive
 interaction between the two.  Marginal effects of climate on posterior
 mean of DBH for a tree 25 years after planting are shown in
-[[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
-mean is in [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
+figure [[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
+mean is in figure [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
 estimated 40cm difference in dbh between an average tree in Orlando,
 FL and one in Boise, ID.
 
 #+name: fig:marginal_effects_climate_25AGE_mean_labels
+#+caption: Posterior median DBH at 25 years after planting.
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
 
 #+name: fig:marginal_effects_climate_25AGE_se_labels
+#+caption: Posterior standard error of DBH at 25 years after planting.
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
 
 ** Comparing to existing equations
@@ -59659,9 +59661,10 @@ used.  Note, in the code used parameters were rescaled so that all
 parameters would be on roughly the same order of magnitude.  This
 scaling was omitted from table [[tab:model_descriptions]] for clarity.
 
+
 #+name: tab:model_descriptions
 #+caption: model numbers, short descriptions, and brms formula syntax
-#+latex: \resizebox*{!}{\textheight}{%
+#+ATTR_LATEX: :environment longtable :align |l|l{10cm}|l|
 | Model | Description                                  | brms formula syntax                                  |
 |-------+----------------------------------------------+------------------------------------------------------|
 |     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
@@ -59699,7 +59702,7 @@ scaling was omitted from table [[tab:model_descriptions]] for clarity.
 |       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
-#+latex: }
+
 
 #+begin_src R :exports none :eval no :colnames yes :results org
 library(ascii)
@@ -59753,6 +59756,10 @@ cite:vehtari_e_2017. Lower values indicate better model predictive
 performance. The standard error for the elpd difference of 131 between
 model 6 and model 7 is 21.4, giving strong evidence that model 6 is
 superior to the other models.
+
+*** COMMENT old way to resize table
+##+latex: \resizebox*{!}{\textheight}{%
+##+latex: }
 
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
