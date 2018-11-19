@@ -59599,7 +59599,7 @@ Posterior distributions with 80% interval and median for parameters.
 There is a positive effect of growing degree days (gdd) and annual
 precipitation (precip) on tree diameter (dbh), and a postive
 interaction between the two.  Marginal effects of climate on posterior
-mean of DBH for a tree 25 years after planting in
+mean of DBH for a tree 25 years after planting are shown in
 [[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
 mean is in [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
 estimated 40cm difference in dbh between an average tree in Orlando,
@@ -59616,7 +59616,7 @@ Figure
 [[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
 compares our model to existing UTD equations for /Acer platanoides/
 (Comparisons for all species and cities are in supplementary
-figures).  i
+figures).
 #+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
@@ -59943,8 +59943,7 @@ bibliographystyle:apa
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
-
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_FullData.png]]
 
 ** fort collins versus cheyenne
 [[file:../figs/ftcollins_cheyenne_ash.png]]
