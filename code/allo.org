@@ -16,134 +16,6 @@
 #+latex_header: \usepackage{setspace} \doublespacing
 #+LATEX_CLASS_OPTIONS: [12pt]
 ---------------------
-* COMMENT Objective
-Concept: Application of bayesian multilevel modelling approach using
-Stan via the R package brms.
-Motivation: To create better allometric equations for urban trees.
-* COMMENT Caveat
-I am not an expert on this, but I think I have a contribution to
-make.  I'm using a dataset I did not work to collect and it may have
-idiosyncrasies that I may not understand.  I also don't fully understand
-the modelling approach used to create the equations, namely the
-weighting.
-
-* COMMENT Why needed
-Whoops.  They do have equations by tree type:
-Tree types: BDL = broadleaf deciduous large, BDM = broadleaf deciduous
-medium, BDS = broadleaf deciduous small, BEL = broadleaf evergreen
-large, BEM = broadleaf evergreen medium, BES = broadleaf evergreen
-small, CEL = conifer evergreen large, CEM = conifer evergreen medium,
-CES = conifer evergreen small, PEL = palm evergreen large, PEM = palm
-evergreen medium, PES= palm evergreen small.
-
-http://www.cpp.edu/~sagarver/GEO309/exercises/allometry/Predicting_Diameter_Height_Crown_Width_Leaf_Area_peper.pdf
-
-The urban tree allometry dataset is an incredibly valuable resource
-for making better predictions about tree growth in urban environments,
-and it is essential for accurate ecosystem service evaluation.
-However, there are a number of limitations with the current set of
-equations that multilevel modelling can address.
-
-Limitations:
-1) Limited number of species in each region.  There are only equations
-   for the ten most common urban tree species in each region.  If a
-   user wants an equation for a different species, they either need to
-   use an equation for that species from a different region, or select
-   the equation from the species they think is most similar.
-
-2) Hard boundaries of regions.  There are separate allometric
-   equations for 16 distinct climatic regions in the US.  However
-   climate varies continuously across space.  Users of the equations
-   have to pick which region they are closest to, or consider
-   averaging two equations, but the weighting could be difficult to
-   determine.  Climatic differences have been discretized/binned into
-   relatively few groups, when it could be more continuous.
-
-3) Some of the existing equations are based on smaller sample sizes
-   than reported.  For example, dbh as a function of age for...  only
-   has two observations and so the best fitting equation is a straight
-   line, but we know that isn't right.
-
-4) used the best fitting model of several forms based on AIC (i
-   think).  This could potentially lead to overfitting, and depending
-   on the model form selected, makes extrapolation very tenuous.
-
-Solution: Allow for information to be shared across species and across
-regions when fitting models.  Include climate variables as predictors
-in the model so that the allometric equations vary continuously across
-space.
-
-A multilevel model would allow for the partial pooling of information
-across species and across cities, so that in the cases where we have
-little or even no data, we can still make reasonable predictions.  If
-we want to make predictions about red maple in our city where we have
-no observations, a multilevel model would allow us to take the red
-maple equation from another city and adjust it to fit the climate of
-our city.
-
-Improvements:
-1) Climate based rather than regions based.  Continuous rather than
-   discrete, gradient rather than hard boundaries.
-2) Rather than set Apps min and Apps Max, we can relax these hard
-   boundaries, but include information about how uncertainty
-   increases.  Appsmin and Appsmax significantly truncates predictive
-   envelope.
-3) Can use an equation form that makes sense to extrapolate with (this
-   is probably more realistic and worth the decrease in equation form flexibility).
-4) Species can be nested within Genus, Genus within broader type
-   (conifer/broadleaf/palm etc).
-
-
-1) One equation for 10 species in each region.  What about species not
-   on the list?  What if I'm interested in the equation for red maple
-   in the southeast, but the only equation comes from the northeast
-   region?  How should I adjust the equation?
-2) What if my location is on the border of two regions?  How should I
-   average the equations from each region, espcially if they are of
-   two different forms (e.g. cubic and log-log)?
-   1) this could allow for easy integration of new cities too, because
-      right now equations for each region just come from 1 or 2 cities.
-
-
-1) Currently urban tree allometric equations are built separately for
-   each species and for each region.  So there is a separate equation
-   for red maple in the northeast and a separate equation for red
-   maple in the midwest. These are hard differences when such hard
-   divisions don't exist.  Better models for red maple could probably
-   be made if the different regions could be pooled to the extent that
-   their climates are similar.
-2)
-
-
-For practicioners who wish to use
-
-what was the metric used to select from models?  was it r^2?  they
-used AIC
-shouldn't we select the model form based on expert knowledge about
-universal tree growth patterns, rather than a small sample of
-observations?  We'd expect to occasionally find with small samples
-that a cubic relationship best fits the data.  But this relationship
-suffers from lack of basis in what we know about how trees grow and
-may give grossly inaccurate predictions if considered outside the
-range of the data.
-
-
-cite:Weiskittel_ForestGrowthAndYieldModeling
-note on pg 130: for biomass equations:
-"Zianis et al. (2005) found that more than two-thirds of the
-equations they examined were functions of just DBH, and more than 75%
-of the studies that reported a sample size had less than 50
-trees. The use of just DBH assumes that the relationship between DBH
-and height is static, which is often not the case, as noted above."
-
-"The application to other populations of simple model forms fitted to
-small datasets can produce large prediction errors (e.g. Wang et al.,
-2002a). In addition, development of universal (Pilli et al., 2006) and
-generalized (Muukkonen, 2007) static equations ignores significant
-species variability and complex relationships, particularly when the
-goal is to estimate regional and national biomass (Zianis and
-Mancuccini, 2004)."
-
 * Introduction
 Modeling the growth of trees has been important to estimate timber
 production and other ecosystem services of forests for decades.
@@ -2444,7 +2316,9 @@ weibull curve for all trees and then varying the curve parameters by
 city, by genus and species, and by climate.  Using approximate
 leave-one-out cross validation we selected the model with the highest
 estimated log posterior density cite:vehtari_e_2017.  The following
-section details this model, and other models tested are in
+section details this model.  The source code for this paper and
+details for all other models tested is available at
+, and   are in
 supplementary materials.
 **** COMMENT comment
 and, especially in the urban setting, they
@@ -59572,6 +59446,8 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/robiniapsuedoacacia.png]]
 
+
+
 * Results
 ** Parameter Estimates
 Posterior distributions with 80% interval and median for parameters.
@@ -59971,6 +59847,8 @@ not have repeat measures on individual trees, but it would be
 straightforward to incorporate such data in the model.
 
 * Conclusion
+
+We have demonstrated the
 
 large geographic range
 
