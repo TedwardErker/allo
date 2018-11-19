@@ -10,6 +10,7 @@
 #+LATEX_HEADER: \usepackage[margin=1in]{geometry}
 #+LATEX_HEADER: \usepackage{natbib}
 #+LATEX_HEADER: \usepackage{chemformula}
+#+latex_header: \usepackage{adjustbox}
 #+LaTeX_HEADER: \RequirePackage{lineno} \def\linenumberfont{\normalfont\small\tt}
 #+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black, citecolor=black, urlcolor=black}
 #+latex_header: \usepackage{setspace} \doublespacing
@@ -59660,11 +59661,12 @@ provides short descriptions of the models tested and the brms sytax
 used.  Note, in the code used parameters were rescaled so that all
 parameters would be on roughly the same order of magnitude.  This
 scaling was omitted from table [[tab:model_descriptions]] for clarity.
+##+begin_table
+##+end_table
 
 
 #+name: tab:model_descriptions
 #+caption: model numbers, short descriptions, and brms formula syntax
-#+ATTR_LATEX: :environment longtable :align |l|l{10cm}|l|
 | Model | Description                                  | brms formula syntax                                  |
 |-------+----------------------------------------------+------------------------------------------------------|
 |     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
@@ -59692,16 +59694,18 @@ scaling was omitted from table [[tab:model_descriptions]] for clarity.
 |       |                                              | b1 \sim 1                                               |
 |       |                                              | b2 \sim 1                                               |
 |       |                                              | b3 \sim gdd * precip                                    |
-|     6 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|     6 | Parameters vary by city, genus, species      | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       | (but asymptote does not vary by city).       | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
-|     7 | Parameters vary by city, genus, and species. | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|     7 | Parameters vary by city, genus, species.     | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
 |       | Growth rate varies by climate.               | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
+
+
 
 
 #+begin_src R :exports none :eval no :colnames yes :results org
@@ -59761,6 +59765,8 @@ superior to the other models.
 ##+latex: \resizebox*{!}{\textheight}{%
 ##+latex: }
 
+
+#+ATTR_LATEX: :environment longtable :align |l|l{10cm}|l|
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
 
