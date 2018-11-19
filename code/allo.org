@@ -59661,7 +59661,9 @@ provides short descriptions of the models tested and the brms sytax
 used.  Note, in the code used parameters were rescaled so that all
 parameters would be on roughly the same order of magnitude.  This
 scaling was omitted from table [[tab:model_descriptions]] for clarity.
-
+After fitting a complex model where all of the \beta's could vary by city,
+genus, and species, we sought a slightly simpler model and dropped the
+variation of the asymptote by city (model 6).
 
 #+name: tab:model_descriptions
 #+caption: Model numbers, short descriptions, and brms formula syntax
@@ -59804,7 +59806,7 @@ each genera, and a couple cities.  Then making spaghetti plot of these.
 Show how the equations vary continuously across geographic space,
 show the equations for a variety of unsampled cities.
 
-* Discussoins
+* Discussion
 
 Our selected model provides biologically realistic estimates of tree
 diameter growth for all species and cities observed, and also a way to
@@ -59815,7 +59817,7 @@ overfit to single species by cities combinations.  We found the growth
 curve parameters, \beta_0, \beta_2, \beta_3, vary more across cities, than they do
 across genera, and there is much less varation due to species within
 genera.  This suggests that management practices and other factors
-that vary across cities have a stronger impact on growth than the
+that vary across cities can have a stronger impact on growth than the
 genetic potential of trees.  This result is not surprising for \beta_0, the
 diameter of trees when they are transplanted, since it is almost
 completely determined by management decisions about when a tree is
@@ -59830,7 +59832,7 @@ growth, our results show that an information on city-level management
 practices would do more to improve predictive performance, especially
 in unsampled cities.
 
-There is growth rate (\beta_3) varies with climatic differences across
+There is evidence that growth rate (\beta_3) varies with climatic differences across
 cities, but there is still considerable uncertainty in these effects
 due largely to the relatively small sample size of cities and their
 uneven distribution in climate space.  25 years after planting, the
@@ -59838,25 +59840,28 @@ model predicts that trees in warm and wet climates (e.g. central
 florida) will be about 60 cm greater in DBH than trees grown in cool
 dry climates (e.g. Fort Collins).  While this is physically possible,
 the high uncertainty qualifies this estimate.  Orlando is the only
-city sampled from a very warm and wet climate, it's large influence in
+city sampled from a very warm and wet climate, its large influence in
 the model and the high uncertainty suggests more cities need to be
 sampled in places like Louisiana and eastern Texas.
 
-The mean asymptote for diameter growth of common urban species (\beta_1)
-is about 150 cm (95% CI: 131 - 171).  This varies considerably by
-genus and at times in unrealistic ways due to data limitations.  For
+The mean asymptote for diameter growth of common urban species (\beta_1) is
+about 150 cm (95% CI: 131 - 171).  This varies considerably by genus
+and at times in unrealistic ways due to data limitations.  For
 example, the estimated mean asymptotic DBH for Prunus (cherry), a
 small tree is 194 cm, while for Robinina psuedoacacia, a larger tree,
 it is 107 cm.  Prunus has such a large estimated asymptote because
 there are several trees younger than 30 with a DBH greater than 80 cm,
 but the oldest tree sampled was just 30 years old.  Extrapolation and
-the interpretion of \beta_1 as the asymptotic dbh should be used with
+the interpretion of \beta_1 as the asymptotic DBH should be used with
 caution depending on the presence of observations at large ages.  Half
-of the species observed have an oldest tree of less than 55 years.  To
-make better predictions of diameter at large ages, older trees are
-needed.  Another alternative could be to create constraints on maximum
-DBH based on the largest individuals (called champion trees) of the
-species found anywhere (not just urban).
+of the species observed have an oldest tree of less than 55 years.
+While our method improves upon existing methods, extrapolation to ages
+great than those sampled should be done with caution.  To make better
+predictions of diameter at large ages, older and larger trees are
+needed.  Since finding large old trees in urban environments would
+require more challenging work, one alternative could be to create
+constraints on maximum DBH based on the largest individuals (called
+champion trees) of the species found anywhere (not just in urban areas).
 
 Extimates of uncertainty reveal where new observations are most
 needed.  Sampling older trees would improve extrapolation to century
@@ -59987,4 +59992,5 @@ bibliographystyle:apa
 - fitting multilevel models in the frequentist way (lme4) seems quite
   complex and is much over my head.  Talk to Jun about this concern.
 - why model correlations of parameters within groups?
+
 
