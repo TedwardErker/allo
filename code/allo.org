@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Allometric equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -2415,7 +2415,10 @@ rate starts slow, reaches a maximum at a young age, and then gradually
 declines to nearly zero.  Unlike tree height, which often reaches a
 true asymptote, diameter of trees must always increase, however
 slightly, because the growth of new wood is essential for proper
-function.  Since there is no true asymptote for tree diameter,
+function.  While there is no true asymptote for tree diameter, they
+often re
+is a practical one
+
 the asymptote in our function could be considered a pragmatic way to
 constrain diameter growth, or a practical asymptote.  While trees
 could theoretically continue to increase in diameter indefinitely,
