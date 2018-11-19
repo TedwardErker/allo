@@ -1,7 +1,7 @@
 #+TITLE: Multilevel Urban Tree Growth equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -146,7 +146,7 @@ Mancuccini, 2004)."
 * Introduction
 Modeling the growth of trees has been important to estimate timber
 production and other ecosystem services of forests for decades.
-Multilevel modeling is an attractive approach because it provides a
+Multilevel modeling is an attractive modeling approach because it provides a
 coherent framework to account for the many levels of observation or of
 groupings in data and to pool information across groups
 citep:lappi_bailey_1988.  This paper has two main contributions.
@@ -2455,10 +2455,9 @@ constrain diameter growth, or a practical asymptote.  While trees
 could theoretically continue to increase in diameter indefinitely,
 they do not in reality.  The asymptote represents this practical
 maximum diameter.
-*** Model
-**** COMMENT Bayesian Mulitlevel Modeling
+*** COMMENT Bayesian Mulitlevel Modeling
 a bit of background?
-**** likelihood
+*** likelihood
 \[
 y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
@@ -2524,7 +2523,7 @@ The effect of city is normally distributed:
 \delta^j_{c} \sim N(0, \sigma^j_{city})
 \]
 
-**** Priors
+*** Priors
 
 The priors were selected to make biologically unrealistic parameters
 highly improbable, but they have a small effect on the posterior
@@ -2535,7 +2534,7 @@ that might appear to be narrow (e.g Half-Normal(0,.1)) are actually
 fairly wide given the scale of the predictors and the reasonable range
 of some parameters.
 
-**** COMMENT Prior stuff for appendix
+*** COMMENT Prior stuff for appendix
 Priors were selected to be slightly informative and make very
 biologically unreasonable parameters improbable.  The quanitity of
 data overwhelms the priors, but the relatively narrow priors also
@@ -2688,7 +2687,6 @@ gdd:precip
 \[
 \tau_3 \sim Normal(.005, .005)
 \]
-
 
 
 *** COMMENT Modeling Notes
@@ -59959,7 +59957,7 @@ large geographic range
 bibliography:~/git/notes/references.bib
 bibliographystyle:apa
 
-* supplemental figures
+* COMMENT supplemental figures
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
@@ -59969,7 +59967,7 @@ bibliographystyle:apa
 ** fort collins versus cheyenne
 [[file:../figs/ftcollins_cheyenne_ash.png]]
 
-* to address
+* COMMENT to address
 - fitting multilevel models in the frequentist way (lme4) seems quite
   complex and is much over my head.  Talk to Jun about this concern.
 - why model correlations of parameters within groups?
