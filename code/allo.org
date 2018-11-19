@@ -59612,8 +59612,12 @@ FL and one in Boise, ID.
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
 
 ** Comparing to existing equations
-*** illustrative comparisons
-#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
+Figure
+[[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
+compares our model to existing UTD equations for /Acer platanoides/
+(Comparisons for all species and cities are in supplementary
+figures).  i
+#+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
 
