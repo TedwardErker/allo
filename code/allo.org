@@ -1,4 +1,4 @@
-#+TITLE: Multilevel Urban Tree Allometric equations
+#+TITLE: Multilevel Urban Tree Growth equations
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
@@ -59640,7 +59640,8 @@ observations in that city.
 [[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
 ** Uncertainty increases when predicting out of sample cities, genera, and species
 It is also possible to make predictions to unsampled cities and
-species while accounting for the increased uncertainty.
+species while accounting for the increased uncertainty.  Figure
+[[fig:predicting_ubobserved_groups]] shows
 #+name: fig:predicting_ubobserved_groups
 [[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** Model Comparisons
@@ -59952,7 +59953,7 @@ large geographic range
 bibliography:~/git/notes/references.bib
 bibliographystyle:apa
 
-* COMMENT supplemental figures
+* supplemental figures
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
 #+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
