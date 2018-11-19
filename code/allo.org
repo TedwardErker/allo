@@ -149,11 +149,11 @@ production and other ecosystem services of forests for decades.
 Multilevel modeling is an attractive approach because it provides a
 coherent framework to account for the many levels of observation or of
 groupings in data and to pool information across groups
-cite:lappi_bailey_1988.  This paper has two main contributions.
+citep:lappi_bailey_1988.  This paper has two main contributions.
 First, we demonstrate the use of Stan via the =brms= package in R to
 fit bayesian nonlinear multilevel models to predict tree diameter
-growth from age cite:carpenter_e_2017,buerkner_2017.  Second, we apply
-the method to the Urban Tree Database cite:utd_2016,mcpherson_e_2016.
+growth from age citep:carpenter_e_2017,buerkner_2017.  Second, we apply
+the method to the Urban Tree Database citep:utd_2016,mcpherson_e_2016.
 This dataset is the result an over a decade long effort to collect age
 and size data on thousands of trees in 17 cities across the US.
 Multilevel modeling has the potential to extract more information from
@@ -163,10 +163,10 @@ ability to predict the important ecosystem services these trees
 provide urban dwellers.
 
 Stan is a probabilistic programming language for bayesian inference
-cite:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
+citep:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
 Hamiltonian Monte Carlo sampling, to effectively draw samples from the
 specified log posterior density.  Here, we access Stan via the R
-package =brms= cite:buerkner_2017. =brms= allows the user to specify
+package =brms= citep:buerkner_2017. =brms= allows the user to specify
 the likelihood and priors in syntax similar to the R package lme4
 commonly used for frequentist multilevel (mixed effects) models.  This
 makes using Stan much simpler and concise because it frees the user
@@ -260,9 +260,9 @@ urban tree context, cite:peper_e_2014 model DBH growth with repeat
 measures data on individual trees and test a varying coefficients
 model because they have repeat measures on individual trees.
 
-Compared to past work, our approach is new from a modeling standpoint
-in the use of a bayesian approach with both nested and non-nested
-groupings and group level predictors.  The Bayesian
+Compared to past work, our approach is more complex from a modeling
+standpoint in the use of a bayesian approach with both nested and
+non-nested groupings and group level predictors.  The Bayesian
 multilevel/hierarchical modeling framework has many strengths as
 discussed in cite:li_e_2011 (and others) and includes the ability to
 sample parameter values from the entire posterior, rather than maximum
@@ -2418,25 +2418,18 @@ declines to nearly zero.  Unlike tree height, which often reaches a
 true asymptote, diameter of trees must always increase, however
 slightly, because the growth of new wood is essential for proper
 function.  While there is no true asymptote for tree diameter, they
-often re
-is a practical one
-
-the asymptote in our function could be considered a pragmatic way to
-constrain diameter growth, or a practical asymptote.  While trees
-could theoretically continue to increase in diameter indefinitely,
-they do not in reality.  The asymptote represents this practical
-maximum diameter.  An additional feature to the data is that age is
-time since transplanting.  This means trees can have substantial
-diameter at age 0.
+often reach a practical one.  An additional feature to the data is
+that age is time since transplanting.  This means trees can have
+substantial diameter at age 0.
 
 The type of curve that meets these criteria would be an asymmetric
 sigmoidal curve with an intercept.  A modified weibull is such a curve
 that has worked well in forestry and is the one we use here
 cite:weiskittel_e_2011.  However, there are many other curves such as
-the Chapman-Richards that meet these criteria and could be used.
+the Chapman-Richards that meet these criteria and could also be used.
 
 Another characteristic of tree growth curves is heterosckedasticity,
-namely that as the age of a tree increases, so does the variability
+namely that as the age of trees increases, so does the variability
 around the mean.  Often past modelers controlled this using log - log
 transformations cite:troxel_e_2013, but we wanted to keep units in
 their original scale.  We tested fitting models where the variance was
@@ -2452,9 +2445,18 @@ leave-one-out cross validation we selected the model with the highest
 estimated log posterior density cite:vehtari_e_2017.  The following
 section details this model, and other models tested are in
 supplementary materials.
+**** COMMENT comment
+and, especially in the urban setting, they
+often die before the get close
+is a practical one
 
+the asymptote in our function could be considered a pragmatic way to
+constrain diameter growth, or a practical asymptote.  While trees
+could theoretically continue to increase in diameter indefinitely,
+they do not in reality.  The asymptote represents this practical
+maximum diameter.
 *** Model
-**** Bayesian Mulitlevel Modeling
+**** COMMENT Bayesian Mulitlevel Modeling
 a bit of background?
 **** likelihood
 \[
@@ -59563,8 +59565,61 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/robiniapsuedoacacia.png]]
 
-
 * Results
+** Parameter Estimates
+Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
+
+#+name: fig:main_effects_posterior
+[[file:../figs/posterior_distributions_model_mainparameters.png]]
+#+name: fig:climate_effects_posterior
+[[file:../figs/posterior_distributions_model_climate_effects.png]]
+#+name: fig:sd_beta0_posterior
+[[file:../figs/posterior_distributions_model_sd_beta0.png]]
+
+#+name: fig:sd_beta1_posterior
+[[file:../figs/posterior_distributions_model_sd_beta1.png]]
+
+#+name: fig:sd_beta2_posterior
+[[file:../figs/posterior_distributions_model_sd_beta2.png]]
+
+#+name: fig:sd_beta3_posterior
+[[file:../figs/posterior_distributions_model_sd_beta3.png]]
+
+#+name: fig:shape_posterior
+[[file:../figs/posterior_distributions_model_shape.png]]
+
+** Climate Effects on Growth Rate
+There is a positive effect of growing degree days (gdd) and annual
+precipitation (precip) on tree diameter (dbh), and a postive
+interaction between the two.  Marginal effects of climate on posterior
+mean of DBH for a tree 25 years after planting in
+[[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
+mean is in [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
+estimated 40cm difference in dbh between an average tree in Orlando,
+FL and one in Boise, ID.
+
+#+name: fig:marginal_effects_climate_25AGE_mean_labels
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+
+#+name: fig:marginal_effects_climate_25AGE_se_labels
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
+
+** Comparing to existing equations
+*** illustrative comparisons
+#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+
+
+
+*** COMMENT all comparisons for model
+#+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+** Uncertainty increases when predicting out of sample cities, genera, and species
+
+#+name: fig:predicting_ubobserved_groups
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** Model Comparisons
 
 Short descriptions of the models tested and the brms sytax are in
@@ -59673,63 +59728,6 @@ higher out of sample predictive accuracy than model 7.
 
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
-
-** parameter estimates
-Posterior distributions with 80% interval and median for parameters in [[fig:main_effects_posterior]]
-
-#+name: fig:main_effects_posterior
-[[file:../figs/posterior_distributions_model_mainparameters.png]]
-#+name: fig:climate_effects_posterior
-[[file:../figs/posterior_distributions_model_climate_effects.png]]
-#+name: fig:sd_beta0_posterior
-[[file:../figs/posterior_distributions_model_sd_beta0.png]]
-
-#+name: fig:sd_beta1_posterior
-[[file:../figs/posterior_distributions_model_sd_beta1.png]]
-
-#+name: fig:sd_beta2_posterior
-[[file:../figs/posterior_distributions_model_sd_beta2.png]]
-
-#+name: fig:sd_beta3_posterior
-[[file:../figs/posterior_distributions_model_sd_beta3.png]]
-
-#+name: fig:shape_posterior
-[[file:../figs/posterior_distributions_model_shape.png]]
-
-** Climate Effects on Growth Rate
-There is a positive effect of growing degree days (gdd) and annual
-precipitation (precip) on tree diameter (dbh), and a postive
-interaction between the two.  Marginal effects of climate on posterior
-mean of DBH for a tree 25 years after planting in
-[[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
-mean is in [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
-estimated 40cm difference in dbh between an average tree in Orlando,
-FL and one in Boise, ID.
-
-#+name: fig:marginal_effects_climate_25AGE_mean_labels
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
-
-#+name: fig:marginal_effects_climate_25AGE_se_labels
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
-
-
-** Comparing to existing equations
-*** illustrative comparisons
-#+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
-#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
-
-
-
-*** COMMENT all comparisons for model
-#+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
-#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
-
-** Uncertainty increases when predicting out of sample cities, genera, and species
-
-#+name: fig:predicting_ubobserved_groups
-[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 ** COMMENT ideas
 summary figure showing parameter marginal posterior distributions.  Or
