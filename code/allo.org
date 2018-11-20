@@ -1,4 +1,4 @@
-#+TITLE: Multilevel Urban Tree Growth equations
+#+TITLE: A Bayesian Nonlinear Multilevel Model of Urban Tree Growth
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
