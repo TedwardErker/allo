@@ -61,11 +61,11 @@ model with the lowest Akaike Information Criterion (AIC).  This
 approach has several limitations, many highlighted in the report.
 First, while the model form selected provided the lowest AIC, many of
 the estimates are not biologically realistic (for example, estimates
-of diameter may begin to increase sharply at old ages, cubic fits, or
-they may decrease at old ages, quadratic fits).  Therefore, the
-researchers cautioned against applying the models beyond the range of
-the data, or sometimes even within the range of data if the estimates
-were unrealistic.  These unrealistic estimates and the inability to
+of diameter may begin to increase or decrease sharply at old ages,
+cubic and quadratic fits, respectively).  Therefore, the researchers
+cautioned against applying the models beyond the range of the data, or
+sometimes even within the range of data if the estimates were
+unrealistic.  These unrealistic estimates and the inability to
 extrapolate severely limits managers' ability to predict growth over
 meaningful time scales (a century rather than a few decades).  A
 second limitations is that some models predict negative diameters, an
@@ -76,8 +76,8 @@ the model from the reference city in the same climate region.
 However, many of the reference cities are on the border of climate
 regions and as noted in the UTC report there is known large
 variability in growth within regions (see figure 5 in the UTD report
-which is from McPherson and Peper 2012, comparing Cheyenne to Ft.
-Collins. Figure is reproduced in supplementary figures).  Furthermore,
+originally from McPherson and Peper 2012, comparing Cheyenne to Ft.
+Collins. The figure is reproduced in supplementary figures).  Furthermore,
 if a manager wants to predict growth for an unsampled species or a
 species that was sampled in a different city it is not obvious which
 equation to use and the additional uncertainty that this introduces is
@@ -107,7 +107,7 @@ cite:mcpherson_simpson_99 fit the same curve to a small number of
 observations and adjusted parameters for different locations based on
 the number of frost free days.  The amount the parameters were
 adjusted was based on expert opinion, not data.  cite:peper_2001a and
-cite:peper_2001b compared this Chapman-Richards curve to logarithm
+cite:peper_2001b compared the Chapman-Richards curve to logarithm
 regression and selected the logarithm regression based on a higher R^2.
 Subsequent UTD growth equations did not use sigmoidal curves
 citep:mcpherson_e_2016.
@@ -119,7 +119,7 @@ in allometric and growth equations. Indeed, one of the test datasets
 in R to demonstrate nonlinear multilevel modeling are observations of
  [[https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Orange.html][orange tree growth]] citep:r_lang. cite:hall_bailey_2001 give a
 general overview of the frequentist multilevel approach and an example
-of loblolly pine height growth in the Southeastern US.  Levels in
+of loblolly pine height growth in the Southeastern US.  Levels/groups in
 their model are plot and tree nested within plot, and they use tree
 density as a plot level covariate.  cite:nothdurft_e_2006 provide
 another example of modeling tree height growth using norway spruce in
