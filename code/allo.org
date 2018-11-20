@@ -135,7 +135,7 @@ model because they have repeat measures on individual trees.
 
 Compared to past work, our approach is more complex from a modeling
 standpoint in the use of a bayesian approach with both nested and
-non-nested groupings and group level predictors.  The Bayesian
+non-nested groupings and group level predictors.  The bayesian
 multilevel/hierarchical modeling framework has many strengths as
 discussed in cite:li_e_2011 (and others) and includes the ability to
 sample parameter values from the entire posterior, rather than maximum
@@ -8052,7 +8052,6 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/robiniapsuedoacacia.png]]
-
 
 * Results
 ** Parameter Estimates
