@@ -8113,19 +8113,46 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 #+RESULTS:
 [[file:../figs/pp_check_bmod.png]]
 
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_ecdf.png :width 1000 :res 100
+  pp_check(mod, type = "ecdf_overlay") +
+    scale_x_continuous(limits = c(0,200))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_check_bmod_ecdf.png]]
+
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_stat_max.png
   pp_check(mod, type = "stat", stat = "max", nsamples = 30)
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_bmod_stat.png]]
+[[file:../figs/pp_check_bmod_stat_max.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod.png :width 800 :res 100
-  pp_check(mod, type = "dens_overlay") +
-    scale_x_continuous(breaks = c(0,25,50,100,150,200,250,300))
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_stat_mean.png
+  pp_check(mod, type = "stat", stat = "mean", nsamples = 100)
 #+end_src
 
-*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm no multistem species
+#+RESULTS:
+[[file:../figs/pp_check_bmod_stat_mean.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/age_dbh_alldata_maybeoutliers.png
+ggplot(mod$data, aes(x = AGE, y = DBH)) + geom_point(alpha = .3)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/age_dbh_alldata_maybeoutliers.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/age_dbh_alldata_maybeoutliers_alpha1.png
+ggplot(mod$data, aes(x = AGE, y = DBH)) + geom_point(alpha = .01)
+#+end_src
+
+#+RESULTS:
+[[file:../figs/age_dbh_alldata_maybeoutliers_alpha1.png]]
+
+
+*** COMMENT NOT RUN. but names changed genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm no multistem species
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm_noMultistem.R
   library(dplyr)
