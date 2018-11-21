@@ -508,8 +508,6 @@ The following objects are masked from ‘package:base’:
 
 Warning message:
 package ‘dplyr’ was built under R version 3.4.4
-RStudio Community is a great place to get help:
-https://community.rstudio.com/c/tidyverse.
 
 Attaching package: ‘tidyr’
 
@@ -848,11 +846,15 @@ There may be other common names I need to fix.
 #+end_src
 
 #+RESULTS:
-
+**** identify species with multi stems
+#+begin_src R
+multistems <-
+#+end_src
 **** tidy a few names and select variables of interest here
 #+begin_src R
-    d <- d %>%
-        rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, Species = SpCode) %>% select(Region, City, TreeID, Species, DBH, Leaf, DBH, Age, ScientificName)
+      d <- d %>%
+          rename(DBH = `DBH (cm)`, Leaf = `Leaf (m2)`, Species = SpCode) %>%
+          select(Region, City, TreeID, Species, DBH, Leaf, DBH, Age, ScientificName)
 #+end_src
 
 #+RESULTS:
@@ -864,8 +866,6 @@ There may be other common names I need to fix.
 #+end_src
 
 #+RESULTS:
-: Warning message:
-: package ‘bindrcpp’ was built under R version 3.4.4
 **** save data
 #+begin_src R
   saveRDS(d, "../data/tidy_age_dbh.rds")
@@ -2243,7 +2243,7 @@ ggplot(filter(d, Species == "LIST"), aes(x = AGE, y = DBH, color = HDD)) + geom_
 Is minneapolis an influential point?
 **** density of dbh by species
 #+begin_src R
-dd <- readRDS("../data/age_dbh_testing.rds")
+dd <- readRDS("../data/age_dbh_full_noPalms.rds")
 #+end_src
 
 #+RESULTS:
@@ -2257,15 +2257,26 @@ ggplot(dd, aes(x = DBH)) + geom_density()
 
 
 #+begin_src R :exports results :results graphics :file ../figs/species_density_species.png
-ggplot(dd, aes(x = DBH, color = Species)) + geom_density()
+ggplot(dd, aes(x = DBH, color = Species)) + geom_density() +
+theme(legend.position = "none")
 #+end_src
 
 #+RESULTS:
 [[file:../figs/species_density_species.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/species_density_species_facet.png
+#+begin_src R :exports results :results graphics :file ../figs/species_area_species.png :width 1000
+ggplot(dd, aes(x = DBH, color = Species)) + geom_density(position = "stack")
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/species_area_species.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/species_density_species_facet.png :width 600 :height 700
   ggplot(dd, aes(x = DBH, color = Species)) + geom_density() +
-    facet_wrap(~Species)
+    facet_wrap(~Species) +
+    theme(legend.position = "none")
 #+end_src
 
 #+RESULTS:
@@ -8094,20 +8105,25 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod.png
-pp_check(mod)
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod.png :width 800 :res 100
+  pp_check(mod, type = "dens_overlay") +
+    scale_x_continuous(breaks = c(0,25,50,100,150,200,250,300))
 #+end_src
 
 #+RESULTS:
 [[file:../figs/pp_check_bmod.png]]
 
-#+begin_src R
-pp_check(mod, type = "xyz")
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_stat_max.png
+  pp_check(mod, type = "stat", stat = "max", nsamples = 30)
 #+end_src
 
 #+RESULTS:
-: Error: Type 'xyz' is not a valid ppc type. Valid types are:
-: 'bars', 'bars_grouped', 'boxplot', 'data', 'dens', 'dens_overlay', 'ecdf_overlay', 'error_binned', 'error_hist', 'error_hist_grouped', 'error_scatter', 'error_scatter_avg', 'error_scatter_avg_vs_x', 'freqpoly', 'freqpoly_grouped', 'hist', 'intervals', 'intervals_data', 'intervals_grouped', 'loo_intervals', 'loo_pit', 'loo_pit_overlay', 'loo_pit_qq', 'loo_ribbon', 'ribbon', 'ribbon_data', 'ribbon_grouped', 'rootogram', 'scatter', 'scatter_avg', 'scatter_avg_grouped', 'stat', 'stat_2d', 'stat_freqpoly_grouped', 'stat_grouped', 'violin_grouped'
+[[file:../figs/pp_check_bmod_stat.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod.png :width 800 :res 100
+  pp_check(mod, type = "dens_overlay") +
+    scale_x_continuous(breaks = c(0,25,50,100,150,200,250,300))
+#+end_src
 
 *** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm no multistem species
 **** model R code
