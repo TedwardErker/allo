@@ -8081,9 +8081,16 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 
 #+RESULTS:
 
+#+begin_src R
+  p <- pp_check(mod, type = "dens_overlay", nsamples = 30) +
+      scale_x_continuous(limits = c(0,200), breaks = c(0,25,50,100,150,200))
+#+end_src
+
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_dens_bmod.png :width 800 :res 130
-  pp_check(mod, type = "dens_overlay", nsamples = 30) +
-    scale_x_continuous(limits = c(0,200), breaks = c(0,25,50,100,150,200))
+      p +
+        scale_color_manual(labels = c(expression(italic(DBH)), expression(italic(DBH)[rep])), values = c("black", "light gray")) +
+          theme(legend.title=element_blank(),
+                legend.position = c(.85, .85))
 #+end_src
 
 #+RESULTS:
