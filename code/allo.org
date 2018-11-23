@@ -8072,30 +8072,6 @@ library(brms)
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Warning message:
-package ‘dplyr’ was built under R version 3.4.4
-Loading required package: Rcpp
-Loading required package: ggplot2
-Loading 'brms' package (version 2.6.0). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').
-Run theme_set(theme_default()) to use the default bayesplot theme.
-Warning messages:
-1: package ‘brms’ was built under R version 3.4.4
-2: package ‘Rcpp’ was built under R version 3.4.4
-#+end_example
 
 
 #+begin_src R
@@ -8105,13 +8081,13 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod.png :width 800 :res 100
-  pp_check(mod, type = "dens_overlay") +
-    scale_x_continuous(breaks = c(0,25,50,100,150,200,250,300))
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_dens_bmod.png :width 800 :res 130
+  pp_check(mod, type = "dens_overlay", nsamples = 30) +
+    scale_x_continuous(limits = c(0,200), breaks = c(0,25,50,100,150,200))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/pp_check_bmod.png]]
+[[file:../figs/pp_check_dens_bmod.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_ecdf.png :width 1000 :res 100
@@ -8123,12 +8099,11 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 [[file:../figs/pp_check_bmod_ecdf.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_stat_max.png
-  pp_check(mod, type = "stat", stat = "max", nsamples = 30)
+  pp_check(mod, type = "stat", stat = "max", nsamples = 100)
 #+end_src
 
 #+RESULTS:
 [[file:../figs/pp_check_bmod_stat_max.png]]
-
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_stat_mean.png
   pp_check(mod, type = "stat", stat = "mean", nsamples = 100)
@@ -8136,6 +8111,11 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 
 #+RESULTS:
 [[file:../figs/pp_check_bmod_stat_mean.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/pp_check_bmod_stat_mean.png
+  pp_check(mod, type = "stat", stat = "mean", nsamples = 100)
+#+end_src
+
 
 #+begin_src R :exports results :results graphics :file ../figs/age_dbh_alldata_maybeoutliers.png
 ggplot(mod$data, aes(x = AGE, y = DBH)) + geom_point(alpha = .3)
@@ -8151,6 +8131,13 @@ ggplot(mod$data, aes(x = AGE, y = DBH)) + geom_point(alpha = .01)
 #+RESULTS:
 [[file:../figs/age_dbh_alldata_maybeoutliers_alpha1.png]]
 
+#+begin_src R :exports results :results graphics :file ../figs/pp_hist.png
+  pp_check(mod, type = "hist", nsamples = 8) +
+    xlim(c(0,200))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/pp_hist.png]]
 
 * Results
 ** Parameter Estimates
@@ -8356,7 +8343,9 @@ superior to the other models.
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
 ** Model Checking
 *** Posterior predictive check
-
+#+name:posterior_predictive_density_overlay
+#+caption: Comparison of the distribution of the observed DBH (black line) with the kernel density estimate of 30 simulated draws from the posterior predictive distribution (light blue lines).
+[[file:../figs/pp_check_dens_bmod.png]]
 ** COMMENT ideas
 summary figure showing parameter marginal posterior distributions.  Or
 maybe just mean and a couple confidence intervals
