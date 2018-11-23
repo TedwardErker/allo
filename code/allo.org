@@ -8354,6 +8354,8 @@ superior to the other models.
 #+ATTR_LATEX: :environment longtable :align |l|l{10cm}|l|
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
+** Model Checking
+*** Posterior predictive check
 
 ** COMMENT ideas
 summary figure showing parameter marginal posterior distributions.  Or
