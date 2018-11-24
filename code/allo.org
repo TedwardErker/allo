@@ -6,7 +6,7 @@
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
-#+OPTIONS: toc:nil num:nil date:t
+#+OPTIONS: toc:nil num:t date:t
 #+LATEX_HEADER: \usepackage[margin=1in]{geometry}
 #+LATEX_HEADER: \usepackage{natbib}
 #+LATEX_HEADER: \usepackage{chemformula}
@@ -8130,8 +8130,7 @@ ggplot(mod$data, aes(x = AGE, y = DBH)) + geom_point(alpha = .01)
 [[file:../figs/pp_hist.png]]
 
 * Statistical Inference
-** Model fitting
-
+** Model fitting in Stan
 Stan is a probabilistic programming language for bayesian inference
 citep:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
 Hamiltonian Monte Carlo sampling, to effectively draw samples from the
@@ -8149,7 +8148,6 @@ here.  Some of the key advantages of fitting a model in Stan via
 sampling for multilevel non-linear models.  The bayesian approach
 gives better estimates of parameter uncertainty and provides a formal
 way to include prior information.
-
 
 Posterior distributions with 80% interval and median for parameters.
 #+name: fig:main_effects_posterior
@@ -8171,65 +8169,6 @@ Posterior distributions with 80% interval and median for parameters.
 #+name: fig:shape_posterior
 [[file:../figs/posterior_distributions_model_FullData_shape.png]]
 
-** Climate Effects on Growth Rate
-There is a positive effect of growing degree days (gdd) and annual
-precipitation (precip) on tree diameter (dbh), and a postive
-interaction between the two.  Marginal effects of climate on posterior
-mean of DBH for a tree 25 years after planting are shown in
-figure [[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
-mean is in figure [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
-estimated 40cm difference in dbh between an average tree in Orlando,
-FL and one in Boise, ID.
-
-#+name: fig:marginal_effects_climate_25AGE_mean_labels
-#+caption: Posterior median DBH at 25 years after planting.
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
-
-#+name: fig:marginal_effects_climate_25AGE_se_labels
-#+caption: Posterior standard error of DBH at 25 years after planting.
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
-
-** Comparing to existing equations
-Figure
-[[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
-compares our model to existing UTD equations for /Acer platanoides/
-(Comparisons for all species and cities are in supplementary figures).
-In the case of Fort Collins, UTD and our equations have high
-agreement.  Similarly in Minneapolis, however we are able to provide
-more reasonable extrapolation.  In the case of Boise, UTD predicts
-declining DBH at large ages, and in Longview it predicts rapidly
-increasing DBH at large ages.  Our model does not fit the sample of
-data from those individual cities as well, but it shares information
-across all cities so that it will likely make a better out of sample
-prediction and extrapolates more reasonably.  In the case of Queens,
-there were only two observations and so the UTD growth equation was a
-straight line (there may be a missing point used to fit the line which
-is not in the data and would explain why the line doesn't connect the
-two observations).  By borrowing information across all cities, we are
-able to make a more reasonable prediction even with only two
-observations in that city.
-#+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
-#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
-
-*** COMMENT all comparisons for model
-#+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
-#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
-** Uncertainty increases when predicting out of sample cities, genera, and species
-It is also possible to make predictions to unsampled cities and
-species while accounting for the increased uncertainty.  Figure
-[[fig:predicting_ubobserved_groups]] shows how the predictive interval for
-DBH increases for an unknown species of /Acer/ (second column) and
-increases even more for an unknown genus and unknown species (third
-column).  For an unsampled city, such as St. Louis, MO (second row),
-uncertainty is higher than for a sampled city, Sacramento, CA (first
-row).  The large 95% predictive intervals for a tree of unknown genus
-and species shows how great the genetic variablility is across trees.
-
-#+name: fig:predicting_ubobserved_groups
-#+caption: Uncertainty in mean diameter growth increases for unsampled genera, species, and cities.  DBH estimate shown in black, 50% predictive interval in dark gray and 95% predictive interval in gray.
-[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** Model Comparisons
 Our approach increased model complexity at each step, first fitting a
 single weibull curve to all trees, and then allowing all parameters to
@@ -8351,6 +8290,67 @@ superior to the other models.
 #+ATTR_LATEX: :environment longtable :align |l|l{10cm}|l|
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
+
+* Results
+** Climate Effects on Growth Rate
+There is a positive effect of growing degree days (gdd) and annual
+precipitation (precip) on tree diameter (dbh), and a postive
+interaction between the two.  Marginal effects of climate on posterior
+mean of DBH for a tree 25 years after planting are shown in
+figure [[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of this
+mean is in figure [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
+estimated 40cm difference in dbh between an average tree in Orlando,
+FL and one in Boise, ID.
+
+#+name: fig:marginal_effects_climate_25AGE_mean_labels
+#+caption: Posterior median DBH at 25 years after planting.
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+
+#+name: fig:marginal_effects_climate_25AGE_se_labels
+#+caption: Posterior standard error of DBH at 25 years after planting.
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
+
+** Comparing to existing equations
+Figure
+[[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
+compares our model to existing UTD equations for /Acer platanoides/
+(Comparisons for all species and cities are in supplementary figures).
+In the case of Fort Collins, UTD and our equations have high
+agreement.  Similarly in Minneapolis, however we are able to provide
+more reasonable extrapolation.  In the case of Boise, UTD predicts
+declining DBH at large ages, and in Longview it predicts rapidly
+increasing DBH at large ages.  Our model does not fit the sample of
+data from those individual cities as well, but it shares information
+across all cities so that it will likely make a better out of sample
+prediction and extrapolates more reasonably.  In the case of Queens,
+there were only two observations and so the UTD growth equation was a
+straight line (there may be a missing point used to fit the line which
+is not in the data and would explain why the line doesn't connect the
+two observations).  By borrowing information across all cities, we are
+able to make a more reasonable prediction even with only two
+observations in that city.
+#+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+
+*** COMMENT all comparisons for model
+#+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_dbh_bySpeciesCity_wData_wUTDpredictions.png]]
+** Uncertainty increases when predicting out of sample cities, genera, and species
+It is also possible to make predictions to unsampled cities and
+species while accounting for the increased uncertainty.  Figure
+[[fig:predicting_ubobserved_groups]] shows how the predictive interval for
+DBH increases for an unknown species of /Acer/ (second column) and
+increases even more for an unknown genus and unknown species (third
+column).  For an unsampled city, such as St. Louis, MO (second row),
+uncertainty is higher than for a sampled city, Sacramento, CA (first
+row).  The large 95% predictive intervals for a tree of unknown genus
+and species shows how great the genetic variablility is across trees.
+
+#+name: fig:predicting_ubobserved_groups
+#+caption: Uncertainty in mean diameter growth increases for unsampled genera, species, and cities.  DBH estimate shown in black, 50% predictive interval in dark gray and 95% predictive interval in gray.
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** COMMENT Model Checking
 *** Posterior predictive check
 #+name:posterior_predictive_density_overlay
