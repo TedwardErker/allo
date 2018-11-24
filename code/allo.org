@@ -1,7 +1,7 @@
 #+TITLE: A Bayesian Nonlinear Multilevel Model of Urban Tree Growth
 #+AUTHOR: erker
 #+email: erker@wisc.edu
-#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval no
 #+PROPERTY:  header-args:sh :eval no
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
@@ -35,23 +35,6 @@ Improving predictions of tree size from tree age will improve our
 ability to predict the important ecosystem services these trees
 provide urban dwellers.
 
-Stan is a probabilistic programming language for bayesian inference
-citep:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
-Hamiltonian Monte Carlo sampling, to effectively draw samples from the
-specified log posterior density.  Here, we access Stan via the R
-package =brms= citep:buerkner_2017. =brms= allows the user to specify
-the likelihood and priors in syntax similar to the R package lme4
-commonly used for frequentist multilevel (mixed effects) models.  This
-makes using Stan much simpler and concise because it frees the user
-from the need to optimize Stan code (=brms= is already very efficient)
-and can convert a few lines of R code into many lines of Stan.  =brms=
-is not as flexible as Stan, but still can be used to fit many types of
-models including nonlinear multilevel regression models, such as ours
-here.  Some of the key advantages of fitting a model in Stan via
-=brms= include relatively simple syntax and efficient posterior
-sampling for multilevel non-linear models.  The bayesian approach
-gives better estimates of parameter uncertainty and provides a formal
-way to include prior information.
 
 The existing approach to modeling the diameter growth of trees in the
 urban tree database (UTD) was to fit a separate model for each tree
@@ -8146,8 +8129,28 @@ ggplot(mod$data, aes(x = AGE, y = DBH)) + geom_point(alpha = .01)
 #+RESULTS:
 [[file:../figs/pp_hist.png]]
 
-* Results
-** Parameter Estimates
+* Statistical Inference
+** Model fitting
+
+Stan is a probabilistic programming language for bayesian inference
+citep:carpenter_e_2017.  It uses No-U-Turn sampler, an adaptive form of
+Hamiltonian Monte Carlo sampling, to effectively draw samples from the
+specified log posterior density.  Here, we access Stan via the R
+package =brms= citep:buerkner_2017. =brms= allows the user to specify
+the likelihood and priors in syntax similar to the R package lme4
+commonly used for frequentist multilevel (mixed effects) models.  This
+makes using Stan much simpler and concise because it frees the user
+from the need to optimize Stan code (=brms= is already very efficient)
+and can convert a few lines of R code into many lines of Stan.  =brms=
+is not as flexible as Stan, but still can be used to fit many types of
+models including nonlinear multilevel regression models, such as ours
+here.  Some of the key advantages of fitting a model in Stan via
+=brms= include relatively simple syntax and efficient posterior
+sampling for multilevel non-linear models.  The bayesian approach
+gives better estimates of parameter uncertainty and provides a formal
+way to include prior information.
+
+
 Posterior distributions with 80% interval and median for parameters.
 #+name: fig:main_effects_posterior
 [[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
@@ -8348,7 +8351,7 @@ superior to the other models.
 #+ATTR_LATEX: :environment longtable :align |l|l{10cm}|l|
 *** COMMENT elpd loo
 [[file:../../../org/attachments/Results/p_2018-10-30_19-36-31.png]]
-** Model Checking
+** COMMENT Model Checking
 *** Posterior predictive check
 #+name:posterior_predictive_density_overlay
 #+caption: Comparison of the distribution of the observed DBH (black line) with the kernel density estimate of 30 simulated draws from the posterior predictive distribution (light blue lines).
@@ -8578,6 +8581,7 @@ bibliographystyle:apa
 ** fort collins versus cheyenne
 [[file:../figs/ftcollins_cheyenne_ash.png]]
 
+
 * COMMENT to address
 - fitting multilevel models in the frequentist way (lme4) seems quite
   complex and is much over my head.  Talk to Jun about this concern.
@@ -8591,3 +8595,7 @@ bibliographystyle:apa
     the climate normals.
   - Could core trees near uhi sensors and use the temp to predict
   - this type of modeling could allow for climate change/ uhi change predictions.
+
+- move figures and tables to end
+- put parentheses around the betas exponenents.
+- description of stan
