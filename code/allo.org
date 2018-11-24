@@ -2331,7 +2331,7 @@ y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
 
 \[
-\mu_{igsc} = \beta^{0}_{igsc} + \beta^1_{igsc} (1 - \exp(-\beta^{2}_{igsc} x_{igsc}^{\beta^3_{igsc}}))
+\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^(1)_{igsc} (1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^(3)_{igsc}}))
 \]
 
 where:
@@ -2351,44 +2351,44 @@ species, /s/, and city, /c/.
 /x_{igsc}/ is the transplant age in years of tree /igsc/ (i.e. years
 since transplanting).
 
-$\beta^0_{igsc}$ is the intercept, or the diameter of a tree at time
+$\beta^(0)_{igsc}$ is the intercept, or the diameter of a tree at time
 of transplanting.
 
-$\beta^1_{igsc}$ (plus $\beta^0_{igsc}$) is the asymptote of the
+$\beta^(1)_{igsc}$ (plus $\beta^(0)_{igsc}$) is the asymptote of the
 sigmoidal weibull curve.
 
-$\beta^2_{igsc}$ and $\beta^3_{igsc}$ affect the rate of growth.  $\beta^2_{igsc}$ provides flexibility to have
+$\beta^(2)_{igsc}$ and $\beta^(3)_{igsc}$ affect the rate of growth.  $\beta^(2)_{igsc}$ provides flexibility to have
 slow or fast growth at young ages.
 
-For each $\beta^j_{igsc}$, /j/ = 0,1,2:
+For each $\beta^(j)_{igsc}$, /j/ = 0,1,2:
 
 \[
-\beta^j_{igsc} = \beta^j_0 + \gamma^j_{gs}+\delta^j_{c}
+\beta^(j)_{igsc} = \beta^(j)_0 + \gamma^(j)_{gs}+\delta^(j)_{c}
 \]
 
-for $\beta^3_{igsc}$:
+for $\beta^(3)_{igsc}$:
 \[
-\beta^3_{igsc} = \beta^3_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *
-(\text{precip}_c * \text{gdd}_c) + \gamma^3_{gs}+\delta^3_{c}
+\beta^(3)_{igsc} = \beta^(3)_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *
+(\text{precip}_c * \text{gdd}_c) + \gamma^(3)_{gs}+\delta^(3)_{c}
 \]
 
-where $\beta^j_0$ is the mean for $\beta^j_{igsc}$. $\gamma^j_{gs}$ is
-genetic (genus and species) effect on $\beta^j$.  $\delta^j_{c}$ is the
-city effect on $\beta^j$
+where $\beta^(j)_0$ is the mean for $\beta^(j)_{igsc}$. $\gamma^(j)_{gs}$ is
+genetic (genus and species) effect on $\beta^(j)$.  $\delta^(j)_{c}$ is the
+city effect on $\beta^(j)$
 
 The species effect is nested within the genus effect.  Both are
 normally distributed, such that:
 \[
-\gamma^j_{gs} \sim N(\gamma^j_{g}, \sigma^j_{genus:species})
+\gamma^(j)_{gs} \sim N(\gamma^(j)_{g}, \sigma^(j)_{genus:species})
 \]
 
 \[
-\gamma^j_{g} \sim N(0, \sigma^j_{genus})
+\gamma^(j)_{g} \sim N(0, \sigma^(j)_{genus})
 \]
 
 The effect of city is normally distributed:
 \[
-\delta^j_{c} \sim N(0, \sigma^j_{city})
+\delta^(j)_{c} \sim N(0, \sigma^(j)_{city})
 \]
 
 *** Priors
@@ -2410,7 +2410,7 @@ helps with sampling.
 
 
 All \beta's must be positive and they are likely correlated with one
-another, especially /\beta^1_{igsc}/ and /\beta^3_{igsc}/.  Without very old trees that are close
+another, especially /\beta^(1)_{igsc}/ and /\beta^(3)_{igsc}/.  Without very old trees that are close
 to their asympototic dbh, it is harder to separate these two parameters.
 
 
@@ -8149,7 +8149,12 @@ sampling for multilevel non-linear models.  The bayesian approach
 gives better estimates of parameter uncertainty and provides a formal
 way to include prior information.
 
-Posterior distributions with 80% interval and median for parameters.
+Posterior distributions with 80% interval and median for parameters
+are shown in figures [[fig:main_effects_posterior]],
+[[fig:climate_effects_posterior]], [[fig:sd_beta0_posterior]],
+[[fig:sd_beta1_posterior]], [[fig:sd_beta2_posterior]], [[fig:sd_beta3_posterior]], [[fig:shape_posterior]]
+
+
 #+name: fig:main_effects_posterior
 [[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
 #+name: fig:climate_effects_posterior
@@ -8310,7 +8315,7 @@ FL and one in Boise, ID.
 #+caption: Posterior standard error of DBH at 25 years after planting.
 [[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
 
-** Comparing to existing equations
+** Comparing to Existing Equations
 Figure
 [[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
 compares our model to existing UTD equations for /Acer platanoides/
@@ -8580,7 +8585,6 @@ bibliographystyle:apa
 
 ** fort collins versus cheyenne
 [[file:../figs/ftcollins_cheyenne_ash.png]]
-
 
 * COMMENT to address
 - fitting multilevel models in the frequentist way (lme4) seems quite
