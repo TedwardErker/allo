@@ -80,7 +80,7 @@ or species with very little or no data.
 Sigmoidal curves very similar to the weibull have been used before in
 modeling urban tree diameter growth as a function of age.
 cite:frelich_1992 use the Chapman-Richards growth curve of form $y =
-B_0 (1 - exp(B_1 x))^{B_{2}}$ to predict DBH from age for healthy trees (12
+B_0 (1 - \text{exp}(B_1 x))^{B_{2}}$ to predict DBH from age for healthy trees (12
 species, 221 trees total) in Minneapolis and St. Paul, Minnesota.
 This equation form worked very well (8 out of 12 species had an R^2
 over .9), but the trees used were only healthly open grown trees,
@@ -413,16 +413,10 @@ in the ecoSmart Landscapes software (McPherson et al. 2014).
 
 * Methods
 ** Data
-
 The urban tree database (UTD, cite:utd_2016) consists of measurements on 14487 trees of 170
 species in 17 cities.  However, largely because of the difficulty is measuring
 tree age, there are only 12687 trees with complete age and diameter
 data (161 species, 17 cities, 309 species by city combinations [[fig:City_Species_Ntrees]]).
-
-#+name: fig:City_Species_Ntrees
-#+caption: Number of trees sampled of each species and city combination in the urban tree database.
-#+attr_latex: :width 7in
-[[../figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 Some species were measured in multiple cities, but not most.  The number of
 trees of each city by species combination sampled ranged from 1
@@ -443,13 +437,7 @@ The 17 cities in the UTD cover much of the US geographically, [[fig:utd_climate]
 much of the variation in climate, [[fig:utd_gdd_precip_space_map]].
 However, New York City only has a few observations and the data for
 Indianapolis is missing too.
-#+name: fig:utd_climate
-#+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
-[[file:../figs/ClimateRegions_UTD.png]]
 
-#+name: fig:utd_gdd_precip_space_map
-#+caption: US census tract centroids with UTD reference cities overlaid in growing degree day (GDD) and precipitation climate space and matching color gradient in geographic space.  The reference cities cover climate space well, and variation in precipitation and growing degree days is continuous.
-[[file:../figs/climate_space_wMap_labels.png]]
 Rather than using the aggregated sunset zones as done in UTD, we used
 growing degree days (GDD) and precipitation data from climate NOAA's
 climate normals to continuously vary equation parameters across
@@ -2331,7 +2319,7 @@ y_{igsc} \sim Gamma(\mu_{igsc}, \alpha_y)
 \]
 
 \[
-\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^(1)_{igsc} (1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^(3)_{igsc}}))
+\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igsc} (1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^{(3)}_{igsc}}))
 \]
 
 where:
@@ -2351,44 +2339,44 @@ species, /s/, and city, /c/.
 /x_{igsc}/ is the transplant age in years of tree /igsc/ (i.e. years
 since transplanting).
 
-$\beta^(0)_{igsc}$ is the intercept, or the diameter of a tree at time
+$\beta^{(0)}_{igsc}$ is the intercept, or the diameter of a tree at time
 of transplanting.
 
-$\beta^(1)_{igsc}$ (plus $\beta^(0)_{igsc}$) is the asymptote of the
+$\beta^{(1)}_{igsc}$ (plus $\beta^(0)_{igsc}$) is the asymptote of the
 sigmoidal weibull curve.
 
-$\beta^(2)_{igsc}$ and $\beta^(3)_{igsc}$ affect the rate of growth.  $\beta^(2)_{igsc}$ provides flexibility to have
+$\beta^{(2)}_{igsc}$ and $\beta^{(3)}_{igsc}$ affect the rate of growth.  $\beta^{(2)}_{igsc}$ provides flexibility to have
 slow or fast growth at young ages.
 
-For each $\beta^(j)_{igsc}$, /j/ = 0,1,2:
+For each $\beta^{(j)}_{igsc}$, /j/ = 0,1,2:
 
 \[
-\beta^(j)_{igsc} = \beta^(j)_0 + \gamma^(j)_{gs}+\delta^(j)_{c}
+\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}+\delta^{(j)}_{c}
 \]
 
-for $\beta^(3)_{igsc}$:
+for $\beta^{(3)}_{igsc}$:
 \[
-\beta^(3)_{igsc} = \beta^(3)_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *
-(\text{precip}_c * \text{gdd}_c) + \gamma^(3)_{gs}+\delta^(3)_{c}
+\beta^{(3)}_{igsc} = \beta^{(3)}_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *
+(\text{precip}_c * \text{gdd}_c) + \gamma^{(3)}_{gs}+\delta^{(3)}_{c}
 \]
 
-where $\beta^(j)_0$ is the mean for $\beta^(j)_{igsc}$. $\gamma^(j)_{gs}$ is
-genetic (genus and species) effect on $\beta^(j)$.  $\delta^(j)_{c}$ is the
-city effect on $\beta^(j)$
+where $\beta^{(j)}_0$ is the mean for $\beta^{(j)}_{igsc}$. $\gamma^{(j)}_{gs}$ is
+genetic (genus and species) effect on $\beta^{(j)}$.  $\delta^{(j)}_{c}$ is the
+city effect on $\beta^{(j)}$
 
 The species effect is nested within the genus effect.  Both are
 normally distributed, such that:
 \[
-\gamma^(j)_{gs} \sim N(\gamma^(j)_{g}, \sigma^(j)_{genus:species})
+\gamma^{(j)}_{gs} \sim N(\gamma^{(j)}_{g}, \sigma^{(j)}_{genus:species})
 \]
 
 \[
-\gamma^(j)_{g} \sim N(0, \sigma^(j)_{genus})
+\gamma^{(j)}_{g} \sim N(0, \sigma^{(j)}_{genus})
 \]
 
 The effect of city is normally distributed:
 \[
-\delta^(j)_{c} \sim N(0, \sigma^(j)_{city})
+\delta^{(j)}_{c} \sim N(0, \sigma^{(j)}_{city})
 \]
 
 *** Priors
@@ -2408,11 +2396,9 @@ biologically unreasonable parameters improbable.  The quanitity of
 data overwhelms the priors, but the relatively narrow priors also
 helps with sampling.
 
-
 All \beta's must be positive and they are likely correlated with one
 another, especially /\beta^(1)_{igsc}/ and /\beta^(3)_{igsc}/.  Without very old trees that are close
 to their asympototic dbh, it is harder to separate these two parameters.
-
 
 for gamma
 \alpha = \mu^2/\sigma^2
@@ -8152,27 +8138,8 @@ way to include prior information.
 Posterior distributions with 80% interval and median for parameters
 are shown in figures [[fig:main_effects_posterior]],
 [[fig:climate_effects_posterior]], [[fig:sd_beta0_posterior]],
-[[fig:sd_beta1_posterior]], [[fig:sd_beta2_posterior]], [[fig:sd_beta3_posterior]], [[fig:shape_posterior]]
-
-
-#+name: fig:main_effects_posterior
-[[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
-#+name: fig:climate_effects_posterior
-[[file:../figs/posterior_distributions_model_FullData_climate_effects.png]]
-#+name: fig:sd_beta0_posterior
-[[file:../figs/posterior_distributions_model_FullData_sd_beta0.png]]
-
-#+name: fig:sd_beta1_posterior
-[[file:../figs/posterior_distributions_model_FullData_sd_beta1.png]]
-
-#+name: fig:sd_beta2_posterior
-[[file:../figs/posterior_distributions_model_FullData_sd_beta2.png]]
-
-#+name: fig:sd_beta3_posterior
-[[file:../figs/posterior_distributions_model_FullData_sd_beta3.png]]
-
-#+name: fig:shape_posterior
-[[file:../figs/posterior_distributions_model_FullData_shape.png]]
+[[fig:sd_beta1_posterior]], [[fig:sd_beta2_posterior]],
+[[fig:sd_beta3_posterior]], [[fig:shape_posterior]].
 
 ** Model Comparisons
 Our approach increased model complexity at each step, first fitting a
@@ -8185,54 +8152,6 @@ scaling was omitted from table [[tab:model_descriptions]] for clarity.
 After fitting a complex model where all of the \beta's could vary by city,
 genus, and species, we sought a slightly simpler model and dropped the
 variation of the asymptote by city (model 6).
-
-#+name: tab:model_descriptions
-#+caption: Model numbers, short descriptions, and brms formula syntax
-#+attr_latex: :align l{.5cm}ll :font \small
-| Model | Description                                  | brms formula syntax                                  |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       |                                              | b0 \sim 1                                               |
-|       |                                              | b1 \sim 1                                               |
-|       |                                              | b2 \sim 1                                               |
-|       |                                              | b3 \sim 1                                               |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     2 | Parameters vary by city                      | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       |                                              | b0 \sim (1 \vert City)                                      |
-|       |                                              | b1 \sim (1 \vert City)                                      |
-|       |                                              | b2 \sim (1 \vert City)                                      |
-|       |                                              | b3 \sim (1 \vert City)                                      |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     3 | Parameters vary by genus and species         | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       | Species is nested in genus                   | b0 \sim (1 \vert Genus / Species)                           |
-|       |                                              | b1 \sim (1 \vert Genus / Species)                           |
-|       |                                              | b2 \sim (1 \vert Genus / Species)                           |
-|       |                                              | b3 \sim (1 \vert Genus / Species)                           |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     4 | Asymptote (\beta_1) varies by climate             | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       |                                              | b0 \sim 1                                               |
-|       |                                              | b1 \sim gdd * precip                                    |
-|       |                                              | b2 \sim 1                                               |
-|       |                                              | b3 \sim 1                                               |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     5 | Growth rate (\beta_3) varies by climate           | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       |                                              | b0 \sim 1                                               |
-|       |                                              | b1 \sim 1                                               |
-|       |                                              | b2 \sim 1                                               |
-|       |                                              | b3 \sim gdd * precip                                    |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     6 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       | (but asymptote does not vary by city).       | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
-|       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
-|-------+----------------------------------------------+------------------------------------------------------|
-|     7 | Parameters vary by city, genus, and species. | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
-|       | Growth rate varies by climate.               | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
-|       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
-
 
 #+begin_src R :exports none :eval no :colnames yes :results org
 library(ascii)
@@ -8259,18 +8178,6 @@ org(data.frame(res[[2]]))
   | model4 |  -1349.80 | -20195.21 |       82.60 |   6.97 |     0.35 | 40390.43 |   165.20 |
   | model1 |  -1667.70 | -20513.12 |       81.57 |   4.93 |     0.23 | 41026.23 |   163.14 |
 #+END_SRC
-
-#+name: tab:model_comparison
-#+caption: \widehat{elpd}_{loo} is the estimated expected log pointwise predictive density. elpd diff is the difference from the \widehat{elpd}_{loo} of the top model. se elpd loo is standard error of    cite:vehtari_e_2017 for descriptions
-|       | Model | \widehat{elpd}_{loo} | difference |
-|-------+-------+-------------------+------------|
-| Best  |     6 |         -18845.41 |       0.00 |
-|       |     7 |         -18976.38 |    -130.97 |
-|       |     3 |         -18989.24 |    -143.83 |
-|       |     2 |         -19764.48 |    -919.06 |
-|       |     5 |         -20180.41 |   -1334.99 |
-|       |     4 |         -20195.21 |   -1349.80 |
-| Worst |     1 |         -20513.12 |   -1667.70 |
 
 #+begin_src R :exports none
 loo::compare(res[[1]][[6]], res[[1]][[7]])
@@ -8572,9 +8479,104 @@ values.  The model along with the data and relevant code are published
 online and are available for scientists and managers to use as an
 input into ecosystem services modeling.
 
-* bibliography                                                       :ignore:
+* Bibliography                                                       :ignore:
 bibliography:~/git/notes/references.bib
 bibliographystyle:apa
+
+* Figures
+#+name: fig:City_Species_Ntrees
+#+caption: Number of trees sampled of each species and city combination in the urban tree database.
+#+attr_latex: :width 7in
+[[../figs/CityScientificNameData_CityCentric_n_splits.png]]
+
+#+name: fig:utd_climate
+#+caption: 16 climate regions and 17 representative cities in the UTD citep:mcpherson_e_2016.
+[[file:../figs/ClimateRegions_UTD.png]]
+
+#+name: fig:utd_gdd_precip_space_map
+#+caption: US census tract centroids with UTD reference cities overlaid in growing degree day (GDD) and precipitation climate space and matching color gradient in geographic space.  The reference cities cover climate space well, and variation in precipitation and growing degree days is continuous.
+[[file:../figs/climate_space_wMap_labels.png]]
+
+#+name: fig:main_effects_posterior
+[[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
+#+name: fig:climate_effects_posterior
+[[file:../figs/posterior_distributions_model_FullData_climate_effects.png]]
+#+name: fig:sd_beta0_posterior
+[[file:../figs/posterior_distributions_model_FullData_sd_beta0.png]]
+
+#+name: fig:sd_beta1_posterior
+[[file:../figs/posterior_distributions_model_FullData_sd_beta1.png]]
+
+#+name: fig:sd_beta2_posterior
+[[file:../figs/posterior_distributions_model_FullData_sd_beta2.png]]
+
+#+name: fig:sd_beta3_posterior
+[[file:../figs/posterior_distributions_model_FullData_sd_beta3.png]]
+
+#+name: fig:shape_posterior
+[[file:../figs/posterior_distributions_model_FullData_shape.png]]
+
+* Tables
+#+name: tab:model_descriptions
+#+caption: Model numbers, short descriptions, and brms formula syntax
+#+attr_latex: :align l{.5cm}ll :font \small
+| Model | Description                                  | brms formula syntax                                  |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     1 | No varying parameters                        | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       |                                              | b0 \sim 1                                               |
+|       |                                              | b1 \sim 1                                               |
+|       |                                              | b2 \sim 1                                               |
+|       |                                              | b3 \sim 1                                               |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     2 | Parameters vary by city                      | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       |                                              | b0 \sim (1 \vert City)                                      |
+|       |                                              | b1 \sim (1 \vert City)                                      |
+|       |                                              | b2 \sim (1 \vert City)                                      |
+|       |                                              | b3 \sim (1 \vert City)                                      |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     3 | Parameters vary by genus and species         | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       | Species is nested in genus                   | b0 \sim (1 \vert Genus / Species)                           |
+|       |                                              | b1 \sim (1 \vert Genus / Species)                           |
+|       |                                              | b2 \sim (1 \vert Genus / Species)                           |
+|       |                                              | b3 \sim (1 \vert Genus / Species)                           |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     4 | Asymptote (\beta_1) varies by climate             | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       |                                              | b0 \sim 1                                               |
+|       |                                              | b1 \sim gdd * precip                                    |
+|       |                                              | b2 \sim 1                                               |
+|       |                                              | b3 \sim 1                                               |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     5 | Growth rate (\beta_3) varies by climate           | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       |                                              | b0 \sim 1                                               |
+|       |                                              | b1 \sim 1                                               |
+|       |                                              | b2 \sim 1                                               |
+|       |                                              | b3 \sim gdd * precip                                    |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     6 | Parameters vary by city, genus, and species  | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       | (but asymptote does not vary by city).       | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       | Growth rate varies by climate.               | b1 \sim (1 \vert Genus/Species)                             |
+|       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
+|-------+----------------------------------------------+------------------------------------------------------|
+|     7 | Parameters vary by city, genus, and species. | DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3))               |
+|       | Growth rate varies by climate.               | b0 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       |                                              | b1 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       |                                              | b2 \sim (1 \vert City) + (1 \vert Genus/Species)                |
+|       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
+
+#+name: tab:model_comparison
+#+caption: \widehat{elpd}_{loo} is the estimated expected log pointwise predictive density. elpd diff is the difference from the \widehat{elpd}_{loo} of the top model. se elpd loo is standard error of    cite:vehtari_e_2017 for descriptions
+|       | Model | \widehat{elpd}_{loo} | difference |
+|-------+-------+-------------------+------------|
+| Best  |     6 |         -18845.41 |       0.00 |
+|       |     7 |         -18976.38 |    -130.97 |
+|       |     3 |         -18989.24 |    -143.83 |
+|       |     2 |         -19764.48 |    -919.06 |
+|       |     5 |         -20180.41 |   -1334.99 |
+|       |     4 |         -20195.21 |   -1349.80 |
+| Worst |     1 |         -20513.12 |   -1667.70 |
+
+
 
 * COMMENT supplemental figures
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
