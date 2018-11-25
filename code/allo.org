@@ -8468,7 +8468,7 @@ input into ecosystem services modeling.
 bibliography:allo.bib
 bibliographystyle:apa
 
-* Figures
+* Figures and Tables
 #+name: fig:City_Species_Ntrees
 #+caption: Number of trees sampled of each species and city combination in the urban tree database.
 #+attr_latex: :width 7in
@@ -8526,7 +8526,6 @@ bibliographystyle:apa
 #+caption: Uncertainty in mean diameter growth increases for unsampled genera, species, and cities.  DBH estimate shown in black, 50% predictive interval in dark gray and 95% predictive interval in gray.
 [[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
-* Tables
 #+name: tab:model_descriptions
 #+caption: Model numbers, short descriptions, and brms formula syntax.  \beta^{(j)}'s are recoded as /bj/ for conciseness.
 #+attr_latex: :align l{.5cm}ll :font \small
