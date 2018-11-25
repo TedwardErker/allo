@@ -6,7 +6,7 @@
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
-#+OPTIONS: toc:nil num:t date:t
+#+OPTIONS: toc:nil num:t date:t author:nil
 #+LATEX_HEADER: \usepackage[margin=1in]{geometry}
 #+LATEX_HEADER: \usepackage{natbib}
 #+LATEX_HEADER: \usepackage{chemformula}
@@ -8213,15 +8213,6 @@ figure [[fig:marginal_effects_climate_25AGE_mean_labels]], standard error of thi
 mean is in figure [[fig:marginal_effects_climate_25AGE_se_labels]].  There is an
 estimated 40cm difference in dbh between an average tree in Orlando,
 FL and one in Boise, ID.
-
-#+name: fig:marginal_effects_climate_25AGE_mean_labels
-#+caption: Posterior median DBH at 25 years after planting.
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
-
-#+name: fig:marginal_effects_climate_25AGE_se_labels
-#+caption: Posterior standard error of DBH at 25 years after planting.
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
-
 ** Comparing to Existing Equations
 Figure
 [[fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL]]
@@ -8241,9 +8232,6 @@ is not in the data and would explain why the line doesn't connect the
 two observations).  By borrowing information across all cities, we are
 able to make a more reasonable prediction even with only two
 observations in that city.
-#+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
-#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
 
 *** COMMENT all comparisons for model
 #+name: fig:all_predictions_dbh_bySpeciesCity_wData_wUTDpredictions
@@ -8260,9 +8248,6 @@ uncertainty is higher than for a sampled city, Sacramento, CA (first
 row).  The large 95% predictive intervals for a tree of unknown genus
 and species shows how great the genetic variablility is across trees.
 
-#+name: fig:predicting_ubobserved_groups
-#+caption: Uncertainty in mean diameter growth increases for unsampled genera, species, and cities.  DBH estimate shown in black, 50% predictive interval in dark gray and 95% predictive interval in gray.
-[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 ** COMMENT Model Checking
 *** Posterior predictive check
 #+name:posterior_predictive_density_overlay
@@ -8480,7 +8465,7 @@ online and are available for scientists and managers to use as an
 input into ecosystem services modeling.
 
 * Bibliography                                                       :ignore:
-bibliography:~/git/notes/references.bib
+bibliography:allo.bib
 bibliographystyle:apa
 
 * Figures
@@ -8498,23 +8483,48 @@ bibliographystyle:apa
 [[file:../figs/climate_space_wMap_labels.png]]
 
 #+name: fig:main_effects_posterior
+#+caption: Marginal posterior distributions of \beta^{(j)}_0
 [[file:../figs/posterior_distributions_model_FullData_mainparameters.png]]
+
 #+name: fig:climate_effects_posterior
+#+caption: Marginal posterior distributions of \tau's
 [[file:../figs/posterior_distributions_model_FullData_climate_effects.png]]
+
 #+name: fig:sd_beta0_posterior
+#+caption: Marginal posterior distributions of \sigma^{(0)}'s
 [[file:../figs/posterior_distributions_model_FullData_sd_beta0.png]]
 
 #+name: fig:sd_beta1_posterior
+#+caption: Marginal posterior distributions of \sigma^{(1)}'s
 [[file:../figs/posterior_distributions_model_FullData_sd_beta1.png]]
 
 #+name: fig:sd_beta2_posterior
+#+caption: Marginal posterior distributions of \sigma^{(2)}'s
 [[file:../figs/posterior_distributions_model_FullData_sd_beta2.png]]
 
 #+name: fig:sd_beta3_posterior
+#+caption: Marginal posterior distributions of \sigma^{(3)}'s
 [[file:../figs/posterior_distributions_model_FullData_sd_beta3.png]]
 
 #+name: fig:shape_posterior
+#+caption: Marginal posterior distributions of \alpha_y
 [[file:../figs/posterior_distributions_model_FullData_shape.png]]
+
+#+name: fig:marginal_effects_climate_25AGE_mean_labels
+#+caption: Posterior median DBH at 25 years after planting.
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+
+#+name: fig:marginal_effects_climate_25AGE_se_labels
+#+caption: Posterior standard error of DBH at 25 years after planting.
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png]]
+
+#+name: fig:acpl_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ACPL
+#+caption: red points are observations, blue lines are predictions of the model and shading indicates 95% prediction interval, green lines show UTD equations
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+
+#+name: fig:predicting_ubobserved_groups
+#+caption: Uncertainty in mean diameter growth increases for unsampled genera, species, and cities.  DBH estimate shown in black, 50% predictive interval in dark gray and 95% predictive interval in gray.
+[[file:../figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 * Tables
 #+name: tab:model_descriptions
@@ -8565,18 +8575,16 @@ bibliographystyle:apa
 |       |                                              | b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) |
 
 #+name: tab:model_comparison
-#+caption: \widehat{elpd}_{loo} is the estimated expected log pointwise predictive density. elpd diff is the difference from the \widehat{elpd}_{loo} of the top model. se elpd loo is standard error of    cite:vehtari_e_2017 for descriptions
-|       | Model | \widehat{elpd}_{loo} | difference |
-|-------+-------+-------------------+------------|
-| Best  |     6 |         -18845.41 |       0.00 |
-|       |     7 |         -18976.38 |    -130.97 |
-|       |     3 |         -18989.24 |    -143.83 |
-|       |     2 |         -19764.48 |    -919.06 |
-|       |     5 |         -20180.41 |   -1334.99 |
-|       |     4 |         -20195.21 |   -1349.80 |
-| Worst |     1 |         -20513.12 |   -1667.70 |
-
-
+#+caption: \widehat{elpd}_{loo} is the estimated expected log pointwise predictive density. elpd_{diff} is the difference from the \widehat{elpd}_{loo} of the top model. See cite:vehtari_e_2017 for details of elpd_{loo}.
+|       | Model | \widehat{elpd}_{loo} | elpd_{diff} |
+|-------+-------+----------------------+-------------|
+| Best  |     6 |            -18845.41 |        0.00 |
+|       |     7 |            -18976.38 |     -130.97 |
+|       |     3 |            -18989.24 |     -143.83 |
+|       |     2 |            -19764.48 |     -919.06 |
+|       |     5 |            -20180.41 |    -1334.99 |
+|       |     4 |            -20195.21 |    -1349.80 |
+| Worst |     1 |            -20513.12 |    -1667.70 |
 
 * COMMENT supplemental figures
 #+name: fig:ulam_predictions_dbh_bySpeciesCity_wData_wUTDpredictions_ULAM
@@ -8605,3 +8613,349 @@ bibliographystyle:apa
 - move figures and tables to end
 - put parentheses around the betas exponenents.
 - description of stan
+*  COMMENT Bibtex entries
+
+#+BEGIN_SRC bibtex :tangle allo.bib
+@article{lappi_bailey_1988,
+author = {Lappi, Juha and Bailey, Robert L.},
+title = {A Height Prediction Model with Random Stand and Tree Parameters: An Alternative to Traditional Site Index Methods},
+journal = {Forest Science},
+volume = {34},
+number = {4},
+pages = {907-927},
+year = {1988},
+doi = {10.1093/forestscience/34.4.907},
+URL = {http://dx.doi.org/10.1093/forestscience/34.4.907},
+eprint = {/oup/backfile/content_public/journal/forestscience/34/4/10.1093_forestscience_34.4.907/1/forestscience0907.pdf}
+}
+
+
+
+@article{carpenter_e_2017,
+  author =       {Bob Carpenter and Andrew Gelman and Matthew
+                  D. Hoffman and Daniel Lee and Ben Goodrich and
+                  Michael Betancourt and Marcus Brubaker and Jiqiang
+                  Guo and Peter Li and Allen Riddell},
+  title =        {Stan: A Probabilistic Programming Language},
+  journal =      {Journal of Statistical Software},
+  volume =       76,
+  number =       1,
+  pages =        {nil},
+  year =         2017,
+  doi =          {10.18637/jss.v076.i01},
+  url =          {https://doi.org/10.18637/jss.v076.i01},
+  DATE_ADDED =   {Fri Oct 26 14:14:48 2018},
+}
+
+
+
+
+@article{buerkner_2017,
+  author =       {Paul-Christian B{\"u}rkner},
+  title =        {Brms: An R Package for Bayesian Multilevel Models
+                  Using Stan},
+  journal =      {Journal of Statistical Software},
+  volume =       80,
+  number =       1,
+  pages =        {nil},
+  year =         2017,
+  doi =          {10.18637/jss.v080.i01},
+  url =          {https://www.jstatsoft.org/article/view/v080i01},
+  DATE_ADDED =   {Tue Jul 17 11:36:43 2018},
+}
+
+
+
+@misc{utd_2016,
+  author={McPherson, E Gregory and van Doorn, Natalie S and Peper, Paula J},
+  title = {Urban Tree Database},
+  year = {2016},
+  city = {Fort Collins, CO},
+  institution = {Forest Service Research Data Archive},
+  url = {https://doi.org/10.2737/RDS-2016-0005},
+}
+
+
+
+@misc{mcpherson_e_2016,
+  title={Urban tree database and allometric equations},
+  author={McPherson, E Gregory and van Doorn, Natalie S and Peper, Paula J},
+  year=2016
+}
+
+
+
+@misc{frelich_1992,
+  title={Predicting dimensional relationships for Twin Cities shade trees},
+  author={Frelich, Lee E},
+  year=1992,
+  publisher={University of Minnesota, Department of Forest Resources St. Paul}
+}
+
+
+
+@article{mcpherson_simpson_99,
+  title={Carbon dioxide reduction through urban forestry},
+  author={McPherson, E Gregory and Simpson, James R},
+  journal={Gen. Tech. Rep. PSW-171, USDA For. Serv., Pacific Southwest Research Station, Albany, CA},
+  year={1999}
+}
+
+
+
+@article{peper_2001a,
+  title={Equations for predicting diameter, height, crown width, and leaf area of San Joaquin Valley street trees},
+  author={Peper, Paula J and McPherson, E Gregory and Mori, Sylvia M},
+  journal={Journal of Arboriculture},
+  volume=27,
+  number=6,
+  pages={306--317},
+  year=2001,
+  publisher={INTERNATIONAL SOCIETY OF ARBORICULTURE},
+}
+
+
+
+@article{peper_2001b,
+  title={Predictive equations for dimensions and leaf area of coastal Southern California street trees},
+  author={Peper, Paula J and McPherson, E Gregory and Mori, Sylvia M},
+  journal={Journal of Arboriculture},
+  volume=27,
+  number=4,
+  pages=169,
+  year=2001,
+  publisher={INTERNATIONAL SOCIETY OF ARBORICULTURE},
+}
+
+
+
+@Manual{r_lang,
+  address =      {Vienna, Austria},
+  author =       {{R Core Team}},
+  organization = {R Foundation for Statistical Computing},
+  title =        {R: A Language and Environment for Statistical
+                  Computing},
+  url =          {https://www.R-project.org/},
+  year =         2016,
+}
+
+
+
+@article{hall_bailey_2001,
+  title={Modeling and prediction of forest growth variables based on multilevel nonlinear mixed models},
+  author={Hall, Daniel B and Bailey, Robert L},
+  journal={Forest science},
+  volume={47},
+  number={3},
+  pages={311--321},
+  year={2001},
+  publisher={Oxford University Press}
+}
+
+
+
+
+@article{nothdurft_e_2006,
+  author =       {Arne Nothdurft and Edgar Kublin and Juha Lappi},
+  title =        {A Non-Linear Hierarchical Mixed Model To Describe
+                  Tree Height Growth},
+  journal =      {European Journal of Forest Research},
+  volume =       125,
+  number =       3,
+  pages =        {281-289},
+  year =         2006,
+  doi =          {10.1007/s10342-006-0118-6},
+  url =          {https://doi.org/10.1007/s10342-006-0118-6},
+  DATE_ADDED =   {Mon Aug 27 15:46:01 2018},
+}
+
+
+
+@article{li_e_2011,
+  author =       {R. Li and B. Stewart and A. Weiskittel},
+  title =        {A Bayesian Approach for Modelling Non-Linear
+                  Longitudinal/hierarchical Data With Random Effects
+                  in Forestry},
+  journal =      {Forestry},
+  volume =       85,
+  number =       1,
+  pages =        {17-25},
+  year =         2011,
+  doi =          {10.1093/forestry/cpr050},
+  url =          {https://doi.org/10.1093/forestry/cpr050},
+  DATE_ADDED =   {Wed Nov 7 14:10:40 2018},
+}
+
+
+
+@article{peper_e_2014,
+  author =       {Paula J. Peper and Claudia P. Alzate and John
+                  W. McNeil and Jalil Hashemi},
+  title =        {Allometric Equations for Urban Ash Trees (Fraxinus
+                  spp.) in Oakville, Southern Ontario, Canada},
+  journal =      {Urban Forestry \& Urban Greening},
+  volume =       13,
+  number =       1,
+  pages =        {175-183},
+  year =         2014,
+  doi =          {10.1016/j.ufug.2013.07.002},
+  url =          {https://doi.org/10.1016/j.ufug.2013.07.002},
+  DATE_ADDED =   {Wed Nov 7 11:40:24 2018},
+}
+
+
+
+
+@book{weiskittel_e_2011,
+  author =       {Aaron R. Weiskittel and David W. Hann and John
+                  A. Kershaw and Jerome K. Vanclay},
+  title =        {Forest Growth and Yield Modeling},
+  year =         2011,
+  publisher =    {John Wiley \& Sons, Ltd},
+  url =          {https://doi.org/10.1002/9781119998518},
+  DATE_ADDED =   {Wed Apr 25 10:21:16 2018},
+  doi =          {10.1002/9781119998518},
+  pages =        {nil},
+  series =       {[]},
+}
+
+
+
+@article{manso_e_2015,
+  author =       {Rub{\'e}n Manso and Fran{\c{c}}ois Morneau and
+                  Fran{\c{c}}ois Ningre and Mathieu Fortin},
+  title =        {Effect of Climate and Intra- and Inter-Specific
+                  Competition on Diameter Increment in Beech and Oak
+                  Stands},
+  journal =      {Forestry},
+  volume =       88,
+  number =       5,
+  pages =        {540-551},
+  year =         2015,
+  doi =          {10.1093/forestry/cpv020},
+  url =          {https://doi.org/10.1093/forestry/cpv020},
+  DATE_ADDED =   {Wed Nov 7 14:15:45 2018},
+}
+
+
+
+@article{dietze_e_2008,
+  author =       {Michael C. Dietze and Michael S. Wolosin and James
+                  S. Clark},
+  title =        {Capturing Diversity and Interspecific Variability in
+                  Allometries: A Hierarchical Approach},
+  journal =      {Forest Ecology and Management},
+  volume =       256,
+  number =       11,
+  pages =        {1939-1948},
+  year =         2008,
+  doi =          {10.1016/j.foreco.2008.07.034},
+  url =          {https://doi.org/10.1016/j.foreco.2008.07.034},
+  DATE_ADDED =   {Wed Apr 25 16:05:22 2018},
+}
+
+
+
+@article{sirkia_e_2015,
+  author =       {Seija Sirki{\"a} and Jaakko Heinonen and Jari Miina
+                  and Kalle Eerik{\"a}inen},
+  title =        {Subject-Specific Prediction Using a Nonlinear Mixed
+                  Model: Consequences of Different Approaches},
+  journal =      {Forest Science},
+  volume =       61,
+  number =       2,
+  pages =        {205-212},
+  year =         2015,
+  doi =          {10.5849/forsci.13-142},
+  url =          {https://doi.org/10.5849/forsci.13-142},
+  DATE_ADDED =   {Wed Nov 7 14:25:32 2018},
+}
+
+
+
+
+@article{yang_e_2009,
+  author =       {Yuqing Yang and Shongming Huang and Shawn X. Meng
+                  and Guillermo Trincado and Curtis L. VanderSchaaf},
+  title =        {A Multilevel Individual Tree Basal Area Increment
+                  Model for Aspen in Boreal Mixedwood Stands},
+  journal =      {Canadian Journal of Forest Research},
+  volume =       39,
+  number =       11,
+  pages =        {2203-2214},
+  year =         2009,
+  doi =          {10.1139/x09-123},
+  url =          {https://doi.org/10.1139/x09-123},
+  DATE_ADDED =   {Mon Aug 27 15:42:21 2018},
+}
+
+
+
+@article{troxel_e_2013,
+  title={Relationships between bole and crown size for young urban trees in the northeastern USA},
+  author={Troxel, Blake and Piana, Max and Ashton, Mark S and Murphy-Dunning, Colleen},
+  journal={Urban forestry \& urban greening},
+  volume={12},
+  number={2},
+  pages={144--153},
+  year={2013},
+  publisher={Elsevier}
+}
+
+
+
+@article{vehtari_e_2017,
+  author =       {Aki Vehtari and Andrew Gelman and Jonah Gabry},
+  title =        {Practical Bayesian Model Evaluation Using
+                  Leave-One-Out Cross-Validation and Waic},
+  journal =      {Statistics and Computing},
+  volume =       27,
+  number =       5,
+  pages =        {1413-1432},
+  year =         2017,
+  doi =          {10.1007/s11222-016-9696-4},
+  url =          {https://doi.org/10.1007/s11222-016-9696-4},
+  DATE_ADDED =   {Tue Oct 30 14:49:26 2018},
+}
+
+
+
+
+@article{garcia_2005,
+  title={Unifying sigmoid univariate growth equations},
+  author={Garcia, OSCAR},
+  journal={Forest biometry, modelling and information sciences},
+  volume={1},
+  pages={63--68},
+  year={2005}
+}
+
+
+
+@article{garcia_2005,
+  title={Unifying sigmoid univariate growth equations},
+  author={Garcia, OSCAR},
+  journal={Forest biometry, modelling and information sciences},
+  volume={1},
+  pages={63--68},
+  year={2005}
+}
+
+
+
+@article{zeide_2004,
+  author =       {Boris Zeide},
+  title =        {Intrinsic Units in Growth Modeling},
+  journal =      {Ecological Modelling},
+  volume =       175,
+  number =       3,
+  pages =        {249-259},
+  year =         2004,
+  doi =          {10.1016/j.ecolmodel.2003.10.017},
+  url =          {https://doi.org/10.1016/j.ecolmodel.2003.10.017},
+  DATE_ADDED =   {Thu May 17 21:33:42 2018},
+}
+
+
+
+#+END_SRC
