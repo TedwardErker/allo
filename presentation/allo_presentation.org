@@ -22,7 +22,19 @@
   - show the full model written out. and show the brms syntax for comparison.
   - show HMC sampling video. http://chi-feng.github.io/mcmc-demo/
     - I should probably just take a video of this.
--
-  -
+- Statistical Inference
+  - ?Model Comparisons
+  - Compare to existing equations
+  - Uncertainty Quantification
+- problems and future work
+  - multistemmed trees?
+  - palms - excluded from analysis, but theyare in the data
 
-*
+* Urban Tree Growth
+
+infrastructure
+
+services
+
+
+
