@@ -1,6 +1,6 @@
 
-* ideas for presentation
 
+* COMMENT ideas for presentation
 - motivation
   - tree growth as a problem
     - I needed to predict growth through time for ecosystem service modeling
@@ -24,3 +24,5 @@
     - I should probably just take a video of this.
 -
   -
+
+*
