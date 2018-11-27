@@ -66,10 +66,9 @@ ecosystem services
 #+ATTR_HTML: :height 750px
 [[file:figs/elmer.jpg]]
 
-#+REVEAL: split
-
-#+ATTR_HTML: :height 750px
-[[file:figs/elmer.jpg]]
+#+BEGIN_NOTES
+ I needed equation for ash growth.
+#+END_NOTES
 
 
 * Forest \neq Urban
@@ -100,8 +99,14 @@ You could use existing growth equations that have been developed, but forest tre
 [[file:figs/eg_urban.jpg]]
  #+REVEAL_HTML: </div>
 
-
+#+BEGIN_NOTES
 They also aren't simply open grown trees.  urban trees are often hacked up.
+#+END_NOTES
+
+
+* Urban Tree Database
+
+
 
 
 * COMMENT A two column slide
