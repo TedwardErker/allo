@@ -123,6 +123,10 @@ How can we predict the growth of urban trees?
 
 #+REVEAL: split
 #+ATTR_HTML: :height 750px
+[[file:figs/CityScientificNameData_CityCentric_n_commonSpecies.png]]
+
+#+REVEAL: split
+#+ATTR_HTML: :height 750px
 [[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 
