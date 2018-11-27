@@ -88,6 +88,19 @@ ecosystem services
 You could use existing growth equations that have been developed, but forest trees grow differently than urban trees.
 #+END_NOTES
 
+* Open Grown \neq Urban
+
+#+REVEAL_HTML: <div class="column" style="float:left; width:49%">
+#+ATTR_HTML: :height 650px
+[[file:figs/open_oak.jpg]]
+ #+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:49%">
+#+ATTR_HTML: :height 650px
+[[file:figs/eg_urban.jpg]]
+ #+REVEAL_HTML: </div>
+
+
 They also aren't simply open grown trees.  urban trees are often hacked up.
 
 
