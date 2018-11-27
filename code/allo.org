@@ -2,7 +2,7 @@
 #+AUTHOR: erker
 #+email: erker@wisc.edu
 #+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
-#+PROPERTY:  header-args:sh :eval no
+#+PROPERTY:  header-args:sh :eval yes
 #+startup: indent entitiespretty
 #+FILETAGS: work allo
 #+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
@@ -7128,7 +7128,7 @@ rsync -avz erker@krusty:~/allo/models/model_comparison_loo.rds ~/git/allo/models
 
 #+end_src
 
-*** COMMENT genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
+*** genus: many;  species: many; cities: many (not \beta_1); climate: b3linint; hetero: no; family: Gamma FULL DATA no Palm
 **** model R code
 #+begin_src R :tangle genus_species_citiesNotB1_b3climate_fulldata_noPalm.R
   library(dplyr)
@@ -7452,7 +7452,7 @@ plot(p)[[1]] +
   cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
   cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
-  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 1000)
+  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 5000)
   saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 
 #+end_src
@@ -7464,12 +7464,10 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #+END_SRC
 
 #+RESULTS:
-: erker@krusty's password:
-: building file list ... done
-: calc_marginal_effects_fulldata.R
 :
-: sent 450 bytes  received 54 bytes  144.00 bytes/sec
-: total size is 1213  speedup is 2.41
+: ssh: Could not resolve hostname krusty: nodename nor servname provided, or not known
+: rsync: connection unexpectedly closed (0 bytes received so far) [sender]
+: rsync error: error in rsync protocol data stream (code 12) at /BuildRoot/Library/Caches/com.apple.xbs/Sources/rsync/rsync-52.200.1/rsync/io.c(453) [sender=2.6.9]
 
 #+BEGIN_SRC sh
 
@@ -7895,7 +7893,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 #+RESULTS:
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_ulam.png]]
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png :height 1000 :width 1300 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png :height 800 :width 1300 :res 300
             red <- "#dc322f"
             blue <- "#268bd2"
             green <- "#859900"
@@ -7922,7 +7920,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
       d.com <- rbind(utd.pred)
 
-    cols <- c(red, blue)
+    cols <- c("black", red)
 
       ggplot(d.com, aes(x = AGE, y = DBH)) +
           geom_point(data = dd.sub, aes(x = AGE, y = DBH, color = Acer_platanoides), alpha = .4, size = .75) +
@@ -7969,14 +7967,14 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
     d.com <- rbind(utd.pred, me3)
 
-  cols <- c(red, blue, green)
+  cols <- c("black", red, blue)
 
     ggplot(d.com, aes(x = AGE, y = DBH)) +
         geom_point(data = dd.sub, aes(x = AGE, y = DBH, color = Acer_platanoides), alpha = .4, size = .75) +
         geom_line(aes(color = Acer_platanoides, group = interaction(Acer_platanoides,City))) +
         geom_ribbon(data = me2.sub, aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__,group = City), inherit.aes = F, alpha = .15) +
         facet_wrap(~City) +
-        scale_x_continuous(breaks = c(0,75)) +
+        scale_x_continuous(breaks = c(0,75), limits = c(0, 120)) +
         scale_color_manual("Acer platanoides", values = cols) +
         theme_minimal() +
         theme(text = element_text(size = 14),
@@ -7988,7 +7986,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 #+end_src
 
 #+RESULTS:
-[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl.png]]
+[[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
 
 What city is the lower midwest?  Indianapolis.  There is no data for that.
 

@@ -129,11 +129,10 @@ How can we predict the growth of urban trees?
 #+ATTR_HTML: :height 750px
 [[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
 
+* Existing Approach
 
 
-- cities
-- species
--
+
 
 
 * COMMENT A two column slide
