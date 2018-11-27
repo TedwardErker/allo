@@ -103,9 +103,12 @@ You could use existing growth equations that have been developed, but forest tre
 They also aren't simply open grown trees.  urban trees are often hacked up.
 #+END_NOTES
 
-
-* Urban Tree Database
-
+* Urban Tree Database                                                :ignore:
+:PROPERTIES:
+:reveal_background: figs/UTD_cover.png
+:reveal_background_size: 800px
+:reveal_background_trans: slide
+:END:
 
 
 
