@@ -68,8 +68,17 @@ ecosystem services
 
 #+REVEAL: split
 
+#+ATTR_HTML: :height 750px
+[[file:figs/elmer.jpg]]
+
+#+REVEAL: split
+
+#+ATTR_HTML: :height 750px
+[[file:figs/eg_forest1.jpg]] | [[file:figs/eg_urban.jpg]]
+
+
 #+BEGIN_NOTES
-forest trees grow differently than urban trees.
+You could use existing growth equations that have been developed, but forest trees grow differently than urban trees.
 #+END_NOTES
 
 * Urban Tree Growth
