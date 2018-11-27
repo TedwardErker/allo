@@ -131,6 +131,40 @@ How can we predict the growth of urban trees?
 
 * Existing Approach
 
+Acer
+
+#+BEGIN_NOTES
+no extrapolation
+quadradic
+cubic
+#+END_NOTES
+
+#+BEGIN_NOTES
+two major problems:
+1) poor extrapolation because of curves not based on biology
+2) they even predict negative values at times
+#+END_NOTES
+
+* one
+** Model Considerations
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+1. Biologically realistic
+ #+REVEAL_HTML: </div>
+
+ #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+ #+ATTR_ORG: :width 150
+ [[file:figs/weibull_one.png]]
+ #+REVEAL_HTML: </div>
+** Model Considerations
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+1. Biologically realistic
+2. Variance increases with age
+ #+REVEAL_HTML: </div>
+
+ #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+ #+ATTR_ORG: :width 150
+ [[file:figs/weibull_one_wGammaY.png]]
+ #+REVEAL_HTML: </div>
 
 
 
