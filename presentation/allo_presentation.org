@@ -51,14 +51,30 @@
 * Biometry Project:
 Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 
-* japanese lilac :ignore:
+#+REVEAL: split
+
+#+ATTR_HTML: :height 750px
+[[file:figs/japanese_lilac.jpg]]
+
+
+#+REVEAL: split
+
+#+ATTR_HTML: :height 750px
+[[file:figs/elmer.jpg]]
+
+
+* japanese lilac
 :PROPERTIES:
 :reveal_background: figs/japanese_lilac.jpg
+:reveal_background_size: center
 :END:
 
 #+BEGIN_NOTES
 
 #+END_NOTES
+
+* japanese lilac
+
 
 * Urban Tree Growth
 
