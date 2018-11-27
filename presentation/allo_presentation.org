@@ -71,15 +71,39 @@ ecosystem services
 #+ATTR_HTML: :height 750px
 [[file:figs/elmer.jpg]]
 
-#+REVEAL: split
 
-#+ATTR_HTML: :height 750px
-[[file:figs/eg_forest1.jpg]] | [[file:figs/eg_urban.jpg]]
+* Forest \neq Urban
 
+#+REVEAL_HTML: <div class="column" style="float:left; width:49%">
+#+ATTR_HTML: :height 650px
+[[file:figs/eg_forest1.jpg]]
+ #+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:49%">
+#+ATTR_HTML: :height 650px
+[[file:figs/eg_urban.jpg]]
+ #+REVEAL_HTML: </div>
 
 #+BEGIN_NOTES
 You could use existing growth equations that have been developed, but forest trees grow differently than urban trees.
 #+END_NOTES
+
+They also aren't simply open grown trees.  urban trees are often hacked up.
+
+
+* COMMENT A two column slide
+#+REVEAL_HTML: <div class="column" style="float:left; width:70%">
+Blablablablabla
+ * blablabl
+ * more blabla
+ #+REVEAL_HTML: </div>
+
+ #+REVEAL_HTML: <div class="column" style="float:right; width:30%">
+ #+ATTR_ORG: :width 150
+ [[file:figs/eg_urban.jpg]]
+ #+ATTR_ORG: :width 150
+ [[file:figs/eg_forest1.jpg]]
+ #+REVEAL_HTML: </div>
 
 * Urban Tree Growth
 
