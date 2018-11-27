@@ -103,11 +103,14 @@ You could use existing growth equations that have been developed, but forest tre
 They also aren't simply open grown trees.  urban trees are often hacked up.
 #+END_NOTES
 
-* How can we predict the growth of urban trees?
+* Growth of urban trees?
 #+REVEAL: split
 #+ATTR_HTML: :height 750px
-[[file:figs/UTD_cover.jpg]]
+[[file:figs/UTD_cover.png]]
 
+#+BEGIN_NOTES
+How can we predict the growth of urban trees?
+#+END_NOTES
 
 
 
