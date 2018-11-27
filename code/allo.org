@@ -2080,6 +2080,50 @@ readily apparent when looking.
 I should order left to right by n cities that a species is observed in
 and then by city (alphabetic)
 
+#+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n_commonSpecies.png
+     library(dplyr)
+     library(ggplot2)
+
+                d <- readRDS("../data/tidy_age_dbh.rds")
+
+                d2 <- d %>%
+                      group_by(ScientificName, City) %>%
+                      summarize(n = n()) %>%
+                      ungroup()
+
+            d3 <- d2 %>%
+              group_by(ScientificName) %>%
+              summarize(n_cities = n()) %>%
+              filter(n_cities > 4) %>%
+              arrange(n_cities)
+
+       d4 <- left_join(d2, d3)
+
+       d5 <- d4 %>%
+           group_by(City) %>%
+           summarize(meann = sum(n_cities)) %>%
+           arrange(-meann)
+
+         d2 <- d4 %>%
+             mutate(City = factor(City, levels = unique(d5$City), ordered = T),
+                    ScientificName = factor(ScientificName, levels = unique(d3$ScientificName), ordered = T))
+
+   d3 <- filter(d2, !is.na(ScientificName))
+
+                ggplot(d3, aes(y = ScientificName, x = City, fill = n)) +
+                          geom_raster() +
+                          coord_equal() +
+                          scale_fill_continuous(label = "number\n of trees\n sampled", breaks = seq(min(d2$n), max(d2$n), length.out = 3), type = "viridis") +
+                          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                    scale_x_discrete(position = "top")
+
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/CityScientificNameData_CityCentric_n_commonSpecies.png]]
+
+
 #+begin_src R :exports results :results graphics :file ../figs/CityScientificNameData_CityCentric_n.png :height 1300
              d <- readRDS("../data/tidy_age_dbh.rds")
 
