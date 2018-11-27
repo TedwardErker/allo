@@ -112,6 +112,24 @@ They also aren't simply open grown trees.  urban trees are often hacked up.
 How can we predict the growth of urban trees?
 #+END_NOTES
 
+#+REVEAL: split
+#+ATTR_HTML: :height 750px
+[[file:figs/UTD_cover.png]]
+
+
+#+REVEAL: split
+#+ATTR_HTML: :height 750px
+[[file:figs/ClimateRegions_UTD.png]]
+
+#+REVEAL: split
+#+ATTR_HTML: :height 750px
+[[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
+
+
+
+- cities
+- species
+-
 
 
 * COMMENT A two column slide
