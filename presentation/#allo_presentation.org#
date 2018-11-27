@@ -139,6 +139,17 @@ quadradic
 cubic
 #+END_NOTES
 
+#+BEGIN_NOTES
+two major problems:
+1) poor extrapolation because of curves not based on biology
+2) they even predict negative values at times
+#+END_NOTES
+
+* Model Considerations
+
+1. Biologically realistic
+2. heteroskedasticity
+3. not negative
 
 
 * COMMENT A two column slide
