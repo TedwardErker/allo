@@ -115,6 +115,10 @@ give summary of data here.
 
 dbh and age
 
+units of dbh are cm
+
+4.5ft above ground 1.3m.
+
 #+END_NOTES
 
 #+REVEAL: split
