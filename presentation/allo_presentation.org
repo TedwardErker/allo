@@ -110,12 +110,12 @@ They also aren't simply open grown trees.  urban trees are often hacked up.
 
 #+BEGIN_NOTES
 How can we predict the growth of urban trees?
+
+give summary of data here.
+
+dbh and age
+
 #+END_NOTES
-
-#+REVEAL: split
-#+ATTR_HTML: :height 750px
-[[file:figs/UTD_cover.png]]
-
 
 #+REVEAL: split
 #+ATTR_HTML: :height 750px
@@ -130,10 +130,14 @@ How can we predict the growth of urban trees?
 [[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 * Existing Approach
-
-Acer
+#+ATTR_HTML: :height 700px
+[[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png]]
 
 #+BEGIN_NOTES
+for every species and city combination
+test a number of models,
+select the one with the lowest AIC.
+
 no extrapolation
 quadradic
 cubic
