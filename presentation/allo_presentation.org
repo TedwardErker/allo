@@ -168,11 +168,11 @@ two major problems:
 
 * Weibull
 
-#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $y = 1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})$
 #+REVEAL_HTML: </div>
 
-#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
 [[file:figs/weibull_cdf2.png]]
 #+REVEAL_HTML: </div>
@@ -183,11 +183,11 @@ point is that it is flexible
 
 
 * Weibull
-#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $y = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
-#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
 [[file:figs/weibull_scaled.png]]
 #+REVEAL_HTML: </div>
@@ -195,19 +195,26 @@ $y = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
 
 
 * Weibull
-#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $y = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
-#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
 [[file:figs/weibull_scaled_intercept.png]]
 #+REVEAL_HTML: </div>
 
 
-add intercept to account for transplanting age.  trees have a dbh at
-age 0.
 
+* Weibull
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
+$\mu = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
+#+ATTR_ORG: :width 150
+[[file:figs/weibull_scaled_intercept.png]]
+#+REVEAL_HTML: </div>
 
 * Norway Maple Comparison
 #+ATTR_HTML: :height 750px
