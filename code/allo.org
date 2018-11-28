@@ -7500,20 +7500,21 @@ plot(p)[[1]] +
 
 
 #+begin_src R :tangle calc_marginal_effects_fulldata.R
-  library(dplyr)
-  library(brms)
-  mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
-  mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
-  ## precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100, nsamples = 10000, cond = data.frame(AGE = 25))
-  ## saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
+    library(dplyr)
+    library(brms)
+    mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
+    mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
+    ## precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", surface = T, resolution = 100, nsamples = 10000, cond = data.frame(AGE = 25))
+    ## saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 
 
-  cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+    cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
+    cond <- expand.grid(Species = "ACPL",  City = unique(mod$data$City))
   cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
-  cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
+    cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
-  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict") #, nsamples = 10000)
-  saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
+    me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 15000)
+    saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 
 #+end_src
 
@@ -7526,10 +7527,9 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
-: calc_marginal_effects_fulldata.R
 :
-: sent 342 bytes  received 54 bytes  158.40 bytes/sec
-: total size is 1213  speedup is 3.06
+: sent 103 bytes  received 20 bytes  35.14 bytes/sec
+: total size is 1223  speedup is 9.94
 
 #+BEGIN_SRC sh
 
@@ -7549,10 +7549,9 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
-: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds
 :
-: sent 16502 bytes  received 7372480 bytes  2111137.71 bytes/sec
-: total size is 7498109  speedup is 1.01
+: sent 16 bytes  received 189 bytes  24.12 bytes/sec
+: total size is 7498109  speedup is 36576.14
 : You have new mail in /var/mail/erker
 
 #+begin_src R
@@ -7718,7 +7717,7 @@ p1
 
 
 #+begin_src R
-me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
+#me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 #+end_src
 
 #+RESULTS:
@@ -8029,7 +8028,7 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 
     d.com <- rbind(utd.pred, me3)
 
-  cols <- c("black", red, blue)
+  cols <- c("black", blue, red)
 
     ggplot(d.com, aes(x = AGE, y = DBH)) +
         geom_point(data = dd.sub, aes(x = AGE, y = DBH, color = Acer_platanoides), alpha = .4, size = .75) +
