@@ -166,7 +166,30 @@ two major problems:
  [[file:figs/weibull_one_wGammaY.png]]
  #+REVEAL_HTML: </div>
 
-* Weibull Curve
+* Weibull
+
+figure showing the many possible cdfs if the parameters in the curve
+are modified.
+
+#+BEGIN_NOTES
+point is that it is flexible
+#+END_NOTES
+
+#+REVEAL: split
+
+multiply cdf by \beta_1 to scale it for trees
+
+#+REVEAL: split
+
+add intercept to account for transplanting age.  trees have a dbh at
+age 0.
+
+
+* Norway Maple Comparison
+#+ATTR_HTML: :height 750px
+[[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
+
+
 
 
 
