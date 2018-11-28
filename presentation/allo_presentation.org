@@ -130,7 +130,7 @@ dbh and age
 [[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 * Existing Approach
-#+ATTR_HTML: :height 700px
+#+ATTR_HTML: :height 650px
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png]]
 
 #+BEGIN_NOTES
@@ -221,7 +221,7 @@ $\mu = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
 * Norway Maple Comparison
-#+ATTR_HTML: :height 750px
+#+ATTR_HTML: :height 650px
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
 
 

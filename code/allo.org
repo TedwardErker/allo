@@ -3285,7 +3285,7 @@ n <- nrow(df)
     w <- function(x, beta_0, beta_1, beta_2, beta_3) {beta_0 + beta_1 * (1 - exp(-beta_2 * x^beta_3)) }
     x <- 0:150
 
-    beta_0 <- c(1,5,10)
+    beta_0 <- 5
     beta_1 <- 120
     beta_2 <- 9^ seq(-1, -6, length.out = 5)
     beta_3 <- seq(.5, 2.7, length.out = 5) ^ 1.2
@@ -3301,7 +3301,7 @@ n <- nrow(df)
 #+begin_src R :exports results :results graphics :file ../figs/weibull_scaled_intercept.png :res 120
   ggplot(df, aes(x = x, y = y, color = factor(beta_0))) + geom_line() +
     scale_y_continuous(limits = c(0,160)) +
-    scale_color_solarized() +
+    scale_color_solarized("magenta") +
     theme_minimal() +
     theme(legend.position = "none")
 
@@ -7700,9 +7700,10 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_
 #+RESULTS:
 : erker@krusty's password:
 : receiving file list ... done
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds
 :
-: sent 16 bytes  received 189 bytes  24.12 bytes/sec
-: total size is 7498109  speedup is 36576.14
+: sent 16484 bytes  received 52050 bytes  19581.14 bytes/sec
+: total size is 52428  speedup is 0.76
 : You have new mail in /var/mail/erker
 
 #+begin_src R
@@ -7868,7 +7869,7 @@ p1
 
 
 #+begin_src R
-#me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
+me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
 #+end_src
 
 #+RESULTS:
@@ -8154,7 +8155,11 @@ p +   theme(axis.text = element_text(size = 18, color = "#839496"))
 [[file:../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png]]
 
 
-#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png :height 1000 :width 1300 :res 300
+#+begin_src R :exports results :results graphics :file ../figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png :height 800 :width 1300 :res 300
+            red <- "#dc322f"
+            blue <- "#268bd2"
+            green <- "#859900"
+
     sp.subset <- c("ACPL")
     r.subset <- c("MidWst", "NMtnPr", "NoEast", "PacfNW","TpIntW")
 
