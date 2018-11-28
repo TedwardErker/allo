@@ -3160,6 +3160,37 @@ are correlated.  I wonder if I could include that information in the prior?
 
 #+RESULTS:
 [[file:../figs/frelich_reasonable.png]]
+****** weibull examples
+#+begin_src R
+  w <- function(x, beta_2, beta_3) {(1 - exp(-beta_2 * x^beta_3)) }
+  x <- 1:150
+  beta_2 <- c(.0001, .0003, .005)
+  beta_3 <- c(1.3, 2.2, 3)
+
+  beta_2 <- c(.005, .0003, .1)
+  beta_3 <- c(1.3, 2.2, .4)
+
+  df <- data.frame(beta_2, beta_3)
+
+n <- nrow(df)
+
+  df <- cbind(df[rep(1:n, each = 150),], x = rep(x, times = n))
+
+  df <- df %>% mutate(y = w(age, beta_2, beta_3))
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_cdf.png
+  ggplot(df, aes(x = x, y = y, color = interaction(beta_2, beta_3))) + geom_line() +
+    scale_y_continuous(limits = c(0,1)) +
+    theme_minimal() #+
+#    theme(legend.position = "none")
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_cdf.png]]
 
 **** COMMENT a look at gamma family
 #+begin_src R
@@ -7527,9 +7558,10 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #+RESULTS:
 : erker@krusty's password:
 : building file list ... done
+: calc_marginal_effects_fulldata.R
 :
-: sent 103 bytes  received 20 bytes  35.14 bytes/sec
-: total size is 1223  speedup is 9.94
+: sent 624 bytes  received 54 bytes  271.20 bytes/sec
+: total size is 1309  speedup is 1.93
 
 #+BEGIN_SRC sh
 
