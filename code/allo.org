@@ -3229,7 +3229,7 @@ n <- nrow(df)
   w <- function(x, beta_2, beta_3) {(1 - exp(-beta_2 * x^beta_3)) }
   x <- 0:150
 
-  beta_2 <- 10^ seq(-2, -3, length.out = 3)
+  beta_2 <- round(10^ seq(-2, -3, length.out = 3), 3)
   beta_3 <- seq(1, 1.5, length.out = 3)
 
   df <- expand.grid(beta_2 = beta_2, beta_3 = beta_3, x = x)

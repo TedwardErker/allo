@@ -168,23 +168,30 @@ two major problems:
 
 * Weibull
 
-figure showing the many possible cdfs if the parameters in the curve
-are modified.
-
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
-${n! \over k!(n-k)!} = {n \choose k}$
- #+REVEAL_HTML: </div>
+$y = 1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})$
+#+REVEAL_HTML: </div>
 
- #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
- #+ATTR_ORG: :width 150
- [[file:figs/weibull_cdf2.png]]
- #+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+#+ATTR_ORG: :width 150
+[[file:figs/weibull_cdf2.png]]
+#+REVEAL_HTML: </div>
 
 #+BEGIN_NOTES
 point is that it is flexible
 #+END_NOTES
 
-#+REVEAL: split
+
+* Weibull
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+$y = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+#+ATTR_ORG: :width 150
+[[file:figs/weibull_cdf2.png]]
+#+REVEAL_HTML: </div>
+
 
 multiply cdf by \beta_1 to scale it for trees
 
