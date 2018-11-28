@@ -3252,6 +3252,65 @@ n <- nrow(df)
 #+RESULTS:
 [[file:../figs/weibull_cdf3.png]]
 
+
+#+begin_src R
+    w <- function(x, beta_1, beta_2, beta_3) {beta_1 * (1 - exp(-beta_2 * x^beta_3)) }
+    x <- 0:150
+
+    beta_1 <- c(80, 100, 120, 140, 160)
+    beta_2 <- 9^ seq(-1, -6, length.out = 5)
+    beta_3 <- seq(.5, 2.7, length.out = 5) ^ 1.2
+
+    df <- expand.grid(beta_1 = beta_1, beta_2 = beta_2[3], beta_3 = beta_3[3], x = x)
+
+    df <- df %>% mutate(y = w(x, beta_1, beta_2, beta_3))
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_scaled.png :res 120
+  ggplot(df, aes(x = x, y = y, color = factor(beta_1))) + geom_line() +
+    scale_y_continuous(limits = c(0,160)) +
+    scale_color_solarized() +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_scaled.png]]
+
+#+begin_src R
+    w <- function(x, beta_0, beta_1, beta_2, beta_3) {beta_0 + beta_1 * (1 - exp(-beta_2 * x^beta_3)) }
+    x <- 0:150
+
+    beta_0 <- c(1,5,10)
+    beta_1 <- 120
+    beta_2 <- 9^ seq(-1, -6, length.out = 5)
+    beta_3 <- seq(.5, 2.7, length.out = 5) ^ 1.2
+
+    df <- expand.grid(beta_0 = beta_0, beta_1 = beta_1, beta_2 = beta_2[3], beta_3 = beta_3[3], x = x)
+
+    df <- df %>% mutate(y = w(x, beta_0, beta_1, beta_2, beta_3))
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_scaled_intercept.png :res 120
+  ggplot(df, aes(x = x, y = y, color = factor(beta_0))) + geom_line() +
+    scale_y_continuous(limits = c(0,160)) +
+    scale_color_solarized() +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_scaled_intercept.png]]
+
+
 **** COMMENT a look at gamma family
 #+begin_src R
     library(brms)
