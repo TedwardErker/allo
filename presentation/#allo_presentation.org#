@@ -168,9 +168,6 @@ two major problems:
 
 * Weibull
 
-figure showing the many possible cdfs if the parameters in the curve
-are modified.
-
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
 ${n! \over k!(n-k)!} = {n \choose k}$
  #+REVEAL_HTML: </div>

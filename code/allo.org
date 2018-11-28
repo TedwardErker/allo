@@ -3192,6 +3192,66 @@ n <- nrow(df)
 #+RESULTS:
 [[file:../figs/weibull_cdf.png]]
 
+#+begin_src R
+    w <- function(x, beta_2, beta_3) {(1 - exp(-beta_2 * x^beta_3)) }
+    x <- 0:150
+    beta_2 <- c(.005, .000001, .11)
+    beta_3 <- c(1.3, 3.2, .7)
+
+    beta_2 <- 9^ seq(-1, -6, length.out = 5)
+    beta_3 <- seq(.5, 2.7, length.out = 5) ^ 1.2
+
+    df <- data.frame(beta_2, beta_3)
+
+  n <- nrow(df)
+
+    df <- cbind(df[rep(1:n, each = 151),], x = rep(x, times = n))
+
+    df <- df %>% mutate(y = w(x, beta_2, beta_3))
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_cdf2.png :res 120
+  ggplot(df, aes(x = x, y = y, color = interaction(beta_2, beta_3))) + geom_line() +
+    scale_y_continuous(limits = c(0,1)) +
+    scale_color_solarized() +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_cdf2.png]]
+
+#+begin_src R
+  w <- function(x, beta_2, beta_3) {(1 - exp(-beta_2 * x^beta_3)) }
+  x <- 0:150
+
+  beta_2 <- 10^ seq(-2, -3, length.out = 3)
+  beta_3 <- seq(1, 1.5, length.out = 3)
+
+  df <- expand.grid(beta_2 = beta_2, beta_3 = beta_3, x = x)
+
+  df <- df %>% mutate(y = w(x, beta_2, beta_3))
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_cdf3.png :res 120
+  ggplot(df, aes(x = x, y = y, color = interaction(beta_2, beta_3))) + geom_line() +
+    scale_y_continuous(limits = c(0,1)) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    facet_grid(beta_2~beta_3)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_cdf3.png]]
+
 **** COMMENT a look at gamma family
 #+begin_src R
     library(brms)
