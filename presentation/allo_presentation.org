@@ -54,7 +54,7 @@ Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 #+REVEAL: split
 
 #+ATTR_HTML: :height 750px
-[[file:figs/japanese_lilac.jpg]]
+[[file:figs/monroe_tree.jpg]]
 
 #+BEGIN_NOTES
 need to know how big trees are going to get.  infrastructure and
@@ -62,7 +62,10 @@ ecosystem services
 #+END_NOTES
 
 #+REVEAL: split
+#+ATTR_HTML: :height 750px
+[[file:figs/annapolis_oak.jpg]]
 
+#+REVEAL: split
 #+ATTR_HTML: :height 750px
 [[file:figs/elmer.jpg]]
 
@@ -271,21 +274,31 @@ $\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igsc} \{1 - \exp(-\beta^{(2)}_{i
 species, /s/; genus, /g/; city, /c/
 
 * Multilevel Modeling
-#+ATTR_REVEAL: :frag (appear)
-For \(\beta^{(j)}_{igsc}\), /j/ = 0,2,
+\\
+#+ATTR_REVEAL: :frag appear
+For \(\beta^{(j)}_{igsc}\), /j/ = 0,2, \\
 $\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}+\delta^{(j)}_{c}$
+\\
+\\
+#+ATTR_REVEAL: :frag appear
+For \(\beta^{(j)}_{igsc}\), /j/ = 1 \\
+$\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}$
 
-#+ATTR_REVEAL: :frag (appear)
-- For \(\beta^{(j)}_{igsc}\), /j/ = 1
-- $\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}$
+#+BEGIN_NOTES
+asymptote does not vary by city
+#+END_NOTES
+
 * Multilevel Modeling
-
-For \(\beta^{(3)}_{igsc}\),
-
+\\
+For \(\beta^{(3)}_{igsc}\), \\
 $\beta^{(3)}_{igsc} = \beta^{(3)}_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *(\text{precip}_c * \text{gdd}_c) + \gamma^{(3)}_{gs}+\delta^{(3)}_{c}$
 
+#+REVEAL: split
+#+ATTR_HTML: :height 750px
+[[file:figs/ClimateRegions_UTD.png]]
 
-
+#+ATTR_HTML: :height 750px
+[[file:figs/
 
 
 
