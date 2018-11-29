@@ -595,6 +595,13 @@ check
 ** Comparison
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
+** Genus and City Variability
+#+ATTR_REVEAL: :frag appear
+$\sigma^{(0)}_{genus} < \sigma^{(0)}_{city}$
+#+ATTR_REVEAL: :frag appear
+$\sigma^{(2)}_{genus} \approx \sigma^{(2)}_{city}$ \\
+$\sigma^{(3)}_{genus} \approx \sigma^{(3)}_{city}$
+#+ATTR_REVEAL: :frag appear
 
 ** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
