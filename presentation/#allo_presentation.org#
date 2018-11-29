@@ -345,7 +345,8 @@ $\delta^{(j)}_{c} \sim N(0, \sigma^{(j)}_{city})$
 ** Priors
 
 #+BEGIN_NOTES
-talk about them, biologically realistic/ possible.
+This is what makees it bayesian.  We treat all parameters are random
+variables. talk about them, biologically realistic/ possible.
 #+END_NOTES
 * Fitting Model
 ** =brms=
