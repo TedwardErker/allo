@@ -698,3 +698,18 @@ Blablablablabla
  [[file:figs/eg_forest1.jpg]]
  #+REVEAL_HTML: </div>
 
+* COMMENT notes
+
+add my name.
+and committee
+and date.
+
+pulling from same model.
+
+this would be generated from model if you enter gdd and precip.
+
+say taxonomic not genetic difference.
+
+add functional group as an extension.
+
+
