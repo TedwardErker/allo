@@ -188,7 +188,7 @@ $\mu_i = 1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})$
 #+REVEAL_HTML: </div>
 
 #+BEGIN_NOTES
-point is that it is flexible
+it is flexible and sigmoidal
 #+END_NOTES
 
 
@@ -202,9 +202,27 @@ $\mu_i = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 [[file:figs/weibull_scaled.png]]
 #+REVEAL_HTML: </div>
 
+#+BEGIN_NOTES
+it can be scaled to an asymptote
+#+END_NOTES
 
 
-* Biologically realistic
+* Weibull
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
+$\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
+#+ATTR_ORG: :width 150
+[[file:figs/weibull_scaled_intercept.png]]
+#+REVEAL_HTML: </div>
+
+#+BEGIN_NOTES
+and an intercept added because at time of transplanting, age 0, trees
+have a dbh.
+#+END_NOTES
+
+* Weibull
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
@@ -215,18 +233,7 @@ $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
 
-
-* Biologically realistic
-#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
-$\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
-#+REVEAL_HTML: </div>
-
-#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
-#+ATTR_ORG: :width 150
-[[file:figs/weibull_scaled_intercept.png]]
-#+REVEAL_HTML: </div>
-
-* Positive, increasing variance
+* Y \sim Gamma
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
@@ -238,8 +245,12 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 [[file:figs/weibull_scaled_intercept_obs.png]]
 #+REVEAL_HTML: </div>
 
+#+BEGIN_NOTES
+1. Positive
+2. Increasing variance
+#+END_NOTES
 
-
+* All the data fit.
 
 
 
