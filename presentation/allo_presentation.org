@@ -647,11 +647,3 @@ Blablablablabla
  [[file:figs/eg_forest1.jpg]]
  #+REVEAL_HTML: </div>
 
-* Urban Tree Growth
-
-infrastructure
-
-services
-
-
-
