@@ -48,7 +48,7 @@
   - palms - excluded from analysis, but theyare in the data
 
 
-* Biometry Project:
+* Biometry Project
 Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 
 #+REVEAL: split
@@ -125,19 +125,19 @@ units of dbh are cm
 #+END_NOTES
 
 #+REVEAL: split
-#+ATTR_HTML: :height 750px
+#+ATTR_HTML: :height 750px :class plain
 [[file:figs/ClimateRegions_UTD.png]]
 
 #+REVEAL: split
-#+ATTR_HTML: :height 750px
+#+ATTR_HTML: :height 750px :class plain
 [[file:figs/CityScientificNameData_CityCentric_n_commonSpecies.png]]
 
 #+REVEAL: split
-#+ATTR_HTML: :height 750px
+#+ATTR_HTML: :height 750px :class plain
 [[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
 
 * Existing Approach
-#+ATTR_HTML: :height 650px
+#+ATTR_HTML: :height 650px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png]]
 
 #+BEGIN_NOTES
@@ -166,6 +166,7 @@ two major problems:
 
  #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
  #+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
  [[file:figs/weibull_one.png]]
  #+REVEAL_HTML: </div>
 * Model Considerations
@@ -178,6 +179,7 @@ two major problems:
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
 [[file:figs/weibull_one_wGammaY.png]]
 #+REVEAL_HTML: </div>
 
@@ -189,6 +191,7 @@ $\mu_i = 1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})$
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
 [[file:figs/weibull_cdf2.png]]
 #+REVEAL_HTML: </div>
 
@@ -204,6 +207,7 @@ $\mu_i = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
 [[file:figs/weibull_scaled.png]]
 #+REVEAL_HTML: </div>
 
@@ -219,6 +223,7 @@ $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
 [[file:figs/weibull_scaled_intercept.png]]
 #+REVEAL_HTML: </div>
 
@@ -234,6 +239,7 @@ $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
 [[file:figs/weibull_scaled_intercept.png]]
 #+REVEAL_HTML: </div>
 
@@ -246,7 +252,7 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
-#+ATTR_ORG: :width 150
+#+ATTR_HTML: :class plain
 [[file:figs/weibull_scaled_intercept_obs.png]]
 #+REVEAL_HTML: </div>
 
@@ -256,7 +262,7 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 #+END_NOTES
 
 * Complete Pooling
-
+#+ATTR_HTML: :height 600px :class plain
 [[file:figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png]]
 
 #+BEGIN_NOTES
@@ -282,20 +288,32 @@ repeat: species, /s/; genus, /g/; city, /c/
 
 
 ** Multilevel Modeling
+$\mu_{igsc} = \color{red}{\beta^{(0)}_{igsc}} + \beta^{(1)}_{igs} \{1 - \exp(-\color{red}{\beta^{(2)}_{igsc}} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
 \\
+\\
+#+ATTR_REVEAL: :frag appear
 For \(\beta^{(j)}_{igsc}\), /j/ = 0,2, \\
 $\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}+\delta^{(j)}_{c}$
 \\
 \\
+#+BEGIN_NOTES
+asymptote does not vary by city
+#+END_NOTES
+
+** Multilevel Modeling
+$\mu_{igsc} = \beta^{(0)}_{igsc} + \color{red}{\beta^{(1)}_{igs}} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
+\\
+\\
 #+ATTR_REVEAL: :frag appear
 For \(\beta^{(1)}_{igs}\), \\
-$\beta^{(j)}_{igs} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}$
+$\beta^{(1)}_{igs} = \beta^{(1)}_0 + \gamma^{(1)}_{gs}$
 
 #+BEGIN_NOTES
 asymptote does not vary by city
 #+END_NOTES
 
 ** Multilevel Modeling
+$\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igs} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\color{red}{\beta^{(3)}_{igsc}}})\}$
 \\
 For \(\beta^{(3)}_{igsc}\), \\
 \begin{split}
@@ -304,7 +322,7 @@ For \(\beta^{(3)}_{igsc}\), \\
 \end{split}
 
 #+REVEAL: split
-#+ATTR_HTML: :height 750px
+#+ATTR_HTML: :height 750px :class plain
 [[file:figs/ClimateRegions_UTD.png]]
 
 #+REVEAL: split
@@ -353,11 +371,12 @@ No-U-Turn Sampler
 http://chi-feng.github.io/mcmc-demo/
 
 * Comparison
+#+ATTR_HTML: :height 600px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
 
 * Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
-#+ATTR_HTML: :height 600px
+#+ATTR_HTML: :height 600px :class plain
 [[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
 #+REVEAL_HTML: </div>
 
@@ -367,18 +386,18 @@ http://chi-feng.github.io/mcmc-demo/
 
 * Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
-#+ATTR_HTML: :height 600px
+#+ATTR_HTML: :height 600px :class plain
 [[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
-#+ATTR_HTML: :height 600px
+#+ATTR_HTML: :height 600px :class plain
 file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png
 #+REVEAL_HTML: </div>
 
 
 * Uncertainty
-#+ATTR_HTML: :height 600px
+#+ATTR_HTML: :height 600px :class plain
 [[file:figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 
