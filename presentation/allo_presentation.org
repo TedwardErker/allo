@@ -574,16 +574,18 @@ generated quantities {
 #+END_SRC
 #+REVEAL_HTML: </div>
 ** Sampling the Posterior
-
-Random Walk
-
-No-U-Turn Sampler
-
-show video from:
+#+REVEAL: split
+#+ATTR_REVEAL: :frag appear
+#+ATTR_HTML: :height 600px :class plain
+[[file:figs/RMH.gif]]
 
 http://chi-feng.github.io/mcmc-demo/
 
-to explain NUTS
+#+REVEAL: split
+#+ATTR_REVEAL: :frag appear
+#+ATTR_HTML: :height 600px :class plain
+[[file:figs/NUTS.gif]]
+http://chi-feng.github.io/mcmc-demo/
 
 ** MCMC diagnostics
 check
