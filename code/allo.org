@@ -3831,7 +3831,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
         blue <- "#268bd2"
 
     ggplot(me$AGE, aes(x = AGE, y = estimate__, ymin = lower__, ymax = upper__)) +
-      geom_point(data = mod$data, aes(x = AGE, y = DBH), inherit.aes = F, alpha = .3) +
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), inherit.aes = F, alpha = .3, size = 1) +
       geom_line(color = blue) +
       geom_ribbon(fill = blue, alpha = .5) +
   theme_minimal() +

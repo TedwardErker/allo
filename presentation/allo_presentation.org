@@ -250,8 +250,9 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 2. Increasing variance
 #+END_NOTES
 
-* All the data fit.
+* Complete Pooling
 
+[[file:figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png]]
 
 #+BEGIN_NOTES
 we can fit this model to any single species city combination (no
@@ -260,6 +261,27 @@ here).  The multilevel approach allows for information to be shared
 across groups: cities, genera and species, so that species city
 combinations with little or no data can have somewhat reasonable predictions.
 #+END_NOTES
+
+* Multilevel Modeling
+$y_{igsc} \sim \mbox{Gamma}(\mu_{igsc}, \alpha_y)$
+
+$\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igsc} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
+
+
+species, /s/; genus, /g/; city, /c/
+
+* Multilevel Modeling
+
+For \(\beta^{(j)}_{igsc}\), \emph{j} = 0,1,2, we let
+
+$\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}+\delta^{(j)}_{c}$
+
+* Multilevel Modeling
+
+For \(\beta^{(3)}_{igsc}\),
+
+$\beta^{(3)}_{igsc} = \beta^{(3)}_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *(\text{precip}_c * \text{gdd}_c) + \gamma^{(3)}_{gs}+\delta^{(3)}_{c}$
+
 
 
 
