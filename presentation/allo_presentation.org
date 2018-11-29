@@ -164,17 +164,19 @@ two major problems:
  [[file:figs/weibull_one.png]]
  #+REVEAL_HTML: </div>
 * Model Considerations
-#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 1. Biologically realistic
 2. Variance increases with age
- #+REVEAL_HTML: </div>
+3. Leverage information across groups
+   (Cities, Genera, Species)
+#+REVEAL_HTML: </div>
 
- #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
- #+ATTR_ORG: :width 150
- [[file:figs/weibull_one_wGammaY.png]]
- #+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
+#+ATTR_ORG: :width 150
+[[file:figs/weibull_one_wGammaY.png]]
+#+REVEAL_HTML: </div>
 
-* TODO Weibull  Change the y axis to be diameter and the x axis to be age.
+* Weibull
 
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = 1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})$
@@ -202,7 +204,7 @@ $\mu_i = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
 
 
-* Weibull
+* Biologically realistic
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
@@ -214,7 +216,7 @@ $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
 
 
-* Weibull
+* Biologically realistic
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
@@ -224,10 +226,11 @@ $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 [[file:figs/weibull_scaled_intercept.png]]
 #+REVEAL_HTML: </div>
 
-* y \sim Gamm
+* Positive, increasing variance
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
-$ y_i \sim \mbox{Gamma}(\mu_i, \alpha)
+
+$y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
