@@ -351,6 +351,43 @@ Random Walk
 No-U-Turn Sampler
 
 http://chi-feng.github.io/mcmc-demo/
+
+* Comparison
+[[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
+
+* Climate
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+ATTR_HTML: :height 600px
+[[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+
+#+REVEAL_HTML: </div>
+
+* Climate
+#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+ATTR_HTML: :height 600px
+[[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+#+ATTR_HTML: :height 600px
+file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png
+#+REVEAL_HTML: </div>
+
+
+* Uncertainty
+#+ATTR_HTML: :height 600px
+[[file:figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
+
+
+* Future
+
+problems
+
+more modeling
+
 * Norway Maple Comparison
 #+ATTR_HTML: :height 650px
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
