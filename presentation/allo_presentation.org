@@ -299,12 +299,17 @@ asymptote does not vary by city
 * Multilevel Modeling
 \\
 For \(\beta^{(3)}_{igsc}\), \\
-
 \begin{split}
-\beta^{(3)}_{igsc} = \beta^{(3)}_0 + {\color{red}\tau_1 * \text{precip}_c} + \tau_2 * \text{gdd}_c + \tau_3 *(\text{precip}_c * \text{gdd}_c) }+ \\
+\beta^{(3)}_{ig sc} = \beta^{(3)}_0 + \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *(\text{precip}_c * \text{gdd}_c) + \\
 \gamma^{(3)}_{gs}+\delta^{(3)}_{c}
 \end{split}
 
+\\
+For \(\beta^{(3)}_{igsc}\), \\
+\begin{split}
+\color{gray}{\beta^{(3)}_{ig sc} = \beta^{(3)}_0 + }  \tau_1 * \text{precip}_c + \tau_2 * \text{gdd}_c + \tau_3 *(\text{precip}_c * \text{gdd}_c) \color{gray} {+ \\
+\gamma^{(3)}_{gs}+\delta^{(3)}_{c}}
+\end{split}
 
 #+REVEAL: split
 #+ATTR_HTML: :height 750px
