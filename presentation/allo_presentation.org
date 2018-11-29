@@ -157,12 +157,14 @@ two major problems:
 #+END_NOTES
 
 * Model Considerations
-#+REVEAL_HTML: <div class="column" style="float:left; width:50%">
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 1. Biologically realistic
 2. Variance increases with age
+3. Share information across groups
+(Cities, Genera, Species)
  #+REVEAL_HTML: </div>
 
- #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
+ #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
  #+ATTR_ORG: :width 150
  [[file:figs/weibull_one.png]]
  #+REVEAL_HTML: </div>
@@ -170,8 +172,8 @@ two major problems:
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 1. Biologically realistic
 2. Variance increases with age
-3. Leverage information across groups
-   (Cities, Genera, Species)
+3. Share information across groups
+(Cities, Genera, Species)
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
@@ -266,12 +268,16 @@ combinations with little or no data can have somewhat reasonable predictions.
 #+END_NOTES
 
 * Multilevel Modeling
+#+ATTR_REVEAl: :frag appear
 $y_{igsc} \sim \mbox{Gamma}(\mu_{igsc}, \alpha_y)$
 
-$\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igsc} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
+#+ATTR_REVEAl: :frag appear
+$\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igs} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
 
+#+BEGIN_NOTES
+repeat: species, /s/; genus, /g/; city, /c/
+#+END_NOTES
 
-species, /s/; genus, /g/; city, /c/
 
 * Multilevel Modeling
 \\
