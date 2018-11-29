@@ -340,7 +340,7 @@ variables. talk about them, biologically realistic/ possible.
 
 ** posterior distribution.
 A more formal slide here showing the poster proportional to likelihood
-*priors, the whole model written out.
+*priors, the whole model written out?
 
 * Model Fitting
 ** =brms=
@@ -575,6 +575,7 @@ generated quantities {
 #+REVEAL_HTML: </div>
 ** Sampling the Posterior
 #+REVEAL: split
+Metropolis-Hastings
 #+ATTR_REVEAL: :frag appear
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/RMH.gif]]
@@ -582,7 +583,7 @@ generated quantities {
 http://chi-feng.github.io/mcmc-demo/
 
 #+REVEAL: split
-#+ATTR_REVEAL: :frag appear
+No-U-Turn Sampler (NUTS)
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/NUTS.gif]]
 http://chi-feng.github.io/mcmc-demo/
