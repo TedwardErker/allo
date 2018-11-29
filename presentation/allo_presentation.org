@@ -629,7 +629,6 @@ file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB
 [[file:figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 * Limitations
-** Data
 Yoshino Cherry
 #+ATTR_HTML: :height 400px :class plain
 [[file:figs/yoshinocherry.png]]
@@ -646,7 +645,26 @@ an estimate of life-span of trees.
 #+END_NOTES
 
 #+REVEAL: split
+#+ATTR_HTML: :height 400px
 [[file:figs/prye_multistem.jpg]]
+
+#+REVEAL: split
+
+- Minneapolis, MN
+- No repeat measures
+- champion trees
+- less common species
+
+* Extensions
+
+- Individual level predictors
+- Genus and Species level predictors (traits)
+- Age as random variable
+
+#+BEGIN_NOTES
+possible extensions with existing data
+#+END_NOTES
+
 * Conclusion
 #+ATTR_HTML: :height 550px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]

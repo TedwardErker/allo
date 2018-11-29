@@ -8377,7 +8377,9 @@ pd <- cbind(nd, pred.nd)
 #+begin_src R :exports results :results graphics :file ../figs/yoshinocherry.png :res 200 :width 800
   ggplot() + geom_point(data = prye, aes(x = AGE, y = DBH)) +
       geom_line(data = pred.prye, aes(x = AGE, y = Estimate), inherit.aes = F, color = blue) +
+      geom_ribbon(data = pred.prye, aes(x = AGE, ymin = Q2.5, ymax = Q97.5), inherit.aes = F, fill = blue, alpha = .3) +
     scale_x_continuous(limits = c(0,100)) +
+      coord_cartesian(ylim = c(0,200)) +
     theme_minimal()
 
 #+end_src
