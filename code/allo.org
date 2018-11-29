@@ -8356,7 +8356,7 @@ pd <- cbind(nd, pred.nd)
 
 ***** prye
 #+begin_src R
-      prye <- filter(d, Species == "PRYE")
+      prye <- filter(mod$data, Species == "PRYE")
 
     nd.prye <- prye %>%
         select(City, Species, Genus, gdd, precip) %>%
@@ -8370,14 +8370,51 @@ pd <- cbind(nd, pred.nd)
 #+end_src
 
 #+RESULTS:
+: Warning message:
+: In data.frame(..., check.names = FALSE) :
+:   row names were found from a short variable and have been discarded
 
-#+begin_src R :exports results :results graphics :file ../figs/yoshinocherry.png
-  ggplot() + geom_point(data = prye, aes(x = AGE, y = DBH)) + geom_line(data = pred.prye, aes(x = AGE, y = Estimate), inherit.aes = F)
+#+begin_src R :exports results :results graphics :file ../figs/yoshinocherry.png :res 200 :width 800
+  ggplot() + geom_point(data = prye, aes(x = AGE, y = DBH)) +
+      geom_line(data = pred.prye, aes(x = AGE, y = Estimate), inherit.aes = F, color = blue) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
 
 #+end_src
 
 #+RESULTS:
 [[file:../figs/yoshinocherry.png]]
+
+***** crepe mrytl
+#+begin_src R
+        lain <- filter(mod$data, Species == "LAIN")
+
+      nd.lain <- lain %>%
+          select(City, Species, Genus, gdd, precip) %>%
+          unique() %>%
+          cbind(data.frame(AGE = rep(1:200, each = 5)))
+
+        pred.lain <- predict(mod, nd.lain, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+
+    pred.lain <- cbind(nd.lain,pred.lain)
+
+#+end_src
+
+#+RESULTS:
+: Warning message:
+: In data.frame(..., check.names = FALSE) :
+:   row names were found from a short variable and have been discarded
+
+#+begin_src R :exports results :results graphics :file ../figs/lain.png :res 200 :width 800
+  ggplot() + geom_point(data = lain, aes(x = AGE, y = DBH, color = City)) +
+      geom_line(data = pred.lain, aes(x = AGE, y = Estimate, color = City), inherit.aes = F) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/lain.png]]
 
 ***** rops
 
