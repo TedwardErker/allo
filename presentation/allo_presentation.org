@@ -73,8 +73,7 @@ ecosystem services
  I needed equation for ash growth.
 #+END_NOTES
 
-
-* Forest \neq Urban
+** Forest \neq Urban
 
 #+REVEAL_HTML: <div class="column" style="float:left; width:49%">
 #+ATTR_HTML: :height 650px
@@ -90,7 +89,7 @@ ecosystem services
 You could use existing growth equations that have been developed, but forest trees grow differently than urban trees.
 #+END_NOTES
 
-* Open Grown \neq Urban
+** Open Grown \neq Urban
 
 #+REVEAL_HTML: <div class="column" style="float:left; width:49%">
 #+ATTR_HTML: :height 650px
@@ -136,7 +135,7 @@ units of dbh are cm
 #+ATTR_HTML: :height 750px :class plain
 [[file:figs/CityScientificNameData_CityCentric_n_splits.png]]
 
-* Existing Approach
+** Existing Approach
 #+ATTR_HTML: :height 650px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png]]
 
@@ -157,6 +156,7 @@ two major problems:
 #+END_NOTES
 
 * Model Considerations
+** Model Considerations
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 1. Biologically realistic
 2. Variance increases with age
@@ -169,7 +169,7 @@ two major problems:
 #+ATTR_HTML: :class plain
  [[file:figs/weibull_one.png]]
  #+REVEAL_HTML: </div>
-* Model Considerations
+** Model Considerations
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 1. Biologically realistic
 2. Variance increases with age
@@ -183,7 +183,7 @@ two major problems:
 [[file:figs/weibull_one_wGammaY.png]]
 #+REVEAL_HTML: </div>
 
-* Weibull
+** Weibull
 
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = 1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})$
@@ -200,7 +200,7 @@ it is flexible and sigmoidal
 #+END_NOTES
 
 
-* Weibull
+** Weibull
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
@@ -216,7 +216,7 @@ it can be scaled to an asymptote
 #+END_NOTES
 
 
-* Weibull
+** Weibull
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
@@ -233,7 +233,7 @@ have a dbh.
 #+END_NOTES
 
 
-* Y \sim Gamma
+** Y \sim Gamma
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
@@ -250,7 +250,7 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 2. Increasing variance
 #+END_NOTES
 
-* Pooling
+** Pooling
 #+ATTR_HTML: :height 450px :class plain
 [[file:figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png]]
 
@@ -337,7 +337,12 @@ $\delta^{(j)}_{c} \sim N(0, \sigma^{(j)}_{city})$
 This is what makees it bayesian.  We treat all parameters are random
 variables. talk about them, biologically realistic/ possible.
 #+END_NOTES
-* Fitting Model
+
+** posterior distribution.
+A more formal slide here showing the poster proportional to likelihood
+*priors, the whole model written out.
+
+* Model Fitting
 ** =brms=
 #+ATTR_HTML: :height 250
 [[file:figs/brms.png]]
@@ -355,9 +360,7 @@ b2 \sim (1 \vert City) + (1 \vert Genus/Species) \\
 b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) \\
 
 ** Stan Code
-
-
-#+REVEAL_HTML: <div class="column" style="float:left; width:50%; font-size:13px">
+#+REVEAL_HTML: <div class="column" style="float:left; width:33%; font-size:18px">
 #+BEGIN_SRC stan
 // generated with brms 2.4.3
 functions {
@@ -434,6 +437,11 @@ data {
 }
 transformed data {
 }
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:left; width:33%; font-size:18px">
+#+BEGIN_SRC stan
 parameters {
   vector<lower=0>[K_b0] b_b0;  // population-level effects
   vector<lower=0>[K_b1] b_b1;  // population-level effects
@@ -463,11 +471,7 @@ parameters {
   vector<lower=0>[M_11] sd_11;  // group-level standard deviations
   vector[N_11] z_11[M_11];  // unscaled group-level effects
 }
-#+END_SRC
-#+REVEAL_HTML: </div>
 
-#+REVEAL_HTML: <div class="column" style="float:right; width:50%; font-size:15px">
-#+BEGIN_SRC stan
 transformed parameters {
   // group-level effects
   vector[N_1] r_1_b0_1 = sd_1[1] * (z_1[1]);
@@ -492,6 +496,11 @@ transformed parameters {
   // group-level effects
   vector[N_11] r_11_b3_1 = sd_11[1] * (z_11[1]);
 }
+#+END_SRC
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:33%; font-size:18px">
+#+BEGIN_SRC stan
 model {
   vector[N] nlp_b0 = X_b0 * b_b0;
   vector[N] nlp_b1 = X_b1 * b_b1;
@@ -570,13 +579,21 @@ Random Walk
 
 No-U-Turn Sampler
 
+show video from:
+
 http://chi-feng.github.io/mcmc-demo/
 
-* Comparison
+to explain NUTS
+
+** MCMC diagnostics
+check
+
+* Results
+** Comparison
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
 
-* Climate
+** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
@@ -586,7 +603,7 @@ http://chi-feng.github.io/mcmc-demo/
 
 #+REVEAL_HTML: </div>
 
-* Climate
+** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
@@ -597,11 +614,9 @@ http://chi-feng.github.io/mcmc-demo/
 file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png
 #+REVEAL_HTML: </div>
 
-
-* Uncertainty
+** Uncertainty
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
-
 
 * Future
 
@@ -610,7 +625,7 @@ problems
 more modeling
 
 * Conclusion
-#+ATTR_HTML: :height 650px
+#+ATTR_HTML: :height 550px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
 
 
