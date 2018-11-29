@@ -344,7 +344,13 @@ b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) \\
 #+ATTR_HTML: :height 250 :class plain :style background:none
 [[file:figs/stan_logo.png]]
 
+** Sampling the Posterior
 
+Random Walk
+
+No-U-Turn Sampler
+
+http://chi-feng.github.io/mcmc-demo/
 * Norway Maple Comparison
 #+ATTR_HTML: :height 650px
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
