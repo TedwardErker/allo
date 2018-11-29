@@ -726,5 +726,7 @@ show crepe mrtyle variability within species.
 
 validation
 
+priors - be more clear.
+
 
 
