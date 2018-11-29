@@ -628,15 +628,25 @@ file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB
 #+ATTR_HTML: :height 600px :class plain
 [[file:figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
-* Future
+* Limitations
+** Data
+Yoshino Cherry
+#+ATTR_HTML: :height 400px :class plain
+[[file:figs/yoshinocherry.png]]
 
+#+BEGIN_NOTES
 - weird data
   - MN less variability
   - huge cherry trees
+
 problems
 
-more modeling
+an estimate of life-span of trees.
 
+#+END_NOTES
+
+#+REVEAL: split
+[[file:figs/prye_multistem.jpg]]
 * Conclusion
 #+ATTR_HTML: :height 550px :class plain
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
