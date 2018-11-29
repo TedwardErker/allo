@@ -3311,6 +3311,45 @@ n <- nrow(df)
 [[file:../figs/weibull_scaled_intercept.png]]
 
 
+#+begin_src R
+    w <- function(x, beta_0, beta_1, beta_2, beta_3) {beta_0 + beta_1 * (1 - exp(-beta_2 * x^beta_3)) }
+    x <- 0:150
+
+    beta_0 <- 5
+    beta_1 <- 120
+    beta_2 <- 9^ seq(-1, -6, length.out = 5)
+    beta_3 <- seq(.5, 2.7, length.out = 5) ^ 1.2
+
+    df <- expand.grid(beta_0 = beta_0, beta_1 = beta_1, beta_2 = beta_2[3], beta_3 = beta_3[3], x = x)
+
+    df <- df %>% mutate(y = w(x, beta_0, beta_1, beta_2, beta_3))
+
+  sc <- 5
+  n <- 45
+  sam <- sample(1:150, n)
+
+  d2 <- df %>%
+      sample_n(n) %>%
+      mutate(obs = rgamma(n, shape = y/ sc, scale = sc))
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/weibull_scaled_intercept_obs.png :res 120
+  ggplot(df, aes(x = x, y = y, color = factor(beta_0))) +
+      geom_line() +
+      geom_point(data = d2, aes(x = x, y = obs), inherit.aes = F) +
+    scale_y_continuous(limits = c(0,160)) +
+    scale_color_solarized("magenta") +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/weibull_scaled_intercept_obs.png]]
+
 **** COMMENT a look at gamma family
 #+begin_src R
     library(brms)

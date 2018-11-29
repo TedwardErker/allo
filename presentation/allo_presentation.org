@@ -174,10 +174,10 @@ two major problems:
  [[file:figs/weibull_one_wGammaY.png]]
  #+REVEAL_HTML: </div>
 
-* Weibull
+* TODO Weibull  Change the y axis to be diameter and the x axis to be age.
 
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
-$y = 1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})$
+$\mu_i = 1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})$
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
@@ -192,7 +192,7 @@ point is that it is flexible
 
 * Weibull
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
-$y = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
+$\mu_i = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
@@ -204,7 +204,7 @@ $y = \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
 
 * Weibull
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
-$y = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
+$\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
@@ -216,13 +216,33 @@ $y = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
 
 * Weibull
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
-$\mu = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x^{\beta^{(3)}})\}$
+$\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:40%">
 #+ATTR_ORG: :width 150
 [[file:figs/weibull_scaled_intercept.png]]
 #+REVEAL_HTML: </div>
+
+* y \sim Gamm
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
+$\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
+$ y_i \sim \mbox{Gamma}(\mu_i, \alpha)
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
+#+ATTR_ORG: :width 150
+[[file:figs/weibull_scaled_intercept_obs.png]]
+#+REVEAL_HTML: </div>
+
+
+
+
+
+
+
+
+
 
 * Norway Maple Comparison
 #+ATTR_HTML: :height 650px
