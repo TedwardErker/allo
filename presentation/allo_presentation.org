@@ -253,6 +253,14 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 * All the data fit.
 
 
+#+BEGIN_NOTES
+we can fit this model to any single species city combination (no
+pooling, as was done with UTD), or to all the trees combined (complete pooling, shown
+here).  The multilevel approach allows for information to be shared
+across groups: cities, genera and species, so that species city
+combinations with little or no data can have somewhat reasonable predictions.
+#+END_NOTES
+
 
 
 

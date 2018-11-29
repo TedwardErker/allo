@@ -3792,20 +3792,20 @@ Formula: DBH ~ b0 + 100 * b1 * (1 - exp(-(b2/100) * AGE^(b3)))
          b1 ~ 1
          b2 ~ 1
          b3 ~ 1
-   Data: d (Number of observations: 5548)
-Samples: 6 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup samples = 6000
+   Data: d (Number of observations: 5381)
+Samples: 8 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 8000
 
 Population-Level Effects:
              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-b0_Intercept     2.77      0.08     2.61     2.93       3416 1.00
-b1_Intercept     1.12      0.05     1.03     1.24       2694 1.00
-b2_Intercept     1.08      0.04     1.00     1.17       3530 1.00
-b3_Intercept     1.11      0.02     1.08     1.14       2806 1.00
+b0_Intercept     2.79      0.08     2.64     2.95       4697 1.00
+b1_Intercept     1.11      0.05     1.02     1.21       3390 1.00
+b2_Intercept     0.99      0.04     0.92     1.06       4125 1.00
+b3_Intercept     1.14      0.02     1.11     1.17       3419 1.00
 
 Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-shape     7.69      0.14     7.42     7.96       3579 1.00
+shape     8.01      0.15     7.72     8.30       5836 1.00
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential
@@ -3825,6 +3825,23 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 #+RESULTS:
 [[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png :res 220 :width 800 :height 600
+  #  me <-   marginal_effects(mod)
+        blue <- "#268bd2"
+
+    ggplot(me$AGE, aes(x = AGE, y = estimate__, ymin = lower__, ymax = upper__)) +
+      geom_point(data = mod$data, aes(x = AGE, y = DBH), inherit.aes = F, alpha = .3) +
+      geom_line(color = blue) +
+      geom_ribbon(fill = blue, alpha = .5) +
+  theme_minimal() +
+    scale_y_continuous("DBH (cm)") +
+    scale_x_continuous("Age")
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png]]
 
 
 #+begin_src R :exports results :results graphics :file ../figs/pp_check_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma.png
