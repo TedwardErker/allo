@@ -344,6 +344,7 @@ b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) \\
 #+ATTR_HTML: :height 250 :class plain :style background:none
 [[file:figs/stan_logo.png]]
 
+** 
 
 * Norway Maple Comparison
 #+ATTR_HTML: :height 650px
