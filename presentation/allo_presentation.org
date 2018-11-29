@@ -649,6 +649,16 @@ an estimate of life-span of trees.
 [[file:figs/prye_multistem.jpg]]
 
 #+REVEAL: split
+#+ATTR_HTML: :height 600px
+[[file:figs/large_yoshino_washington.jpg]]
+
+#+BEGIN_NOTES
+these trees on the university of washington campus are 80 years old
+http://www.washington.edu/news/blog/2015-uw-cherry-tree-watch-flowers-on-all-trees-full-bloom-by-mid-march/
+#+END_NOTES
+
+
+#+REVEAL: split
 
 - Minneapolis, MN
 - No repeat measures
