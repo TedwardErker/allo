@@ -7732,7 +7732,7 @@ plot(p)[[1]] +
 
    cond <- unique(select(mod$data, Species, Genus, City, precip, gdd))
 
-    me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "fitted", nsamples = 1000)
+    me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NA, method = "fitted", nsamples = 1000)
     saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
 
 #+end_src
@@ -7748,8 +7748,8 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 346 bytes  received 54 bytes  160.00 bytes/sec
-: total size is 1240  speedup is 3.10
+: sent 679 bytes  received 54 bytes  293.20 bytes/sec
+: total size is 1700  speedup is 2.32
 : You have new mail in /var/mail/erker
 
 #+BEGIN_SRC sh
@@ -7767,20 +7767,19 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds ~/git/allo/models/
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds ~/git/allo/models/
+#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : 
-: sh-3.2$ sh-3.2$ sh-3.2$ erker@krusty's password: 
-: Permission denied, please try again.
-: erker@krusty's password: 
+: sh-3.2$ sh-3.2$ sh-3.2$ sh-3.2$ erker@krusty's password: 
 : receiving file list ... done
-: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds
 : 
-: sent 38 bytes  received 7099608 bytes  946619.47 bytes/sec
-: total size is 7202426  speedup is 1.01
+: sent 38 bytes  received 944631 bytes  269905.43 bytes/sec
+: total size is 955325  speedup is 1.01
 
 #+begin_src R
 precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
@@ -7988,12 +7987,13 @@ p
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
 
 #+begin_src R
-me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
+#me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
+me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png :width 1000 :height 800 :res 170 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons_test.png :width 1000 :height 800 :res 170 :bg transparent
   me2 <- me_genus$AGE
 
   #      dd <- mod$data
@@ -8007,8 +8007,8 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
             magenta <- "#d33682"
 
   p <-           ggplot(me2) +
-                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "gray", alpha = .1) +
-                geom_line(aes(x = AGE, y = estimate__, group = Genus), size = .7, alpha = .5, color = blue) +
+#                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "gray", alpha = .1) +
+                geom_line(aes(x = AGE, y = estimate__, color = Genus, group = interaction(Species, City)), size = .7, alpha = .5, color = blue) +
    #             geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
                 scale_x_continuous(limits = c(0,150)) +
                 scale_y_continuous("DBH") +
@@ -8027,7 +8027,7 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons_test.png]]
 
 
 #+begin_src R
@@ -8046,8 +8046,11 @@ path <- "../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_
 #+begin_src R
   mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
   mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
-  me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds")
+  me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
+
 #+end_src
+
+#+RESULTS:
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_methodfitted.png :width 1000 :height 1000
 
