@@ -626,6 +626,8 @@ $\sigma^{(2)}_{genus} \approx \sigma^{(2)}_{city}$ \\
 $\sigma^{(3)}_{genus} \approx \sigma^{(3)}_{city}$
 #+ATTR_REVEAL: :frag appear
 
+
+
 ** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
 #+ATTR_HTML: :height 600px :class plain
