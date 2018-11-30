@@ -7719,12 +7719,13 @@ plot(p)[[1]] +
   ## saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 
 
-  cond <- expand.grid(City = unique(mod$data$City)) #Species = unique(mod$data$Species))#,  
-  #cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
-  cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
+  cond <- expand.grid(Genus = unique(mod$data$Genus)) #City = unique(mod$data$City)) #Species = unique(mod$data$Species))#,  
+  
+ #cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
+ # cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
   me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 15000)
-  saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds")
+  saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds")
 
 #+end_src
 
@@ -7739,8 +7740,9 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 351 bytes  received 54 bytes  162.00 bytes/sec
-: total size is 1230  speedup is 3.04
+: sent 625 bytes  received 54 bytes  271.60 bytes/sec
+: total size is 1274  speedup is 1.88
+: You have new mail in /var/mail/erker
 
 #+BEGIN_SRC sh
 
@@ -7754,6 +7756,7 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 
 #+BEGIN_SRC sh :session a :results verbatim
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds ~/git/allo/models/
+#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds ~/git/allo/models/
 rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
 #+END_SRC
