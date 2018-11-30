@@ -49,6 +49,10 @@
 * Biometry Project
 Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 
+Tedward Erker
+
+December 3, 2018
+
 #+begin_src emacs-lisp
 (image-type-available-p 'imagemagick)
 #+end_src
