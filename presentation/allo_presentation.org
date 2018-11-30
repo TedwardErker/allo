@@ -357,16 +357,26 @@ A more formal slide here showing the poster proportional to likelihood
 #+ATTR_HTML: :width 250 :class plain :style background:none
 [[file:figs/stan_logo.png]]
 
-** =brms= syntax
+** =brms=
+#+REVEAL_HTML: <div style="font-size:50px">
+#+begin_src R
+DBH ~ beta0 + beta1 * (1 - exp(-beta2 * AGE^beta3)) 
+beta0 ~ (1 | City) + (1 | Genus/Species) 
+beta1 ~ (1 | Genus/Species) 
+beta2 ~ (1 | City) + (1 | Genus/Species) 
+beta3 ~ precip * gdd + (1 | City) + (1 | Genus/Species)
+#+end_src
+#+REVEAL_HTML: </div>
 
+#+ATTR_REVEAL: :frag appear
+and some lines to specify priors
+
+*** COMMENT non code way of writing
 DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3)) \\
 b0 \sim (1 \vert City) + (1 \vert Genus/Species) \\
 b1 \sim (1 \vert Genus/Species) \\
 b2 \sim (1 \vert City) + (1 \vert Genus/Species) \\
 b3 \sim precip * gdd + (1 \vert City) + (1 \vert Genus/Species) \\
-
-#+ATTR_REVEAL: :frag appear
-and some lines to specify priors
 
 ** Stan Code
 #+REVEAL_HTML: <div class="column" style="float:left; width:33%; font-size:18px">
