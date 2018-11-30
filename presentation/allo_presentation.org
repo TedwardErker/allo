@@ -56,12 +56,6 @@ Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 #+RESULTS:
 
 #+REVEAL: split
-
-#+NAME: fig:figure name
-#+CAPTION: figure name
-#+ATTR_ORG: :width 20
-[[file:figs/monroe_tree.jpg]]
-
 #+ATTR_HTML: :height 750px
 [[file:figs/monroe_tree.jpg]]
 
