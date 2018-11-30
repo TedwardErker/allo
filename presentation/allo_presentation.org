@@ -16,7 +16,6 @@
 #+REVEAL_MAX_SCALE: 2.5
 #+REVEAL_THEME: black
 #+REVEAL_POSTAMBLE: <p> Created by Erker </p>
-# -*- org-image-actual-width: nil; -*-
 
 
 * COMMENT ideas for presentation
@@ -55,6 +54,13 @@ Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 
 #+REVEAL: split
 
+#+NAME: fig:figure name
+#+CAPTION: figure name
+#+ATTR_ORG: :width 200/250/300/400/500/600
+#+ATTR_LATEX: :width 2.0in
+#+ATTR_HTML: :width 200/250/300/400/500/600px
+[[file:figs/monroe_tree.jpg]]
+
 #+ATTR_HTML: :height 750px
 [[file:figs/monroe_tree.jpg]]
 
@@ -68,8 +74,8 @@ ecosystem services
 [[file:figs/annapolis_oak.jpg]]
 
 #+REVEAL: split
-#+ATTR_HTML: :height 750px
-#+ATTR_ORG: :width 750
+#+name: elmer
+#+attr_org: :width 60
 [[file:figs/elmer.jpg]]
 
 #+BEGIN_NOTES
