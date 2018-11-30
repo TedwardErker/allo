@@ -7719,13 +7719,12 @@ plot(p)[[1]] +
     ## saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 
 
-    cond <- expand.grid(Species = unique(mod$data$Species),  City = unique(mod$data$City))
-    cond <- expand.grid(Species = "ACPL",  City = unique(mod$data$City))
-  cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
+    cond <- expand.grid(Species = unique(mod$data$Species))#,  City = unique(mod$data$City))
+    cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
     cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
     me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 15000)
-    saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds")
+    saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Species.rds")
 
 #+end_src
 
@@ -7934,6 +7933,28 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 #+end_src
 
 #+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane.png
+
+  #arrange the cities by precip * gdd
+  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
+                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+  dd <- mod$data %>%
+      mutate(gddprecip = gdd  * precip,
+             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+
+      ggplot(me2) +
+          geom_line(aes(x = AGE, y = estimate__, group = interaction(Species, City)), size = 1) +
+          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
+          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
+          scale_x_continuous(limits = c(0,150))
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full.png :width 1000 :height 20000
 
