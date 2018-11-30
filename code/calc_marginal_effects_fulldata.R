@@ -20,6 +20,6 @@ library(dplyr)
 
  cond <- unique(select(mod$data, Species, Genus, City, precip, gdd))
 
-  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NA, method = "fitted", nsamples = 1000)
+  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "fitted", nsamples = 1000)
   saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
 ## assess model:14 ends here

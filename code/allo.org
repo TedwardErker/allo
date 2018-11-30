@@ -7732,7 +7732,7 @@ plot(p)[[1]] +
 
    cond <- unique(select(mod$data, Species, Genus, City, precip, gdd))
 
-    me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NA, method = "fitted", nsamples = 1000)
+    me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "fitted", nsamples = 1000)
     saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
 
 #+end_src
@@ -7748,8 +7748,8 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 679 bytes  received 54 bytes  293.20 bytes/sec
-: total size is 1700  speedup is 2.32
+: sent 189 bytes  received 60 bytes  99.60 bytes/sec
+: total size is 1698  speedup is 6.82
 : You have new mail in /var/mail/erker
 
 #+BEGIN_SRC sh
@@ -7778,8 +7778,8 @@ rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_
 : receiving file list ... done
 : genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds
 : 
-: sent 38 bytes  received 944631 bytes  269905.43 bytes/sec
-: total size is 955325  speedup is 1.01
+: sent 5912 bytes  received 122665 bytes  51430.80 bytes/sec
+: total size is 137142  speedup is 1.07
 
 #+begin_src R
 precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
@@ -7988,7 +7988,7 @@ p
 
 #+begin_src R
 #me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
-me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds")
+me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
 #+end_src
 
 #+RESULTS:
@@ -8008,7 +8008,7 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 
   p <-           ggplot(me2) +
 #                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "gray", alpha = .1) +
-                geom_line(aes(x = AGE, y = estimate__, color = Genus, group = interaction(Species, City)), size = .7, alpha = .5, color = blue) +
+                geom_line(aes(x = AGE, y = estimate__, color = interaction(City,Genus)), size = .7, alpha = .5) +
    #             geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
                 scale_x_continuous(limits = c(0,150)) +
                 scale_y_continuous("DBH") +
@@ -8020,7 +8020,7 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
                   axis.text = element_text(color = "#839496"),
                   rect = element_rect(fill = "transparent"),
                   panel.background = element_rect(fill = "transparent"),
-                  panel.grid = element_blank(), 
+                  panel.grid = element_blank(),
                   legend.position = "none")
         #          legend.key.height = unit("2.3", "lines"))
   p
