@@ -52,6 +52,12 @@
 * Biometry Project
 Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 
+#+begin_src emacs-lisp
+(image-type-available-p 'imagemagick)
+#+end_src
+
+#+RESULTS:
+
 #+REVEAL: split
 
 #+NAME: fig:figure name
