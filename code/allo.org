@@ -7748,8 +7748,8 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 189 bytes  received 60 bytes  99.60 bytes/sec
-: total size is 1698  speedup is 6.82
+: sent 185 bytes  received 60 bytes  98.00 bytes/sec
+: total size is 1700  speedup is 6.94
 : You have new mail in /var/mail/erker
 
 #+BEGIN_SRC sh
@@ -7985,6 +7985,37 @@ p
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
+
+
+#+begin_src R
+
+  nd <- unique(select(mod$data, Species, Genus, City, gdd, precip))
+
+  res <- 30
+
+  nd <- cbind(nd[rep(1,nrow(nd), each = res),], AGE = seq(0,200,length.out = res))
+
+  genus_test <- fitted(mod, newdata = nd, nsamples = 50, re_formula = NULL)
+
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+dd <- cbind(nd, genus_test)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/genus_test.png
+  ggplot(dd) + 
+  geom_line(aes(x = AGE, y = Estimate, color = Genus))
+#+end_src
+
+#+RESULTS:
+[[file:../figs/genus_test.png]]
+
 
 #+begin_src R
 #me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
