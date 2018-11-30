@@ -7935,35 +7935,13 @@ me <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climat
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane.png
-
-  #arrange the cities by precip * gdd
-  me2 <- me$AGE  %>% mutate(gddprecip = gdd * precip,
-                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
-
-  dd <- mod$data %>%
-      mutate(gddprecip = gdd  * precip,
-             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
-
-      ggplot(me2) +
-          geom_line(aes(x = AGE, y = estimate__, group = interaction(Species, City)), size = 1) +
-          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__), alpha = .3, fill = "blue") +
-          geom_point(data = dd, aes(x = AGE, y = DBH), alpha = 1, size = .5, color = "red") +
-          scale_x_continuous(limits = c(0,150))
-
-#+end_src
-
-#+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane.png]]
-
-
 #+begin_src R
 me_city <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png :width 1000 :height 800 :res 170 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png :width 1000 :height 800 :res 170 :bg transparent
 
       #arrange the cities by precip * gdd
       me2 <- me_city$AGE  %>% mutate(gddprecip = gdd * precip,
@@ -7974,12 +7952,13 @@ me_city <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_c
                  City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
 p <-           ggplot(me2) +
-     #         geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, fill = City), alpha = .3) +
-#              geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
-              geom_line(aes(x = AGE, y = estimate__, color = as.numeric(City), group = City), size = 1) +
+              geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, fill = as.numeric(City), group = City), alpha = .01) +
+              geom_line(aes(x = AGE, y = estimate__, color = as.numeric(City), group = City), size = 1, alpha = .2) +
+              geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
               scale_x_continuous(limits = c(0,150)) +
               scale_y_continuous("DBH", limits = c(0,230)) +
               scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+              scale_fill_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
               theme_minimal() +
           theme(text = element_text(color = "#839496"),
                 axis.text = element_text(color = "#839496"),
@@ -7991,7 +7970,39 @@ p
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
+
+#+begin_src R
+me_species <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Species.rds")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_points.png :width 1000 :height 800 :res 170 :bg transparent
+
+
+      dd <- mod$data
+
+
+p <-           ggplot(me2) +
+              geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, fill = as.numeric(City), group = City), alpha = .01) +
+              geom_line(aes(x = AGE, y = estimate__, color = as.numeric(City), group = City), size = 1, alpha = .2) +
+              geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
+              scale_x_continuous(limits = c(0,150)) +
+              scale_y_continuous("DBH", limits = c(0,230)) +
+              scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+              scale_fill_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+              theme_minimal() +
+          theme(text = element_text(color = "#839496"),
+                axis.text = element_text(color = "#839496"),
+                rect = element_rect(fill = "transparent"),
+                panel.background = element_rect(fill = "transparent"),
+                panel.grid = element_blank(), 
+                legend.key.height = unit("2.3", "lines"))
+p
+#+end_src
+
+#+RESULTS:
 
 
 #+begin_src R
@@ -8002,6 +8013,27 @@ path <- "../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_
   pw <- ggplotly(p)
   saveWidget(pw, path, selfcontained = F)
 #+end_src
+
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘plotly’
+
+The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+The following object is masked from ‘package:stats’:
+
+    filter
+
+The following object is masked from ‘package:graphics’:
+
+    layout
+
+Warning message:
+package ‘htmlwidgets’ was built under R version 3.4.4
+#+end_example
 
 
 

@@ -624,9 +624,21 @@ $\sigma^{(0)}_{genus} < \sigma^{(0)}_{city}$
 #+ATTR_REVEAL: :frag appear
 $\sigma^{(2)}_{genus} \approx \sigma^{(2)}_{city}$ \\
 $\sigma^{(3)}_{genus} \approx \sigma^{(3)}_{city}$
-#+ATTR_REVEAL: :frag appear
+#+REVEAL: split
+
+#+ATTR_HTML: :height 800px :class plain :style background:none
+[[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png]]
+#+REVEAL: split
+#+ATTR_HTML: :height 800px :class plain :style background:none
+[[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_ribbons.png]]
+
+#+REVEAL: split
+#+ATTR_HTML: :height 800px :class plain :style background:none
+[[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
 
 
+
+honolulu is the warm wet city with slow growth
 
 ** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
