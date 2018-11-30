@@ -333,6 +333,10 @@ $\delta^{(j)}_{c} \sim N(0, \sigma^{(j)}_{city})$
 
 ** Priors
 
+\beta^{(j)}_0 \sim Gamma(\theta_j, \alpha_j)
+\sigma^{(j)}'s \sim Gamma(\theta_j, \alpha_j)
+
+
 #+BEGIN_NOTES
 This is what makees it bayesian.  We treat all parameters are random
 variables. talk about them, biologically realistic/ possible.
