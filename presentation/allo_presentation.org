@@ -333,8 +333,9 @@ $\delta^{(j)}_{c} \sim N(0, \sigma^{(j)}_{city})$
 
 ** Priors
 
-\beta^{(j)}_0 \sim Gamma(\theta_j, \alpha_j)
-\sigma^{(j)}'s \sim Gamma(\theta_j, \alpha_j)
+$\beta^{(j)}_0 \sim Gamma(\theta_j, \alpha_j)$ \\
+$\sigma^{(j)}_{group} \sim half-Normal(\theta_j, \alpha_j)$ \\
+$\alpha_y \sim Gamma(\theta_{\alpha_y}, \alpha_{\alpha_y})$
 
 
 #+BEGIN_NOTES
