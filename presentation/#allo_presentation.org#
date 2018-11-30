@@ -358,6 +358,8 @@ A more formal slide here showing the poster proportional to likelihood
 [[file:figs/stan_logo.png]]
 
 ** =brms= syntax
+#+begin_src R
+
 
 DBH \sim b0 + b1 * (1 - exp(-b2 * AGE^b3)) \\
 b0 \sim (1 \vert City) + (1 \vert Genus/Species) \\
