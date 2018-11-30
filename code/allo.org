@@ -7963,30 +7963,45 @@ me_city <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_c
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects.png
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png :width 1000 :height 800 :res 170 :bg transparent
 
-  #arrange the cities by precip * gdd
-  me2 <- me_city$AGE  %>% mutate(gddprecip = gdd * precip,
-                          City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+      #arrange the cities by precip * gdd
+      me2 <- me_city$AGE  %>% mutate(gddprecip = gdd * precip,
+                              City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
-  dd <- mod$data %>%
-      mutate(gddprecip = gdd  * precip,
-             City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
+      dd <- mod$data %>%
+          mutate(gddprecip = gdd  * precip,
+                 City = factor(City, levels=unique(City[order(gddprecip)]), ordered=TRUE))
 
-      ggplot(me2) +
-          geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, fill = City), alpha = .3, fill = "gray") +
-          geom_point(data = dd, aes(x = AGE, y = DBH, color = City), alpha = 1, size = .5) +
-          geom_line(aes(x = AGE, y = estimate__, color = City), size = 1) +
-          scale_x_continuous(limits = c(0,150)) +
-          scale_y_continuous(limits = c(0,230)) +
-          theme_minimal() +
-          theme(legend.position 
-
+p <-           ggplot(me2) +
+     #         geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, fill = City), alpha = .3) +
+#              geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
+              geom_line(aes(x = AGE, y = estimate__, color = as.numeric(City), group = City), size = 1) +
+              scale_x_continuous(limits = c(0,150)) +
+              scale_y_continuous("DBH", limits = c(0,230)) +
+              scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+              theme_minimal() +
+          theme(text = element_text(color = "#839496"),
+                axis.text = element_text(color = "#839496"),
+                rect = element_rect(fill = "transparent"),
+                panel.background = element_rect(fill = "transparent"),
+                panel.grid = element_blank(), 
+                legend.key.height = unit("2.3", "lines"))
+p
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png]]
 
+
+#+begin_src R
+  library(plotly)
+  library(htmlwidgets)
+
+path <- "../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.html"
+  pw <- ggplotly(p)
+  saveWidget(pw, path, selfcontained = F)
+#+end_src
 
 
 
