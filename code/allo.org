@@ -7740,8 +7740,9 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 360 bytes  received 54 bytes  118.29 bytes/sec
-: total size is 1275  speedup is 3.08
+: sent 366 bytes  received 54 bytes  168.00 bytes/sec
+: total size is 1287  speedup is 3.06
+: You have new mail in /var/mail/erker
 
 #+BEGIN_SRC sh
 
@@ -7756,18 +7757,19 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #+BEGIN_SRC sh :session a :results verbatim
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds ~/git/allo/models/
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds ~/git/allo/models/
+#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
 : 
-: sh-3.2$ erker@krusty's password: 
+: sh-3.2$ sh-3.2$ erker@krusty's password: 
 : receiving file list ... done
-: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds
 : 
-: sent 38 bytes  received 233580 bytes  66748.00 bytes/sec
-: total size is 235028  speedup is 1.01
+: sent 38 bytes  received 233442 bytes  93392.00 bytes/sec
+: total size is 234824  speedup is 1.01
 
 #+begin_src R
 precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
@@ -7975,7 +7977,7 @@ p
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
 
 #+begin_src R
-me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds")
+me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
 #+end_src
 
 #+RESULTS:
@@ -8553,18 +8555,24 @@ pd <- cbind(nd, pred.nd)
         unique() %>%
         cbind(data.frame(AGE = 1:200))
 
-      pred.pisa2 <- predict(mod, nd.pisa2, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+#      pred.pisa2 <- posterior_predict(mod, nd.pisa2, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+      pred.pisa2 <- fitted(mod, nd.pisa2, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000, summary = T)
 
   pred.pisa2 <- cbind(nd.pisa2,pred.pisa2)
 
 #+end_src
 
 #+RESULTS:
+: 
+: Warning message:
+: In data.frame(..., check.names = FALSE) :
+:   row names were found from a short variable and have been discarded
 
 #+begin_src R :exports results :results graphics :file ../figs/monkypod.png
       ggplot() +
           geom_point(data = pisa2, aes(x = AGE, y = DBH, color = City)) +
-          geom_line(data = pred.pisa2, aes(x = AGE, y = Estimate, color = City), inherit.aes = F)
+          geom_ribbon(data = pred.pisa2, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, fill = City), inherit.aes = F, alpha = .3) +
+          geom_line(data = pred.pisa2, aes(x = AGE, y = Estimate, color = City), inherit.aes = F) 
 
 #+end_src
 
