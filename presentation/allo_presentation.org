@@ -710,6 +710,8 @@ http://www.washington.edu/news/blog/2015-uw-cherry-tree-watch-flowers-on-all-tre
 - Individual level predictors
 - Genus and Species level predictors (traits)
 - Age as random variable
+- Height and crown width as joint responses
+- More taxonomic levels (or phylogentic distance GP)
 
 #+BEGIN_NOTES
 possible extensions with existing data
