@@ -7724,8 +7724,8 @@ plot(p)[[1]] +
  #cond <- left_join(cond, unique(select(mod$data, Species, Genus)))
  # cond <- left_join(cond, unique(select(mod$data, City, precip, gdd)))
 
-  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "predict", nsamples = 15000)
-  saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds")
+  me <- marginal_effects(mod, effects = "AGE", conditions = cond, re_formula = NULL, method = "fitted", nsamples = 15000)
+  saveRDS(me, "../models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
 
 #+end_src
 
@@ -7980,18 +7980,26 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects.png :width 1000 :height 800 :res 170 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png :width 1000 :height 800 :res 170 :bg transparent
   me2 <- me_genus$AGE
 
   #      dd <- mod$data
-
+             blue <- "#268bd2"
+       red <- "#dc322f"
+             yellow <- "#b58900"
+             green <- "#859900"
+             cyan <- "#2aa198"
+             orange <- "#cb4b16"
+            violet <- "#6c71c4"
+            magenta <- "#d33682"
 
   p <-           ggplot(me2) +
-  #              geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), alpha = .01) +
-                geom_line(aes(x = AGE, y = estimate__, color = Genus, group = Genus), size = 1, alpha = .2) +
+                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "gray", alpha = .1) +
+                geom_line(aes(x = AGE, y = estimate__, group = Genus), size = .7, alpha = .5, color = blue) +
    #             geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
                 scale_x_continuous(limits = c(0,150)) +
-                scale_y_continuous("DBH", limits = c(0,230)) +
+                scale_y_continuous("DBH") +
+                coord_cartesian(c(0,150), c(0,230)) +
   #              scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
   #              scale_fill_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
                 theme_minimal() +
@@ -8006,7 +8014,7 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png]]
 
 
 #+begin_src R
