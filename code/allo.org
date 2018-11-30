@@ -7740,9 +7740,8 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 625 bytes  received 54 bytes  271.60 bytes/sec
-: total size is 1274  speedup is 1.88
-: You have new mail in /var/mail/erker
+: sent 360 bytes  received 54 bytes  118.29 bytes/sec
+: total size is 1275  speedup is 3.08
 
 #+BEGIN_SRC sh
 
@@ -7757,18 +7756,18 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #+BEGIN_SRC sh :session a :results verbatim
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds ~/git/allo/models/
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-: You have new mail in /var/mail/erker
-: erker@krusty's password: 
-: receiving file list ... done
-: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_City.rds
 : 
-: sent 38 bytes  received 52278 bytes  20926.40 bytes/sec
-: total size is 52488  speedup is 1.00
+: sh-3.2$ erker@krusty's password: 
+: receiving file list ... done
+: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds
+: 
+: sent 38 bytes  received 233580 bytes  66748.00 bytes/sec
+: total size is 235028  speedup is 1.01
 
 #+begin_src R
 precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
@@ -7976,67 +7975,50 @@ p
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
 
 #+begin_src R
-me_species <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Species.rds")
+me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds")
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_points.png :width 1000 :height 800 :res 170 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects.png :width 1000 :height 800 :res 170 :bg transparent
+  me2 <- me_genus$AGE
+
+  #      dd <- mod$data
 
 
-      dd <- mod$data
-
-
-p <-           ggplot(me2) +
-              geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, fill = as.numeric(City), group = City), alpha = .01) +
-              geom_line(aes(x = AGE, y = estimate__, color = as.numeric(City), group = City), size = 1, alpha = .2) +
-              geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
-              scale_x_continuous(limits = c(0,150)) +
-              scale_y_continuous("DBH", limits = c(0,230)) +
-              scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
-              scale_fill_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
-              theme_minimal() +
-          theme(text = element_text(color = "#839496"),
-                axis.text = element_text(color = "#839496"),
-                rect = element_rect(fill = "transparent"),
-                panel.background = element_rect(fill = "transparent"),
-                panel.grid = element_blank(), 
-                legend.key.height = unit("2.3", "lines"))
-p
+  p <-           ggplot(me2) +
+  #              geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), alpha = .01) +
+                geom_line(aes(x = AGE, y = estimate__, color = Genus, group = Genus), size = 1, alpha = .2) +
+   #             geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
+                scale_x_continuous(limits = c(0,150)) +
+                scale_y_continuous("DBH", limits = c(0,230)) +
+  #              scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+  #              scale_fill_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+                theme_minimal() +
+            theme(text = element_text(color = "#839496"),
+                  axis.text = element_text(color = "#839496"),
+                  rect = element_rect(fill = "transparent"),
+                  panel.background = element_rect(fill = "transparent"),
+                  panel.grid = element_blank(), 
+                  legend.position = "none")
+        #          legend.key.height = unit("2.3", "lines"))
+  p
 #+end_src
 
 #+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects.png]]
 
 
 #+begin_src R
   library(plotly)
   library(htmlwidgets)
 
-path <- "../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.html"
+path <- "../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_lines.html"
   pw <- ggplotly(p)
   saveWidget(pw, path, selfcontained = F)
 #+end_src
 
 #+RESULTS:
-#+begin_example
-
-Attaching package: ‘plotly’
-
-The following object is masked from ‘package:ggplot2’:
-
-    last_plot
-
-The following object is masked from ‘package:stats’:
-
-    filter
-
-The following object is masked from ‘package:graphics’:
-
-    layout
-
-Warning message:
-package ‘htmlwidgets’ was built under R version 3.4.4
-#+end_example
 
 
 
@@ -8552,6 +8534,34 @@ pd <- cbind(nd, pred.nd)
 
 #+RESULTS:
 [[file:../figs/robiniapsuedoacacia.png]]
+
+***** Monkey Pod,  PISA2, Albizia Saman, Samanea Saman
+
+#+begin_src R
+  pisa2 <- filter(mod$data, Genus == "Samanea")
+
+    nd.pisa2 <- pisa2 %>%
+        select(City, Species, Genus, gdd, precip) %>%
+        unique() %>%
+        cbind(data.frame(AGE = 1:200))
+
+      pred.pisa2 <- predict(mod, nd.pisa2, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+
+  pred.pisa2 <- cbind(nd.pisa2,pred.pisa2)
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/monkypod.png
+      ggplot() +
+          geom_point(data = pisa2, aes(x = AGE, y = DBH, color = City)) +
+          geom_line(data = pred.pisa2, aes(x = AGE, y = Estimate, color = City), inherit.aes = F)
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/monkypod.png]]
 
 **** posterior predictive check
 
