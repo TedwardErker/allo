@@ -16,8 +16,6 @@
 #+REVEAL_MAX_SCALE: 2.5
 #+REVEAL_THEME: black
 #+REVEAL_POSTAMBLE: <p> Created by Erker </p>
-
-
 * COMMENT ideas for presentation
 - motivation
   - tree growth as a problem
@@ -47,7 +45,6 @@
 - problems and future work
   - multistemmed trees?
   - palms - excluded from analysis, but theyare in the data
-
 
 * Biometry Project
 Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
