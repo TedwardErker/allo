@@ -16,6 +16,8 @@
 #+REVEAL_MAX_SCALE: 2.5
 #+REVEAL_THEME: black
 #+REVEAL_POSTAMBLE: <p> Created by Erker </p>
+# -*- org-image-actual-width: nil; -*-
+
 
 * COMMENT ideas for presentation
 - motivation
@@ -67,6 +69,7 @@ ecosystem services
 
 #+REVEAL: split
 #+ATTR_HTML: :height 750px
+#+ATTR_ORG: :width 750
 [[file:figs/elmer.jpg]]
 
 #+BEGIN_NOTES
