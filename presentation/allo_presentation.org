@@ -231,6 +231,23 @@ and an intercept added because at time of transplanting, age 0, trees
 have a dbh.
 #+END_NOTES
 
+** Y \sim Normal
+#+REVEAL_HTML: <div class="column" style="float:left; width:60%">
+$\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
+
+$y_i \sim \mbox{Normal}(\mu_i, \sigma)$
+#+REVEAL_HTML: </div>
+
+#+REVEAL_HTML: <div class="column" style="float:right; width:40%">
+#+ATTR_HTML: :class plain
+[[file:figs/weibull_scaled_intercept_normal_obs.png]]
+#+REVEAL_HTML: </div>
+
+#+BEGIN_NOTES
+1. Positive
+2. Increasing variance
+#+END_NOTES
+
 ** Y \sim Gamma
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
