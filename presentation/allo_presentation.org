@@ -53,12 +53,6 @@ Tedward Erker
 
 December 3, 2018
 
-#+begin_src emacs-lisp
-(image-type-available-p 'imagemagick)
-#+end_src
-
-#+RESULTS:
-
 #+REVEAL: split
 #+ATTR_HTML: :height 750px
 [[file:figs/monroe_tree.jpg]]
