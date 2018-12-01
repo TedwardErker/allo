@@ -812,6 +812,24 @@ priors - be more clear.
 
 * COMMENT jun notes
 
+for climate panels:
+- median and standard error don't go together.
+  - median absolute deviance.
+  - inter quartile range
+
+- sample correlation.
+  - 
+
+review:
+- LOO
+- mixed effects models
+- HMC
+
+Fix the text.
+
+Add notes to each slide to get what I want to say down.
+
+
 * extras:
 ** Monkeypod
 [[file:figs/salman_monkeypod.jpg]]
