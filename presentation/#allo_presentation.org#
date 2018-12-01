@@ -619,10 +619,12 @@ $\sigma^{(0)}_{genus} < \sigma^{(0)}_{city}$
 $\sigma^{(2)}_{genus} \approx \sigma^{(2)}_{city}$ \\
 $\sigma^{(3)}_{genus} \approx \sigma^{(3)}_{city}$
 #+REVEAL: split
+*** Genus
 
 Albizia saman is very high beta2 (looks like). (in data goes by old
 name salmanea salman, code is PISA2).  Also called monkey pod
 
+*** City
 #+ATTR_HTML: :height 800px :class plain :style background:none
 [[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png]]
 #+REVEAL: split

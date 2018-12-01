@@ -8037,8 +8037,10 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons_test.png :width 1000 :height 800 :res 170 :bg transparent
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_lines.png :width 1000 :height 800 :res 170 :bg transparent
   me2 <- me_genus$AGE
+
+#me2 <- filter(me2, Genus == "Acer")
 
   #      dd <- mod$data
              blue <- "#268bd2"
@@ -8051,8 +8053,8 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
             magenta <- "#d33682"
 
   p <-           ggplot(me2) +
-#                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "gray", alpha = .1) +
-                geom_line(aes(x = AGE, y = estimate__, color = interaction(City,Genus)), size = .7, alpha = .5) +
+#                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "white", alpha = .1) +
+                geom_line(aes(x = AGE, y = estimate__, group = interaction(City,Genus)), size = .7, alpha = .5, color = blue) +
    #             geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
                 scale_x_continuous(limits = c(0,150)) +
                 scale_y_continuous("DBH") +
@@ -8071,7 +8073,7 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons_test.png]]
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_lines.png]]
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png :width 1000 :height 800 :res 170 :bg transparent
   me2 <- me_genus$AGE
@@ -8693,7 +8695,7 @@ pd <- cbind(nd, pred.nd)
 : In data.frame(..., check.names = FALSE) :
 :   row names were found from a short variable and have been discarded
 
-#+begin_src R :exports results :results graphics :file ../figs/monkypod.png
+#+begin_src R :exports results :results graphics :file ../figs/monkeypod.png
       ggplot() +
           geom_point(data = pisa2, aes(x = AGE, y = DBH, color = City)) +
           geom_ribbon(data = pred.pisa2, aes(x = AGE, ymin = Q2.5, ymax = Q97.5, fill = City), inherit.aes = F, alpha = .3) +
