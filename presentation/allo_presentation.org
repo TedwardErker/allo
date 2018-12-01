@@ -266,9 +266,10 @@ $y_i \sim \mbox{Gamma}(\mu_i, \alpha)$
 #+END_NOTES
 
 ** Pooling
-#+ATTR_REVEAl: :frag appear
+#+ATTR_REVEAL: :frag appear
 #+ATTR_HTML: :height 450px :class plain
-[[file:figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png]]
+[[file:figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png]]\\
+complete pooling
 
 #+BEGIN_NOTES
 we can fit this model to any single species city combination (no
@@ -809,6 +810,8 @@ validation
 
 priors - be more clear.
 
+* COMMENT jun notes
+
 * extras:
 ** Monkeypod
 [[file:figs/salman_monkeypod.jpg]]
@@ -835,5 +838,7 @@ priors - be more clear.
 #+reveal: split
 #+ATTR_HTML: :height 250px :class plain
 [[file:figs/posterior_distributions_model_FullData_shape.png]]
+
+
 
 
