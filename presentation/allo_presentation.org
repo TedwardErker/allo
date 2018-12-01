@@ -231,7 +231,7 @@ and an intercept added because at time of transplanting, age 0, trees
 have a dbh.
 #+END_NOTES
 
-** Y \sim Normal
+** Y ~ Normal
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
@@ -248,7 +248,7 @@ $y_i \sim \mbox{Normal}(\mu_i, \sigma)$
 2. Increasing variance
 #+END_NOTES
 
-** Y \sim Gamma
+** Y ~ Gamma
 #+REVEAL_HTML: <div class="column" style="float:left; width:60%">
 $\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}$
 
@@ -348,15 +348,19 @@ $\delta^{(j)}_{c} \sim N(0, \sigma^{(j)}_{city})$
 
 ** Priors
 #+ATTR_REVEAL: :frag appear
-$\beta^{(j)}_0 \sim Gamma(\theta_j, \alpha_j)$ \\
+$\beta^{(j)}_0 \sim \mbox{Gamma}$ \\
 #+ATTR_REVEAL: :frag appear
-$\sigma^{(j)}_{group} \sim half-Normal(\theta_j, \alpha_j)$ \\
+$\sigma^{(j)}_{group} \sim \mbox{half-Normal}$ \\
 #+ATTR_REVEAL: :frag appear
-$\alpha_y \sim Gamma(\theta_{\alpha_y}, \alpha_{\alpha_y})$
+$\alpha_y \sim \mbox{Gamma}$
 
 #+BEGIN_NOTES
 This is what makees it bayesian.  We treat all parameters are random
 variables. talk about them, biologically realistic/ possible.
+
+$\beta^{(j)}_0 \sim Gamma \theta_j, \alpha_j)$ \\
+$\sigma^{(j)}_{group} \sim half-Normal(\theta_j, \alpha_j)$ \\
+$\alpha_y \sim Gamma(\theta_{\alpha_y}, \alpha_{\alpha_y})$
 #+END_NOTES
 
 ** posterior distribution.
