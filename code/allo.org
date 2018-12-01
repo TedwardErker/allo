@@ -8629,6 +8629,7 @@ pd <- cbind(nd, pred.nd)
 #+end_src
 
 #+RESULTS:
+: 
 : Warning message:
 : In data.frame(..., check.names = FALSE) :
 :   row names were found from a short variable and have been discarded
@@ -8644,7 +8645,106 @@ pd <- cbind(nd, pred.nd)
 #+RESULTS:
 [[file:../figs/lain.png]]
 
-***** rops
+#+begin_src R :exports results :results graphics :file ../figs/lain_CA.png :res 200 :width 800
+  ggplot() + geom_point(data = filter(lain, !City %in% c("Charleston, SC", "Orlando, FL")) , aes(x = AGE, y = DBH, color = City)) +
+      geom_line(data =  filter(pred.lain, !City %in% c("Charleston, SC", "Orlando, FL")), aes(x = AGE, y = Estimate, color = City), inherit.aes = F) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/lain_CA.png]]
+
+***** sweet gum
+#+begin_src R
+
+        list <- filter(mod$data, Species == "LIST")
+
+      nd.list <- list %>%
+          select(City, Species, Genus, gdd, precip) %>%
+          unique() %>%
+          cbind(data.frame(AGE = rep(1:200, each = 11)))
+
+        pred.list <- predict(mod, nd.list, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+
+    pred.list <- cbind(nd.list,pred.list)
+
+#+end_src
+
+#+RESULTS:
+: 
+: Warning message:
+: In data.frame(..., check.names = FALSE) :
+:   row names were found from a short variable and have been discarded
+
+#+begin_src R :exports results :results graphics :file ../figs/list.png :res 200 :width 800
+  ggplot() + geom_point(data = list, aes(x = AGE, y = DBH, color = City)) +
+      geom_line(data = pred.list, aes(x = AGE, y = Estimate, color = City), inherit.aes = F) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/list.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/list_CA.png :res 200 :width 800
+  ggplot() + geom_point(data = filter(list, grepl(".*CA",City)), aes(x = AGE, y = DBH, color = City), size = .5) +
+      geom_line(data = filter(pred.list, grepl(".*CA",City)), aes(x = AGE, y = Estimate, color = City), inherit.aes = F) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/list_CA.png]]
+
+***** Camphor
+#+begin_src R
+
+        cica <- filter(mod$data, Species == "CICA")
+
+      nd.cica <- cica %>%
+          select(City, Species, Genus, gdd, precip) %>%
+          unique() %>%
+          cbind(data.frame(AGE = rep(1:200, each = 6)))
+
+        pred.cica <- predict(mod, nd.cica, robust = T, probs = c(0.025, 0.25, .75, .975), nsamples = 5000)
+
+    pred.cica <- cbind(nd.cica,pred.cica)
+
+#+end_src
+
+#+RESULTS:
+: 
+: Warning message:
+: In data.frame(..., check.names = FALSE) :
+:   row names were found from a short variable and have been discarded
+
+#+begin_src R :exports results :results graphics :file ../figs/cica.png :res 200 :width 800
+  ggplot() + geom_point(data = cica, aes(x = AGE, y = DBH, color = City)) +
+      geom_line(data = pred.cica, aes(x = AGE, y = Estimate, color = City), inherit.aes = F) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/cica.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/cica_CA.png :res 200 :width 800
+  ggplot() + geom_point(data = filter(cica, grepl(".*CA",City)), aes(x = AGE, y = DBH, color = City), size = .5) +
+      geom_line(data = filter(pred.cica, grepl(".*CA",City)), aes(x = AGE, y = Estimate, color = City), inherit.aes = F) +
+    scale_x_continuous(limits = c(0,100)) +
+    theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+[[file:../figs/cica_CA.png]]
+
+***** Black Locust  rops
 
 #+begin_src R
       rops <- filter(d, Species == "ROPS")
