@@ -817,6 +817,9 @@ for climate panels:
   - median absolute deviance.
   - inter quartile range
 
+- sample correlation.
+  - 
+
 * extras:
 ** Monkeypod
 [[file:figs/salman_monkeypod.jpg]]
