@@ -621,8 +621,16 @@ $\sigma^{(3)}_{genus} \approx \sigma^{(3)}_{city}$
 #+REVEAL: split
 *** Genus
 
+
+
+
+#+BEGIN_NOTES
 Albizia saman is very high beta2 (looks like). (in data goes by old
 name salmanea salman, code is PISA2).  Also called monkey pod
+
+#+END_NOTES
+
+
 
 *** City
 #+ATTR_HTML: :height 800px :class plain :style background:none
@@ -635,6 +643,10 @@ name salmanea salman, code is PISA2).  Also called monkey pod
 #+ATTR_HTML: :height 800px :class plain :style background:none
 [[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
 
+
+show the same species in two cities with similar climates but
+different management to prove the management is important point.
+Though, as Brian noted, there 
 
 
 honolulu is the warm wet city with slow growth
@@ -774,3 +786,26 @@ priors - be more clear.
 [[file:figs/salman_monkeypod.jpg]]
 #+reveal: split
 [[file:figs/monkeypod.png]]
+** parameter estimates
+#+ATTR_HTML: :height 550px :class plain
+[[file:figs/posterior_distributions_model_FullData_mainparameters.png]]
+#+reveal: split
+#+ATTR_HTML: :height 550px :class plain
+[[file:figs/posterior_distributions_model_FullData_climate_effects.png]]
+#+reveal: split
+#+ATTR_HTML: :height 550px :class plain
+[[file:figs/posterior_distributions_model_FullData_sd_beta0.png]]
+#+reveal: split
+#+ATTR_HTML: :height 550px :class plain
+[[file:figs/posterior_distributions_model_FullData_sd_beta1.png]]
+#+reveal: split
+#+ATTR_HTML: :height 550px :class plain
+[[file:figs/posterior_distributions_model_FullData_sd_beta2.png]]
+#+reveal: split
+#+ATTR_HTML: :height 550px :class plain
+[[file:figs/posterior_distributions_model_FullData_sd_beta3.png]]
+#+reveal: split
+#+ATTR_HTML: :height 250px :class plain
+[[file:figs/posterior_distributions_model_FullData_shape.png]]
+
+
