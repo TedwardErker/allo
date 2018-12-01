@@ -621,12 +621,26 @@ $\sigma^{(3)}_{genus} \approx \sigma^{(3)}_{city}$
 #+REVEAL: split
 *** Genus
 
+
+
+
+#+BEGIN_NOTES
 Albizia saman is very high beta2 (looks like). (in data goes by old
 name salmanea salman, code is PISA2).  Also called monkey pod
+
+#+END_NOTES
+
+
 
 *** City
 #+ATTR_HTML: :height 800px :class plain :style background:none
 [[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_lines.png]]
+#+BEGIN_NOTES
+honolulu is the warm wet city with slow growth.  Does it share any
+species with the other cities?  Only one species is shared and that is
+just with one other city.  honolulu being in the same model might be suspect.
+#+END_NOTES
+
 #+REVEAL: split
 #+ATTR_HTML: :height 800px :class plain :style background:none
 [[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_ribbons.png]]
@@ -636,8 +650,12 @@ name salmanea salman, code is PISA2).  Also called monkey pod
 [[file:figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_CityEffects_points.png]]
 
 
+show the same species in two cities with similar climates but
+different management to prove the management is important point.
+Though, as Brian noted, there 
 
-honolulu is the warm wet city with slow growth
+crepe myrtl?
+
 
 ** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
