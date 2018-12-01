@@ -292,7 +292,7 @@ repeat: species, /s/; genus, /g/; city, /c/
 *** COMMENT no color equ
 $\mu_{igsc} = \beta^{(0)}_{gsc} + \beta^{(1)}_{gs} \{1 - \exp(-\beta^{(2)}_{gsc} x_{igsc}^{\beta^{(3)}_{gsc}})\}$
 ** Multilevel Modeling
-$\mu_{igsc} = \color{red}{\beta^{(0)}_{igsc}} + \beta^{(1)}_{igs} \{1 - \exp(-\color{red}{\beta^{(2)}_{igsc}} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
+$\mu_{igsc} = \color{red}{\beta^{(0)}_{gsc}} + \beta^{(1)}_{gs} \{1 - \exp(-\color{red}{\beta^{(2)}_{gsc}} x_{igsc}^{\beta^{(3)}_{gsc}})\}$
 \\
 \\
 #+ATTR_REVEAL: :frag appear
@@ -302,10 +302,11 @@ $\beta^{(j)}_{igsc} = \beta^{(j)}_0 + \gamma^{(j)}_{gs}+\delta^{(j)}_{c}$
 \\
 #+BEGIN_NOTES
 asymptote does not vary by city
+$\mu_{igsc} = \color{red}{\beta^{(0)}_{igsc}} + \beta^{(1)}_{igs} \{1 - \exp(-\color{red}{\beta^{(2)}_{igsc}} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
 #+END_NOTES
 
 ** Multilevel Modeling
-$\mu_{igsc} = \beta^{(0)}_{igsc} + \color{red}{\beta^{(1)}_{igs}} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\beta^{(3)}_{igsc}})\}$
+$\mu_{igsc} = \beta^{(0)}_{gsc} + \color{red}{\beta^{(1)}_{gs}} \{1 - \exp(-\beta^{(2)}_{gsc} x_{igsc}^{\beta^{(3)}_{gsc}})\}$
 \\
 \\
 #+ATTR_REVEAL: :frag appear
@@ -318,7 +319,7 @@ asymptote does not vary by city
 #+END_NOTES
 
 ** Multilevel Modeling
-$\mu_{igsc} = \beta^{(0)}_{igsc} + \beta^{(1)}_{igs} \{1 - \exp(-\beta^{(2)}_{igsc} x_{igsc}^{\color{red}{\beta^{(3)}_{igsc}}})\}$
+$\mu_{igsc} = \beta^{(0)}_{gsc} + \beta^{(1)}_{gs} \{1 - \exp(-\beta^{(2)}_{gsc} x_{igsc}^{\color{red}{\beta^{(3)}_{gsc}}})\}$
 \\
 \\
 For \(\beta^{(3)}_{igsc}\), \\
