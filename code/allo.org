@@ -7993,7 +7993,7 @@ p
 
   res <- 30
 
-  nd <- cbind(nd[rep(1,nrow(nd), each = res),], AGE = seq(0,200,length.out = res))
+  nd <- cbind(nd[rep(1:nrow(nd), each = res),], AGE = seq(0,200,length.out = res))
 
   genus_test <- fitted(mod, newdata = nd, nsamples = 50, re_formula = NULL)
 
@@ -8008,9 +8008,22 @@ dd <- cbind(nd, genus_test)
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/genus_test.png
+#+begin_src R :exports results :results graphics :file ../figs/genus_test.png :width 1000 :bg transparent  :width 1000 :height 800 :res 170 
+#  ggplot(filter(dd, Genus %in% c("Samanea", "Malus"))) + 
   ggplot(dd) + 
-  geom_line(aes(x = AGE, y = Estimate, color = Genus))
+#  geom_ribbon(aes(x = AGE, ymin = Q2.5, ymax = Q97.5, fill = Genus, group = interaction(Species, City)), alpha = .3) +
+  geom_line(aes(x = AGE, y = Estimate, color = Genus, group = interaction(Species, City))) +
+                scale_x_continuous(limits = c(0,150)) +
+                scale_y_continuous("DBH") +
+                coord_cartesian(c(0,150), c(0,230)) +
+                theme_minimal() +
+            theme(text = element_text(color = "#839496"),
+                  axis.text = element_text(color = "#839496"),
+                  rect = element_rect(fill = "transparent"),
+                  panel.background = element_rect(fill = "transparent"),
+                  panel.grid = element_blank(),
+                  legend.position = "none")
+
 #+end_src
 
 #+RESULTS:
@@ -8018,8 +8031,8 @@ dd <- cbind(nd, genus_test)
 
 
 #+begin_src R
-#me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
-me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
+me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds")
+#me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds")
 #+end_src
 
 #+RESULTS:
@@ -8059,6 +8072,44 @@ me_genus <-readRDS("~/git/allo/models/genus_many_species_many_cities_notB1_many_
 
 #+RESULTS:
 [[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons_test.png]]
+
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png :width 1000 :height 800 :res 170 :bg transparent
+  me2 <- me_genus$AGE
+
+  #      dd <- mod$data
+             blue <- "#268bd2"
+       red <- "#dc322f"
+             yellow <- "#b58900"
+             green <- "#859900"
+             cyan <- "#2aa198"
+             orange <- "#cb4b16"
+            violet <- "#6c71c4"
+            magenta <- "#d33682"
+
+  p <-           ggplot(filter(me2, Genus == "Samanea")) +
+                geom_ribbon(aes(x = AGE, ymin = estimate__ - se__, ymax = estimate__ + se__, group = Genus), fill = "gray", alpha = .1) +
+                geom_line(aes(x = AGE, y = estimate__, color = interaction(City,Genus)), size = .7, alpha = .5) +
+   #             geom_point(data = dd, aes(x = AGE, y = DBH, color = as.numeric(City)), alpha = 1, size = .2) +
+                scale_x_continuous(limits = c(0,150)) +
+                scale_y_continuous("DBH") +
+                coord_cartesian(c(0,150), c(0,230)) +
+  #              scale_color_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+  #              scale_fill_distiller("City\nranked by\n(GDD * Precip)", palette = "Spectral", breaks = 1:16, labels = levels(me2$City)) +
+                theme_minimal() +
+            theme(text = element_text(color = "#839496"),
+                  axis.text = element_text(color = "#839496"),
+                  rect = element_rect(fill = "transparent"),
+                  panel.background = element_rect(fill = "transparent"),
+                  panel.grid = element_blank(),
+                  legend.position = "none")
+        #          legend.key.height = unit("2.3", "lines"))
+  p
+#+end_src
+
+#+RESULTS:
+[[file:../figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_ribbons.png]]
+
+
 
 
 #+begin_src R
