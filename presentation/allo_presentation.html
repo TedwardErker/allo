@@ -26,8 +26,8 @@
 <div class="reveal">
 <div class="slides">
 <section>
-<section id="slide-org78cbea4">
-<h2 id="org78cbea4">Biometry Project</h2>
+<section id="slide-orgcd097b2">
+<h2 id="orgcd097b2">Biometry Project</h2>
 <p>
 Bayesian Nonlinear Multilevel Modeling of Urban Tree Growth
 </p>
@@ -81,7 +81,7 @@ up the sidewalk.
 </section>
 <section>
 
-<figure id="org0105151">
+<figure id="orgc6b2a0e">
 <img src="figs/elmer.jpg" alt="elmer.jpg">
 
 </figure>
@@ -99,8 +99,8 @@ a first step to modeling ecosystem services.
 </aside>
 
 </section>
-<section id="slide-orgf4bea3a">
-<h3 id="orgf4bea3a">Forest &ne; Urban</h3>
+<section id="slide-orgdedf144">
+<h3 id="orgdedf144">Forest &ne; Urban</h3>
 <div class="column" style="float:left; width:49%">
 
 <figure>
@@ -125,8 +125,8 @@ You could use existing growth equations that have been developed, but forest tre
 </aside>
 
 </section>
-<section id="slide-org4fcde1e">
-<h3 id="org4fcde1e">Open Grown &ne; Urban</h3>
+<section id="slide-orgb132d70">
+<h3 id="orgb132d70">Open Grown &ne; Urban</h3>
 <div class="column" style="float:left; width:49%">
 
 <figure>
@@ -153,8 +153,8 @@ They also aren't simply open grown trees.  urban trees are often hacked up.
 </section>
 </section>
 <section>
-<section id="slide-org4ad14f5">
-<h2 id="org4ad14f5">Growth of urban trees?</h2>
+<section id="slide-org301bd94">
+<h2 id="org301bd94">Growth of urban trees?</h2>
 </section>
 <section>
 
@@ -211,8 +211,8 @@ units of dbh are cm
 </figure>
 
 </section>
-<section id="slide-org4fab243">
-<h3 id="org4fab243">Existing Approach</h3>
+<section id="slide-org55c5129">
+<h3 id="org55c5129">Existing Approach</h3>
 
 <figure>
 <img src="figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png" alt="predictions_cities_notB1_dbh_bySpeciesCity_wData_no_UTDpredictions_focus_acpl_FullData.png" height="650px" class="plain">
@@ -249,13 +249,13 @@ two major problems:
 </section>
 </section>
 <section>
-<section id="slide-orgcbc28a6">
-<h2 id="orgcbc28a6">Model Considerations</h2>
-<div class="outline-text-2" id="text-orgcbc28a6">
+<section id="slide-org6151f04">
+<h2 id="org6151f04">Model Considerations</h2>
+<div class="outline-text-2" id="text-org6151f04">
 </div>
 </section>
-<section id="slide-orgaca232a">
-<h3 id="orgaca232a">Model Considerations</h3>
+<section id="slide-org2024f9e">
+<h3 id="org2024f9e">Model Considerations</h3>
 <div class="column" style="float:left; width:60%">
 <ol>
 <li>Biologically realistic</li>
@@ -276,8 +276,8 @@ two major problems:
 </figure>
 </div>
 </section>
-<section id="slide-org4da6065">
-<h3 id="org4da6065">Model Considerations</h3>
+<section id="slide-org44e3ba7">
+<h3 id="org44e3ba7">Model Considerations</h3>
 <div class="column" style="float:left; width:60%">
 <ol>
 <li>Biologically realistic</li>
@@ -299,8 +299,8 @@ two major problems:
 </div>
 
 </section>
-<section id="slide-orgd18db13">
-<h3 id="orgd18db13">Weibull</h3>
+<section id="slide-org71f68d8">
+<h3 id="org71f68d8">Weibull</h3>
 <div class="column" style="float:left; width:60%">
 <p>
 \(\mu_i = 1 - \exp(-\color{red}{\beta^{(2)}}x_i^{\color{red}{\beta^{(3)}}})\)
@@ -323,8 +323,8 @@ it is flexible and sigmoidal
 </aside>
 
 </section>
-<section id="slide-orgd646c9f">
-<h3 id="orgd646c9f">Weibull</h3>
+<section id="slide-org061c9ea">
+<h3 id="org061c9ea">Weibull</h3>
 <div class="column" style="float:left; width:60%">
 <p>
 \(\mu_i = \color{red}{\beta^{(1)}} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}\)
@@ -347,8 +347,8 @@ it can be scaled to an asymptote
 </aside>
 
 </section>
-<section id="slide-orgb039162">
-<h3 id="orgb039162">Weibull</h3>
+<section id="slide-orgc81e2ea">
+<h3 id="orgc81e2ea">Weibull</h3>
 <div class="column" style="float:left; width:60%">
 <p>
 \(\mu_i = \color{red}{\beta^{(0)}} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}\)
@@ -372,8 +372,8 @@ have a dbh.
 </aside>
 
 </section>
-<section id="slide-orgdc692c0">
-<h3 id="orgdc692c0">Y ~ Normal</h3>
+<section id="slide-orgb99f914">
+<h3 id="orgb99f914">Y ~ Normal</h3>
 <div class="column" style="float:left; width:60%">
 <p>
 \(\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}\)
@@ -402,8 +402,8 @@ have a dbh.
 </aside>
 
 </section>
-<section id="slide-org6ecf686">
-<h3 id="org6ecf686">Y ~ Gamma</h3>
+<section id="slide-org13254f4">
+<h3 id="org13254f4">Y ~ Gamma</h3>
 <div class="column" style="float:left; width:60%">
 <p>
 \(\mu_i = \beta^{(0)} + \beta^{(1)} \{1 - \exp(-\beta^{(2)}x_i^{\beta^{(3)}})\}\)
@@ -432,8 +432,8 @@ have a dbh.
 </aside>
 
 </section>
-<section id="slide-orgeca58c4">
-<h3 id="orgeca58c4">Pooling</h3>
+<section id="slide-orgb8808e4">
+<h3 id="orgb8808e4">Pooling</h3>
 <p class="fragment appear" height="450px" class="plain">
 <img src="figs/marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png" alt="marginal_effects_genus_none_species_single_cities_single_climate_none_hetero_no_family_Gamma_points.png" class="plain" height="450px"><br>
 complete pooling
@@ -453,13 +453,13 @@ combinations with little or no data can have somewhat reasonable predictions.
 </section>
 </section>
 <section>
-<section id="slide-orga9ced88">
-<h2 id="orga9ced88">Multilevel Modeling</h2>
-<div class="outline-text-2" id="text-orga9ced88">
+<section id="slide-orgf4c90c3">
+<h2 id="orgf4c90c3">Multilevel Modeling</h2>
+<div class="outline-text-2" id="text-orgf4c90c3">
 </div>
 </section>
-<section id="slide-org1347352">
-<h3 id="org1347352">Multilevel Modeling</h3>
+<section id="slide-org5f0741e">
+<h3 id="org5f0741e">Multilevel Modeling</h3>
 <p>
 \(y_{i\color{red}{gsc}} \sim \mbox{Gamma}(\mu_{i\color{red}{gsc}}, \alpha_y)\)
 </p>
@@ -477,8 +477,8 @@ repeat: species, <i>s</i>; genus, <i>g</i>; city, <i>c</i>
 
 </aside>
 </section>
-<section id="slide-org5dada46">
-<h3 id="org5dada46">Multilevel Modeling</h3>
+<section id="slide-orgd53c5a8">
+<h3 id="orgd53c5a8">Multilevel Modeling</h3>
 <p>
 \(\mu_{igsc} = \color{red}{\beta^{(0)}_{gsc}} + \beta^{(1)}_{gs} \{1 - \exp(-\color{red}{\beta^{(2)}_{gsc}} x_{igsc}^{\beta^{(3)}_{gsc}})\}\)
 <br>
@@ -499,8 +499,8 @@ asymptote does not vary by city
 </aside>
 
 </section>
-<section id="slide-org004db8e">
-<h3 id="org004db8e">Multilevel Modeling</h3>
+<section id="slide-orgd8439e8">
+<h3 id="orgd8439e8">Multilevel Modeling</h3>
 <p>
 \(\mu_{igsc} = \beta^{(0)}_{gsc} + \color{red}{\beta^{(1)}_{gs}} \{1 - \exp(-\beta^{(2)}_{gsc} x_{igsc}^{\beta^{(3)}_{gsc}})\}\)
 <br>
@@ -520,8 +520,8 @@ asymptote does not vary by city
 </aside>
 
 </section>
-<section id="slide-org5f93f9f">
-<h3 id="org5f93f9f">Multilevel Modeling</h3>
+<section id="slide-org08e320c">
+<h3 id="org08e320c">Multilevel Modeling</h3>
 <p>
 \(\mu_{igsc} = \beta^{(0)}_{gsc} + \beta^{(1)}_{gs} \{1 - \exp(-\beta^{(2)}_{gsc} x_{igsc}^{\color{red}{\beta^{(3)}_{gsc}}})\}\)
 <br>
@@ -550,8 +550,8 @@ For \(\beta^{(3)}_{igsc}\), <br>
 </figure>
 
 </section>
-<section id="slide-org1736de9">
-<h3 id="org1736de9">Multilevel Modeling</h3>
+<section id="slide-org73514f9">
+<h3 id="org73514f9">Multilevel Modeling</h3>
 <p class="fragment appear">
 \(\gamma^{(j)}_{gs} \sim N(\gamma^{(j)}_{g}, \sigma^{(j)}_{genus:species})\)
 </p>
@@ -565,8 +565,8 @@ For \(\beta^{(3)}_{igsc}\), <br>
 </p>
 
 </section>
-<section id="slide-org4f6c03e">
-<h3 id="org4f6c03e">Priors</h3>
+<section id="slide-orgfc25d38">
+<h3 id="orgfc25d38">Priors</h3>
 <p class="fragment appear">
 \(\beta^{(j)}_0 \sim \mbox{Gamma}\) <br>
 </p>
@@ -594,13 +594,13 @@ variables. talk about them, biologically realistic/ possible.
 </section>
 </section>
 <section>
-<section id="slide-orgaca2014">
-<h2 id="orgaca2014">Model Fitting</h2>
-<div class="outline-text-2" id="text-orgaca2014">
+<section id="slide-orgf07c04c">
+<h2 id="orgf07c04c">Model Fitting</h2>
+<div class="outline-text-2" id="text-orgf07c04c">
 </div>
 </section>
-<section id="slide-orgd81c76e">
-<h3 id="orgd81c76e"><code>brms</code></h3>
+<section id="slide-org761dde6">
+<h3 id="org761dde6"><code>brms</code></h3>
 
 <figure>
 <img src="figs/brms.png" alt="brms.png" width="250" class="plain">
@@ -608,8 +608,8 @@ variables. talk about them, biologically realistic/ possible.
 </figure>
 
 </section>
-<section id="slide-orgc4f77a6">
-<h3 id="orgc4f77a6">Stan</h3>
+<section id="slide-orgb111e1d">
+<h3 id="orgb111e1d">Stan</h3>
 
 <figure>
 <img src="figs/stan_logo.png" alt="stan_logo.png" width="250" class="plain" style="background:none">
@@ -617,8 +617,8 @@ variables. talk about them, biologically realistic/ possible.
 </figure>
 
 </section>
-<section id="slide-org337ca4f">
-<h3 id="org337ca4f"><code>brms</code></h3>
+<section id="slide-org06c8fe5">
+<h3 id="org06c8fe5"><code>brms</code></h3>
 <div style="font-size:50px">
 <div class="org-src-container">
 
@@ -636,8 +636,8 @@ and some lines to specify priors
 </p>
 
 </section>
-<section id="slide-orga77989c">
-<h3 id="orga77989c">Stan Code</h3>
+<section id="slide-org10fafca">
+<h3 id="org10fafca">Stan Code</h3>
 <div class="column" style="float:left; width:33%; font-size:18px">
 <div class="org-src-container">
 
@@ -858,8 +858,8 @@ and some lines to specify priors
 </div>
 </div>
 </section>
-<section id="slide-orgf99481d">
-<h3 id="orgf99481d">Sampling the Posterior</h3>
+<section id="slide-org2eb47ce">
+<h3 id="org2eb47ce">Sampling the Posterior</h3>
 </section>
 <section>
 <p>
@@ -886,8 +886,8 @@ No-U-Turn Sampler (NUTS)
 </p>
 
 </section>
-<section id="slide-org8266dea">
-<h3 id="org8266dea">MCMC diagnostics</h3>
+<section id="slide-org79cdadc">
+<h3 id="org79cdadc">MCMC diagnostics</h3>
 <p>
 check
 </p>
@@ -895,21 +895,21 @@ check
 </section>
 </section>
 <section>
-<section id="slide-orge0b2c38">
-<h2 id="orge0b2c38">Results</h2>
-<div class="outline-text-2" id="text-orge0b2c38">
+<section id="slide-org4e38ca5">
+<h2 id="org4e38ca5">Results</h2>
+<div class="outline-text-2" id="text-org4e38ca5">
 </div>
 </section>
-<section id="slide-org4a5e308">
-<h3 id="org4a5e308">Comparison</h3>
+<section id="slide-orgfbd00b8">
+<h3 id="orgfbd00b8">Comparison</h3>
 
 <figure>
 <img src="figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png" alt="predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png" height="600px" class="plain">
 
 </figure>
 </section>
-<section id="slide-org87c6799">
-<h3 id="org87c6799">Genus and City Variability</h3>
+<section id="slide-org9fc9d09">
+<h3 id="org9fc9d09">Genus and City Variability</h3>
 <p class="fragment appear">
 \(\sigma^{(0)}_{genus} < \sigma^{(0)}_{city}\)
 </p>
@@ -920,8 +920,8 @@ check
 </section>
 <section>
 </section>
-<section id="slide-org12a9e24">
-<h4 id="org12a9e24">Genus</h4>
+<section id="slide-org9deae49">
+<h4 id="org9deae49">Genus</h4>
 
 <figure>
 <img src="figs/marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_lines.png" alt="marginal_effects_BySpecies_Genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_full_singlepane_GenusEffects_lines.png" height="700px" class="plain" style="background:none">
@@ -940,8 +940,8 @@ name salmanea salman, code is PISA2).  Also called monkey pod
 </aside>
 
 </section>
-<section id="slide-org7d5e0a2">
-<h4 id="org7d5e0a2">City</h4>
+<section id="slide-org17ad92f">
+<h4 id="org17ad92f">City</h4>
 </section>
 <section>
 
@@ -989,8 +989,8 @@ crepe myrtl, camphor, sweetgum
 </aside>
 
 </section>
-<section id="slide-org0af97cf">
-<h3 id="org0af97cf">Climate</h3>
+<section id="slide-org4e54518">
+<h3 id="org4e54518">Climate</h3>
 <div class="column" style="float:left; width:50%">
 
 <figure>
@@ -1004,8 +1004,8 @@ crepe myrtl, camphor, sweetgum
 </div>
 
 </section>
-<section id="slide-orga33a8cd">
-<h3 id="orga33a8cd">Climate</h3>
+<section id="slide-orgd73ca05">
+<h3 id="orgd73ca05">Climate</h3>
 <div class="column" style="float:left; width:50%">
 
 <figure>
@@ -1023,8 +1023,8 @@ crepe myrtl, camphor, sweetgum
 </div>
 
 </section>
-<section id="slide-orga29fa3e">
-<h3 id="orga29fa3e">Uncertainty</h3>
+<section id="slide-org46d097c">
+<h3 id="org46d097c">Uncertainty</h3>
 
 <figure>
 <img src="figs/predicting_cities_notB1_unobserved_groups_FullData.png" alt="predicting_cities_notB1_unobserved_groups_FullData.png" height="600px" class="plain">
@@ -1034,13 +1034,13 @@ crepe myrtl, camphor, sweetgum
 </section>
 </section>
 <section>
-<section id="slide-orgb069f06">
-<h2 id="orgb069f06">Limitations</h2>
-<div class="outline-text-2" id="text-orgb069f06">
+<section id="slide-org089a6aa">
+<h2 id="org089a6aa">Limitations</h2>
+<div class="outline-text-2" id="text-org089a6aa">
 </div>
 </section>
-<section id="slide-org9576579">
-<h3 id="org9576579">age extrapolation</h3>
+<section id="slide-org5212f25">
+<h3 id="org5212f25">age extrapolation</h3>
 <p>
 Yoshino Cherry
 </p>
@@ -1101,8 +1101,8 @@ Incorporating Champion trees could help with this problem.
 </aside>
 
 </section>
-<section id="slide-orge6c064b">
-<h3 id="orge6c064b">Minneapolis, MN</h3>
+<section id="slide-org9b96957">
+<h3 id="org9b96957">Minneapolis, MN</h3>
 
 <figure>
 <img src="figs/MN.png" alt="MN.png" height="600px" class="plain" style="background:none">
@@ -1111,8 +1111,8 @@ Incorporating Champion trees could help with this problem.
 
 
 </section>
-<section id="slide-org785aeac">
-<h3 id="org785aeac">other limitations</h3>
+<section id="slide-org1a392e9">
+<h3 id="org1a392e9">other limitations</h3>
 <ul>
 <li>no repeat measures</li>
 <li>missing less common species</li>
@@ -1123,14 +1123,14 @@ Incorporating Champion trees could help with this problem.
 </section>
 </section>
 <section>
-<section id="slide-org8952907">
-<h2 id="org8952907">Extensions</h2>
+<section id="slide-org06d0fa3">
+<h2 id="org06d0fa3">Extensions</h2>
 <ul>
 <li>Individual level predictors</li>
 <li>Genus and Species level predictors (traits)</li>
-<li>Age as random variable</li>
+<li>Measurement error in age</li>
 <li>Height and crown width as joint responses</li>
-<li>More taxonomic levels (or phylogentic distance GP)</li>
+<li>More taxonomic levels</li>
 
 </ul>
 
@@ -1139,13 +1139,17 @@ Incorporating Champion trees could help with this problem.
 possible extensions with existing data
 </p>
 
+<p>
+(or phylogentic distance GP)
+</p>
+
 </aside>
 
 </section>
 </section>
 <section>
-<section id="slide-orgbfa817f">
-<h2 id="orgbfa817f">Conclusion</h2>
+<section id="slide-orgef76de0">
+<h2 id="orgef76de0">Conclusion</h2>
 
 <figure>
 <img src="figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png" alt="predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png" height="550px" class="plain">
@@ -1156,19 +1160,19 @@ possible extensions with existing data
 </section>
 </section>
 <section>
-<section id="slide-org6166a4f">
-<h2 id="org6166a4f">Thank you</h2>
+<section id="slide-org97f2bc6">
+<h2 id="org97f2bc6">Thank you</h2>
 
 </section>
 </section>
 <section>
-<section id="slide-orgabe2619">
-<h2 id="orgabe2619">extras:</h2>
-<div class="outline-text-2" id="text-orgabe2619">
+<section id="slide-orgb5167f9">
+<h2 id="orgb5167f9">extras:</h2>
+<div class="outline-text-2" id="text-orgb5167f9">
 </div>
 </section>
-<section id="slide-org436c875">
-<h3 id="org436c875">Monkeypod</h3>
+<section id="slide-org7acc46c">
+<h3 id="org7acc46c">Monkeypod</h3>
 
 <figure>
 <img src="figs/salman_monkeypod.jpg" alt="salman_monkeypod.jpg">
@@ -1182,8 +1186,8 @@ possible extensions with existing data
 
 </figure>
 </section>
-<section id="slide-orgf5ab200">
-<h3 id="orgf5ab200">parameter estimates</h3>
+<section id="slide-org938702e">
+<h3 id="org938702e">parameter estimates</h3>
 
 <figure>
 <img src="figs/posterior_distributions_model_FullData_mainparameters.png" alt="posterior_distributions_model_FullData_mainparameters.png" height="550px" class="plain">

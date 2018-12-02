@@ -767,12 +767,14 @@ Incorporating Champion trees could help with this problem.
 
 - Individual level predictors
 - Genus and Species level predictors (traits)
-- Age as random variable
+- Measurement error in age
 - Height and crown width as joint responses
-- More taxonomic levels (or phylogentic distance GP)
+- More taxonomic levels 
 
 #+BEGIN_NOTES
 possible extensions with existing data
+
+(or phylogentic distance GP)
 #+END_NOTES
 
 * Conclusion
