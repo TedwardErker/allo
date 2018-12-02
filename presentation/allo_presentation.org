@@ -697,7 +697,7 @@ crepe myrtl, camphor, sweetgum
 ** Climate
 #+REVEAL_HTML: <div class="column" style="float:left; width:50%">
 #+ATTR_HTML: :height 600px :class plain
-[[file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_mean_directlabel.png
 #+REVEAL_HTML: </div>
 
 #+REVEAL_HTML: <div class="column" style="float:right; width:50%">
