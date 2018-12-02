@@ -9152,16 +9152,26 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
 #+begin_src R
     d <- mod$data %>%
       filter(City %in% c("Minneapolis, MN", "Charlotte, NC"),
-             Species %in% c("ACRU", "ACSA1", "ACSA2","MA2","QURU"))
+             Species %in% c("ACRU", "ACSA1", "ACSA2","MA2","QURU"),
+             Species %in% c("ACSA1", "ACSA2"))
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :exports results :results graphics :file ../figs/MN.png :height 500 :width 900 :res 100 :bg transparent
-  ggplot(d, aes(x = AGE, y = DBH)) + 
-      geom_point() +
-      facet_grid(City~Species) +
-      theme_minimal()
+#+begin_src R :exports results :results graphics :file ../figs/MN.png :height 500 :width 600 :res 150 :bg transparent
+  blue <- "#268bd2"
+
+    ggplot(d, aes(x = AGE, y = DBH)) + 
+        geom_point(color = blue, size = .7) +
+        facet_grid(City~Species) +
+                  theme_minimal() +
+              theme(text = element_text(color = "#839496"),
+                    axis.text = element_text(color = "#839496"),
+                    rect = element_rect(fill = "transparent"),
+                    panel.background = element_rect(fill = "transparent"),
+                    panel.grid = element_blank(),
+                    legend.position = "none",
+                    strip.text = element_text(color = "#839496"))
 #+end_src
 
 #+RESULTS:
