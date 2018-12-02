@@ -7756,7 +7756,7 @@ plot(p)[[1]] +
     library(brms)
     mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
     mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
-     precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", robust = T, surface = T, resolution = 100, nsamples = 10000, cond = data.frame(AGE = 25))
+     precip.gdd <-   marginal_effects(mod, effects = "precip:gdd", robust = F, surface = T, resolution = 100, nsamples = 10000, cond = data.frame(AGE = 25))
      saveRDS(precip.gdd, "../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
 
 
@@ -7789,9 +7789,8 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 : building file list ... done
 : calc_marginal_effects_fulldata.R
 : 
-: sent 185 bytes  received 60 bytes  98.00 bytes/sec
-: total size is 1700  speedup is 6.94
-: You have new mail in /var/mail/erker
+: sent 441 bytes  received 60 bytes  66.80 bytes/sec
+: total size is 1742  speedup is 3.48
 
 #+BEGIN_SRC sh
 
@@ -7809,18 +7808,18 @@ rsync -avz calc_marginal_effects_fulldata.R erker@krusty:~/allo/code/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_Genus_methodfitted.rds ~/git/allo/models/
 #rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted.rds ~/git/allo/models/
-rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds ~/git/allo/models/
-#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
+#rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds ~/git/allo/models/
+rsync -avz erker@krusty:~/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds ~/git/allo/models/
 #+END_SRC
 
 #+RESULTS:
-: 
-: sh-3.2$ sh-3.2$ sh-3.2$ sh-3.2$ erker@krusty's password: 
+: You have new mail in /var/mail/erker
+: sh-3.2$ sh-3.2$ sh-3.2$ sh-3.2$ sh-3.2$ erker@krusty's password: 
 : receiving file list ... done
-: genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_marginaleffects_methodfitted_observedconditions.rds
+: genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds
 : 
-: sent 5912 bytes  received 122665 bytes  51430.80 bytes/sec
-: total size is 137142  speedup is 1.07
+: sent 2870 bytes  received 326784 bytes  34700.42 bytes/sec
+: total size is 329738  speedup is 1.00
 
 #+begin_src R
 precip.gdd <- readRDS("../models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData_precip.gdd.surface.rds")
@@ -7840,7 +7839,7 @@ I should make these contours and label the contour lines with DBH.
 
 Use the direct label package
 
-#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png :res 100
+#+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_mean_directlabel.png :res 100
       library(directlabels)
 
 
@@ -7868,12 +7867,13 @@ Use the direct label package
       p1 +
             geom_point(data = unique(select(mod$data, City, gdd, precip)), aes(x = gdd, y = precip), color = "white") +
             geom_label(data = shifted.city, aes(x = gdd, y = precip, label = City), nudge_y = .18) +
-  ggtitle("Posterior median DBH at age 25")
+  ggtitle("Posterior mean DBH at age 25")
 
 #+end_src
 
 #+RESULTS:
-[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_directlabel.png]]
+[[file:../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_median_directlabel.png]]
+
 
 #+begin_src R :exports results :results graphics :file ../figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB1_many_climate_b3linint_hetero_no_family_Gamma_FullData_wCities_se.png :res 100
   red <- "#dc322f"
