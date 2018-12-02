@@ -759,7 +759,7 @@ possible extensions with existing data
 [[file:figs/predictions_cities_notB1_dbh_bySpeciesCity_wData_wUTDpredictions_focus_acpl_FullData.png]]
 
 
-* acknowledgements
+* Thank you
 
 
 
@@ -824,6 +824,8 @@ review:
 - LOO
 - mixed effects models
 - HMC
+- Brush up on the basics
+  - 
 
 Fix the text.
 
