@@ -58,6 +58,9 @@ December 3, 2018
 [[file:figs/monroe_tree.jpg]]
 
 #+BEGIN_NOTES
+When a city or a person plants a tree, they might want to know how
+that tree will grow in diameter through time.
+
 need to know how big trees are going to get.  infrastructure and
 ecosystem services
 #+END_NOTES
@@ -66,13 +69,24 @@ ecosystem services
 #+ATTR_HTML: :height 750px
 [[file:figs/annapolis_oak.jpg]]
 
+#+BEGIN_NOTES
+One reason why folks are interested is because trees can interfere
+with infrastructure.  Here's an oak tree in annapolis that is pushing
+up the sidewalk.
+#+END_NOTES
+
 #+REVEAL: split
 #+name: elmer
 #+attr_org: :width 600
 [[file:figs/elmer.jpg]]
 
 #+BEGIN_NOTES
- I needed equation for ash growth.
+But also trees can provide ecosystem services, for example modifying
+microclimates for our benefit.  Here is an american elm, "elmer",
+outside of biochemistry, soon after it was cut down.  That courtyard
+has changed greatly with the absence of the tree.  Often the services
+trees provide is in proportion to their size and so modeling growth is
+a first step to modeling ecosystem services.
 #+END_NOTES
 
 ** Forest \neq Urban
