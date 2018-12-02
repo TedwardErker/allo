@@ -9165,13 +9165,13 @@ mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_
         geom_point(color = blue, size = .7) +
         facet_grid(City~Species) +
                   theme_minimal() +
-              theme(text = element_text(color = "#839496"),
-                    axis.text = element_text(color = "#839496"),
+              theme(text = element_text(color = "white"),
+                    axis.text = element_text(color = "white"),
                     rect = element_rect(fill = "transparent"),
                     panel.background = element_rect(fill = "transparent"),
                     panel.grid = element_blank(),
                     legend.position = "none",
-                    strip.text = element_text(color = "#839496"))
+                    strip.text = element_text(color = "white"))
 #+end_src
 
 #+RESULTS:
