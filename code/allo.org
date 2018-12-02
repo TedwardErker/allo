@@ -9140,7 +9140,8 @@ model {
 generated quantities { 
 }
 
-#+BEGIN_SRC 
+#+END_SRC 
+
 
 * Statistical Inference
 ** Model fitting in Stan
