@@ -366,7 +366,7 @@ $\sigma^{(j)}_{group} \sim half-Normal(\theta_j, \alpha_j)$ \\
 $\alpha_y \sim Gamma(\theta_{\alpha_y}, \alpha_{\alpha_y})$
 #+END_NOTES
 
-** posterior distribution.
+** COMMENT posterior distribution.
 A more formal slide here showing the poster proportional to likelihood
 *priors, the whole model written out?
 
@@ -740,13 +740,14 @@ Incorporating Champion trees could help with this problem.
 #+END_NOTES
 
 ** Minneapolis, MN
-#+ATTR_HTML: :height 600px
-[[file:figs/MN.jpg]]
+#+ATTR_HTML: :height 600px :class plain :style background:none
+[[file:figs/MN.png]]
 
 
-** other
+** other limitations
 - No repeat measures
-- less common species
+- missing less common species
+- ...
 
 * Extensions
 
