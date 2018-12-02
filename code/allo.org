@@ -9142,6 +9142,30 @@ generated quantities {
 
 #+END_SRC 
 
+**** Minneapolis
+#+begin_src R
+mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData <- readRDS("~/git/allo/models/genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData.rds")
+mod <- mod_genus_many_species_many_cities_many_notB1_climate_b3linint_hetero_no_family_Gamma_FullData
+
+#+end_src
+
+#+begin_src R
+    d <- mod$data %>%
+      filter(City %in% c("Minneapolis, MN", "Charlotte, NC"),
+             Species %in% c("ACRU", "ACSA1", "ACSA2","MA2","QURU"))
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/MN.png :height 500 :width 900 :res 100 :bg transparent
+  ggplot(d, aes(x = AGE, y = DBH)) + 
+      geom_point() +
+      facet_grid(City~Species) +
+      theme_minimal()
+#+end_src
+
+#+RESULTS:
+[[file:../figs/MN.png]]
 
 * Statistical Inference
 ** Model fitting in Stan

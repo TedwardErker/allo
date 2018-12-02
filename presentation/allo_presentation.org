@@ -761,11 +761,6 @@ possible extensions with existing data
 
 * Thank you
 
-
-
-
-
-
 * COMMENT A two column slide
 #+REVEAL_HTML: <div class="column" style="float:left; width:70%">
 Blablablablabla
