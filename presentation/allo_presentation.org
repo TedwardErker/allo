@@ -706,6 +706,7 @@ file:figs/marginal_effects_surface_precipCDD_genus_many_species_many_cities_notB
 [[file:figs/predicting_cities_notB1_unobserved_groups_FullData.png]]
 
 * Limitations
+** age extrapolation
 Yoshino Cherry
 #+ATTR_HTML: :height 400px :class plain
 [[file:figs/yoshinocherry.png]]
@@ -732,14 +733,19 @@ an estimate of life-span of trees.
 #+BEGIN_NOTES
 these trees on the university of washington campus are 80 years old
 http://www.washington.edu/news/blog/2015-uw-cherry-tree-watch-flowers-on-all-trees-full-bloom-by-mid-march/
+
+
+Incorporating Champion trees could help with this problem.
+
 #+END_NOTES
 
+** Minneapolis, MN
+#+ATTR_HTML: :height 600px
+[[file:figs/MN.jpg]]
 
-#+REVEAL: split
 
-- Minneapolis, MN
+** other
 - No repeat measures
-- champion trees
 - less common species
 
 * Extensions
