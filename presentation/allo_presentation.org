@@ -6,7 +6,7 @@
 #+OPTIONS: reveal_mathjax:t reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil h:4
 #+OPTIONS: reveal_width:1200 reveal_height:850
 #+OPTIONS: reveal_title_slide:nil
-#+OPTIONS: reveal_single_file:t
+#+OPTIONS: reveal_single_file:nil
 #+OPTIONS: toc:nil
 #+OPTIONS: html5-fancy:t
 #+HTML_DOCTYPE: html5
@@ -745,9 +745,9 @@ Incorporating Champion trees could help with this problem.
 
 
 ** other limitations
-- No repeat measures
+- no repeat measures
 - missing less common species
-- ...
+- no mortality estimates
 
 * Extensions
 
