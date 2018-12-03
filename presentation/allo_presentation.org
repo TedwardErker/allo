@@ -854,6 +854,18 @@ Add notes to each slide to get what I want to say down.
 grace wahba - combining data
 
 
+- comparison to nlme.
+- 
+
+journal forest ecology and management
+- compare to frequentist approach
+- would need nlme
+  - touch base with doug bates.
+- expound on why ours is better than existing UTD
+- 
+- 
+
+get learning goal form.
 
 * extras:
 ** Monkeypod
