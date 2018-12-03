@@ -849,6 +849,8 @@ Fix the text.
 
 Add notes to each slide to get what I want to say down.
 
+* actual presentation
+
 
 * extras:
 ** Monkeypod
