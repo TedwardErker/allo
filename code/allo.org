@@ -66,7 +66,7 @@ equation to use and the additional uncertainty that this introduces is
 not quantified.
 
 Our approach addresses the above limitations.  First, we use a weibull
-curve, commonly used in foresty growth equations for its biological
+curve, commonly used in forestry growth equations for its biological
 realism, which makes extrapolation to ages outside the data range less
 fraught.  Second, using this sigmoidal curve and modeling diameter
 with a gamma distribution ensures our estimates of diameter are
