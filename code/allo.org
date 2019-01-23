@@ -35,7 +35,6 @@ Improving predictions of tree size from tree age will improve our
 ability to predict the important ecosystem services these trees
 provide urban dwellers.
 
-
 The existing approach to modeling the diameter growth of trees in the
 urban tree database (UTD) was to fit a separate model for each tree
 species in each city and test several model forms (various polynomials
