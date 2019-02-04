@@ -40,9 +40,39 @@ elegantly presented elsewhere (Pinheiro & Bates 2000; Bolker 2008;
 Ritz & Streibig 2008; Bolker et al. 2009)
 
 
+
+old email
+
+I'm thinking of splitting it into two parts/papers. 
+
+The first would be methodological - rewriting for a more general
+audience interested in how to fit bayesian multilevel growth models in
+ecology via brms and Stan.  I'm thinking the journal Methods in
+Ecology and Evolution might be fitting.  They have previously
+published a paper highlighting Stan and others about plant growth
+models.  I think my work would be in the same vein as these and a good
+addition.
+
+
+The second would be applied and focused on urban forestry.  Talking to
+people at the forest service there is more data that I should
+incorporate into the model to make it actually useful to this
+audience.  But I also think it would involve significant additional
+work (many of the things I mentioned as next steps) and warrant a new
+paper.  For this I was thinking of targeting the journal Forest
+Ecology and Management or Urban Forestry and Urban Greening.
+
+
+
+
+
+
+
+
+
 * Improvements before submission.
 Comparison to lmer
- - attempt to fit in lmer
+ - attempt to fit in nlme
  - if not possible to fit, simulate data from the proposed model and
    then fit in both lmer and with brms/stan
 * Introduction
