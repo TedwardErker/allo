@@ -34,6 +34,12 @@ https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12681
 
 about plant growth
 https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210X.2011.00155.x
+
+fitting fixed and random effects in them, as these topics are
+elegantly presented elsewhere (Pinheiro & Bates 2000; Bolker 2008;
+Ritz & Streibig 2008; Bolker et al. 2009)
+
+
 * Improvements before submission.
 Comparison to lmer
  - attempt to fit in lmer
