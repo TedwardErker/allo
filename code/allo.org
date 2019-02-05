@@ -39,6 +39,7 @@ fitting fixed and random effects in them, as these topics are
 elegantly presented elsewhere (Pinheiro & Bates 2000; Bolker 2008;
 Ritz & Streibig 2008; Bolker et al. 2009)
 
+bolker et al 2009 https://www-sciencedirect-com.ezproxy.library.wisc.edu/science/article/pii/S0169534709000196
 
 
 old email
