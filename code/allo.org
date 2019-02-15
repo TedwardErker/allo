@@ -68,7 +68,8 @@ paper.  For this I was thinking of targeting the journal Forest
 Ecology and Management or Urban Forestry and Urban Greening.
 * Questions for Jun
 
-Why model the correlation between groups?  What does that add?
+Why model the correlation between groups / covariance structure?  What does that add?
+Does it affect prediction?  pg 157 touches on this a bit
 
 How to deal with the normal response. since I use a gamma.  even log
 transform won't make it exactly comparable
