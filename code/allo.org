@@ -89,6 +89,10 @@ plot random effects of coefficients by species kinda like this:
 nlme uses maximum likelihood (not restricted maximum likelihood) so
 that likelihood ratio tests can be done.
 
+check the confidence intervals for the correlation of random effects.
+Make sure the intervals are not huge (-1 to 1) which would indicate
+the matrix is ill-conditioned.
+
 * Introduction
 Modeling the growth of trees has been important to estimate timber
 production and other ecosystem services of forests for decades.
