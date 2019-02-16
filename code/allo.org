@@ -74,7 +74,7 @@ Does it affect prediction?  pg 157 touches on this a bit
 How to deal with the normal response. since I use a gamma.  even log
 transform won't make it exactly comparable
 
-* Improvements before submission.
+* Improvements before submission. / new notes
 Comparison to lmer
  - attempt to fit in nlme
  - if not possible to fit, simulate data from the proposed model and
@@ -85,6 +85,9 @@ plot random effects of coefficients by species kinda like this:
 #+DOWNLOADED: /Users/erker/Dropbox/Screenshots/Screenshot 2019-02-14 10.47.28.png @ 2019-02-14 10:54:14
 [[file:../../../org/attachments/Improvements before submission./Screenshot 2019-02-14 10.47.28_2019-02-14_10-54-14.png]]
 
+
+nlme uses maximum likelihood (not restricted maximum likelihood) so
+that likelihood ratio tests can be done.
 
 * Introduction
 Modeling the growth of trees has been important to estimate timber
