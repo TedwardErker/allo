@@ -1,0 +1,107 @@
+#+TITLE:Bayesian Nonlinear Multilevel Growth Models
+#+AUTHOR: erker
+#+email: erker@wisc.edu
+#+PROPERTY:  header-args:R :cache no :results output :exports both :comments link :session *R:allo3* :eval yes
+#+PROPERTY:  header-args:sh :eval yes
+#+startup: indent entitiespretty
+#+FILETAGS: work allo
+#+HTML_HEAD: <link rel="stylesheet" href="main.css" type="text/css">
+#+OPTIONS: toc:nil num:t date:t author:nil
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{natbib}
+#+LATEX_HEADER: \usepackage{chemformula}
+#+latex_header: \usepackage{adjustbox}
+#+LaTeX_HEADER: \RequirePackage{lineno} \def\linenumberfont{\normalfont\small\tt}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black, citecolor=black, urlcolor=black}
+#+latex_header: \usepackage{setspace} \doublespacing
+#+LATEX_CLASS_OPTIONS: [12pt]
+---------------------
+* COMMENT local variables
+# local variables:
+# org-download-image-dir: "~/git/allo/figs/attachments"
+# end:
+* Target Journal
+
+| Journal                          | url                                                          |       |   |
+|----------------------------------+--------------------------------------------------------------+-------+---|
+| Methods in Ecology and Evolution | https://besjournals.onlinelibrary.wiley.com/journal/2041210x | wiley |   |
+|                                  |                                                              |       |   |
+|                                  |                                                              |       |   |
+| Journal of Applied Ecology       | https://besjournals.onlinelibrary.wiley.com/journal/13652664 |       |   |
+| Ecological Modeling              | https://www.journals.elsevier.com/ecological-modelling       |       |   |
+| Forest Ecology and Management    |                                                              |       |   |
+
+
+Rewrite to be more general growth model.
+
+paper on methods in ecology and evolution about stan
+https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12681
+
+about plant growth
+https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210X.2011.00155.x
+
+fitting fixed and random effects in them, as these topics are
+elegantly presented elsewhere (Pinheiro & Bates 2000; Bolker 2008;
+Ritz & Streibig 2008; Bolker et al. 2009)
+
+bolker et al 2009 https://www-sciencedirect-com.ezproxy.library.wisc.edu/science/article/pii/S0169534709000196
+
+
+old email
+
+I'm thinking of splitting it into two parts/papers. 
+p
+The first would be methodological - rewriting for a more general
+audience interested in how to fit bayesian multilevel growth models in
+ecology via brms and Stan.  I'm thinking the journal Methods in
+Ecology and Evolution might be fitting.  They have previously
+published a paper highlighting Stan and others about plant growth
+models.  I think my work would be in the same vein as these and a good
+addition.
+
+
+The second would be applied and focused on urban forestry.  Talking to
+people at the forest service there is more data that I should
+incorporate into the model to make it actually useful to this
+audience.  But I also think it would involve significant additional
+work (many of the things I mentioned as next steps) and warrant a new
+paper.  For this I was thinking of targeting the journal Forest
+Ecology and Management or Urban Forestry and Urban Greening.
+* submission requirements
+Single column, double line spaced
+Within the word count (6000-7000 words for Standard Articles, 3000 words for Applications)
+Continuous line and page numbering throughout
+Clearly defined manuscript structure as standard: Author details, Abstract (must be numbered according to Manuscript Specifications), Keywords, Introduction, Materials and Methods, Results, Discussion, Figures and Tables with captions
+Figures and Tables can be embedded within the text where referenced to facilitate reviewing
+Statement of where you intend to archive your data
+
+* Questions for Jun
+
+Why model the correlation between groups / covariance structure?  What does that add?
+Does it affect prediction?  pg 157 touches on this a bit
+
+How to deal with the normal response. since I use a gamma.  even log
+transform won't make it exactly comparable
+
+* Improvements before submission. / new notes
+Comparison to lmer
+ - attempt to fit in nlme
+ - if not possible to fit, simulate data from the proposed model and
+   then fit in both lmer and with brms/stan
+
+plot random effects of coefficients by species kinda like this:
+
+#+DOWNLOADED: /Users/erker/Dropbox/Screenshots/Screenshot 2019-02-14 10.47.28.png @ 2019-02-14 10:54:14
+[[file:../../../org/attachments/Improvements before submission./Screenshot 2019-02-14 10.47.28_2019-02-14_10-54-14.png]]
+
+
+nlme uses maximum likelihood (not restricted maximum likelihood) so
+that likelihood ratio tests can be done.
+
+check the confidence intervals for the correlation of random effects.
+Make sure the intervals are not huge (-1 to 1) which would indicate
+the matrix is ill-conditioned.  pg 364 has good text on testing which
+rfs to include.
+
+
+
