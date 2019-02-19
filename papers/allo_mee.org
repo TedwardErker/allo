@@ -199,3 +199,15 @@ rfs to include.
 
 
 
+Growth equations commonly used in ecology.  Give examples.  Biomass
+growth important for ecosystem dynamics and services....
+
+Data are often correlated/ multilevel.  For example species nested
+with genus.  Or individual nested within site.  Nonlinear mixed models
+have been addressed 
+
+
+
+
+
+
