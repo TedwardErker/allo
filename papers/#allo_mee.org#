@@ -68,12 +68,104 @@ work (many of the things I mentioned as next steps) and warrant a new
 paper.  For this I was thinking of targeting the journal Forest
 Ecology and Management or Urban Forestry and Urban Greening.
 * submission requirements
+https://besjournals.onlinelibrary.wiley.com/hub/journal/2041210X/author-guidelines
+
 Single column, double line spaced
 Within the word count (6000-7000 words for Standard Articles, 3000 words for Applications)
 Continuous line and page numbering throughout
 Clearly defined manuscript structure as standard: Author details, Abstract (must be numbered according to Manuscript Specifications), Keywords, Introduction, Materials and Methods, Results, Discussion, Figures and Tables with captions
 Figures and Tables can be embedded within the text where referenced to facilitate reviewing
 Statement of where you intend to archive your data
+
+Research article:  should have a maximum of 6000-7000 words (including
+tables/figure captions and references) and describe new methods and
+how they may be used.  We place emphasis on methods that are
+applicable as broadly as possible. Papers describing methods that
+apply to one species or system are unlikely to meet these criteria,
+unless authors are able to show that their methods can be
+generalised. Structure: see Manuscript specifications below.
+
+Manuscripts should be formatted with double-spaced lines and
+continuous line numbers throughout the article, including pages for
+acknowledgements, references, tables and figures. Manuscripts must be
+written in English. Authors for whom English is not their first
+language may wish to consider using a professional editing service
+before submission, e.g. Wiley’s editing services. The use of these
+services does not guarantee acceptance or preference for
+publication. It is also recommended that authors follow search engine
+optimisations guidelines to maximise the reach of their article.
+
+
+
+
+Submissions should be divided into the following sections:
+
+Title Page should include:
+
+A concise and informative title. Do not include the authorities for taxonomic names.
+A list of all authors' names with names and addresses of Institutions.
+The name, address and e-mail address of the correspondence author.
+A running headline of not more than 45 characters.
+Abstract
+
+The Abstract must not exceed 350 words and should list the main results and conclusions, using simple, factual, numbered statements:
+
+Point 1: set the context for and purpose of the work;
+
+Point 2: indicate the approach and methods;
+
+Point 3: outline the main results;
+
+Point 4: identify the conclusions and the wider implications.
+
+
+
+Key-words: A list in alphabetical order not exceeding eight words or
+short phrases. The most important key-words should appear in the title
+and the abstract as well as the key-word list. More advice on
+selecting good keywords can be found here.
+
+
+Introduction
+
+This should state the reason for doing the work, the nature of the
+hypothesis or hypotheses under consideration, and should outline the
+essential background.
+
+
+Materials and Methods
+
+Include sufficient details for the work to be repeated. Where specific
+equipment and materials are named, the manufacturer’s details (name,
+city and country) should be given so that readers can trace
+specifications by contacting the manufacturer. Where commercially
+available software has been used, details of the supplier should be
+given in brackets or the reference given in full in the reference
+list. Do not describe or refer to commonplace statistical tests in
+this section but allude to them briefly in Results.
+
+
+Results
+
+State the results and draw attention in the text to important details shown in tables and figures.
+
+Discussion
+
+This should point out the significance of the results in relation to
+the reasons for doing the work, and place them in the context of other
+work.
+
+Conclusions (optional)
+
+Acknowledgements (optional)
+
+A brief statement acknowledging collaborators and research assistants
+who do not meet the criteria for authorship described above, or
+acknowledging funding sources, providing relevant permit numbers
+(including institutional animal use permits), or giving recognition to
+nature reserves or other organizations that made the work possible.
+
+
 
 * Questions for Jun
 
@@ -102,6 +194,8 @@ check the confidence intervals for the correlation of random effects.
 Make sure the intervals are not huge (-1 to 1) which would indicate
 the matrix is ill-conditioned.  pg 364 has good text on testing which
 rfs to include.
+
+* Abstract
 
 
 
