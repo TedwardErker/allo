@@ -204,7 +204,13 @@ growth important for ecosystem dynamics and services....
 
 Data are often correlated/ multilevel.  For example species nested
 with genus.  Or individual nested within site.  Nonlinear mixed models
-have been addressed 
+have been addressed nlme.  growth equations discussed in detail.
+
+bayesian approach
+- bayesian interpretation of confidence intervals
+- prior information
+- greater flexibility in modeling (e.g. gamma response
+- 
 
 
 
