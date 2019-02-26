@@ -10100,3 +10100,534 @@ eprint = {/oup/backfile/content_public/journal/forestscience/34/4/10.1093_forest
 
 
 #+END_SRC
+* quick test looking at crown width
+*** COMMENT Tidy data for this analysis
+**** load libraries
+#+begin_src R :exports none
+  library(plyr)
+  library(dplyr)
+  library(ggplot2)
+  library(readr)
+  library(ascii)
+  library(tidyr)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:plyr’:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning message:
+package ‘dplyr’ was built under R version 3.4.4
+
+Attaching package: ‘tidyr’
+
+The following object is masked from ‘package:ascii’:
+
+    expand
+#+end_example
+**** functions
+#+begin_src R
+  options(asciiType = "org")
+  ascii.nowarn.print <- function(x,...) {
+                                          #op <- options(warn = -1)
+                                          #      on.exit(options(op))
+
+      suppressWarnings(print(ascii(x,...)))
+
+  }
+#+end_src
+
+#+RESULTS:
+
+**** read in data
+data pdf:
+https://www.fs.fed.us/psw/publications/documents/psw_gtr253/psw_gtr_253.pdf
+data webpage: https://www.fs.usda.gov/rds/archive/Product/RDS-2016-0005
+#+begin_src R :exports code
+  d <- read_csv("../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv")
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Parsed with column specification:
+cols(
+  .default = col_integer(),
+  Region = col_character(),
+  City = col_character(),
+  Source = col_character(),
+  Zone = col_character(),
+  `Park/Street` = col_character(),
+  SpCode = col_character(),
+  ScientificName = col_character(),
+  CommonName = col_character(),
+  TreeType = col_character(),
+  street = col_character(),
+  `DBH (cm)` = col_double(),
+  `TreeHt (m)` = col_double(),
+  CrnBase = col_double(),
+  `CrnHt (m)` = col_double(),
+  `CdiaPar (m)` = col_double(),
+  `CDiaPerp (m)` = col_double(),
+  `AvgCdia (m)` = col_double(),
+  `Leaf (m2)` = col_double(),
+  dbh1 = col_double()
+)
+See spec(...) for full column specifications.
+Warning: 24255 parsing failures.
+row [90m# A tibble: 5 x 5[39m col     row col   expected   actual file                                            expected   [3m[90m<int>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m      [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m                                           actual [90m1[39m  126[90m2[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… file [90m2[39m  126[90m3[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… row [90m3[39m  126[90m4[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… col [90m4[39m  126[90m5[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.… expected [90m5[39m  126[90m6[39m side  an integer C      '../data/RDS-2016-0005/Data/TS3_Raw_tree_data.…
+........................... ... ............................................................................... ........ ............ [... truncated]
+Warning message:
+In rbind(names(probs), probs_f) :
+  number of columns of result is not a multiple of vector length (arg 1)
+#+end_example
+
+
+#+begin_src R
+                                          str(d)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	14487 obs. of  41 variables:
+ $ DbaseID       : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ Region        : chr  "InlVal" "InlVal" "InlVal" "InlVal" ...
+ $ City          : chr  "Modesto, CA" "Modesto, CA" "Modesto, CA" "Modesto, CA" ...
+ $ Source        : chr  "Motown2.xls: Completed Data" "Motown2.xls: Completed Data" "Motown2.xls: Completed Data" "Motown2.xls: Completed Data" ...
+ $ TreeID        : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ Zone          : chr  "Nursery" "Nursery" "Nursery" "Nursery" ...
+ $ Park/Street   : chr  "Nursery" "Nursery" "Nursery" "Nursery" ...
+ $ SpCode        : chr  "ACSA1" "BEPE" "CESI4" "CICA" ...
+ $ ScientificName: chr  "Acer saccharinum" "Betula pendula" "Celtis sinensis" "Cinnamomum camphora" ...
+ $ CommonName    : chr  "Silver maple" "European white birch" "Chinese hackberry" "Camphor tree" ...
+ $ TreeType      : chr  "BDL" "BDM" "BDL" "BEM" ...
+ $ address       : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ street        : chr  "Nursery" "Nursery" "Nursery" "Nursery" ...
+ $ side          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ cell          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ OnStreet      : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ FromStreet    : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ ToStreet      : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ Age           : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ DBH (cm)      : num  2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 ...
+ $ TreeHt (m)    : num  2 1.5 1.8 2 2 2 2 2 2 1.6 ...
+ $ CrnBase       : num  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ CrnHt (m)     : num  0.5 0.8 0.6 0.9 0.9 0.8 0.8 0.8 0.8 0.8 ...
+ $ CdiaPar (m)   : num  1 0.6 0.7 1 1 0.8 0.8 0.8 1 0.7 ...
+ $ CDiaPerp (m)  : num  1 0.6 0.7 1 1 0.8 0.8 0.8 1 0.7 ...
+ $ AvgCdia (m)   : num  1 0.6 0.7 1 1 0.8 0.8 0.8 1 0.7 ...
+ $ Leaf (m2)     : num  2.5 1.9 2.2 2 2.2 2.2 2.2 2.2 2.1 1.3 ...
+ $ Setback       : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ TreeOr        : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ CarShade      : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ LandUse       : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ Shape         : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ WireConf      : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh1          : num  2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 ...
+ $ dbh2          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh3          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh4          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh5          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh6          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh7          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ $ dbh8          : int  -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ...
+ - attr(*, "problems")=Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	24255 obs. of  5 variables:
+  ..$ row     : int  1262 1263 1264 1265 1266 1267 1268 1269 1270 1271 ...
+  ..$ col     : chr  "side" "side" "side" "side" ...
+  ..$ expected: chr  "an integer" "an integer" "an integer" "an integer" ...
+  ..$ actual  : chr  "C" "C" "C" "C" ...
+  ..$ file    : chr  "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" ...
+ - attr(*, "spec")=List of 2
+  ..$ cols   :List of 41
+  .. ..$ DbaseID       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Region        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ City          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ Source        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ TreeID        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Zone          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ Park/Street   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ SpCode        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ ScientificName: list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ CommonName    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ TreeType      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ address       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ street        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ side          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ cell          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ OnStreet      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ FromStreet    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ ToStreet      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Age           : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ DBH (cm)      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ TreeHt (m)    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CrnBase       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CrnHt (m)     : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CdiaPar (m)   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CDiaPerp (m)  : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ AvgCdia (m)   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ Leaf (m2)     : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ Setback       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ TreeOr        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ CarShade      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ LandUse       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Shape         : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ WireConf      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh1          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ dbh2          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh3          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh4          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh5          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh6          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh7          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh8          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  ..$ default: list()
+  .. ..- attr(*, "class")= chr  "collector_guess" "collector"
+  ..- attr(*, "class")= chr "col_spec"
+#+end_example
+
+
+**** fix some species things
+***** change lower case species codes
+#+begin_src R
+  d$SpCode <- toupper(d$SpCode)
+#+end_src
+
+#+RESULTS:
+***** change QUAG1 to be QUAG
+#+begin_src R
+  d$SpCode[d$SpCode == "QUAG1"] <- "QUAG"
+#+end_src
+
+#+RESULTS:
+***** fix common names
+
+There may be other common names I need to fix.
+
+#+begin_src R
+  d$CommonName[d$CommonName == "Kurrajong"] <- "Kurrajong/Bottle tree"
+  d$CommonName[d$CommonName == "Bottle tree"] <- "Kurrajong/Bottle tree"
+
+  d$CommonName[d$CommonName == "Apple"] <- "Apple/Crabapple"
+  d$CommonName[d$CommonName == "Crabapple"] <- "Apple/Crabapple"
+
+
+  d$CommonName[d$CommonName == "silver maple"] <- "Silver maple"
+  d$CommonName[d$CommonName == "camphor tree"] <- "Camphor tree"
+  d$CommonName[d$CommonName == "ginkgo"] <- "Ginkgo"
+  d$CommonName[d$CommonName == "honeylocust"] <- "Honeylocust"
+  d$CommonName[d$CommonName == "ginkgo"] <- "Ginkgo"
+  d$CommonName[d$CommonName == "common crapemyrtle"] <- "Common crapemyrtle"
+  d$CommonName[d$CommonName == "sweetgum"] <- "Sweetgum"
+  d$CommonName[d$CommonName == "southern magnolia"] <- "Southern magnolia"
+
+
+
+#+end_src
+
+#+RESULTS:
+***** change scientific names (remove cultivated variety)
+#+begin_src R
+  d$ScientificName[d$ScientificName == "Prunus cerasifera cvs."] <- "Prunus cerasifera"
+  d$ScientificName[d$ScientificName == "Pyrus calleryana cvs."] <- "Pyrus calleryana"
+
+#+end_src
+
+#+RESULTS:
+**** identify species with multi stems
+#+begin_src R
+multistems <-
+#+end_src
+**** tidy a few names and select variables of interest here
+#+begin_src R
+      d <- d %>%
+          rename(DBH = `DBH (cm)`, cdia = `AvgCdia (m)`, Species = SpCode) %>%
+          select(Region, City, TreeID, Species, DBH, cdia, Age, ScientificName)
+#+end_src
+
+#+RESULTS:
+
+**** Remove missing data (either DBH or Age)
+#+begin_src R
+  d <- filter(d, DBH != -1, cdia != -1) %>%
+      rename(AGE = Age)
+#+end_src
+
+#+RESULTS:
+: 
+: Warning message:
+: package ‘bindrcpp’ was built under R version 3.4.4
+**** save data
+#+begin_src R
+  saveRDS(d, "../data/tidy_cdia_dbh.rds")
+#+end_src
+
+#+RESULTS:
+**** str of data now
+#+begin_src R
+d <- readRDS("../data/tidy_cdia_dbh.rds")
+str(d)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	14440 obs. of  8 variables:
+ $ Region        : chr  "InlVal" "InlVal" "InlVal" "InlVal" ...
+ $ City          : chr  "Modesto, CA" "Modesto, CA" "Modesto, CA" "Modesto, CA" ...
+ $ TreeID        : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ Species       : chr  "ACSA1" "BEPE" "CESI4" "CICA" ...
+ $ DBH           : num  2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 ...
+ $ cdia          : num  1 0.6 0.7 1 1 0.8 0.8 0.8 1 0.7 ...
+ $ AGE           : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ ScientificName: chr  "Acer saccharinum" "Betula pendula" "Celtis sinensis" "Cinnamomum camphora" ...
+ - attr(*, "problems")=Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	24255 obs. of  5 variables:
+  ..$ row     : int  1262 1263 1264 1265 1266 1267 1268 1269 1270 1271 ...
+  ..$ col     : chr  "side" "side" "side" "side" ...
+  ..$ expected: chr  "an integer" "an integer" "an integer" "an integer" ...
+  ..$ actual  : chr  "C" "C" "C" "C" ...
+  ..$ file    : chr  "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" ...
+ - attr(*, "spec")=List of 2
+  ..$ cols   :List of 41
+  .. ..$ DbaseID       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Region        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ City          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ Source        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ TreeID        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Zone          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ Park/Street   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ SpCode        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ ScientificName: list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ CommonName    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ TreeType      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ address       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ street        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
+  .. ..$ side          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ cell          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ OnStreet      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ FromStreet    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ ToStreet      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Age           : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ DBH (cm)      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ TreeHt (m)    : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CrnBase       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CrnHt (m)     : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CdiaPar (m)   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ CDiaPerp (m)  : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ AvgCdia (m)   : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ Leaf (m2)     : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ Setback       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ TreeOr        : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ CarShade      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ LandUse       : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ Shape         : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ WireConf      : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh1          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
+  .. ..$ dbh2          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh3          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh4          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh5          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh6          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh7          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  .. ..$ dbh8          : list()
+  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
+  ..$ default: list()
+  .. ..- attr(*, "class")= chr  "collector_guess" "collector"
+  ..- attr(*, "class")= chr "col_spec"
+#+end_example
+**** What is the 10% quanitile of crown diameter for dbh (in inches).  this is for uft work
+
+#+begin_src R
+d <- d %>% mutate(DBHin = DBH * 2.54)
+
+library(quantreg)
+qr1 <- rq(cdia ~ DBHin - 1, data=d, tau = 0.1)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :exports results :results graphics :file ../figs/q.1_cdia_dbhin.png
+library(ggplot2)
+ggplot(d, aes(DBHin,cdia)) + geom_point(alpha = .1) + 
+  geom_abline(intercept=0, slope=coef(qr1)[1])
+#+end_src
+
+#+RESULTS:
+[[file:../figs/q.1_cdia_dbhin.png]]
+
+**** explanation of variables from [[https://www.fs.usda.gov/rds/archive/products/RDS-2016-0005/_metadata_RDS-2016-0005.html][metadata]]
+
+DbaseID = Unique id number for each tree.
+
+Region = 16 U.S. climate regions, abbreviations are used (see \Data\TS1_Regional_information.csv).
+
+City = City/state names where data collected.
+
+Source = Original *.xls filename (not available in this data publication).
+
+TreeID = Number assigned to each tree in inventory by city.
+
+Zone = Number/ID/name of the management area or zone that the tree is located in within a city; or nursery if young tree data collected there.
+
+Park/Street = Data listed as Park, Street, Regional Big Tree, or Nursery (for young tree measurements).
+
+SpCode = 4 to 6 letter code consisting of the first two letters of the genus name and the first two letters of the species name followed by two optional letters to distinguish two species with the same four-letter code (See \Data\TS2_Regional_species_and_counts.csv for a list of the SpCodes and corresponding scientific names.)
+
+ScientificName = Botanical name of species.
+
+CommonName = Common name of species.
+
+Tree Type = 3 letter code where first two letters refer to life form (BD=broadleaf deciduous, BE=broadleaf evergreen, CE=coniferous evergreen, PE=palm evergreen) and the third letter is mature height (S=small which is < 8 meters, M=medium which is 8-15 meters, and L=large which is > 15 meters).
+
+Address = From inventory, street number of building where tree is located.
+
+Street = From inventory, the name of the street the tree is located on. (NOTE: zero values denote data were not recorded in that city. These values were left unchanged because they originated from city inventories.)
+
+Side = From inventory, side of building or lot tree is located on (F=front, M=median, S=side, P=park). (NOTE: zero values denote data were not recorded in that city. These values were left unchanged because they originated from city inventories.)
+
+Cell = From inventory, the cell number (i.e., 1, 2, 3, …), where protocol determines the order trees at same address are numbered (e.g., driving direction or as street number increases).
+
+OnStreet = From inventory (omitted if not a field in city’s inventory), for trees at corner addresses when tree is on cross street rather than addressed street.
+
+FromStreet = From inventory, the name of the first cross street that forms a boundary for trees lining un-addressed boulevards. Trees are typically numbered in order (1, 2, 3 …) on boulevards that have no development adjacent to them, no obvious parcel addresses.
+
+ToStreet = From inventory, the name of the last cross street that forms a boundary for trees lining un-addressed boulevards.
+
+Age = Number of years since planted. (NOTE: zero values represent newly planted trees, < 1 year old.)
+
+DBH (cm) = Diameter at breast height (1.37 meters [m]) measured to nearest 0.1 centimeters (tape). For multi-stemmed trees forking below 1.37 m measured above the butt flare and below the point where the stem begins forking, as per protocol.
+
+TreeHt (m) = From ground level to tree top to nearest 0.5 m (omitting erratic leader).
+
+CrnBase (m) = Average distance between ground and lowest foliage layer to nearest 0.5 m (omitting erratic branch).
+
+CrnHt (m) = Calculated as TreeHT minus Crnbase to nearest 0.5 m. (NOTE: zero values indicate no live crown was present, hence no other tree dimension data were available.)
+
+CdiaPar (m) = Crown diameter measurement taken to the nearest 0.5 m parallel to the street (omitting erratic branch).
+
+CDiaPerp (m) = Crown diameter measurement taken to the nearest 0.5 m perpendicular to the street (omitting erratic branch).
+
+AvgCdia (m) = The average of crown diameter measured parallel and perpendicular to the street.
+
+Leaf (m2) = Estimated using digital imaging method to nearest 0.1 squared meter (m2).
+
+Setback = Distance from tree to nearest air-conditioned/heated space (may not be same address as tree location): 1=0-8 m, 2=8.1-12 m, 3=12.1-18 m, 4=> 18 m.
+
+TreeOr = Taken with compass, the coordinate of tree taken from imaginary lines extending from walls of the nearest conditioned space (may not be same address as tree location).
+
+CarShade = Number of parked automotive vehicles with some part under the tree's drip line. Car must be present (0=no autos, 1=1 auto, etc.).
+
+LandUse = Predominant land use type where tree is growing (1=single family residential, 2=multi-family residential [duplex, apartments, condos], 3=industrial/institutional/large commercial [schools, gov't, hospitals], 4=park/vacant/other [agric., unmanaged riparian areas of greenbelts], 5=small commercial [minimart, retail boutiques, etc.], 6=transportation corridor).
+
+Shape = Visual estimate of crown shape verified from each side with actual measured dimensions of crown height and average crown diameter (1=cylinder [maintains same crown diameter in top and bottom thirds of tree], 2=ellipsoid, the tree's center [whether vertical or horizontal is the widest, includes spherical], 3=paraboloid [widest in bottom third of crown], 4=upside down paraboloid [widest in top third of crown]).
+
+WireConf = Utility lines that interfere with or appear above tree (0=no lines, 1=present and no potential conflict, 2=present and conflicting, 3=present and potential for conflicting). (NOTE: -1 denotes data were not collected.)
+
+dbh1 = Dbh (centimeters [cm]) for multi-stemmed trees; for non-multi-stemmed trees, dbh1 is same as Dbh (cm).
+
+dbh2 = Dbh (cm) for second stem of multi-stemmed trees.
+
+dbh3 = Dbh (cm) for third stem of multi-stemmed trees.
+
+dbh4 = Dbh (cm) for fourth stem of multi-stemmed trees.
+
+dbh5 = Dbh (cm) for fifth stem of multi-stemmed trees.
+
+dbh6 = Dbh (cm) for sixth stem of multi-stemmed trees.
+
+dbh7 = Dbh (cm) for seventh stem of multi-stemmed trees.
+
+dbh8 = Dbh (cm) for eight stem of multi-stemmed trees.
