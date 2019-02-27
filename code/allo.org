@@ -10410,6 +10410,17 @@ multistems <-
 : 
 : Warning message:
 : package ‘bindrcpp’ was built under R version 3.4.4
+
+**** drop palms
+#+begin_src R
+palms <- palms <- c("BUCA", "CONU", "PHCA","PHDA4","SAPA", "SYRO", "VEME", "WAFI", "WARO")
+  d <- d %>%
+    filter(!Species %in% palms)
+
+#+end_src
+
+#+RESULTS:
+
 **** save data
 #+begin_src R
   saveRDS(d, "../data/tidy_cdia_dbh.rds")
@@ -10425,7 +10436,7 @@ str(d)
 #+RESULTS:
 #+begin_example
 
-Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	14440 obs. of  8 variables:
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	13898 obs. of  9 variables:
  $ Region        : chr  "InlVal" "InlVal" "InlVal" "InlVal" ...
  $ City          : chr  "Modesto, CA" "Modesto, CA" "Modesto, CA" "Modesto, CA" ...
  $ TreeID        : int  1 2 3 4 5 6 7 8 9 10 ...
@@ -10434,107 +10445,15 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	14440 obs. of  8 variables:
  $ cdia          : num  1 0.6 0.7 1 1 0.8 0.8 0.8 1 0.7 ...
  $ AGE           : int  0 0 0 0 0 0 0 0 0 0 ...
  $ ScientificName: chr  "Acer saccharinum" "Betula pendula" "Celtis sinensis" "Cinnamomum camphora" ...
- - attr(*, "problems")=Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	24255 obs. of  5 variables:
-  ..$ row     : int  1262 1263 1264 1265 1266 1267 1268 1269 1270 1271 ...
-  ..$ col     : chr  "side" "side" "side" "side" ...
-  ..$ expected: chr  "an integer" "an integer" "an integer" "an integer" ...
-  ..$ actual  : chr  "C" "C" "C" "C" ...
-  ..$ file    : chr  "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" "'../data/RDS-2016-0005/Data/TS3_Raw_tree_data.csv'" ...
- - attr(*, "spec")=List of 2
-  ..$ cols   :List of 41
-  .. ..$ DbaseID       : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ Region        : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ City          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ Source        : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ TreeID        : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ Zone          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ Park/Street   : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ SpCode        : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ ScientificName: list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ CommonName    : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ TreeType      : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ address       : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ street        : list()
-  .. .. ..- attr(*, "class")= chr  "collector_character" "collector"
-  .. ..$ side          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ cell          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ OnStreet      : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ FromStreet    : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ ToStreet      : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ Age           : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ DBH (cm)      : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ TreeHt (m)    : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ CrnBase       : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ CrnHt (m)     : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ CdiaPar (m)   : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ CDiaPerp (m)  : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ AvgCdia (m)   : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ Leaf (m2)     : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ Setback       : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ TreeOr        : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ CarShade      : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ LandUse       : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ Shape         : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ WireConf      : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh1          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_double" "collector"
-  .. ..$ dbh2          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh3          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh4          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh5          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh6          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh7          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  .. ..$ dbh8          : list()
-  .. .. ..- attr(*, "class")= chr  "collector_integer" "collector"
-  ..$ default: list()
-  .. ..- attr(*, "class")= chr  "collector_guess" "collector"
-  ..- attr(*, "class")= chr "col_spec"
+ $ DBHin         : num  6.35 6.35 6.35 6.35 6.35 6.35 6.35 6.35 6.35 6.35 ...
 #+end_example
 **** What is the 10% quanitile of crown diameter for dbh (in inches).  this is for uft work
 
 #+begin_src R
-d <- d %>% mutate(DBHin = DBH * 2.54)
+d <- d %>% mutate(DBHin = DBH / 2.54)
 
 library(quantreg)
-qr1 <- rq(cdia ~ DBHin - 1, data=d, tau = 0.1)
+qr1 <- rq(cdia ~ DBHin - 1, data=d, tau = 0.2)
 #+end_src
 
 #+RESULTS:
