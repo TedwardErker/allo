@@ -10453,7 +10453,8 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	13898 obs. of  9 variables:
 d <- d %>% mutate(DBHin = DBH / 2.54)
 
 library(quantreg)
-qr1 <- rq(cdia ~ DBHin - 1, data=d, tau = 0.2)
+qr1 <- rq(cdia ~ DBHin - 1, data=d, tau = 0.1)
+qr5 <- rq(cdia ~ DBHin - 1, data=d, tau = 0.5)
 #+end_src
 
 #+RESULTS:
