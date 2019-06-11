@@ -9753,6 +9753,17 @@ bibliographystyle:apa
 - move figures and tables to end
 - put parentheses around the betas exponenents.
 - description of stan
+
+
+
+papers to add
+https://www.nsf.gov/awardsearch/showAward?AWD_ID=1252463&HistoricalAwards=false
+
+https://www.researchgate.net/profile/Jeffrey_Harring/publication/321692394_Nonlinear_Mixed-Effects_Modeling_Programs_in_R/links/5b8548414585151fd13797c3/Nonlinear-Mixed-Effects-Modeling-Programs-in-R.pdf
+
+cite:stegmann17_nonlin_mixed_effec_model_progr_r
+
+
 *  COMMENT Bibtex entries
 
 #+BEGIN_SRC bibtex :tangle allo.bib
