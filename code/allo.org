@@ -9766,6 +9766,10 @@ cite:stegmann_e_2017
 https://www.jstatsoft.org/article/view/v080i03
 cite:comets_e_2017
 
+Performance Com- parison of Various Maximum Likelihood Nonlinear
+Mixed-Effects Estimation Methods for Dose-Response Models.
+
+
 
 *  COMMENT Bibtex entries
 
