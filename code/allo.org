@@ -9761,7 +9761,10 @@ https://www.nsf.gov/awardsearch/showAward?AWD_ID=1252463&HistoricalAwards=false
 
 https://www.researchgate.net/profile/Jeffrey_Harring/publication/321692394_Nonlinear_Mixed-Effects_Modeling_Programs_in_R/links/5b8548414585151fd13797c3/Nonlinear-Mixed-Effects-Modeling-Programs-in-R.pdf
 
-cite:stegmann17_nonlin_mixed_effec_model_progr_r
+cite:stegmann_e_2017
+
+https://www.jstatsoft.org/article/view/v080i03
+cite:comets_e_2017
 
 
 *  COMMENT Bibtex entries
