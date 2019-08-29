@@ -95,7 +95,6 @@ Make sure the intervals are not huge (-1 to 1) which would indicate
 the matrix is ill-conditioned.  pg 364 has good text on testing which
 rfs to include.
 
-
 * Introduction
 Modeling the growth of trees has been important to estimate timber
 production and other ecosystem services of forests for decades.
